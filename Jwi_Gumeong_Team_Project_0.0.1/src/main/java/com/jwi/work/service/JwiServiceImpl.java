@@ -11,11 +11,11 @@ import com.jwi.work.mapper.JwiMapper;
 public class JwiServiceImpl implements JwiService{
 	@Autowired
 	private JwiMapper mapper;
-	public String test() {
+//	public String test() {
 		
-		return mapper.test();
+//		return mapper.test();
 		
-	}
+//	}
 
 
 

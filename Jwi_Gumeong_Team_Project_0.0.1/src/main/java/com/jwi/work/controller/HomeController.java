@@ -12,8 +12,8 @@ public class HomeController {
 	private JwiService service;
 	@GetMapping("/")
 	public String board(Model model) {
-	System.out.println(service.test());
-	model.addAttribute("test",service.test());
+//	System.out.println(service.test());
+//	model.addAttribute("test",service.test());
 	return "home";
 	}
 }
