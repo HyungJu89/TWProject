@@ -10,6 +10,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-${test}
+<a href="${cp}/board/SignUp">회원가입</a>
 </body>
 </html>
