@@ -2,7 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.mapper.JwiMapper">
-    <select id="test"  resultType="String">
-        SELECT name FROM ex WHERE no = 1
-    </select>
+
+
+    	<!-- 회원가입 마이정보 -->
+	<insert id="signUpInfo" parameterType="com.jwi.work.dto.userDto">
+		INSERT INTO user (userEmail,userPw,userName,userGender,userAge) 
+		values (#{userEmail}, #{userPw},#{userName}, #{userGender}, #{userAge})
+	</insert>
 </mapper>
