@@ -5,7 +5,7 @@ drop DATABASE jwi;
 CREATE TABLE `user` (
     `userEmail` VARCHAR(30) PRIMARY KEY NOT NULL, -- 유저 이메일
     `userPw` VARCHAR(255) NOT NULL, -- 유저 비밀번호
-    `userName` VARCHAR(30) NOT NULL, -- 유저 닉네임
+    `userName` VARCHAR(30) UNIQUE NOT NULL, -- 유저 닉네임
     `userGender` CHAR(1) NULL, -- 유저 성별
     `userAge` TINYINT NULL, -- 유저 나이
     `userBlind` TINYINT NOT NULL DEFAULT 0, -- 유저 활성 유무
