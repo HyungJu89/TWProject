@@ -1,6 +1,6 @@
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
-
+drop DATABASE jwi;
 -- 유저 테이블
 CREATE TABLE `user` (
     `userEmail` VARCHAR(30) PRIMARY KEY NOT NULL, -- 유저 이메일
@@ -158,7 +158,7 @@ REFERENCES `channel` (`channelId`);
 ALTER TABLE `reportLog` ADD CONSTRAINT `fkReportLogReporter` FOREIGN KEY (`userEmail`)
 REFERENCES `user` (`userEmail`);
 -- 신고 테이블 과 유저 이메일 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
-ALTER TABLE `reportLog` ADD CONSTRAINT `fkReportLogReported ` FOREIGN KEY (`reportEmail`)
+ALTER TABLE `reportLog` ADD CONSTRAINT `fkReportLogReported` FOREIGN KEY (`reportEmail`)
 REFERENCES `user` (`userEmail`);
 -- 게시판 신고 로그 테이블과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
 ALTER TABLE `postReportLog` ADD CONSTRAINT `fkUserToPostReportLogReporter` FOREIGN KEY (`userEmail`)
@@ -189,7 +189,7 @@ REFERENCES `comment` (`commentKey`);
 ALTER TABLE `adminLoginLog` ADD CONSTRAINT `fkAdminToAdminLoginLog` FOREIGN KEY (`adminId`)
 REFERENCES `admin` (`adminId`);
 
--- 유저 테이블과 알람 테이블 간의 외래 키 제약 조건 추가
+-- 유저 테이블과 알람 테이블 간의 외래 키 제약 조건 추가	
 ALTER TABLE `alarm` ADD CONSTRAINT `fkUserToAlarm` FOREIGN KEY (`userEmail`)
 REFERENCES `user` (`userEmail`);
 
