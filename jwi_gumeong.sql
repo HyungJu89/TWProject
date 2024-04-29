@@ -114,6 +114,16 @@ CREATE TABLE `adminLoginLog` (
     `adminLogTime` DATETIME NOT NULL DEFAULT NOW(), -- 운영자 접속시간
     `adminLogUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
 );
+
+ -- 알람
+CREATE TABLE `alarm` (
+    `alarmKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 알람 키
+    `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
+    `postKey` INT NOT NULL, -- 관련 게시글 키
+    `alarmCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성 시간
+    `alarmUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+);
+
 -- 즐겨찾기 테이블과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 를 묶어줌
 ALTER TABLE `favorites` ADD CONSTRAINT `fkUserToFavorites` FOREIGN KEY (`userEmail`)
 REFERENCES `user` (`userEmail`);
@@ -178,3 +188,11 @@ REFERENCES `comment` (`commentKey`);
 -- 운영자 접속 기록 로그 테이블과 운영자 테이블 사이의 연관성을 더해줌 ( adminId ) 로 묶어줌
 ALTER TABLE `adminLoginLog` ADD CONSTRAINT `fkAdminToAdminLoginLog` FOREIGN KEY (`adminId`)
 REFERENCES `admin` (`adminId`);
+
+-- 유저 테이블과 알람 테이블 간의 외래 키 제약 조건 추가
+ALTER TABLE `alarm` ADD CONSTRAINT `fkUserToAlarm` FOREIGN KEY (`userEmail`)
+REFERENCES `user` (`userEmail`);
+
+-- 게시글 테이블과 알람 테이블 간의 외래 키 제약 조건 추가
+ALTER TABLE `alarm` ADD CONSTRAINT `fkPostToAlarm` FOREIGN KEY (`postKey`)
+REFERENCES `post` (`postKey`);
