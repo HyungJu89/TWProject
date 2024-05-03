@@ -9,13 +9,8 @@ import com.jwi.work.mapper.JwiMapper;
 @Service
 @Primary
 public class JwiServiceImpl implements JwiService{
-	@Autowired
-	private JwiMapper mapper;
-	public String test() {
-		
-		return mapper.test();
-		
-	}
+
+
 
 
 
