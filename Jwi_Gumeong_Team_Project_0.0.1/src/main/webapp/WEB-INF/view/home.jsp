@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<c:set var="cp" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,5 +13,9 @@
 </head>
 <body>
 메인화면입니다.
+<<<<<<< HEAD
+=======
+<a href="/user/signUp">회원가입</a>
+>>>>>>> 38e516743c7173d2627abf51c8f8fa7a9f277373
 </body>
 </html>
