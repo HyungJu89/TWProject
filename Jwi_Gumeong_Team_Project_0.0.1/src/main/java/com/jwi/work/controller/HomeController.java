@@ -3,8 +3,6 @@ package com.jwi.work.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 //운영자는 URL /admin/**
 //관리자 URL /manager/**
@@ -16,7 +14,8 @@ public class HomeController {
 
 	@GetMapping("/")
 	public String board(Model model) {
-
+		
+		
 	return "home";
 	}
 
