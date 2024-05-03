@@ -8,6 +8,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+<<<<<<< HEAD
+=======
+//운영자는 URL /admin/**
+//관리자 URL /manager/**
+//유저 URL /user/**
+//로그인페이지 URL  /login
+
+import org.springframework.web.bind.annotation.RequestParam;
+
+>>>>>>> a67a9b07998486457d1c6559176d840e7a96d098
 import com.jwi.work.mapper.UserMapper;
 import com.jwi.work.service.UserService;
 
@@ -15,6 +25,10 @@ import com.jwi.work.service.UserService;
 @RequestMapping("/user/*")
 public class UserController {
 	@Autowired
+<<<<<<< HEAD
+=======
+
+>>>>>>> a67a9b07998486457d1c6559176d840e7a96d098
 	private UserService service;
 	private UserMapper mapper;
 	@PostMapping("/signUp")
@@ -41,4 +55,8 @@ public class UserController {
 		
 	}
 	
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> a67a9b07998486457d1c6559176d840e7a96d098
