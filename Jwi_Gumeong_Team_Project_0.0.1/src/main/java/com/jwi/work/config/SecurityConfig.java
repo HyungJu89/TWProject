@@ -25,7 +25,7 @@ public class SecurityConfig {
 
 
         http
-                .formLogin(auth -> auth.loginPage("/login")
+                .formLogin(auth -> auth.loginPage("/user/signUp")
                         .loginProcessingUrl("/loginProc")
                         .permitAll()
                 );
