@@ -14,7 +14,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
         http
-<<<<<<< HEAD
                 // 특정 URL 또는 URL 에 대한 조건을 걸때 사용합니다.
                 .authorizeHttpRequests(auth -> auth
                 		// requestMatchers : 어떤 경로에 대해 조건을 걸것인지
@@ -28,40 +27,23 @@ public class SecurityConfig {
                         .requestMatchers("/user/**").hasAnyRole("MANAGER", "USER")
                         // anyRequest : 루트가 설정되어 있지 않은 나머지 URL 에 대한 설정
                         // authenticated : 아무 권한이나 가지고있어야 접속가능
-=======
-                .authorizeHttpRequests(auth -> auth
-                		.requestMatchers("/WEB-INF/view/**").permitAll()
-                        .requestMatchers("/", "/login", "/loginProc").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/manager/**").hasRole("MANAGER")
-                        .requestMatchers("/user/**").hasAnyRole("MANAGER", "USER")
->>>>>>> 38e516743c7173d2627abf51c8f8fa7a9f277373
                         .anyRequest().authenticated()
                 );
 
-
         http
-<<<<<<< HEAD
         		// 폼 로그인을 설정합니다. (옵션: 로그인 페이지 등을 지정할 수 있습니다) 
                 .formLogin(auth -> auth // 사용자 정의 로그인 페이지 경로
                 		.loginPage("/login") // 권한없는 페이지로 이동시 리다이렉션
                 		// 로그인 성공하면 이동할 URL (없애버리고 컨트롤러로 해도됨)
                         .loginProcessingUrl("/loginProc")
                         // 모든 사용자가 로그인 페이지에 접근할 수 있도록 허용
-=======
-                .formLogin(auth -> auth.loginPage("/user/signUp")
-                        .loginProcessingUrl("/loginProc")
->>>>>>> 38e516743c7173d2627abf51c8f8fa7a9f277373
                         .permitAll()
                 );
 
         http
-<<<<<<< HEAD
         // CSRF 공격 방지 설정을 활성화합니다. 로그인 로직 완성하면 활성화 시켜야함
         //        .csrf(Customizer.withDefaults())
         // CSRF 공격 방지 설정을 비활성화합니다.
-=======
->>>>>>> 38e516743c7173d2627abf51c8f8fa7a9f277373
                 .csrf(auth -> auth.disable());
 
 
