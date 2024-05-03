@@ -1,5 +1,5 @@
 server:
-  port : 8080
+  port : 9090
 spring:
   mvc:
     view:
@@ -10,3 +10,11 @@ spring:
     url: jdbc:mysql://localhost:3306/jwi?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: root
+    
+    
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+  
