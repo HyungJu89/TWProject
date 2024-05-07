@@ -6,12 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-//운영자는 URL /admin/**
-//관리자 URL /manager/**
-//유저 URL /user/**
-//로그인페이지 URL  /login
-
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jwi.work.service.UserService;
@@ -20,7 +14,6 @@ import com.jwi.work.service.UserService;
 @RequestMapping("/user/*")
 public class UserController {
 	@Autowired
-
 	private UserService service;
 	
 	@PostMapping("/signUp")
@@ -47,4 +40,8 @@ public class UserController {
 		
 	}
 	
+
 }
+
+
+
