@@ -44,9 +44,20 @@ public class SecurityConfig {
         // CSRF 공격 방지 설정을 활성화합니다. 로그인 로직 완성하면 활성화 시켜야함
         //        .csrf(Customizer.withDefaults())
         // CSRF 공격 방지 설정을 비활성화합니다.
-                .csrf(auth -> auth.disable());
+                .csrf(auth -> auth.disable()
+                );
 
 
+        http
+        	.sessionManagement((auth) -> auth
+        	.maximumSessions(1)
+        	.maxSessionsPreventsLogin(true));
+       
+        http
+        	.sessionManagement((auth) -> auth
+        	.sessionFixation().changeSessionId());
+        			
+        
         return http.build();
     }
 }

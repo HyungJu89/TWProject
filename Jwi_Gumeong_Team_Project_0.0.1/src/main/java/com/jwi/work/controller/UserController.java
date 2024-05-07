@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.jwi.work.mapper.UserMapper;
 import com.jwi.work.service.UserService;
 
 @Controller
@@ -23,7 +22,7 @@ public class UserController {
 	@Autowired
 
 	private UserService service;
-	private UserMapper mapper;
+	
 	@PostMapping("/signUp")
 	public String signUp(@RequestParam("userName") String userName,@RequestParam("userEmail") String userEmail,@RequestParam("userPw") String userPw,@RequestParam("userGender") Character userGender,@RequestParam("userAge") int userAge, Model model) {
 		service.InsertUserData(userName,userEmail,userPw,userGender,userAge);
