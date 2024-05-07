@@ -1,3 +1,14 @@
+
+/*
+ * 
+ * 
+ * 
+ * 메인(HOME) 컨트롤러
+ * 
+ * 
+ * 
+ * */
+
 package com.jwi.work.controller;
 
 import org.springframework.stereotype.Controller;
