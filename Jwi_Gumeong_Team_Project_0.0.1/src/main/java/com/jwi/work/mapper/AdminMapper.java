@@ -5,8 +5,12 @@ import com.jwi.work.dto.loginDto.LoginDto;
 
 public interface AdminMapper {
 	
+
+	
 	public int adminLoginCount(LoginDto login);
 	
+	
 	public AdminDto adminLogin(LoginDto login);
+	
 	
 }

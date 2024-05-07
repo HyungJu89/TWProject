@@ -3,9 +3,14 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.mapper.AdminMapper">
     
+    
+    
+
+    
     <select id ="adminLoginCount" parameterType="com.jwi.work.dto.loginDto.LoginDto" resultType="int">
     	SELECT COUNT(*) WHERE adminId = #{adminId} and adminPw = #{adminPw}
     </select>
+    
     
     
     

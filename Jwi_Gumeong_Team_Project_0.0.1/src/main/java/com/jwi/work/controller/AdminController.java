@@ -20,8 +20,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/admin/*")
 public class AdminController {
 	
-	@Autowired
-	private AdminService service;
+
 	
 
 	@GetMapping("/login")
@@ -31,8 +30,7 @@ public class AdminController {
 	
 	@PostMapping("/login")
 	public String adminLoginProc(LoginDto login) {
-		service.adminLogin(login);
-		
+
 		
 		
 		

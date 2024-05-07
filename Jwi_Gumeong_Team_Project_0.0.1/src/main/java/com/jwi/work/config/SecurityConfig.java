@@ -19,7 +19,7 @@ public class SecurityConfig {
                 		// requestMatchers : 어떤 경로에 대해 조건을 걸것인지
                 		// permitAll : 모든 사용자가 접속 가능
                      	.requestMatchers("/WEB-INF/view/**").permitAll()
-                        .requestMatchers("/", "/login", "/loginProc").permitAll()
+                        .requestMatchers("/", "/admin/login", "/login").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         // hasRole : 권한이 있는 사용자가 접속 가능
                         .requestMatchers("/manager/**").hasRole("MANAGER")
