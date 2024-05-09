@@ -12,14 +12,6 @@
     <title>Document</title>
 </head>
 <body>
-메인화면입니다.
-<<<<<<< HEAD
 <a href="/user/signUp">회원가입</a>
-=======
-<<<<<<< HEAD
-=======
-<a href="/user/signUp">회원가입</a>
->>>>>>> 38e516743c7173d2627abf51c8f8fa7a9f277373
->>>>>>> a67a9b07998486457d1c6559176d840e7a96d098
 </body>
 </html>

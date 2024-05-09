@@ -33,9 +33,9 @@ public class SecurityConfig {
         http
         		// 폼 로그인을 설정합니다. (옵션: 로그인 페이지 등을 지정할 수 있습니다) 
                 .formLogin(auth -> auth // 사용자 정의 로그인 페이지 경로
-                		.loginPage("/login") // 권한없는 페이지로 이동시 리다이렉션
+                		.loginPage("/user/signUp") // 권한없는 페이지로 이동시 리다이렉션
                 		// 로그인 성공하면 이동할 URL (없애버리고 컨트롤러로 해도됨)
-                        .loginProcessingUrl("/loginProc")
+                        .loginProcessingUrl("/home")
                         // 모든 사용자가 로그인 페이지에 접근할 수 있도록 허용
                         .permitAll()
                 );
