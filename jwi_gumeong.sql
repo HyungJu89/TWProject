@@ -17,22 +17,25 @@ CREATE TABLE `user` (
 CREATE TABLE `favorites` (
     `favoritesKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 즐겨찾기 키
     `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
-    `channelId` VARCHAR(30) NOT NULL, -- 체널 아이디
+    `channelId` VARCHAR(50) NOT NULL, -- 체널 아이디
     `favoritesCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성 시간
     `favoritesUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
 );
 
+select * from channel;
 -- 체널 정보
 CREATE TABLE `channel` (
-    `channelId` VARCHAR(30) PRIMARY KEY NOT NULL, -- 체널 아이디
-    `channelName` VARCHAR(255) NOT NULL, -- 체널 이름
-    `channelCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `channelUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+	`channelId`	VARCHAR(50) PRIMARY KEY	NOT NULL, #채널아이디
+	`channelName`	VARCHAR(255)	NOT NULL, # 채널이름
+	`channelImageUrl`	VARCHAR(255)	NOT NULL, # 채널 이미지 URL
+	`followerCount`	int	NOT NULL, # 팔로워수
+	`channelCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(), # 생성시간
+	`channelUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW() # 업데이트 시간
 );
 -- 게시글
 CREATE TABLE `post` (
     `postKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 게시글 키
-    `channelId` VARCHAR(30) NOT NULL, -- 체널 아이디
+    `channelId` VARCHAR(50) NOT NULL, -- 체널 아이디
     `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
     `postTitle` VARCHAR(30) NOT NULL, -- 게시글 타이틀
     `postContent` TEXT NOT NULL, -- 게시글 내용
@@ -45,6 +48,7 @@ CREATE TABLE `comment` (
     `commentKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 댓글 키
     `postKey` INT NOT NULL, -- 게시글 키
     `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
+	`reCommentKey`	INT	NULL, -- 대댓글 일때 부모의 키값
     `commentContent` TEXT NOT NULL, -- 댓글 내용
     `commentBlind` TINYINT NOT NULL DEFAULT 0, -- 갯글 활성 유무 0: 활성 1: 비활성
     `commentCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
@@ -63,7 +67,7 @@ CREATE TABLE `likeLog` (
 CREATE TABLE `manager` (
     `managerKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 관리가 키
     `userEmail` VARCHAR(30) NOT NULL, -- 관리자 이메일
-    `channelId` VARCHAR(30) NOT NULL, -- 채널 아이디 
+    `channelId` VARCHAR(50) NOT NULL, -- 채널 아이디 
     `managerAuthority` TINYINT NOT NULL DEFAULT 1, -- 권한 단계 0:권한 제거, 1: 일반관리자 -> 높아질수록 권한높아짐(나중에)
     `managerCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
     `managerUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
@@ -107,6 +111,9 @@ CREATE TABLE `admin` (
     `adminLoginTime` DATETIME NOT NULL DEFAULT NOW(), -- 가장최근 로그인 시간
     `adminUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
 );
+select * from admin;
+
+insert INTO admin(adminId,adminPw) value ("a","a");
 -- 운영자 접속 기록
 CREATE TABLE `adminLoginLog` (
     `adminLoginLogKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 운영자 접속 기록 키
@@ -119,9 +126,20 @@ CREATE TABLE `adminLoginLog` (
 CREATE TABLE `alarm` (
     `alarmKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 알람 키
     `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
-    `postKey` INT NOT NULL, -- 관련 게시글 키
+    `postKey` INT NOT NULL, -- 관련 게시글 키(게시글에 작성된 댓글일경우)
+	`commentUserEmail`	VARCHAR(30)	NULL, -- (대댓글일경우)
+	`alarmType`	VARCHAR(30)	NOT NULL,
     `alarmCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성 시간
     `alarmUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+);
+
+CREATE TABLE `inquiry` (
+	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`userEmail`	VARCHAR(30)	NOT NULL,
+	`inquiryDetails`	VARCHAR(30)	NOT NULL,
+	`answer`	text	NULL,
+	`reportCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
+	`reportUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
 -- 즐겨찾기 테이블과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 를 묶어줌
@@ -196,3 +214,10 @@ REFERENCES `user` (`userEmail`);
 -- 게시글 테이블과 알람 테이블 간의 외래 키 제약 조건 추가
 ALTER TABLE `alarm` ADD CONSTRAINT `fkPostToAlarm` FOREIGN KEY (`postKey`)
 REFERENCES `post` (`postKey`);
+
+ALTER TABLE `alarm` ADD CONSTRAINT `fkCommentToAlarm` FOREIGN KEY (`commentUserEmail`)
+REFERENCES `comment` (`userEmail`);
+
+ALTER TABLE `inquiry` ADD CONSTRAINT `fkUserToInquiry` FOREIGN KEY (`userEmail`)
+REFERENCES `user` (`userEmail`);
+

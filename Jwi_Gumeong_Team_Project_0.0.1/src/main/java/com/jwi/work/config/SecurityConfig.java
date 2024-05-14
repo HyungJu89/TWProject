@@ -18,7 +18,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                 		// requestMatchers : 어떤 경로에 대해 조건을 걸것인지
                 		// permitAll : 모든 사용자가 접속 가능
-                     	.requestMatchers("/WEB-INF/view/**").permitAll()
+                		
+                		.requestMatchers("/WEB-INF/view/**").permitAll()
                         .requestMatchers("/", "/admin/login", "/login").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         // hasRole : 권한이 있는 사용자가 접속 가능
@@ -27,7 +28,9 @@ public class SecurityConfig {
                         .requestMatchers("/user/**").hasAnyRole("MANAGER", "USER")
                         // anyRequest : 루트가 설정되어 있지 않은 나머지 URL 에 대한 설정
                         // authenticated : 아무 권한이나 가지고있어야 접속가능
-                        .anyRequest().authenticated()
+                        //.anyRequest().authenticated()
+                        // 일단 임시로 아무 경로나 다 되게 해놨음
+                        .anyRequest().permitAll()
                 );
 
         http

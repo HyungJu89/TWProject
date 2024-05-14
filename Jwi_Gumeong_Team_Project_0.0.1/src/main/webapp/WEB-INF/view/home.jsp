@@ -14,7 +14,12 @@
 <body>
 메인화면입니다.
 
+
+
 <a href="/user/signUp">회원가입</a>
+
+<a href="/channel/channelCreate">채널 검색 하러가기</a>
+<a href="/channel/postList/b1edf1e47d13f47194e606ad8095e444">채널 홈들어가기</a>
 
 </body>
 </html>
