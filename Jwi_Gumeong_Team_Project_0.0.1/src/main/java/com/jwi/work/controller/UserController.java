@@ -1,3 +1,13 @@
+
+/*
+ * 
+ * 
+ * 
+ * 유저 컨트롤러
+ * 	1. 회원가입
+ * 	2. 로그인 체크
+ * 
+ * */
 package com.jwi.work.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +39,7 @@ public class UserController {
 	@PostMapping("/login")
 	public String login(@RequestParam("userEmail") String userEmail,@RequestParam("userPw") String userPw, Model model) {
 		if(service.userCheck(userEmail, userPw)) {
-			return"mainPage";
+			return"mainPage"; //로그인 성공 시 임시 경로
 		}else {
 			return"home";
 		}

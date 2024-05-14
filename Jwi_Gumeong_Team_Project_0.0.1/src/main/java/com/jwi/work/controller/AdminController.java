@@ -1,3 +1,14 @@
+
+/*
+ * 
+ * 
+ * 
+ * 괸리자 페이지 컨트롤러
+ * 	1.관리자 로그인
+ * 	2.관리자 페이지 입장
+ * 
+ * */
+
 package com.jwi.work.controller;
 
 import org.springframework.stereotype.Controller;
