@@ -20,22 +20,19 @@ public class ChannelCreateService {
 	
 	public ResponseDto createSearch(String channelId) {
 		
-		
-		
 		return channerInfo.chzzkChannelInfo(channelId);
+		
 	}
 	
 	
 	public boolean createChannel(createChannelDto channelDto) {
 		
-	if(mapper.createChannelCheck(channelDto.getChannelId())== 0) {
-		mapper.createChannel(channelDto);
-		return true;
+		if(mapper.createChannelCheck(channelDto.getChannelId())== 0) {
+			mapper.createChannel(channelDto);
+			return true;
+		}
+	return false;
+	
 	}
-	return false;	
-	
-	
-	}
-	
 	
 }

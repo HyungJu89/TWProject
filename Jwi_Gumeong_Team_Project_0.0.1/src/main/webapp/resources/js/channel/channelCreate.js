@@ -12,10 +12,10 @@ $(document).ready(function() {
 			success: function(response) {
 				content = response.content;
 				if(content.channelId != null){
-				$('#channelName').html('채널명 : ' + content.channelName);
-				$('#channelImg').html('<img src="' + content.channelImageUrl + '">');
-				$('#channelText').html('구독자 수' + content.followerCount);
-				$('#channelCreate').html('검색버튼 : <input type="submit" id = "channelCreateSubmit">');
+					$('#channelName').html('채널명 : ' + content.channelName);
+					$('#channelImg').html('<img src="' + content.channelImageUrl + '">');
+					$('#channelText').html('구독자 수' + content.followerCount);
+					$('#channelCreate').html('검색버튼 : <input type="submit" id = "channelCreateSubmit">');
 				} else {
 					alert('존재하지않는 스트리머입니다..');
 				}
@@ -45,8 +45,8 @@ $(document).ready(function() {
 			}),
 			success: function(response) {
 				if(response){
-				alert('채널 생성완료 생성한 채널로 이동합니다.')
-				 window.location.href = '/channel/postList/' + content.channelId;
+					alert('채널 생성완료 생성한 채널로 이동합니다.')
+					window.location.href = '/channel/postList/' + content.channelId;
 				
 				} else {
 					alert('이미 생성되어있는 채널입니다.')

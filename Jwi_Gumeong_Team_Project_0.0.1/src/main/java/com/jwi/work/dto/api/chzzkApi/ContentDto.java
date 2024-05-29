@@ -10,7 +10,7 @@ import lombok.Data;
 public class ContentDto {
     @JsonProperty("channelId")
     private String channelId;
-
+    
     @JsonProperty("channelName")
     private String channelName;
 

@@ -3,26 +3,25 @@ use jwi;
 drop DATABASE jwi;
 -- 유저 테이블
 CREATE TABLE `user` (
-    `userEmail` VARCHAR(30) PRIMARY KEY NOT NULL, -- 유저 이메일
-    `userPw` VARCHAR(255) NOT NULL, -- 유저 비밀번호
-    `userName` VARCHAR(30) UNIQUE NOT NULL, -- 유저 닉네임
-    `userGender` CHAR(1) NULL, -- 유저 성별
-    `userAge` TINYINT NULL, -- 유저 나이
-    `userBlind` TINYINT NOT NULL DEFAULT 0, -- 유저 활성 유무
-    `userCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `userUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+	`userEmail`	VARCHAR(30) PRIMARY KEY	NOT NULL, -- 아이디
+	`userPw`	VARCHAR(255)	NOT NULL, -- 비번
+	`userName`	VARCHAR(30) UNIQUE	NOT NULL, -- 유저 닉네임
+	`userGender`	enum('man','girl','undisclosed')	NOT NULL	DEFAULT 'undisclosed', -- 성별
+	`userBirthday`	DATETIME, -- 생일
+	`userState`	ENUM('activate','deactivate','secession')	NOT NULL	DEFAULT 'activate', -- 로그인할때 체크 필요, deactivate 는 정지, secession는 탈퇴
+	`userCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
+	`userUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
 -- 즐겨찾기
 CREATE TABLE `favorites` (
-    `favoritesKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 즐겨찾기 키
-    `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
-    `channelId` VARCHAR(50) NOT NULL, -- 체널 아이디
-    `favoritesCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성 시간
-    `favoritesUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+	`favoritesKey`	int PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`channelId`	VARCHAR(50)	NOT NULL, -- 채널 아이디
+	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 아이디
+	`favoritesCreatedAt`	datetime	NOT NULL	DEFAULT NOW(),
+	`favoritesUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
-select * from channel;
 -- 체널 정보
 CREATE TABLE `channel` (
 	`channelId`	VARCHAR(50) PRIMARY KEY	NOT NULL, #채널아이디
@@ -38,27 +37,38 @@ CREATE TABLE `post` (
     `channelId` VARCHAR(50) NOT NULL, -- 체널 아이디
     `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
     `postTitle` VARCHAR(30) NOT NULL, -- 게시글 타이틀
-    `postContent` TEXT NOT NULL, -- 게시글 내용
-    `postBlind` TINYINT NOT NULL DEFAULT 0, -- 게시글 활성 유무 0: 활성 1: 비활성
+    `postContent` VARCHAR(200) NOT NULL, -- 게시글 내용
+    `postState`	ENUM('common','delete','disabled')	NOT NULL	DEFAULT 'common', -- 게시글 활성 유무 0: 활성 1: 비활성
     `postCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
     `postUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
 );
-
-CREATE TABLE `comment` (
-    `commentKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 댓글 키
-    `postKey` INT NOT NULL, -- 게시글 키
-    `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
-	`reCommentKey`	INT	NULL, -- 대댓글 일때 부모의 키값
-    `commentContent` TEXT NOT NULL, -- 댓글 내용
-    `commentBlind` TINYINT NOT NULL DEFAULT 0, -- 갯글 활성 유무 0: 활성 1: 비활성
-    `commentCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `commentUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+-- 댓글
+CREATE TABLE `commentLog` (
+	`commentLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 댓글키
+	`postKey`	INT	NOT NULL, -- 게시글 키
+	`userEmail`	VARCHAR(30)	NOT NULL, -- 작성자 이메일
+	`comment`	VARCHAR(200)	NOT NULL, -- 댓글
+	`commentState`	ENUM('common','delete','disabled')	NOT NULL	DEFAULT 'common', -- 댓글상태
+	`commentCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(), -- 생성시간
+	`commentUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
 );
+
+-- 대댓글
+CREATE TABLE `replyLog` (
+	`replyLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 대댓글 키
+	`commentKey`	INT	NOT NULL, -- 댓글 키
+	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 이메일
+	`reply`	VARCHAR(200)	NOT NULL, -- 댓글내용
+	`replyState`	ENUM('common','delete','disabled')	NOT NULL	DEFAULT 'common', -- 
+	`replyCreatedAt`	datetime	NOT NULL	DEFAULT NOW(),
+	`replyUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+);
+
  -- 좋아요 로그
 CREATE TABLE `likeLog` (
     `likeLogKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 좋아요 키
-    `postKey` INT NOT NULL, -- 게시글 키
     `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
+    `postKey` INT NOT NULL, -- 게시글 키
     `likeLogCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
     `likeLogUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
 );
@@ -68,156 +78,76 @@ CREATE TABLE `manager` (
     `managerKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 관리가 키
     `userEmail` VARCHAR(30) NOT NULL, -- 관리자 이메일
     `channelId` VARCHAR(50) NOT NULL, -- 채널 아이디 
-    `managerAuthority` TINYINT NOT NULL DEFAULT 1, -- 권한 단계 0:권한 제거, 1: 일반관리자 -> 높아질수록 권한높아짐(나중에)
     `managerCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
     `managerUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
 );
 -- 유저 신고
 CREATE TABLE `reportLog` (
-    `reportLogKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 유저신고 기록 키
-    `userEmail` VARCHAR(30) NOT NULL, -- 신고한 유저
-    `reportEmail` VARCHAR(30) NOT NULL, -- 신고당한 유저
-    `reportCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `reportUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+	`reportLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 신고기록 키
+	`reportReferenceType`	ENUM('post','comment','replyLog')	NOT NULL, -- 신고 참조 타입
+	`reportReferenceKey`	INT	NOT NULL, -- 심고 참조 키
+	`userEmail`	VARCHAR(30)	NOT NULL, -- 신고자 이메일
+	`reportEmail`	VARCHAR(30)	NOT NULL, -- 신고 당한사람 이메일
+	`reportCategory`	INT	NOT NULL, -- 신고 카테고리
+	`reportContent`	TEXT	NOT NULL, -- 신고 내용
+	`reportState`	ENUM('unprocessed','process')	NOT NULL	DEFAULT 'unprocessed', -- 신고 처리 여부
+	`reportCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
+	`reportUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
--- 게시글 신고 로그
-CREATE TABLE `postReportLog` (
-    `postReportKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 게시글 신고 로그 키
-    `userEmail` VARCHAR(30) NOT NULL, -- 신고한 유저
-    `postKey` INT NOT NULL, -- 게시글 키 
-    `postEmail` VARCHAR(30) NOT NULL, -- 게시글 작성자
-    `postSend` TINYINT NOT NULL DEFAULT 0, -- 처리 유무 0: 처리 x, 1: 완
-    `postReportCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `postReportUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+-- 밴 로그
+CREATE TABLE `bannedLog` (
+	`bannedKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 밴키
+	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 이메일
+	`bannedReason`	VARCHAR(50)	NOT NULL, -- 밴 사유
+	`reasonDate`	DATETIME	NOT NULL	DEFAULT NOW(), -- 정지 날짜
+	`bannedContent`	INT	NOT NULL, -- 정지 일수 
+	`bannedState`	ENUM('activate','deactivate')	NOT NULL	DEFAULT 'activate', -- 밴 활성화 여부(시간이 지나 정지가 풀리면 비활성화가 됨)
+	`bannedCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
+	`bannedUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
-
--- 댓글 신고 로그
-CREATE TABLE `commentReportLog` (
-    `commentReportLogKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 댓글 신고 로그 키 
-    `userEmail` VARCHAR(30) NOT NULL, -- 신고한 유저
-    `commentKey` INT NOT NULL, -- 댓글 키 
-    `commentEmail` VARCHAR(30) NOT NULL, -- 댓글 작성자
-    `commentSend` TINYINT NOT NULL DEFAULT 0, -- 처리 유무 0: 처리 x, 1: 완
-    `commentReportCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `commentReportUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
-);
-
 -- 운영자
 CREATE TABLE `admin` (
-    `adminId` VARCHAR(30) PRIMARY KEY NOT NULL, -- 아이디
-    `adminPw` VARCHAR(255) NOT NULL, -- 비밀번호
-    `adminAuthority` TINYINT NOT NULL DEFAULT 1, -- 권한 레벨
-    `adminCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `adminLoginTime` DATETIME NOT NULL DEFAULT NOW(), -- 가장최근 로그인 시간
-    `adminUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+	`adminId`	VARCHAR(30) PRIMARY KEY	NOT NULL, -- 어드민 아이디
+	`adminPw`	VARCHAR(255)	NOT NULL, -- 어드민 비밀번호
+	`adminState`	ENUM('activate','deactivate','secession')	NOT NULL	DEFAULT 'activate', -- 어드민 아이디 상태
+	`adminCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
+	`adminUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
-select * from admin;
 
-insert INTO admin(adminId,adminPw) value ("a","a");
 -- 운영자 접속 기록
 CREATE TABLE `adminLoginLog` (
-    `adminLoginLogKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 운영자 접속 기록 키
-    `adminId` VARCHAR(30) NOT NULL, -- 운영자 아이디
-    `adminLogTime` DATETIME NOT NULL DEFAULT NOW(), -- 운영자 접속시간
-    `adminLogUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+	`adminLoginLog`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 로그인 기록 키
+	`adminId`	VARCHAR(30) PRIMARY KEY	NOT NULL, -- 어드민 아이디
+	`adminLogTime`	DATETIME	NOT NULL	DEFAULT NOW(), -- 로그인 시간
+	`adminLogUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW() -- 변경시간
 );
 
  -- 알람
 CREATE TABLE `alarm` (
-    `alarmKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 알람 키
-    `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
-    `postKey` INT NOT NULL, -- 관련 게시글 키(게시글에 작성된 댓글일경우)
-	`commentUserEmail`	VARCHAR(30)	NULL, -- (대댓글일경우)
-	`alarmType`	VARCHAR(30)	NOT NULL,
-    `alarmCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성 시간
-    `alarmUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+	`alarmKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 알람 키
+	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 이메일
+	`alarmReferenceType`	ENUM('inquiry','post','comment','system','lick')	NOT NULL, -- 알람 참조 타입
+	`alarmReferenceKey`	INT	NOT NULL	DEFAULT '0', -- 알람 참조 키
+	`alarmTitle`	VARCHAR(50)	NOT NULL, -- 알람 제목
+	`alarmContent`	VARCHAR(255)	NOT NULL, -- 알람 내용
+	`alarmCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
+	`alarmUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
 CREATE TABLE `inquiry` (
-	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
-	`userEmail`	VARCHAR(30)	NOT NULL,
-	`inquiryDetails`	VARCHAR(30)	NOT NULL,
-	`answer`	text	NULL,
+	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 문의하기 키
+	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 이메일
+	`inquiryCategory`	VARCHAR(30)	NOT NULL, -- 문의 카태고리
+	`inquiryDetails`	text	NOT NULL, -- 문의 내용
 	`reportCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
 	`reportUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
--- 즐겨찾기 테이블과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 를 묶어줌
-ALTER TABLE `favorites` ADD CONSTRAINT `fkUserToFavorites` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`);
--- 즐겨찾기 테이블과 채널 테이블 사이의 연관성을 더해줌 ( channelId ) 로 묶어줌
-ALTER TABLE `favorites` ADD CONSTRAINT `fkChannelToFavorites` FOREIGN KEY (`channelId`)
-REFERENCES `channel` (`channelId`);
--- 게시글 테이블과 채널 테이블 사이의 연관성을 더해줌 ( channelId ) 로 묶어줌
-ALTER TABLE `post` ADD CONSTRAINT `fkChannelToPost` FOREIGN KEY (`channelId`)
-REFERENCES `channel` (`channelId`);
--- 게시글 테이블과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
-ALTER TABLE `post` ADD CONSTRAINT `fkUserToPost` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`);
--- 댓글 테이블과 게시판 테이블 사이의 연관성을 더해줌 ( postKey ) 로 묶어줌
-ALTER TABLE `comment` ADD CONSTRAINT `fkPostToComment` FOREIGN KEY (`postKey`)
-REFERENCES `post` (`postKey`);
--- 댓글 테이블과 유저 이메일 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
-ALTER TABLE `comment` ADD CONSTRAINT `fkUserToComment` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`);
--- 좋아요 테이블 과 게시판 테이블 사이의 연관성을 더해줌 ( postKey) 로 묶어줌 
-ALTER TABLE `likeLog` ADD CONSTRAINT `fkPostToLikeLog` FOREIGN KEY (`postKey`)
-REFERENCES `post` (`postKey`);
--- 좋아요 테이블 과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
-ALTER TABLE `likeLog` ADD CONSTRAINT `fkUserToLikeLog` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`); 
--- 메니저 테이블 과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
-ALTER TABLE `manager` ADD CONSTRAINT `fkUserToManager` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`);
--- 메니저 테이블 과 채널 테이블 사이의 연관성을 더해줌 ( channelId ) 로 묶어줌
-ALTER TABLE `manager` ADD CONSTRAINT `fkChannelToManager` FOREIGN KEY (`channelId`)
-REFERENCES `channel` (`channelId`);
--- 신고 테이블 과 유저 이메일 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
-ALTER TABLE `reportLog` ADD CONSTRAINT `fkReportLogReporter` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`);
--- 신고 테이블 과 유저 이메일 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
-ALTER TABLE `reportLog` ADD CONSTRAINT `fkReportLogReported` FOREIGN KEY (`reportEmail`)
-REFERENCES `user` (`userEmail`);
--- 게시판 신고 로그 테이블과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
-ALTER TABLE `postReportLog` ADD CONSTRAINT `fkUserToPostReportLogReporter` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`);
--- 게시판 신고 로그 테이블과 게시판 테이블 사이의 연관성을 더해줌 ( postKey ) 로 묶어줌
-ALTER TABLE `postReportLog` ADD CONSTRAINT `fkPostToPostReportLog` FOREIGN KEY (`postKey`)
-REFERENCES `post` (`postKey`);
-
--- 게시글을 신고하였지만 유저가 아이디를 삭제하는경우가 있을수 있으니 제거
--- 게시판 신고 로그 테이블과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
--- ALTER TABLE `postReportLog` ADD CONSTRAINT `fkUserToPostReportLog2` FOREIGN KEY (`postEmail`)
--- REFERENCES `user` (`userEmail`);
--- 댓글 신고 로그 테이블과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
-
-ALTER TABLE `commentReportLog` ADD CONSTRAINT `fkUserToCommentReportLogReporter` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`);
-
--- 댓글 신고 로그 테이블과 댓글 테이블 사이의 연관성을 더해줌 ( commentKey ) 로 묶어줌
-ALTER TABLE `commentReportLog` ADD CONSTRAINT `fkCommentToCommentReportLog` FOREIGN KEY (`commentKey`)
-REFERENCES `comment` (`commentKey`);
-
--- 댓글을 신고하였지만 유저가 아이디를 삭제하는경우가 있을수 있으니 제거
--- 댓글 신고 로그 테이블과 유저 테이블 사이의 연관성을 더해줌 ( userEmail ) 로 묶어줌
--- ALTER TABLE `commentReportLog` ADD CONSTRAINT `fkUserToCommentReportLog2` FOREIGN KEY (`commentEmail`)
--- REFERENCES `user` (`userEmail`);
-
--- 운영자 접속 기록 로그 테이블과 운영자 테이블 사이의 연관성을 더해줌 ( adminId ) 로 묶어줌
-ALTER TABLE `adminLoginLog` ADD CONSTRAINT `fkAdminToAdminLoginLog` FOREIGN KEY (`adminId`)
-REFERENCES `admin` (`adminId`);
-
--- 유저 테이블과 알람 테이블 간의 외래 키 제약 조건 추가	
-ALTER TABLE `alarm` ADD CONSTRAINT `fkUserToAlarm` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`);
-
--- 게시글 테이블과 알람 테이블 간의 외래 키 제약 조건 추가
-ALTER TABLE `alarm` ADD CONSTRAINT `fkPostToAlarm` FOREIGN KEY (`postKey`)
-REFERENCES `post` (`postKey`);
-
-ALTER TABLE `alarm` ADD CONSTRAINT `fkCommentToAlarm` FOREIGN KEY (`commentUserEmail`)
-REFERENCES `comment` (`userEmail`);
-
-ALTER TABLE `inquiry` ADD CONSTRAINT `fkUserToInquiry` FOREIGN KEY (`userEmail`)
-REFERENCES `user` (`userEmail`);
-
+CREATE TABLE `inquiryResponse` (
+	`inquiryResponseKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 문의 답변
+	`adminId`	VARCHAR(30)	NOT NULL, -- 답변한 어드민 아이디
+	`inquiryKey`	INT	NOT NULL, -- 문의 키값 (어떤 문의에 대답했는지)
+	`inquiryResponseText`	text	NOT NULL, -- 답변 내용
+	`inquiryCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
+	`inquiryUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+);

@@ -32,11 +32,5 @@ public class ChannelCreateController {
 		return "channel/channelCreate";
 	}
 	
-
-	
-
-	
-	
-	
 	
 }

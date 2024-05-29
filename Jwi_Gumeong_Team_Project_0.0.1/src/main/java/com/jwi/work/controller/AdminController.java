@@ -28,8 +28,6 @@ import com.jwi.work.dto.loginDto.LoginDto;
 public class AdminController {
 	
 
-	
-
 	@GetMapping("/login")
 	public String adminLogin() {
 		return "admin/login";
@@ -37,9 +35,6 @@ public class AdminController {
 	
 	@PostMapping("/login")
 	public String adminLoginProc(LoginDto login) {
-
-		
-		
 		
 		return "";
 	}
