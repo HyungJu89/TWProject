@@ -117,7 +117,7 @@ CREATE TABLE `admin` (
 -- 운영자 접속 기록
 CREATE TABLE `adminLoginLog` (
 	`adminLoginLog`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 로그인 기록 키
-	`adminId`	VARCHAR(30) PRIMARY KEY	NOT NULL, -- 어드민 아이디
+	`adminId`	VARCHAR(30) NOT NULL, -- 어드민 아이디
 	`adminLogTime`	DATETIME	NOT NULL	DEFAULT NOW(), -- 로그인 시간
 	`adminLogUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW() -- 변경시간
 );
