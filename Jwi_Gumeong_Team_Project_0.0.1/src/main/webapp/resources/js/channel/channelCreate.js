@@ -29,7 +29,7 @@ $(document).ready(function() {
 	});
 	
 	    $('#channelCreate').on('click', '#channelCreateSubmit', function() {
-			if(content.followerCount < 3000){
+			if(content.followerCount < 150){
 					alert('님이 검색한사람 너무 하꼬임')
 					return;
 					}
@@ -49,7 +49,9 @@ $(document).ready(function() {
 					window.location.href = '/channel/postList/' + content.channelId;
 				
 				} else {
-					alert('이미 생성되어있는 채널입니다.')
+					alert('이미 생성되어있는 채널입니다. 검색한 채널로 이동합니다.');
+					window.location.href = '/channel/postList/' + content.channelId;
+					
 				}
 				
 			},
