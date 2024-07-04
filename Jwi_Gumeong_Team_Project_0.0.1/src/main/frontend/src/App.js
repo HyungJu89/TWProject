@@ -23,8 +23,7 @@ function App() {
         <div>
         	백엔드에서 가져온 데이터입니다 : {hello}
             <p>
-            
-            백엔드에서 가져온 데이터입니다 : {hi}
+            gd
             </p>
             <span onClick={() => {setNamhwi("안하지..연락만 안끊기면")}}>
             	형주가 남희누나한테 한 말: {nuna}
