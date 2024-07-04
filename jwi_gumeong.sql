@@ -38,6 +38,7 @@ CREATE TABLE `post` (
     `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
     `postTitle` VARCHAR(30) NOT NULL, -- 게시글 타이틀
     `postContent` VARCHAR(200) NOT NULL, -- 게시글 내용
+    `postImg`    BLOB    NULL,
     `postState`	ENUM('common','delete','disabled')	NOT NULL	DEFAULT 'common', -- 게시글 활성 유무 0: 활성 1: 비활성
     `postCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
     `postUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
