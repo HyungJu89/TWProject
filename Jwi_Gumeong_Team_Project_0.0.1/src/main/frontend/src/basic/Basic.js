@@ -3,12 +3,12 @@
 
 import React from 'react';
 
-function Main() {
+function Basic() {
     return (
         <div>
-            최지은
+            기본상단입니다.
         </div>
     );
 }
 
-export default Main;
+export default Basic;
