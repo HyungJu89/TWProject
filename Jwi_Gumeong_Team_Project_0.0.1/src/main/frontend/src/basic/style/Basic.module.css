@@ -1,0 +1,25 @@
+.basicNav{
+    background-color: white;
+    max-width: 100%;
+    height: 40px;
+    border: 1px black solid;
+    padding: 10px 60px;
+    display: flex;
+    justify-content: space-between; /* 수평 정렬 */
+    align-items: center; /* 수직 정렬 */
+}
+.basicNav div{
+    display: flex;
+    justify-content: space-between; /* 수평 정렬 */
+    align-items: center; /* 수직 정렬 */
+}
+.basicNav div input {
+    border: 2px solid #FF8901;
+    width: 377px;
+    height: 40px;
+    border-radius: 80px;
+}
+.basicNav div input:focus {
+    border: 2px solid #FF8901;
+    outline: none;
+}
