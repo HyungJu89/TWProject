@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'SpoqaHanSansNeo-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+body, h1, h2, h3, h4, h5, h6, input {
+  font-family: 'SpoqaHanSansNeo-Regular', sans-serif;
+  font-weight: 400;
+  color: #101010;
+  font-size: 16px;
+}
+
+
 .App {
   text-align: center;
 }
