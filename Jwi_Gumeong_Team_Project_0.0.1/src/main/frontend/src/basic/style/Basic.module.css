@@ -5,11 +5,13 @@
 */
 
 .basicNav{ /* 상단 바 전체 영역*/
+    z-index: 10;
     font-size: 14px;
     background-color: white;
     max-width: 100%;
+    min-width: 460px;
     height: 40px;
-    padding: 10px 60px;
+    padding: 10px 5%;
     display: flex;
     justify-content: space-between; /* 수평 정렬 */
     align-items: center; /* 수직 정렬 */
@@ -19,15 +21,13 @@
     align-items: center; /* 수직 정렬 */
 }
 .divWidth{
-    background-color: red;
     max-width: 750px;
-    min-width: 130px;
+    min-width: 110px;
 }
 .basicNav div input { /* 상단 바 input 태그 스타일 */
     font-size: 14px;
     border: 2px solid #FF8901;
     width: 375px;
-    min-width: 130px;
     height: 24px;
     border-radius: 80px;
     padding: 8px 16px;
@@ -38,7 +38,6 @@
     outline: none;
 }
 .basicNav .icon{
-    background-color: red;
     display: flex;
     justify-content: space-between;
     cursor: pointer;
@@ -57,4 +56,11 @@
 }
 .basicNav .signUpBtn:hover{ 
     background-color: rgb(248, 248, 248);
+}
+/* JustSearch 모달 */
+.JustSearchBase{
+    z-index: 20;
+    width: 500px;
+    height: 500px;
+    background-color: red;
 }
