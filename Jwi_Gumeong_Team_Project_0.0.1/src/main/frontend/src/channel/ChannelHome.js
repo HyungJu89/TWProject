@@ -1,22 +1,31 @@
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import MainBanner from './MainBanner.js'
+import axios from 'axios';
+import { Route, Routes } from 'react-router';
+import { useEffect, useState } from 'react';
 
-function ChannelHome({ channelId }) {
+function ChannelHome() {
+    let [babo,setBabo] = useState('');
 
-    let channe = useQuery('channe', () =>
-        axios.get('https://api.chzzk.naver.com/service/v1/channels/' + channelId).then((a) =>
-            a.data
-        )
-    )
+            let channelInfo = useQuery('channe', () =>(
+            axios.get('/channelRest/search')
+            .then((a) =>setBabo(a.data),
+            console.log(22)
+            )
+            ))
 
     return (
+
         <>
+
             <div>
                 <div>
                     <div>
-                        {channe.openLive ? 
-                        <div className="백그라운드 이미지 줄필욘없음"> 메인배너banner</div> : 
+                        {channelInfo.isLoading?'로딩중':babo.content.channelName}
+                        {/* {channe.openLive ?  */}
+                        <MainBanner/> : 
                         <div className="백그라운드 이미지 주기"> 라이브 off배너</div>
-                        }
+                        {/* } */}
                     </div>
                     <div className="채널 정보">
                         <div className="채널 아이콘"></div>
@@ -41,7 +50,7 @@ function ChannelHome({ channelId }) {
                     </div>
                     <div>
                         <div>
-                            즐겨찾기
+                            <div></div>
                         </div>
                         <div>
                             추천창

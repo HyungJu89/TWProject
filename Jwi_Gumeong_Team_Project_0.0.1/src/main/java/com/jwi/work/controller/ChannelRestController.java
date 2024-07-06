@@ -1,5 +1,6 @@
 package com.jwi.work.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +22,13 @@ public class ChannelRestController {
 	
 	
 	
-	@PostMapping("/search")
-	public ResponseDto channelCreateRest(@RequestBody createChannelDto channelId) {
-
-		return service.createSearch(channelId.getChannelId());
+	@GetMapping("/search")
+	public ResponseDto channelCreateRest() {
+		//@RequestBody createChannelDto channelId
+		//channelId.setChannelId();
+		return service.createSearch("0dad8baf12a436f722faa8e5001c5011");
 	}
+
 	
 	@PostMapping("/create")
 	public boolean createChannerProcess(@RequestBody createChannelDto channelInfo) {
