@@ -7,19 +7,12 @@ import { useEffect, useState } from 'react';
 
 function ChannelHome() {
     let { channelId } = useParams();
-    let [channelState,setChannelState] = useState();
-    let channelInfo = useQuery('channe', () => (
+    let channelInfo = useQuery('channelInfo', () => (
         axios.get('/channelRest/search/' + channelId)
             .then((a) =>
                 a.data.content
             )
     ))
-
-    useEffect(() => {
-        if (channelInfo.data) {
-            setChannelState(channelInfo)
-        }
-    }, [channelInfo])
 
     return (
 
@@ -28,8 +21,8 @@ function ChannelHome() {
             <div>
                 <div>
                     <div>
-                        {channelInfo.isLoading ? '로딩중' : channelState.channelName}
-                        {channelState.openLive ? <MainBanner  channelId={channelId}/> : 
+                        {channelInfo.isLoading ? '로딩중' : channelInfo.isError ? '에러남' : '정상작동'}
+                        {channelInfo.openLive ? <MainBanner  channelId={channelId}/> : 
                         <div className="백그라운드 이미지 주기"> 라이브 off배너</div>
                         }
                     </div>
