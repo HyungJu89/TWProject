@@ -10,6 +10,7 @@ function Main() {
         <div>
             최지은fasfasfasfa
             <button onClick={()=>{navigate('/channel/'+'123')}}>채널 확인 URL</button>
+            <div style={{backgroundImage : 'url(https://codingapple1.github.io/shop/shoes1.jpg)'}}></div>
         </div>
     );
 }
