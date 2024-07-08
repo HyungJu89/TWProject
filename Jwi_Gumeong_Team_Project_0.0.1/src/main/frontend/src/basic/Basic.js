@@ -9,8 +9,6 @@ import axios from 'axios'
 function Basic() {
 let [loginOn, setLoginOn] = useState(true);
 let [justSearchOn, setJustSearchOn] = useState(false);
-axios.get('https://api.chzzk.naver.com/service/v1/search/lives?keyword=%EB%A8%B9%EB%B0%A9&offset=0&size=10')
-.then((a)=>{console.log(a)})
 
     return (
         <>
