@@ -18,7 +18,7 @@ public class ChannelCreateService {
 	private ChannelMapper mapper;
 	
 	
-	public String createSearch(String channelId) {
+	public Object createSearch(String channelId) {
 		
 		return channerInfo.chzzkChannelInfo(channelId);
 		

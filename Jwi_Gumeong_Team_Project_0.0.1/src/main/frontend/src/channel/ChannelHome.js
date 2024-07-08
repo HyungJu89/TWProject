@@ -6,15 +6,20 @@ import { Route, Routes } from 'react-router';
 import { useEffect, useState } from 'react';
 
 function ChannelHome() {
-    let [babo, setBabo] = useState('');
-    let { id } = useParams();
+    let { channelId } = useParams();
+    let [channelState,setChannelState] = useState();
     let channelInfo = useQuery('channe', () => (
-        axios.get('/channel/search')
-            .then((a) => 
-
-            setBabo(a.data)
+        axios.get('/channelRest/search/' + channelId)
+            .then((a) =>
+                a.data.content
             )
     ))
+
+    useEffect(() => {
+        if (channelInfo.data) {
+            setChannelState(channelInfo)
+        }
+    }, [channelInfo])
 
     return (
 
@@ -23,11 +28,10 @@ function ChannelHome() {
             <div>
                 <div>
                     <div>
-                        {channelInfo.isLoading ? '로딩중' : babo.content.channelName}
-                        {/* {channe.openLive ?  */}
-                        <MainBanner /> :
+                        {channelInfo.isLoading ? '로딩중' : channelState.channelName}
+                        {channelState.openLive ? <MainBanner  channelId={channelId}/> : 
                         <div className="백그라운드 이미지 주기"> 라이브 off배너</div>
-                        {/* } */}
+                        }
                     </div>
                     <div className="채널 정보">
                         <div className="채널 아이콘"></div>

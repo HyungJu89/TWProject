@@ -11,7 +11,7 @@ public class ChanneService {
 	@Autowired
 	private ChzzkChannelInfo channerInfo;
 
-	public String chzzkLiveInfo(String channelId) {
+	public Object chzzkLiveInfo(String channelId) {
 		
 		
 		

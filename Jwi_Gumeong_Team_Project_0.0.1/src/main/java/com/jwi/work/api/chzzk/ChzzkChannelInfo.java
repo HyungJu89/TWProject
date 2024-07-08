@@ -8,13 +8,10 @@ import java.net.URLEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.jwi.work.dto.api.chzzkApi.ResponseDto;
-import com.jwi.work.dto.api.chzzkLiveApi.chzzkLiveApiDto;
-
 @Service
 public class ChzzkChannelInfo {
 	
-	public String chzzkChannelInfo(String channelId) {
+	public Object chzzkChannelInfo(String channelId) {
 		
 		String API_URL = "https://api.chzzk.naver.com/service/v1/channels/";
 		
@@ -35,7 +32,7 @@ public class ChzzkChannelInfo {
 			e.printStackTrace();				
 		}
 							
-		String channelInfo = restTemplate.getForObject(uri, String.class); 	
+		Object channelInfo = restTemplate.getForObject(uri, Object.class); 	
 		System.out.println(API_URL);
 		System.out.println(channelInfo);
 		
@@ -46,10 +43,11 @@ public class ChzzkChannelInfo {
 	
 	
 	
-	public String chzzkLiveInfo(String channelId) {
+	public Object chzzkLiveInfo(String channelId) {
 		String API_URL = null;
 		try {
 			String encodedChanneId = URLEncoder.encode(channelId, "UTF-8");
+							
 			API_URL = "https://api.chzzk.naver.com/service/v1/channels/"+ encodedChanneId+"/data?fields=banners,topExposedVideos,missionDonationChannelHomeExposure";
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
@@ -65,7 +63,7 @@ public class ChzzkChannelInfo {
 			e.printStackTrace();				
 		}
 							
-		String channelInfo = restTemplate.getForObject(uri, String.class); 	
+		Object channelInfo = restTemplate.getForObject(uri, Object.class); 	
 		System.out.println(API_URL);
 		System.out.println(channelInfo);
 		
