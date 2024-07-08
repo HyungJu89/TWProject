@@ -3,7 +3,10 @@
     - logo svg 받기
     - 아이콘 svg 받기(2)
 */
-
+body{
+    min-width: 730px;
+    margin: 0px;
+}
 .basicNav{ /* 상단 바 전체 영역*/
     z-index: 10;
     font-size: 14px;
@@ -15,23 +18,21 @@
     display: flex;
     justify-content: space-between; /* 수평 정렬 */
     align-items: center; /* 수직 정렬 */
-}
-.basicNav div{ /* 상단 바 하위 div 정렬 코드*/
-    display: flex;
-    align-items: center; /* 수직 정렬 */
+    position: relative;
 }
 .divWidth{
     max-width: 750px;
-    min-width: 110px;
+    min-width: 130px;
 }
 .basicNav div input { /* 상단 바 input 태그 스타일 */
     font-size: 14px;
     border: 2px solid #FF8901;
-    width: 375px;
-    height: 24px;
+    width: 343px;
+    height: 20px;
     border-radius: 80px;
     padding: 8px 16px;
     margin: 0px 10px;
+    
 }
 .basicNav div input:focus { /* 상단 바 input 태그 스타일 */
     border: 2px solid #FF8901;
@@ -39,6 +40,7 @@
 }
 .basicNav .icon{
     display: flex;
+    align-items: center;
     justify-content: space-between;
     cursor: pointer;
     max-width: 750px;
@@ -60,7 +62,52 @@
 /* JustSearch 모달 */
 .JustSearchBase{
     z-index: 20;
-    width: 500px;
-    height: 500px;
-    background-color: red;
+    width: 337px;
+    height: 234px;
+    border-radius: 20px;
+    border: 1px solid #F3F3F3;
+    background: #FFFFFF;
+    padding: 0px 20px;
+    position: absolute;
+    left: 50%;
+    top: 54px;
+    transform: translate(-50%, -0%);
+    margin: 0px 0px;
+}
+.JustSearchBase h4{
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    margin: 20px 0px;
+}
+.JustSearchBase p{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17.53px;
+    text-align: center;
+    color: #999999;
+    left: 50%;
+    top: 50%;
+    margin: 82px 90px 98px 90px;
+}
+.JustSearchBase .mainDiv{
+    width: 337px;
+    height: 160px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.JustSearchBase .list{
+    width: 337px;
+    height:20px;
+    font-size: 14px;
+    font-weight: 400;
+    color:#101010;
+}
+.JustSearchBase .list div{
+    display: flex;
+    margin-bottom: 10px;
+}
+.JustSearchBase img{
+    height: 20px;
+    margin-right: 10px;
 }

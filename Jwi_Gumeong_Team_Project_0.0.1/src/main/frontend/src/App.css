@@ -11,6 +11,17 @@ body, h1, h2, h3, h4, h5, h6, input {
   font-size: 16px;
 }
 
+/* 스크롤바  */
+::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 12px;
+}
+::-webkit-scrollbar-thumb	{
+  background: #d6d6d6; /* 스크롤바 막대 색상 */
+}
+::-webkit-scrollbar-track{
+  background: #f1f1f1;
+}
 
 .App {
   text-align: center;
