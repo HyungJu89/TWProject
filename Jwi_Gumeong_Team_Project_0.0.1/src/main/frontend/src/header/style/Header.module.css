@@ -74,12 +74,11 @@ body{
     transform: translate(-50%, -0%);
     margin: 0px 0px;
 }
-.JustSearchBase .h4{
+.JustSearchBase h4{
     font-size: 14px;
     font-weight: 700;
-    line-height: 17.53px;
     text-align: left;
-    margin-block: 0px;
+    margin: 20px 0px;
 }
 .JustSearchBase p{
     font-size: 14px;
@@ -91,6 +90,24 @@ body{
     top: 50%;
     margin: 82px 90px 98px 90px;
 }
+.JustSearchBase .mainDiv{
+    width: 337px;
+    height: 160px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 .JustSearchBase .list{
-    background-color: red;
+    width: 337px;
+    height:20px;
+    font-size: 14px;
+    font-weight: 400;
+    color:#101010;
+}
+.JustSearchBase .list div{
+    display: flex;
+    margin-bottom: 10px;
+}
+.JustSearchBase img{
+    height: 20px;
+    margin-right: 10px;
 }

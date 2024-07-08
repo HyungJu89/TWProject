@@ -3,6 +3,8 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from './style/Header.module.css'; 
+//이미지 import
+import searching from '../icon/24px/searching.png';
 import '../App.css'; 
 
 function Header() {
@@ -51,15 +53,25 @@ function JustSearch(){
         localStorage.setItem('search', JSON.stringify(justSearchLocal))
       },[])
 
-      let [justSearchOn, setJustSearchOn ] = useState(false) //나중에... 최근 검색어 on/off로 바꿔야함
+      let [justSearchOn, setJustSearchOn ] = useState(true) //나중에... 최근 검색어 on/off로 바꿔야함
 
     return(
         <div className={styles.JustSearchBase}>
             <h4>최근검색어</h4>
-            {justSearchOn === true ? null : <p>최근 검색 내역이 없어요.</p>}
-                <div className={styles.list}>
-                    
-                </div>           
+            {justSearchOn === true ? 
+            <div className={styles.mainDiv}>
+            <div className={styles.list}>
+            <div><img src={searching}/>요즘 검색어</div>
+            <div><img src={searching}/>요즘 검색어</div>
+            <div><img src={searching}/>요즘 검색어</div>
+            <div><img src={searching}/>요즘 검색어</div>
+            <div><img src={searching}/>요즘 검색어</div>
+            <div><img src={searching}/>요즘 검색어</div>
+            </div>   
+            </div>
+            
+            : <p>최근 검색 내역이 없어요.</p>}
+        
             </div>
     )
 }
