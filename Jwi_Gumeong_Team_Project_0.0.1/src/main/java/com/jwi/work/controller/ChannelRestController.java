@@ -23,7 +23,7 @@ public class ChannelRestController {
 	
 	
 	@GetMapping("/search")
-	public ResponseDto channelCreateRest() {
+	public String channelCreateRest() {
 		//@RequestBody createChannelDto channelId
 		//channelId.setChannelId();
 		return service.createSearch("0dad8baf12a436f722faa8e5001c5011");

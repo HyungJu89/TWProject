@@ -1,18 +1,20 @@
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { useParams } from 'react-router-dom';
 import MainBanner from './MainBanner.js'
 import axios from 'axios';
 import { Route, Routes } from 'react-router';
 import { useEffect, useState } from 'react';
 
 function ChannelHome() {
-    let [babo,setBabo] = useState('');
+    let [babo, setBabo] = useState('');
+    let { id } = useParams();
+    let channelInfo = useQuery('channe', () => (
+        axios.get('/channel/search')
+            .then((a) => 
 
-            let channelInfo = useQuery('channe', () =>(
-            axios.get('/channelRest/search')
-            .then((a) =>setBabo(a.data),
-            console.log(22)
+            setBabo(a.data)
             )
-            ))
+    ))
 
     return (
 
@@ -21,9 +23,9 @@ function ChannelHome() {
             <div>
                 <div>
                     <div>
-                        {channelInfo.isLoading?'로딩중':babo.content.channelName}
+                        {channelInfo.isLoading ? '로딩중' : babo.content.channelName}
                         {/* {channe.openLive ?  */}
-                        <MainBanner/> : 
+                        <MainBanner /> :
                         <div className="백그라운드 이미지 주기"> 라이브 off배너</div>
                         {/* } */}
                     </div>
