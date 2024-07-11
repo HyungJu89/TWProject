@@ -26,18 +26,23 @@ body{
     min-width: 200px;
     height: 40px;
 }
-.basicNav div input { /* 상단 바 input 태그 스타일 */
-    font-size: 14px;
+.inputDiv{
+    display: flex;
     border: 2px solid #FF8901;
     width: 343px;
     height: 20px;
     border-radius: 80px;
     padding: 8px 16px;
-    margin: 0px 10px;
-    
+    margin: 0px 9px;
+}
+.basicNav div input { /* 상단 바 input 태그 스타일 */
+    font-size: 14px;
+    width: 320px;
+    height: 20px;
+    margin-right: 5px;
+    border: 0px;
 }
 .basicNav div input:focus { /* 상단 바 input 태그 스타일 */
-    border: 2px solid #FF8901;
     outline: none;
 }
 .basicNav .icon{
@@ -73,11 +78,13 @@ body{
     color: #FF8901;
     padding: 6px 20px;
     cursor: pointer;
+    transition:0.2s;
 }
 .basicNav .signUpBtn:hover{ 
     color: white;
     background-color: #FF8901;
     border: 1px solid white;
+    transition:0.2s;
 }
 /* JustSearch 모달 */
 .JustSearchBase{
@@ -92,6 +99,8 @@ body{
     top: 54px;
     transform: translate(-50%, -0%);
     margin: 0px 0px;
+    box-shadow: 0px 2px 3.9px 0px #F3F3F3;
+
 }
 .JustSearchBase h4{
     font-size: 14px;
@@ -132,10 +141,12 @@ body{
     word-wrap: break-word;
     padding: 0px 5px;
     margin: 0px;
+    transition:0.2s;
 }
 .JustSearchBase .list div p:hover{
     background-color: #F3F3F3;
     padding: 0px 10px;
+    transition:0.2s;
 }
 .JustSearchBase img{
     height: 20px;

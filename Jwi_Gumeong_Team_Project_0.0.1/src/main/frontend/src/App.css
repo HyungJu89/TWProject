@@ -10,6 +10,9 @@ body, h1, h2, h3, h4, h5, h6, input { /*기본 폰트 설정*/
   color: #101010;
   font-size: 16px;
 }
+body{ /* 배경 색상 */
+  background: #F5F6FB;
+}
 button { /*기본 버튼 설정*/
   font-weight: 500;
   color: white;
@@ -18,6 +21,9 @@ button { /*기본 버튼 설정*/
   outline: none;
   border: 0px;
   cursor: pointer;
+}
+div { /* div 기본 둥글기 */
+  border-radius: 20px;
 }
 
 /* 스크롤바  */

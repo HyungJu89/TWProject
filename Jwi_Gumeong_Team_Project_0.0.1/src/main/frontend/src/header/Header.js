@@ -12,6 +12,7 @@ import {Link} from 'react-router-dom';
 import Logo from '../icon/logo/logo.png'; //로고 이미지
 import searching from '../icon/24px/searching.png';
 import deletion from '../icon/14px/deletion.png';
+import search from '../icon/24px/search.png';
 import Open_channel from '../icon/24px/Open-channel.png';
 import notification_activation from '../icon/24px/notification-activation.png';
 import notification_deactivation from '../icon/24px/notification-deactivation.png';
@@ -32,8 +33,10 @@ function Header() {
         <>
             <div className={styles.basicNav}>
                 <div className={styles.divWidth}><Link to="/"><img src={Logo} /></Link></div>
-                <div className={styles.divWidth}>
-                    <input onClick={() => { setJustSearchOn(true) }}  onBlur={()=>{setJustSearchOn(false)}} placeholder='검색어를 입력하세요' /></div>
+                <div className={styles.inputDiv}>
+                    <input onClick={() => { setJustSearchOn(true) }}onBlur={()=>{setJustSearchOn(false)}}placeholder='검색어를 입력하세요' />
+                    <img style={{cursor: 'pointer'}} src={search}/>
+                </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
                 <div className={styles.icon}>
                     {loginOn === true && <Icon/>} {/* 로그인 체크 */}
