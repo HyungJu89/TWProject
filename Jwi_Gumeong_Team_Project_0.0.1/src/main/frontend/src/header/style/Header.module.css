@@ -12,9 +12,9 @@ body{
     font-size: 14px;
     background-color: white;
     max-width: 100%;
-    min-width: 460px;
+    min-width: 700px;
     height: 40px;
-    padding: 10px 5%;
+    padding: 10px 35px;
     display: flex;
     justify-content: space-between; /* 수평 정렬 */
     align-items: center; /* 수직 정렬 */
@@ -22,7 +22,8 @@ body{
 }
 .divWidth{
     max-width: 750px;
-    min-width: 130px;
+    min-width: 150px;
+    height: 40px;
 }
 .basicNav div input { /* 상단 바 input 태그 스타일 */
     font-size: 14px;
@@ -44,10 +45,11 @@ body{
     justify-content: space-between;
     cursor: pointer;
     max-width: 750px;
-    min-width: 130px;
+    min-width: 150px;
 }
 .basicNav .icon div{
-    margin-left: 5px;
+    display: flex;
+    justify-content: space-between;
 }
 .basicNav .signUpBtn{ /* 로그인 버튼 디자인 */
     border: 1px solid #FF8901;
