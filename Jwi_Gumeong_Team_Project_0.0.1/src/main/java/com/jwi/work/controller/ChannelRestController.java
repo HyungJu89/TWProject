@@ -27,7 +27,7 @@ public class ChannelRestController {
 	public Object channelCreateRest(@PathVariable("channelId") String channelId) {
 		//@RequestBody createChannelDto channelId
 		//channelId.setChannelId();
-		return service.createSearch("0b33823ac81de48d5b78a38cdbc0ab94");
+		return service.createSearch("dc740d5bb5680666b6bf2ebc58a8203f");
 	}
 
 
@@ -36,7 +36,7 @@ public class ChannelRestController {
 	@GetMapping("/live/{channelId}")
 	public Object searchChanner(@PathVariable("channelId") String channelId) {
 		
-		return channeService.chzzkLiveInfo("0b33823ac81de48d5b78a38cdbc0ab94");
+		return channeService.chzzkLiveInfo("dc740d5bb5680666b6bf2ebc58a8203f");
 	}
 	
 	
