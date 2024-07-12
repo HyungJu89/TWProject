@@ -1,6 +1,53 @@
-.mainDiv{
-    width: 786px;
-    height: 386px;
+.mainDiv {
+    width: 726px;
+    height: 346px;
     background-color: white;
-    margin: 10px 0px;   
+    margin: 10px 0px;
+    padding: 20px 30px;
+}
+
+.title {
+    width: 726px;
+    height: 25px;
+    padding: 7.5px 0px;
+    font-size: 20px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.title img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+/**/
+.dashed {
+    border-bottom: 1px solid #F3F3F3;
+    border-radius: 0px;
+    margin: 20px 0px;
+    }
+/**/
+.userName {
+    width: 726px;
+    height: 24px;
+}
+.test{
+    background-color: red;
+    display: flex;
+}
+.a{
+    background: linear-gradient(to right,
+     rgb(0, 0, 0) 20%,
+     rgba(255, 255, 255, 0) 60%);
+    height: 200px;
+    width: 100%;
+}
+.b{
+    background: linear-gradient(to left,
+     rgb(0, 0, 0) 20%,
+     rgba(255, 255, 255, 0) 60%);
+    height: 200px;
+    width: 100%;
 }
