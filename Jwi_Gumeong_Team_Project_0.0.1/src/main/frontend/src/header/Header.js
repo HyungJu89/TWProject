@@ -6,11 +6,12 @@ import styles from './style/Header.module.css';
 //이미지 import
 import searching from '../icon/24px/searching.png';
 import '../App.css'; 
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
 let [loginOn, setLoginOn] = useState(true);
 let [justSearchOn, setJustSearchOn] = useState(false);
-
+let navigate = useNavigate();
 useEffect(()=>{ {/* 최근검색어 미완성 */}
 let justSearchLocal = localStorage.getItem('search')
 justSearchLocal = JSON.parse(justSearchLocal)
@@ -28,7 +29,7 @@ justSearchLocal != null ? null : localStorage.setItem('search', JSON.stringify([
                 {justSearchOn == true ? <JustSearch/>: null} {/* 최근 검색 모달*/}
             <div className={styles.icon}>
                 { loginOn === true && <Icon/> } {/* 로그인 체크 */}
-            <div className={styles.signUpBtn}>로그인</div>
+            <div onClick={()=>{navigate('/signIn')}}className={styles.signUpBtn}>로그인</div>
             </div>
         </div>
         </>
