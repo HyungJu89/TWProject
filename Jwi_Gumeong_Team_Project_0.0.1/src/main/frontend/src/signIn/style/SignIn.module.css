@@ -16,28 +16,27 @@ html, body {
 
 .loginContainer {
     background-color: #E5E5E5;
-    width: 766px;
-    height: 658px;
+    width: 626px;
+    height: 518px;
+    padding: 80px; /* 패딩 추가로 여백 확보 */
     display: flex;
     flex-direction: column; /* 세로 방향 정렬 */
     justify-content: center;
     align-items: center;
-    padding: 20px; /* 패딩 추가로 여백 확보 */
     border-radius: 20px;
 }
 
 .topFont {
     font-size: 32px;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
 }
 
 .formGroup {
-    width: 80%;
+    width: 626px;
     max-width: 1000px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 20px; /* 각 그룹 사이에 여백 추가 */
 }
 
 .formGroup p {
@@ -45,10 +44,8 @@ html, body {
 }
 
 .formGroup input {
-    margin-bottom: 30px; /* 입력 요소들 사이에 여백 추가 */
-    width: 100%;
+    width: 626px;
     height: 60px;
-    max-width: 1000px;
     box-sizing: border-box;
     border-radius: 6px;
     border: 2px solid #E5E5E5;
@@ -64,8 +61,10 @@ html, body {
     border-width: 2px;
 }
 .loginButton {
-    width: 80%;
-    height: 54px;
+    background-color: red;
+    width: 626px;
+    height: 60px;
+    padding: 20px 213px;
     box-sizing: border-box;
     background-color: #BBBBBB;
     border-radius: 10px;
@@ -73,7 +72,9 @@ html, body {
     border: none;
     cursor: pointer;
     text-align: center;
-    margin-top: 69px;
+    margin-top: 80px;
+    font-size: 20px;
+    font-weight: 500;
 }
 .loginButton.active {
     background-color: #FF8901; /* 활성화된 배경색 */
@@ -81,13 +82,15 @@ html, body {
 .help {
     display: flex;
     width: 300px;
+    height: 19px;
     max-width: 1000px;
     justify-content: center;
-    margin-top: 20px; /* 위 요소들과의 간격 추가 */
+    margin-top: 30px; /* 위 요소들과의 간격 추가 */
     color: #BBBBBB;
 }
 
 .help h6 {
     width: 100%;
     color: #999999;
+    margin-top: 0px;
 }

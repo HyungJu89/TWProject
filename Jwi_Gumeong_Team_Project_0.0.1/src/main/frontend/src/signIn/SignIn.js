@@ -28,7 +28,7 @@ function SignIn() {
                 <div className={styles.topFont}>로그인</div>
                 <div className={styles.formGroup}>
                     <p>이메일</p>
-                    <input type="email" placeholder="이메일을 입력하세요"  value={email} onChange={handleEmailChange}/>
+                    <input style={{marginBottom : '30px'}} type="email" placeholder="이메일을 입력하세요"  value={email} onChange={handleEmailChange}/>
                 </div>
                 <div className={styles.formGroup}>
                     <p>비밀번호</p>
