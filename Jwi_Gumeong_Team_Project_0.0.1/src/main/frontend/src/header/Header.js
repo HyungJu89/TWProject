@@ -4,6 +4,13 @@
 
 /* eslint-disable */
 // ^워링 업애주는 친구
+
+import React, { useEffect, useState } from 'react';
+import styles from './style/Header.module.css';
+import {Link} from 'react-router-dom';
+//이미지 import
+import Logo from '../icon/logo/logo.png'; //로고 이미지
+import searching from '../icon/24px/searching.png';
 import deletion from '../icon/14px/deletion.png';
 import search from '../icon/24px/search.png';
 import Open_channel from '../icon/24px/Open-channel.png';
