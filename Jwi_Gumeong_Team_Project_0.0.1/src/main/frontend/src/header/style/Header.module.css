@@ -1,8 +1,9 @@
-/*TODO.
-    - hover 정보 받기
-    - logo svg 받기
-    - 아이콘 svg 받기(2)
-*/
+@keyframes scaleUpDown {
+    0% {transform: scale(1);}
+    50% {transform: scale(0.8);}
+    100% {transform: scale(1);}
+}
+
 body{
     min-width: 730px;
     margin: 0px;
@@ -12,9 +13,9 @@ body{
     font-size: 14px;
     background-color: white;
     max-width: 100%;
-    min-width: 460px;
+    min-width: 800px;
     height: 40px;
-    padding: 10px 5%;
+    padding: 10px 35px;
     display: flex;
     justify-content: space-between; /* 수평 정렬 */
     align-items: center; /* 수직 정렬 */
@@ -22,20 +23,26 @@ body{
 }
 .divWidth{
     max-width: 750px;
-    min-width: 130px;
+    min-width: 200px;
+    height: 40px;
 }
-.basicNav div input { /* 상단 바 input 태그 스타일 */
-    font-size: 14px;
+.inputDiv{
+    display: flex;
     border: 2px solid #FF8901;
     width: 343px;
     height: 20px;
     border-radius: 80px;
     padding: 8px 16px;
-    margin: 0px 10px;
-    
+    margin: 0px 9px;
+}
+.basicNav div input { /* 상단 바 input 태그 스타일 */
+    font-size: 14px;
+    width: 320px;
+    height: 20px;
+    margin-right: 5px;
+    border: 0px;
 }
 .basicNav div input:focus { /* 상단 바 input 태그 스타일 */
-    border: 2px solid #FF8901;
     outline: none;
 }
 .basicNav .icon{
@@ -44,10 +51,26 @@ body{
     justify-content: space-between;
     cursor: pointer;
     max-width: 750px;
-    min-width: 130px;
+    min-width: 200px;
 }
-.basicNav .icon div{
-    margin-left: 5px;
+.icon_notification{
+    width: 34px;
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 25px;
+    border-radius: 50%;
+    transition: background-color 0.5s ease-in-out; /* 애니메이션 적용 */
+}
+.icon_notification:hover{
+    background-color: #FFEDD9;
+    border-radius: 50%;
+    animation: scaleUpDown 0.5s forwards; /* 애니메이션 적용 */
+}
+.icon_notification img{
+    width: 24px;
+    height: 24px;
 }
 .basicNav .signUpBtn{ /* 로그인 버튼 디자인 */
     border: 1px solid #FF8901;
@@ -55,15 +78,18 @@ body{
     color: #FF8901;
     padding: 6px 20px;
     cursor: pointer;
+    transition:0.2s;
 }
 .basicNav .signUpBtn:hover{ 
-    background-color: rgb(248, 248, 248);
+    color: white;
+    background-color: #FF8901;
+    border: 1px solid white;
+    transition:0.2s;
 }
 /* JustSearch 모달 */
 .JustSearchBase{
     z-index: 20;
     width: 337px;
-    height: 234px;
     border-radius: 20px;
     border: 1px solid #F3F3F3;
     background: #FFFFFF;
@@ -73,6 +99,8 @@ body{
     top: 54px;
     transform: translate(-50%, -0%);
     margin: 0px 0px;
+    box-shadow: 0px 2px 3.9px 0px #F3F3F3;
+
 }
 .JustSearchBase h4{
     font-size: 14px;
@@ -92,22 +120,34 @@ body{
 }
 .JustSearchBase .mainDiv{
     width: 337px;
-    height: 160px;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 .JustSearchBase .list{
     width: 337px;
-    height:20px;
+    padding-bottom: 10px;
     font-size: 14px;
     font-weight: 400;
     color:#101010;
 }
 .JustSearchBase .list div{
     display: flex;
+    justify-content: space-between;
+    align-items: center; /* 수직 정렬 */
     margin-bottom: 10px;
+}
+.JustSearchBase .list div p{
+    width: 260px;
+    cursor: pointer;
+    text-align: start;
+    word-wrap: break-word;
+    padding: 0px 5px;
+    margin: 0px;
+    transition:0.2s;
+}
+.JustSearchBase .list div p:hover{
+    background-color: #F3F3F3;
+    padding: 0px 10px;
+    transition:0.2s;
 }
 .JustSearchBase img{
     height: 20px;
-    margin-right: 10px;
 }

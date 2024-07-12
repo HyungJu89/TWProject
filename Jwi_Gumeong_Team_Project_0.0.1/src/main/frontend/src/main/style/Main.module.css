@@ -1,0 +1,35 @@
+.basic { /* 전체  사이즈  제한*/
+    margin: 30px auto;
+    width: 1194px;
+    display: flex;
+}
+/*왼쪽*/
+.leftDiv{
+    width: 786px;
+    margin-right: 30px;
+}
+.leftDiv .hotBoard{
+    width: 786px;
+    height: 413px;
+    background-color: white;
+    margin-bottom: 30px;
+}
+.leftDiv .Nav{
+    width: 786px;
+    height: 60px;
+    background: #FFFFFF;
+}
+/*오른쪽*/
+.rightDiv{
+    width: 378px;
+}
+.rightDiv .userBefore{
+    width: 378px;
+    height: 201px;
+    background-color: white;
+}
+.rightDiv .userAfter{
+    width: 378px;
+    height: 951px;
+    background-color: white;
+}
