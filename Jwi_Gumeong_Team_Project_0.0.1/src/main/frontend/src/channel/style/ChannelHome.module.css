@@ -1,12 +1,21 @@
 
 .ChannelHome{
-display: flex;
-justify-content: center;
-align-items: center;
+background-color: blue;
+}
+.channelInfoBack{
+
+    
+
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
 }
 
 
 .MainBanner {
+    
     height: 490px;
     position: relative;
     overflow: hidden;
@@ -92,15 +101,18 @@ align-items: center;
 .iconBack{
     height: 120px;
     width: 120px;
+    position: relative;
+    top:-10px;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    background-color: pink;
-
-    border-radius : 60px 60px 60px 60px;
+        background-color: #ffffff;
+    border-radius : 50%;
 }
-
+.channelIcon{
+    height: 104px;
+    width: 104px;
+}
 .channelIcon img{
 
     height: 104px;
@@ -152,28 +164,41 @@ align-items: center;
 }
 
 .channelBody{
-    width: 1194px;
+    height: 60px;
     z-index: 10;
     background-size: cover;
     background-position: center;
-    background-color: green;
+    background-color: white;
 }
 
 .whiteBackground{
     display: flex;
+    background-color: yellow;
+     height: 60px;
     align-items: center;
-    height: 60px;
 }
 
-.followerCount{
-    width: 150px;
+.mark{
+
+    display: flex;
+    align-items: center;
 }
 
-.bookmark{
-    width: 150px;
+.markText{
+    size: 16px;
+    height: 20px;
+    margin: 5px;
+    color: #999999;
+}
+
+.markCount{
+    height: 23px;
+    size: 18px;
+    color: #101010;
 }
 
 .mainList{
+    background-color: green;
     display: flex;
     justify-content: center;
     align-items: center;
