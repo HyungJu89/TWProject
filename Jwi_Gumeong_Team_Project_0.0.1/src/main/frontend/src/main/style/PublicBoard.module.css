@@ -1,11 +1,6 @@
 .mainDiv{
-    width: 726px;
-    height: 346px;
+    width: 786px;
+    height: 386px;
     background-color: white;
     margin: 10px 0px;   
-    padding: 20px 30px;
 }
-.title{
-    background-color: red;
-}
-
