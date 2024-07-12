@@ -1,232 +1,195 @@
-
-
-
 .ChannelHome{
-border-radius: 0px;
-
-}
-
-
-.channelInfoBack{
-
-    
-
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-}
-.wiwiwi{
-    display: flex;
-    position: absolute;
-    width: 100%;
-    height: 60px;
-    top: 0px;
-    z-index: -10;
-    background-color: red;
     border-radius: 0px;
-    margin: 0px;
-    
-}
-
-
-.MainBanner {
-    
-    height: 490px;
-    position: relative;
-    overflow: hidden;
-    background-size: cover;
-    background-position: center;
-}
-
-.backgroundImage{
-    background-color: red;
-    height: 102px;
-    width: 600px;
-    
-}
-
-.liveImage img{
-    width: 100%;
-    height: 100%;
-    gap: 0px;
-    opacity: 0px;
-    z-index: -1;
-    position: absolute;
-    background-size: cover;
-    background-position: center;
-}
-
-.liveInfo{
-    position: absolute;
-    background-color: white;
-    z-index: 0;
-    width: 497px;
-    height: 167px;
-    bottom: 162px;
-    
-}
-/* @media (max-width: 900px) {
-    .liveInfo {
-        transition: 0.5s;
-        margin-left: 0px;
     }
-} */
-
-.liveIcon{
-    width: 52px;
-    height: 20px;
-    top: 221px;
-    left: 363px;
-    padding: 2px 9px 2px 9px;
-    gap: 10px;
-    border-radius: 20px;
-    opacity: 0px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    .channelInfoBack{ /* 얘가 전역*/
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+    }
+    .wiwiwi{
+        display: flex;
+        position: absolute;
+        width: 100%;
+        height: 60px;
+        top: 0px;
+        z-index: -10;
+        background-color: white;
+        border-radius: 0px;
+        margin: 0px;
+        
+    }
     
-
-
-}
-.liveText{
-    justify-content: space-between;
-    align-items: center;
-    width: 500px;
-    font-size: 32px;
-    background-color: E5E5E5;
-}
-.liveTitle{
-    width: auto;
-}
-.liveGoing{
-    bottom: 0px;
-}
-
-
-.channelInfo{
-    width: 100%;
-    position: relative;
-    top: -60px;
-    display: flex;
-    height: 120px;
-}
-
-
-
-.iconBack{
-    height: 120px;
-    width: 120px;
-    position: relative;
-    top:-10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    
+    .MainBanner { /* 라이브 이미지 영역*/
+        width: 1194px;
+        height: 490px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+    }
+    .backgroundImage{
+        background-color: white;
+        height: 102px;
+        width: 600px;
+        
+    }
+    .MainBanner img{/* 라이브 이미지*/
+        height: 100%;
+        z-index: -1;
+        position: absolute;
+    }
+    
+    .liveInfo{ /* Live 방송 정보 */
+        position: absolute;
+        background-color: white;
+        z-index: 0;
+        width: 497px;
+        bottom: 162px;
+        left: 0px;
+        
+    }
+    /* @media (max-width: 900px) {
+        .liveInfo {
+            transition: 0.5s;
+            margin-left: 0px;
+        }
+    } */
+    
+    .liveIcon{
+        background-color: red;
+        width: 52px;
+        height: 20px;
+        padding: 15px 15px;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32px;
+    }
+    .liveTitle{
+        width: auto;
+        word-wrap: break-word;
+    }
+    .liveGoing{
+        margin-top: 20px;
+    }
+    
+    
+    .channelInfo{
+        width: 1194px;
+        height: 120px;
+        position: relative;
+        top: -60px;
+        display: flex;
+        margin: auto;
+    }
+    
+    
+    
+    .iconBack{
+        height: 120px;
+        width: 120px;
+        position: relative;
+        top:-10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background-color: #ffffff;
-    border-radius : 50%;
-}
-.channelIcon{
-    height: 110px;
-    width: 110px;
-}
-.channelIcon img{
-
-    height: 110px;
-    width: 110px;
-    background-color: white;
-    border-radius :50%;
-}
-
-.imageBackground{
-    display: flex;
-    height: 50px;
-    margin-left: 5px;
-    margin-bottom: 5px;
-}
-
-.iconRight{
-    width: 1074px;
-    background-color: #101010;
-
-}
-.channelTitle{
+        border-radius : 50%;
+    }
+    .channelIcon{
+        height: 110px;
+        width: 110px;
+    }
+    .channelIcon img{
     
-    color : white;
-    display: flex;
-    align-items: center;
-    height:  60%;
-}
-.announcement{
-    display: flex;
-    align-items: center;
-    color : orange;
-    height: 40%;
-}
-
-.bookmarkButton{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 106px;
-    height: 38px;
-    right: 40px;
-    border-radius: 40px;
-    background-color: orange;
-}
-
-.bookmarkButtonBack{
-    display: flex;
+        height: 110px;
+        width: 110px;
+        background-color: white;
+        border-radius :50%;
+    }
     
-}
-
-.channelBody{
-    height: 60px;
-    width: 100%;
-    z-index: 10;
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    background-color: green;
+    .imageBackground{
+        display: flex;
+        height: 50px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+    }
     
-    border-radius : 0px;
-
-}
-
-.whiteBackground{
-    display: flex;
-     height: 60px;
-    align-items: center;
+    .iconRight{
+        width: 1074px;
+    }
+    .channelTitle{
+        
+        color : white;
+        display: flex;
+        align-items: center;
+        height:  60%;
+    }
+    .announcement{
+        display: flex;
+        align-items: center;
+        color : orange;
+        height: 40%;
+    }
     
-}
-
-.mark{
-
-    display: flex;
-    align-items: center;
-}
-
-.markText{
-    size: 16px;
-    height: 20px;
-    margin: 5px;
-    color: #999999;
-}
-
-.markCount{
-    height: 23px;
-    size: 18px;
-    color: #101010;
-}
-
-.mainList{
-    background-color: green;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-.bottomPaging{
-
-}
+    .bookmarkButton{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 106px;
+        height: 38px;
+        right: 40px;
+        border-radius: 40px;
+        background-color: orange;
+    }
+    
+    .bookmarkButtonBack{
+        display: flex;
+        
+    }
+    .channelBody{
+        height: 60px;
+        width: 100%;
+        z-index: 10;
+        position: relative;
+        border-radius : 0px;
+    }
+    
+    .whiteBackground{
+        display: flex;
+         height: 60px;
+        align-items: center;
+        
+    }
+    
+    .mark{
+    
+        display: flex;
+        align-items: center;
+    }
+    
+    .markText{
+        size: 16px;
+        height: 20px;
+        margin: 5px;
+        color: #999999;
+    }
+    
+    .markCount{
+        height: 23px;
+        size: 18px;
+        color: #101010;
+    }
+    
+    .mainList{
+        background-color: green;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+    }
+    
