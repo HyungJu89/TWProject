@@ -1,8 +1,47 @@
 
-.liveImage {
-    width: 1920px;
+.MainBanner {
+    width: 100%;
     height: 490px;
-    top: 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.liveImage img{
+    width: 100%;
+    min-width: 460px;
+    height: 100%;
     gap: 0px;
     opacity: 0px;
+    z-index: -1;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+}
+
+.liveInfo{
+    position: absolute;
+    background-color: red;
+    z-index: 0;
+    width: 497px;
+    height: 167px;
+
+    margin-left: 20%;
+    bottom: 162px;
+    
+}
+/* @media (max-width: 900px) {
+    .liveInfo {
+        transition: 0.5s;
+        margin-left: 0px;
+    }
+} */
+
+.liveIcon{
+
+}
+.liveTitle{
+
+}
+.liveGoing{
+
 }

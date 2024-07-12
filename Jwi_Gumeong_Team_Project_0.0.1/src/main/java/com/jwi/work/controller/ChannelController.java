@@ -5,23 +5,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jwi.work.service.ChanneService;
+
+import lombok.AllArgsConstructor;
+
 
 @Controller
 @RequestMapping("/channel/*")
+@AllArgsConstructor
 public class ChannelController {
 
-	@GetMapping("/search")
-	public String searchChanner() {
-		
-		return null;
-	}
-	
+
 	
 	@GetMapping("/postList/{channelId}")
-	public String joinChanner(@PathVariable("channelId") String channelId) {
+	public Object joinChanner(@PathVariable("channelId") String channelId) {
 		
-		
-		System.out.println(channelId);
+
 		
 		return "channel/postList";
 	}
