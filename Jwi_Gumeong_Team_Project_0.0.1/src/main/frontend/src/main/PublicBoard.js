@@ -3,13 +3,13 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './style/Main.module.css';
+import styles from './style/PublicBoard.module.css';
 import '../App.css';
 
 function PublicBoard() {
     return (
-        <div>
-
+        <div className={styles.mainDiv}>
+            
         </div>
     )
 }

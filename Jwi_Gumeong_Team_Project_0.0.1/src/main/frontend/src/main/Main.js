@@ -14,6 +14,7 @@ function Main() {
         <div className={styles.leftDiv}>{/*게시판 영역*/}
             <div className={styles.hotBoard}></div>
             <div className={styles.Nav}></div>
+            <PublicBoard/>
             <button style={{width : '150px', height : '50px'}} onClick={()=>{navigate('/channel/'+'123')}}>채널 확인 URL</button>
         </div>
         <div className={styles.rightDiv}>{/*유저 영역 */}
