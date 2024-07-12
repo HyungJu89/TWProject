@@ -55,6 +55,7 @@ function ChannelHome() {
 
     return (
         <div className={style.ChannelHome}>
+            <div>
 
             {channel.openLive ? (
                 <div className={style.MainBanner}>
@@ -89,7 +90,9 @@ function ChannelHome() {
                                 <div className={style.channelTitle}>{channel.channelName}</div>
                                 <div className={style.announcement}>채널 공지사항</div>
                             </div>
+                            <div className={style.bookmarkButtonBack}>
                             <div className={style.bookmarkButton}>즐겨찾기 버튼</div>
+                            </div>
                         </div>
                         <div className={style.whiteBackground}>
                             <div className={style.followerCount}>팔로워수: {channel.followerCount}</div>
@@ -98,6 +101,7 @@ function ChannelHome() {
                     </div>
                 </div>
                 <div className={style.mainList}>
+                <div >
                     <div>글리스트</div>
                     <div>
                         <div>
@@ -108,9 +112,12 @@ function ChannelHome() {
                     </div>
                 </div>
                 <div className={style.bottomPaging}>페이징</div>
+                </div>
             </div>
         </div>
+        </div>    
     );
+    
 }
 
 export default ChannelHome;

@@ -1,6 +1,9 @@
 
-
-
+.ChannelHome{
+display: flex;
+justify-content: center;
+align-items: center;
+}
 
 
 .MainBanner {
@@ -9,6 +12,11 @@
     overflow: hidden;
     background-size: cover;
     background-position: center;
+}
+
+.backgroundImage{
+    height: 102px;
+    width: 100%;
 }
 
 .liveImage img{
@@ -29,7 +37,6 @@
     z-index: 0;
     width: 497px;
     height: 167px;
-    margin-left: 20%;
     bottom: 162px;
     
 }
@@ -65,7 +72,7 @@
     background-color: E5E5E5;
 }
 .liveTitle{
-    
+    width: auto;
 }
 .liveGoing{
     bottom: 0px;
@@ -74,7 +81,6 @@
 
 .channelInfo{
     width: 100%;
-    margin-left: 20%;
     position: relative;
     top: -60px;
     display: flex;
@@ -89,10 +95,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    background-size: cover;
-    background-position: center;
-    border-radius :60px;
+
+    background-color: pink;
+
+    border-radius : 60px 60px 60px 60px;
 }
 
 .channelIcon img{
@@ -100,14 +106,14 @@
     height: 104px;
     width: 104px;
     background-color: white;
-    border-radius :60px;
+    border-radius :50%;
 }
 
 .imageBackground{
     display: flex;
     height: 50px;
-    width: 100%;
-    margin: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
     background-color: red;
 }
 
@@ -116,27 +122,38 @@
 
 }
 .channelTitle{
+    
     color : white;
+    display: flex;
+    align-items: center;
     height:  60%;
 }
 .announcement{
+    display: flex;
+    align-items: center;
     color : orange;
     height: 40%;
 }
 
 .bookmarkButton{
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 106px;
     height: 38px;
     right: 40px;
     border-radius: 40px;
     background-color: orange;
+}
+
+.bookmarkButtonBack{
+    display: flex;
     
 }
+
 .channelBody{
     width: 1194px;
     z-index: 10;
-
     background-size: cover;
     background-position: center;
     background-color: green;
@@ -144,7 +161,16 @@
 
 .whiteBackground{
     display: flex;
+    align-items: center;
     height: 60px;
+}
+
+.followerCount{
+    width: 150px;
+}
+
+.bookmark{
+    width: 150px;
 }
 
 .mainList{
