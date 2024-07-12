@@ -84,9 +84,7 @@ function ChannelHome() {
                                 <div className={style.channelTitle}>{channel.channelName}</div>
                                 <div className={style.announcement}>채널 공지사항</div>
                             </div>
-                            <div className={style.bookmarkButtonBack}>
-                                <div className={style.bookmarkButton}>즐겨찾기 버튼</div>
-                            </div>
+                            <div className={style.bookmarkButton}>즐겨찾기 버튼</div>
                         </div>
                         <div className={style.whiteBackground}>
                             <div className={style.mark}>
@@ -100,24 +98,31 @@ function ChannelHome() {
                         </div>
                     </div>
                 </div>
-                <div className={style.wiwiwi}></div>
+                <div className={style.channelInfoBackgroundColor}></div>
             </div>
         </div>
             <div className={style.channelInfoBack}>
                 <div className={style.mainList}>
-                    <div >
-                        <div>글리스트</div>
-                        <div>
-                            <div>
-                                <div></div>
+                        <div className={style.listLeft}>
+                            <div className={style.postCreact}>
+                                <textarea/>
+                                <div className={style.postCreactIconBox}>
+                                    <div className={style.emotIcon}></div>
+                                    <div className={style.imageIcon}></div>
+                                    <div className={style.textareaSize}>100/300</div>
+                                    <div className={style.postCreactButton}>등록</div>
+                                </div>
                             </div>
-                            <div>추천창</div>
-                            <div>사이드 배너</div>
-                        </div>
-                    </div>
-                    <div className={style.bottomPaging}>페이징</div>
-                </div>
 
+                            <div className={style.postList}>글리스트</div>
+                            <div className={style.bottomPaging}>페이징</div>
+                        </div>
+                        <div className={style.listRight}>
+                            <div className={style.sideBar}>사이드 바</div>
+                            <div className={style.suggestionChannel}>추천바</div>
+                            <div className={style.sideBanner}>배너</div>
+                        </div>
+                </div>
             </div>
         </div>
     );
