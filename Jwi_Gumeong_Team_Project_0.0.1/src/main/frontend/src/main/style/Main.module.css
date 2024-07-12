@@ -3,6 +3,12 @@
     width: 1194px;
     display: flex;
 }
+/*전체 채팅 CSS @임재열*/
+.publicBoard{
+    width: 786px;
+    height: 386px;
+}
+
 /*왼쪽*/
 .leftDiv{
     width: 786px;
