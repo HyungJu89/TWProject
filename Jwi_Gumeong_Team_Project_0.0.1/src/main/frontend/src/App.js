@@ -4,6 +4,7 @@ import { Routes, Route} from 'react-router-dom';
 import Main from './main/Main.js'
 import Header from './header/Header.js'
 import ChannelHome from './channel/ChannelHome.js';
+import SignIn from './signIn/SignIn.js';
 
 function App() {
     return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
             <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
             <Route path='/channel/:id' element={<ChannelHome/>}/>
+            <Route path='/signIn' element={<SignIn/>}/>
         </Routes>
         </div>
     );
