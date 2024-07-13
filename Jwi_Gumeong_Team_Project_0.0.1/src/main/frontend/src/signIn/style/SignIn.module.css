@@ -50,6 +50,7 @@ html, body {
     border-radius: 6px;
     border: 2px solid #E5E5E5;
     font-size: 20px;
+    padding: 20px;
 }
 .formGroup input::placeholder {
     font-size: 16px;

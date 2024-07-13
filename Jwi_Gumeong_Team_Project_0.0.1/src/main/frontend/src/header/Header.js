@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from './style/Header.module.css';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 //이미지 import
 import Logo from '../icon/logo/logo.png'; //로고 이미지
 import searching from '../icon/24px/searching.png';
@@ -21,6 +21,7 @@ import '../App.css';
 function Header() {
     let [loginOn, setLoginOn] = useState(true); //로그인 확인 변수
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
+    let navigate = useNavigate();
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
         let justSearchLocal = localStorage.getItem('search')
@@ -40,7 +41,7 @@ function Header() {
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
                 <div className={styles.icon}>
                     {loginOn === true && <Icon/>} {/* 로그인 체크 */}
-                    <div className={styles.signUpBtn}>로그인</div>
+                    <div onClick={() => { navigate('/signIn') }} className={styles.signInBtn}>로그인</div>
                 </div>
             </div>
         </>
