@@ -6,8 +6,18 @@ import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import '../App.css';
 import styles from './style/PublicBoard.module.css';
+import more from '../icon/24px/more.png';
+import heart_deactivation from '../icon/24px/heart-deactivation.png';
+import heart_activation from '../icon/24px/heart-activation.png';
+import comments from '../icon/24px/comments.png';
+import sharing from '../icon/24px/sharing.png';
+import expand_more from '../icon/24px/expand-more.png';
+import emoticon_deactivation from '../icon/24px/emoticon-deactivation.png';
 
 function PublicBoard() {
+    let [heart, setHeart] = useState(true); //좋아요 누름 확인
+    let [commentsON, setCommentsON] = useState(false); //댓글 on/off
+
     const [channel, setChannel] = useState('');
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useQuery('channel', () =>
@@ -31,13 +41,49 @@ function PublicBoard() {
     return (
         <div className={styles.mainDiv}>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                <img src={channel.channelImageUrl}/>{channel.channelName}
+                <img src={channel.channelImageUrl} />{channel.channelName}
             </div>
-            <div className={styles.dashed}/>
-            <div className={styles.userName}>
-                <div>작성자 이름 <div className={styles.grayText}>· 1일</div></div>
+            <div className={styles.dashed} />{/* 회색줄 */}
+            <div className={styles.widthNav}>
+                <div className={styles.name}>작성자 이름 <div className={styles.grayText}>· 1일</div></div>
+                <img src={more} /> {/* 신고삭제 모달 연결 해야함 */}
             </div>
-            <div className={styles.contentArea}>gd</div>
+            <div className={styles.contentArea}>{/* 본문 */}
+                <div className={styles.text}>
+                뉴비라 오늘 조합 검사 받았는데. 진짜 할거 많더라.<br/>
+                피드백 많이 해주셔서 원신 할거 겁나 많이 생김<br/>
+                우리 백출.. 잘 키워야지
+                </div>
+                <img src='https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5367703706/B.jpg?675000000'/>
+            </div>
+            <div className={styles.widthNav} style={{marginBottom:'0px'}}>{/* 하단 댓글,좋아요,공유 */}
+                <div className={styles.commentsDiv}>
+{/*댓글창*/}    <div onClick={()=>{commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
+                    <img src={comments} /><div className={styles.comments}>123</div></div>
+{/*좋아요*/}    <div onClick={()=>{heart == false ? setHeart(true) : setHeart(false) }}>
+                   {heart === true ? <img src={heart_activation} /> :  <img src={heart_deactivation} />}
+                    <div className={styles.comments}>123123</div>
+                </div>
+                </div>
+                <img src={sharing} />
+            </div>
+                {commentsON && <Comments/>}
+        </div>
+    )
+}
+
+function Comments(){
+    return(
+        <div>
+            <div className={styles.dashed} />{/* 회색줄 */}
+            <div className={styles.widthNav} style={{justifyContent:'start',cursor:'pointer'}}>정렬순서<img style={{marginLeft:'4px'}} src={expand_more}/></div>
+            <div className={styles.commentDiv}>
+                <textarea placeholder='댓글 달기'/>
+                <div className={styles.commentNav}>
+                <img src={emoticon_deactivation}/>
+                <div>0/200<button>등록</button></div>
+                </div>
+            </div>
         </div>
     )
 }

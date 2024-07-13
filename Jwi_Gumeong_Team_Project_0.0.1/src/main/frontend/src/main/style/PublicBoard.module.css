@@ -1,6 +1,5 @@
 .mainDiv {
     width: 726px;
-    height: 346px;
     background-color: white;
     margin: 10px 0px;
     padding: 20px 30px;
@@ -29,24 +28,73 @@
     border-radius: 0px;
     margin: 20px 0px;
     }
-/**/
-.userName {
+/* nav */
+.widthNav {
     width: 726px;
     height: 24px;
-    font-size: 18px;
-    font-weight: 500;
     display: flex;
     text-align: center;
     justify-content: space-between;
+    margin: 20px 0px;
 }
-.userName div{display: flex;}
+.widthNav .commentsDiv{width: 230px; display: flex; justify-content: space-between;}
+.widthNav .name{font-size: 18px;font-weight: 500;}
+.widthNav .comments{cursor: pointer;padding-right:20px;font-weight: 400; color: #999999;margin-left: 10px;}
+.widthNav div{display: flex;}
+.widthNav img{cursor: pointer;}
 .grayText{
     color: gray;
     margin: 0px 6px;
 }
-/**/
+/*본문*/
 .contentArea{
     width: 726px;
-    margin: 20px 0px;
-    background-color: red;
+    display: flex;
 }
+.contentArea .text{
+    width: 529px;
+    margin-right: 20px;
+}
+.contentArea img{
+    width: 177px;
+    height: 177px;
+}
+
+/* 댓글창 컴포넌트 */
+.commentDiv{
+    width: 698px;
+    border: 1px solid #F3F3F3;
+    border-radius: 10px;
+    padding: 14px;
+}
+.commentDiv textarea{
+    outline: none;
+    resize: none;
+    margin-bottom: 10px;
+    width: 698px;
+    font-family: Spoqa Han Sans Neo;
+    font-size: 16px;
+    font-weight: 500;
+    border: 0px;
+    padding: 0px;
+}
+.commentNav{width: 698px;height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 400;
+    color: #BBBBBB;
+    }
+.commentNav img{
+    width: 24px;
+    height: 24px;
+}
+.commentNav button{
+    width: 70px;
+    height: 34px;
+    border-radius: 26px;
+    margin-left: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    }
