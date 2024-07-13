@@ -30,15 +30,14 @@ function PublicBoard() {
 
     return (
         <div className={styles.mainDiv}>
-            <div className={styles.title}>
+            <div className={styles.title}> {/* 클릭시 URL 이동 */}
                 <img src={channel.channelImageUrl}/>{channel.channelName}
             </div>
             <div className={styles.dashed}/>
-            <div className={styles.userName}/>
-            <div className={styles.test}>
-            <div className={styles.a}/>
-            <div className={styles.b}/>
+            <div className={styles.userName}>
+                <div>작성자 이름 <div className={styles.grayText}>· 1일</div></div>
             </div>
+            <div className={styles.contentArea}>gd</div>
         </div>
     )
 }

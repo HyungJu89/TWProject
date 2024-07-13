@@ -17,6 +17,7 @@
 }
 
 .title img {
+    cursor: pointer;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -32,22 +33,20 @@
 .userName {
     width: 726px;
     height: 24px;
-}
-.test{
-    background-color: red;
+    font-size: 18px;
+    font-weight: 500;
     display: flex;
+    text-align: center;
+    justify-content: space-between;
 }
-.a{
-    background: linear-gradient(to right,
-     rgb(0, 0, 0) 20%,
-     rgba(255, 255, 255, 0) 60%);
-    height: 200px;
-    width: 100%;
+.userName div{display: flex;}
+.grayText{
+    color: gray;
+    margin: 0px 6px;
 }
-.b{
-    background: linear-gradient(to left,
-     rgb(0, 0, 0) 20%,
-     rgba(255, 255, 255, 0) 60%);
-    height: 200px;
-    width: 100%;
+/**/
+.contentArea{
+    width: 726px;
+    margin: 20px 0px;
+    background-color: red;
 }
