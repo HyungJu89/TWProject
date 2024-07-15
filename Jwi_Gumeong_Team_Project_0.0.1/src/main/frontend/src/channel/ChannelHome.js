@@ -1,6 +1,8 @@
 import axios from 'axios';
 import '../App.css'
 import style from './style/ChannelHome.module.css';
+import emotIcon from '../icon/24px/emoticon-activation.png';
+import imageIcon from '../icon/24px/photo.png'
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -125,8 +127,8 @@ function ChannelHome() {
                                 <textarea className={style.textArea} onChange={textChange} value={text}/> {/*게시글 textarea*/}
                                 <div className={style.dashed} />{/* 회색줄 */}
                                 <div className={style.postCreactIconBox}> {/*게시글 작성 하단 아이콘*/} 
-                                    <div className={style.emotIcon}></div>{/*이모티콘 아이콘*/}
-                                    <div className={style.imageIcon}></div>{/*이미지 아이콘*/}
+                                    <div className={style.emotIcon}><img src={emotIcon}/></div>{/*이모티콘 아이콘*/}
+                                    <div className={style.imageIcon}><img src={imageIcon}/></div>{/*이미지 아이콘*/}
                                     <div className={style.textareaSize} style={{color : textColor}}>{text.length}/{textLimit}</div>{/*작성된 글자수*/}
                                     <div className={style.postCreactButton}>등록</div>{/*게시글 작성 버튼*/}
                                 </div>

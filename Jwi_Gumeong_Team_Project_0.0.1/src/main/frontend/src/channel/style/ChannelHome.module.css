@@ -246,28 +246,27 @@
     align-items: center;
     width: 726px;
     height: 40px;
-    background-color: wheat;
 }
-
+/* 이모트 아이콘 box*/
 .emotIcon {
     height: 24px;
     width: 24px;
     margin-right: 14px;
-    background-color: #101010;
 }
-
+/* 이모트 아이콘 img*/
 .emotIcon img {
     height: 24px;
     width: 24px;
 }
 
+/* 이미지 아이콘 box*/
 .imageIcon {
     height: 24px;
     width: 24px;
     margin-right: 502px;
-    background-color: #101010;
 }
 
+/* 이미지 아이콘 img*/
 .imageIcon img {
 
     height: 24px;
