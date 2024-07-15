@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './style/SignIn.module.css';
 import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
     const [email, setEmail] = useState('');
@@ -9,7 +10,7 @@ function SignIn() {
     const [isButtonActive, setIsButtonActive] = useState(false);
     const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
     const [loginCheck, setLoginCheck] = useState(false);
-
+    let navigate = useNavigate();
     // 눈 아이콘 클릭시 바꾸게 설정하기
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -68,7 +69,7 @@ function SignIn() {
                         else if (password == '') { alert('비밀번호를 입력해주세요!'); }
                         // if(이메일과 비밀번호가 적혀있으면){대충 엑시오스 요청해서 데이터베이스랑 데이터대조 후 로그인진행}
                     }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>로그인</button>
-                <div className={styles.help}><h6>회원가입</h6><h6>|</h6><h6>비밀번호 찾기</h6></div>
+                <div className={styles.help}><h6 onClick={() => { navigate('/signUp') } }>회원가입</h6><h6>|</h6><h6>비밀번호 찾기</h6></div>
             </div>
         </div>
     );

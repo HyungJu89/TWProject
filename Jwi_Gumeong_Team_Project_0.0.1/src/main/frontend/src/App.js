@@ -5,6 +5,7 @@ import Main from './main/Main.js'
 import Header from './header/Header.js'
 import ChannelHome from './channel/ChannelHome.js';
 import SignIn from './signIn/SignIn.js';
+import SignUp from './signUp/SignUp.js';
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
             <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
             <Route path='/channel/:id' element={<ChannelHome/>}/>
             <Route path='/signIn' element={<SignIn/>}/>
+            <Route path='/signUp' element={<SignUp/>}/>
         </Routes>
         </div>
     );

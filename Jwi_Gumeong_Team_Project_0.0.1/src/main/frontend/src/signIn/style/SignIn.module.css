@@ -78,7 +78,6 @@ html, body {
     cursor: pointer; /* 아이콘이 클릭 가능하도록 설정 */
 }
 .loginButton {
-    background-color: red;
     width: 626px;
     height: 60px;
     padding: 20px 213px;
@@ -110,4 +109,5 @@ html, body {
     width: 100%;
     color: #999999;
     margin-top: 0px;
+    cursor: pointer;
 }
