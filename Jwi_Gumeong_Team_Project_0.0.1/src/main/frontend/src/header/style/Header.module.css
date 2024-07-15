@@ -20,6 +20,7 @@ body{
     justify-content: space-between; /* 수평 정렬 */
     align-items: center; /* 수직 정렬 */
     position: relative;
+    border-radius: 0px;
 }
 .divWidth{
     max-width: 750px;
