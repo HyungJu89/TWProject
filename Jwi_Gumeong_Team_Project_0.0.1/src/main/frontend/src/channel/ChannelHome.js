@@ -7,7 +7,18 @@ import { useEffect, useState } from 'react';
 
 function ChannelHome() {
     let { id } = useParams();
+    //작성하고있는 게시글의 길이
+    const [textSize,setTextSize] = useState(0);
+    //게시글 길이 제한
+    const textLimit = 300;
+    //게시글작성 내용
+    const [text,setText]=useState('');
+    //size 계산 상태 색깔
+    const [textColor,setTextColor] = useState('black');
+
+    //채널정보
     const [channel, setChannel] = useState('');
+    //라이브 정보
     const [liveInfo, setLiveInfo] = useState('');
 
     // 첫 번째 쿼리: 채널 정보를 가져오기.
@@ -43,6 +54,12 @@ function ChannelHome() {
             enabled: !!id, // id가 있을 때만 쿼리 실행
         }
     );
+
+    const textChange = (e) =>{
+    setText(e.target.value)
+    setTextColor(e.target.value.length <= 300 ? 'black' : 'red')
+
+    }
 
 
     if (isLoadingChannel || isLoadingLiveInfo) {
@@ -103,14 +120,15 @@ function ChannelHome() {
         </div>
             <div className={style.channelInfoBack}>
                 <div className={style.mainList}>
-                        <div className={style.listLeft}>
+                        <div className={style.listLeft}>  {/*게시글 작성 box*/}
                             <div className={style.postCreact}>
-                                <textarea/>
-                                <div className={style.postCreactIconBox}>
-                                    <div className={style.emotIcon}></div>
-                                    <div className={style.imageIcon}></div>
-                                    <div className={style.textareaSize}>100/300</div>
-                                    <div className={style.postCreactButton}>등록</div>
+                                <textarea className={style.textArea} onChange={textChange} value={text}/> {/*게시글 textarea*/}
+                                <div className={style.dashed} />{/* 회색줄 */}
+                                <div className={style.postCreactIconBox}> {/*게시글 작성 하단 아이콘*/} 
+                                    <div className={style.emotIcon}></div>{/*이모티콘 아이콘*/}
+                                    <div className={style.imageIcon}></div>{/*이미지 아이콘*/}
+                                    <div className={style.textareaSize} style={{color : textColor}}>{text.length}/{textLimit}</div>{/*작성된 글자수*/}
+                                    <div className={style.postCreactButton}>등록</div>{/*게시글 작성 버튼*/}
                                 </div>
                             </div>
 
