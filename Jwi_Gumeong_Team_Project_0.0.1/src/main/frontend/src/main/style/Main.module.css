@@ -63,10 +63,21 @@
             margin-bottom: 10px;
         }
 .leftDiv .Nav{
-    width: 786px;
+    width: 756px;
     height: 60px;
     background: #FFFFFF;
+    display: flex;
+    font-size: 20px;
+    font-weight: 600;
 }
+    .leftDiv .Nav .topicdiv{
+        display: flex;
+        align-items: center;
+        margin-left: 30px;
+    }
+    .leftDiv .Nav .topicdiv div{
+        margin-right: 30px;
+    }
 /*오른쪽*/
 .rightDiv{
     width: 378px;
