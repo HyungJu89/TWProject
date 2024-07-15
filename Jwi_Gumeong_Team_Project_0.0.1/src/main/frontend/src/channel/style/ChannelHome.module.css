@@ -210,7 +210,6 @@
 
 .listLeft {
     width: 786px;
-    height: 328px;
     background-color: wheat;
     margin-right: 15px;
 }
@@ -218,7 +217,6 @@
 .postCreact {
     padding : 20px 30px;
     background-color: white;
-    height: 244px;
     margin-bottom: 10px;
 }
 
