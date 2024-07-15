@@ -1,170 +1,157 @@
-
-
-
-.ChannelHome{
-border-radius: 0px;
-
+.ChannelHome {
+    border-radius: 0px;
 }
 
-
-.channelInfoBack{
-
-    
-
+.channelInfoBack {
+    /* 얘가 전역*/
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin: auto;
 }
-.wiwiwi{
+
+.channelInfoBackgroundColor {
     display: flex;
     position: absolute;
     width: 100%;
     height: 60px;
     top: 0px;
     z-index: -10;
-    background-color: red;
+    background-color: white;
     border-radius: 0px;
     margin: 0px;
-    
+
 }
 
 
 .MainBanner {
-    
+    /* 라이브 이미지 영역*/
+    width: 1194px;
     height: 490px;
     position: relative;
     overflow: hidden;
-    background-size: cover;
-    background-position: center;
+    display: flex;
+    justify-content: center;
 }
 
-.backgroundImage{
-    background-color: red;
+.backgroundImage {
+    background-color: white;
     height: 102px;
     width: 600px;
-    
+
 }
 
-.liveImage img{
-    width: 100%;
+.MainBanner img {
+    /* 라이브 이미지*/
     height: 100%;
-    gap: 0px;
-    opacity: 0px;
     z-index: -1;
     position: absolute;
-    background-size: cover;
-    background-position: center;
 }
 
-.liveInfo{
+.liveInfo {
+    /* Live 방송 정보 */
     position: absolute;
     background-color: white;
     z-index: 0;
     width: 497px;
-    height: 167px;
     bottom: 162px;
-    
-}
-/* @media (max-width: 900px) {
-    .liveInfo {
-        transition: 0.5s;
-        margin-left: 0px;
-    }
-} */
+    left: 0px;
 
-.liveIcon{
+}
+
+/* @media (max-width: 900px) {
+        .liveInfo {
+            transition: 0.5s;
+            margin-left: 0px;
+        }
+    } */
+
+.liveIcon {
+    background-color: red;
     width: 52px;
     height: 20px;
-    top: 221px;
-    left: 363px;
-    padding: 2px 9px 2px 9px;
-    gap: 10px;
+    padding: 15px 15px;
     border-radius: 20px;
-    opacity: 0px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    
-
-
-}
-.liveText{
-    justify-content: space-between;
-    align-items: center;
-    width: 500px;
-    font-size: 32px;
-    background-color: E5E5E5;
-}
-.liveTitle{
-    width: auto;
-}
-.liveGoing{
-    bottom: 0px;
-}
-
-
-.channelInfo{
-    width: 100%;
-    position: relative;
-    top: -60px;
-    display: flex;
-    height: 120px;
-}
-
-
-
-.iconBack{
-    height: 120px;
-    width: 120px;
-    position: relative;
-    top:-10px;
     display: flex;
     justify-content: center;
     align-items: center;
-        background-color: #ffffff;
-    border-radius : 50%;
+    font-size: 32px;
 }
-.channelIcon{
+
+.liveTitle {
+    width: auto;
+    word-wrap: break-word;
+}
+
+.liveGoing {
+    margin-top: 20px;
+}
+
+
+.channelInfo {
+    width: 1194px;
+    height: 120px;
+    position: relative;
+    top: -60px;
+    display: flex;
+    margin: auto;
+}
+
+
+
+.iconBack {
+    height: 120px;
+    width: 120px;
+    position: relative;
+    top: -10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 50%;
+}
+
+.channelIcon {
     height: 110px;
     width: 110px;
 }
-.channelIcon img{
+
+.channelIcon img {
 
     height: 110px;
     width: 110px;
     background-color: white;
-    border-radius :50%;
+    border-radius: 50%;
 }
 
-.imageBackground{
+.imageBackground {
     display: flex;
     height: 50px;
     margin-left: 5px;
     margin-bottom: 5px;
 }
 
-.iconRight{
+.iconRight {
     width: 1074px;
-    background-color: #101010;
+}
 
-}
-.channelTitle{
-    
-    color : white;
+.channelTitle {
+
+    color: white;
     display: flex;
     align-items: center;
-    height:  60%;
+    height: 60%;
 }
-.announcement{
+
+.announcement {
     display: flex;
     align-items: center;
-    color : orange;
+    color: orange;
     height: 40%;
 }
 
-.bookmarkButton{
+.bookmarkButton {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -175,58 +162,136 @@ border-radius: 0px;
     background-color: orange;
 }
 
-.bookmarkButtonBack{
-    display: flex;
-    
-}
 
-.channelBody{
+
+.channelBody {
     height: 60px;
     width: 100%;
     z-index: 10;
     position: relative;
-    background-size: cover;
-    background-position: center;
-    background-color: green;
-    
-    border-radius : 0px;
-
+    border-radius: 0px;
 }
 
-.whiteBackground{
+.whiteBackground {
     display: flex;
-     height: 60px;
+    height: 60px;
     align-items: center;
-    
+
 }
 
-.mark{
+.mark {
 
     display: flex;
     align-items: center;
 }
 
-.markText{
+.markText {
     size: 16px;
     height: 20px;
     margin: 5px;
     color: #999999;
 }
 
-.markCount{
+.markCount {
     height: 23px;
     size: 18px;
     color: #101010;
 }
 
-.mainList{
+.mainList {
     background-color: green;
+    width: 1194px;
+    margin-top: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
 
 }
 
-.bottomPaging{
+.listLeft {
+    width: 786px;
+    background-color: wheat;
+    margin-right: 15px;
+}
 
+.postCreact {
+    background-color: white;
+    height: 244px;
+    margin-bottom: 10px;
+}
+
+.postCreact textarea {
+    font-family: Spoqa Han Sans Neo;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22.54px;
+    text-align: left;
+    width: 726px;
+    height: 123px;
+    list-style: none;
+    resize: none;
+    outline: none;
+    margin: 20px 30px;
+}
+
+.postCreactIconBox {
+    display: flex;
+    align-items: center;
+    width: 726px;
+    height: 40px;
+    margin: 20px 30px;
+    background-color: wheat;
+}
+
+.emotIcon {
+    height: 24px;
+    width: 24px;
+    margin-right: 14px;
+    background-color: #101010;
+}
+
+.emotIcon img {
+    height: 24px;
+    width: 24px;
+}
+
+.imageIcon {
+    height: 24px;
+    width: 24px;
+    margin-right: 502px;
+    background-color: #101010;
+}
+
+.imageIcon img {
+
+    height: 24px;
+    width: 24px;
+
+}
+
+.textareaSize {
+    font-family: Spoqa Han Sans Neo;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 18.78px;
+    text-align: right;
+    height: 19px;
+    width: 60px;
+    margin-top: 11px;
+    margin-right: 16px;
+    margin-bottom: 10px;
+}
+
+.postCreactButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 86px;
+    height: 40px;
+    background-color: orange;
+}
+
+.listRight {
+    margin-left: 15px;
+    width: 378px;
 }

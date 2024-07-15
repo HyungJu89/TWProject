@@ -38,6 +38,17 @@ div { /* div 기본 둥글기 */
   background: #f1f1f1;
 }
 
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .App {
   text-align: center;
 }
