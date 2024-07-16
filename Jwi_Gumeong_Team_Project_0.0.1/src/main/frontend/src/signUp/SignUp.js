@@ -4,6 +4,7 @@ import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { useNavigate } from 'react-router-dom';
 
+// 필수 동의 사항 컴포넌트
 function SignUp() {
     const [isButtonActive, setIsButtonActive] = useState(false);
     const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
@@ -17,6 +18,15 @@ function SignUp() {
     const handleOptionChange2 = (event) => {
         setSelectedOption2(event.target.value === 'true');
     };
+
+    useEffect(() => {
+        if (selectedOption && selectedOption2) {
+            setIsButtonActive(true);
+        } else {
+            setIsButtonActive(false);
+        }
+    }, [selectedOption, selectedOption2]);
+
     // 눈 아이콘 클릭시 바꾸게 설정하기
     return (
         <div className={styles.section}>
@@ -50,6 +60,7 @@ function SignUp() {
                             value="true"
                             checked={selectedOption === true}
                             onChange={handleOptionChange}
+                            className={styles.customRadio}
                         />
                         동의 합니다.
                         <input style={{ marginLeft: '48px' }}
@@ -57,6 +68,7 @@ function SignUp() {
                             value="false"
                             checked={selectedOption === false}
                             onChange={handleOptionChange}
+                            className={styles.customRadio}
                         />
                         동의 하지 않습니다.
                     </label>
@@ -69,6 +81,7 @@ function SignUp() {
                             value="true"
                             checked={selectedOption2 === true}
                             onChange={handleOptionChange2}
+                            className={styles.customRadio}
                         />
                         동의 합니다.
                         <input style={{ marginLeft: '48px' }}
@@ -76,11 +89,12 @@ function SignUp() {
                             value="false"
                             checked={selectedOption2 === false}
                             onChange={handleOptionChange2}
+                            className={styles.customRadio}
                         />
                         동의 하지 않습니다.
                     </label>
                 </div>
-                <button onClick={() => { }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} >다음</button>
+                <button onClick={() => {}} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} >다음</button>
             </div>
         </div>
     );
