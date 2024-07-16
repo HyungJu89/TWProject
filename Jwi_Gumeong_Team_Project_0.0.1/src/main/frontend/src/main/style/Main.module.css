@@ -15,7 +15,7 @@
     margin-right: 30px;
 }
 .leftDiv .hotBoard{
-    width: 723px;
+    width: 726px;
     height: 353px;  
     background-color: white;
     margin-bottom: 30px;
@@ -63,12 +63,13 @@
             margin-bottom: 10px;
         }
 .leftDiv .Nav{
-    width: 756px;
+    width: 786px;
     height: 60px;
     background: #FFFFFF;
     display: flex;
     font-size: 20px;
     font-weight: 600;
+    overflow: hidden;
 }
     .leftDiv .Nav .topicdiv{
         display: flex;
@@ -77,7 +78,18 @@
     }
     .leftDiv .Nav .topicdiv div{
         margin-right: 30px;
+        position: relative;
     }
+    .leftDiv .Nav .topicdiv .bar{
+        position: absolute;
+        left: 50%;
+        top: 41px;
+        transform: translate(-50%, -0%);
+        width: 24px;
+        height: 2px;
+        background-color: #FF8901;
+    }
+
 /*오른쪽*/
 .rightDiv{
     width: 378px;
