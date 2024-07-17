@@ -12,7 +12,7 @@ function App() {
         <Header/> {/* 상단 공통 부분 디자인 */}
         <Routes>
             <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
-            <Route path='/channel/:id' element={<ChannelHome/>}/>
+            <Route path='/channel/:channelId' element={<ChannelHome/>}/>
             <Route path='/signIn' element={<SignIn/>}/>
         </Routes>
         </div>
