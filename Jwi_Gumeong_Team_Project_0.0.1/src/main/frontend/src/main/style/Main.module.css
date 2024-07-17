@@ -55,6 +55,7 @@
 }
 
 .leftDiv .hotBoard .channel {
+    cursor: pointer;
     width: 115px;
     height: 144px;
     display: flex;
