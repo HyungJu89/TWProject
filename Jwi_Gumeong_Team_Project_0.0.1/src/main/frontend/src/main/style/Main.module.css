@@ -146,6 +146,18 @@
     width: 82px;
     height: 18px;
 }
+.fadein {
+    opacity: 0.5; /* 초기 상태: 투명 */
+    transform: translateY(-10px); /*초기 위치: 위로 10px 이동*/
+    animation: fadeIn 0.5s ease-in-out forwards; /* 애니메이션 적용 */
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1; /* 최종 상태: 불투명 */
+        transform: translateY(0); /* 최종 위치: 제자리 */
+    }
+}
 
 .rightDiv .userAfter {
     width: 318px;
@@ -154,6 +166,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.rightDiv .userAfter img{
+    cursor: pointer;
 }
     .rightDiv .userAfter .userInfo{
         width: 100%;
@@ -190,6 +205,13 @@
             border: 1px solid #E5E5E5;
             color: #FF8901;
             margin-top: 30px;
+            transition:0.2s;
+        }
+        .rightDiv .userAfter .myPage:hover{ 
+            color: white;
+            background-color: #FF8901;
+            border: 1px solid white;
+            transition:0.2s;
         }
         .rightDiv .userAfter .Bookmark {
             font-size: 20px;
@@ -200,7 +222,15 @@
             align-items: center;
             justify-content: space-between;
         }
-
+        .rightDiv .userAfter .bottom{
+            font-size: 16px;
+            font-weight: 400;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 318px;
+            height: 48px;
+            }
 .rightDiv .recommendation{
     width: 360px;
     background-color: white;
