@@ -6,7 +6,6 @@
 }
 body, h1, h2, h3, h4, h5, h6, input { /*기본 폰트 설정*/
   font-family: 'SpoqaHanSansNeo-Regular', sans-serif;
-  font-weight: 400;
   color: #101010;
   font-size: 16px;
 }

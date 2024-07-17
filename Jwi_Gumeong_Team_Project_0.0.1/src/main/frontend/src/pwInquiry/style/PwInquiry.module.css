@@ -1,0 +1,107 @@
+
+
+.PwInquiryContainer {
+    background-color: #FFFFFF; 
+    width: 626px;
+    padding: 80px;
+    margin: auto;
+    border-radius: 20px;
+    margin-top: 200px;
+}
+
+.topFont {
+    font-size: 32px;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.inputWrapper {
+    display: flex;
+}
+
+.email {
+    width: 412px;
+    height: 20px;
+    border: 1px solid #E5E5E5;
+    border-radius: 10px;
+    padding: 20px;
+    margin-right: 20px;
+}
+
+.email:focus {
+    border-color: #FF8901;
+    outline: none; 
+    border-width: 2px;
+}
+
+.email::placeholder {
+    font-size: 15px;
+}
+
+.emailButton {
+    width: 154px;
+    height: 60px;
+    background-color: #BBBBBB;
+    font-size: 16px;
+}
+
+.emailButton.active {
+    background-color: #FF8901;
+    /* 활성화된 배경색 */
+}
+
+.formGroup {
+    width: 626px;
+}
+
+.formGroup p {
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.inputWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.inputWrapper input {
+    width: 452px;
+    height: 60px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 2px solid #E5E5E5;
+    font-size: 20px;
+    padding: 20px;
+    padding-right: 50px; /* 아이콘을 위한 여백 추가 */
+}
+
+.inputWrapper input::placeholder {
+    font-size: 16px;
+}
+
+.inputWrapper input:focus {
+    border-color: #FF8901;
+    outline: none; 
+    border-width: 2px;
+}
+
+.loginButton {
+    width: 626px;
+    height: 60px;
+    padding: 20px 213px;
+    box-sizing: border-box;
+    background-color: #BBBBBB;
+    border-radius: 10px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.loginButton.active {
+    background-color: #FF8901;
+    /* 활성화된 배경색 */
+}

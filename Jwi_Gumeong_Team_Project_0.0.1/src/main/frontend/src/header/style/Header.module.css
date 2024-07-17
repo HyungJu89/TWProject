@@ -73,7 +73,7 @@ body{
     width: 24px;
     height: 24px;
 }
-.basicNav .signUpBtn{ /* 로그인 버튼 디자인 */
+.basicNav .signInBtn{ /* 로그인 버튼 디자인 */
     border: 1px solid #FF8901;
     border-radius: 4px;
     color: #FF8901;
@@ -81,7 +81,7 @@ body{
     cursor: pointer;
     transition:0.2s;
 }
-.basicNav .signUpBtn:hover{ 
+.basicNav .signInBtn:hover{ 
     color: white;
     background-color: #FF8901;
     border: 1px solid white;

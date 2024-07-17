@@ -22,14 +22,18 @@
     border-radius: 50%;
     margin-right: 10px;
 }
+
 /**/
 .dashed {
     border-bottom: 1px solid #F3F3F3;
     border-radius: 0px;
     margin: 20px 0px;
-    }
+}
+
 /* nav */
 .widthNav {
+    z-index: 0;
+    position: relative;
     width: 726px;
     height: 24px;
     display: flex;
@@ -37,37 +41,65 @@
     justify-content: space-between;
     margin: 20px 0px;
 }
-.widthNav .commentsDiv{width: 230px; display: flex; justify-content: space-between;}
-.widthNav .name{font-size: 18px;font-weight: 500;}
-.widthNav .comments{cursor: pointer;padding-right:20px;font-weight: 400; color: #999999;margin-left: 10px;}
-.widthNav div{display: flex;}
-.widthNav img{cursor: pointer;}
-.grayText{
+
+.widthNav .commentsDiv {
+    width: 230px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.widthNav .name {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.widthNav .comments {
+    cursor: pointer;
+    padding-right: 20px;
+    font-weight: 400;
+    color: #999999;
+    margin-left: 10px;
+}
+
+.widthNav div {
+    display: flex;
+}
+
+.widthNav img {
+    cursor: pointer;
+}
+
+.grayText {
     color: gray;
     margin: 0px 6px;
 }
+
 /*본문*/
-.contentArea{
+.contentArea {
     width: 726px;
     display: flex;
 }
-.contentArea .text{
+
+.contentArea .text {
     width: 529px;
     margin-right: 20px;
 }
-.contentArea img{
+
+.contentArea img {
     width: 177px;
     height: 177px;
 }
 
 /* 댓글창 컴포넌트 */
-.commentDiv{
+.commentDiv {
     width: 698px;
     border: 1px solid #F3F3F3;
     border-radius: 10px;
     padding: 14px;
+    margin-bottom: 20px;
 }
-.commentDiv textarea{
+
+.commentDiv textarea {
     outline: none;
     resize: none;
     margin-bottom: 10px;
@@ -78,23 +110,111 @@
     border: 0px;
     padding: 0px;
 }
-.commentNav{width: 698px;height: 34px;
+
+.commentNav {
+    width: 698px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-size: 15px;
     font-weight: 400;
     color: #BBBBBB;
-    }
-.commentNav img{
+}
+
+.commentNav img {
     width: 24px;
     height: 24px;
 }
-.commentNav button{
+
+.commentNav button {
     width: 70px;
     height: 34px;
     border-radius: 26px;
     margin-left: 16px;
     font-size: 14px;
     font-weight: 700;
-    }
+}
+
+/* 댓글창 컴포넌트 - List */
+.list {
+    margin-bottom: 20px;
+}
+
+.listNav {
+    display: flex;
+    justify-content: space-between;
+    max-width: 726px;
+    min-width: 696px;
+    position: relative;
+}
+
+.listNav .moreImg {
+    height: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+
+.listName {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.listName .time {
+    font-weight: 400;
+    color: #999999;
+    margin-left: 10px;
+}
+
+.listContent {
+    font-weight: 400;
+    color: #101010;
+}
+
+.bigComments {
+    display: flex;
+}
+
+.bigComments .BcImg {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/*서브 모달창 모음----------------*/
+.moreUi {
+    z-index: 100;
+    position: absolute;
+
+    background-color: white;
+    width: 106px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    padding: 6px 0px;
+    border: 1px solid #F3F3F3;
+    box-shadow: 0px 2px 3.9px 0px #00000080;
+}
+.moreUi .text {
+    color: #101010;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 400;
+    width: 106px;
+    height: 31px;
+    border-radius: 0px;
+}
+
+.moreUi .text:hover {
+    background: #F3F3F3;
+}

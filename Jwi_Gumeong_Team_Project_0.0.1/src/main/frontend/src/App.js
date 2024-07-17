@@ -5,6 +5,8 @@ import Main from './main/Main.js'
 import Header from './header/Header.js'
 import ChannelHome from './channel/ChannelHome.js';
 import SignIn from './signIn/SignIn.js';
+import SignUp from './signUp/SignUp.js';
+import PwInquiry from './pwInquiry/PwInquiry.js';
 
 function App() {
     return (
@@ -12,8 +14,10 @@ function App() {
         <Header/> {/* 상단 공통 부분 디자인 */}
         <Routes>
             <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
-            <Route path='/channel/:id' element={<ChannelHome/>}/>
+            <Route path='/channel/:channelId' element={<ChannelHome/>}/>
             <Route path='/signIn' element={<SignIn/>}/>
+            <Route path='/signUp' element={<SignUp/>}/>
+            <Route path='/pwInquiry' element={<PwInquiry/>}/>
         </Routes>
         </div>
     );
