@@ -2,7 +2,7 @@
 // ^워링 업애주는 친구
 
 import axios from 'axios';
-import React, { useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styles from './style/Main.module.css';
@@ -34,51 +34,69 @@ function Main() {
     }
 
     return (
-    <div className={styles.basic}> {/*전체 DIV*/}
-        <div className={styles.leftDiv}>{/*게시판 영역*/}
-            <div className={styles.hotBoard}>{/*인기 게시판*/}
-                <div style={{display:'flex',alignItems:'center',marginBottom:'20px'}}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
-                <div className={styles.channelDiv}>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+        <div className={styles.basic}> {/*전체 DIV*/}
+            <div className={styles.leftDiv}>{/*게시판 영역*/}
+                <div className={styles.hotBoard}>{/*인기 게시판*/}
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
+                    <div className={styles.channelDiv}>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                    </div>
+                </div>
+                <TopicBtn topic={topic} settopic={settopic} />
+                {console.log(topic)}
+                {topic == true ? <PublicBoard /> : null}
+                <button style={{ width: '150px', height: '50px' }} on Click={() => { navigate('/channel/' + '123') }}>채널 확인 URL</button>
+            </div>
+            <div className={styles.rightDiv}>{/*유저 영역 */}
+                <div className={styles.userBefore}>
+                    스트리머 덕후들이 모이는 쥐구멍!
+                    <button style={{ width: '318px', height: '63px' }}>로그인</button>
+                    <div>
+                        <div className={styles.loginMenu} style={{ borderRight: '1px solid #999999' }}>회원가입</div>
+                        <div className={styles.loginMenu}>비밀번호 찾기</div>
+                    </div>
+                </div>
+                <div className={styles.recommendation}>
+                    <p style={{margin:'0px',marginLeft:'21px'}}>추천</p>
+                    <div className={styles.list}>
+                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                    </div>
                 </div>
             </div>
-            <TopicBtn topic={topic} settopic={settopic}/>
-            {console.log(topic)}
-            <PublicBoard/>
-            <button style={{width : '150px', height : '50px'}} on   Click={()=>{navigate('/channel/'+'123')}}>채널 확인 URL</button>
         </div>
-        <div className={styles.rightDiv}>{/*유저 영역 */}
-            <div className={styles.userBefore}></div>   
-        </div>
-    </div>
     );
 }
 
-function TopicBtn({topic, settopic}){
-    return(
-    <div className={styles.Nav}>
-        {topic == true ?
-            <div className={styles.topicdiv}>
-                <div>추천 토픽<div className={styles.bar}/></div>
-                <div onClick={()=>{topic && settopic(false)}} style={{color:'#999999'}}>즐겨찾기 토픽</div>
-            </div>
-         : 
-         <div className={styles.topicdiv}>
-                <div onClick={()=>{topic ? null : settopic(true)}} style={{color:'#999999'}}>추천 토픽</div>
-                <div>즐겨찾기 토픽<div className={styles.bar}/></div>
-            </div>}
-    </div>
+function TopicBtn({ topic, settopic }) {
+    return (
+        <div className={styles.Nav}>
+            {topic == true ?
+                <div className={styles.topicdiv}>
+                    <div>추천 토픽<div className={styles.bar} /></div>
+                    <div onClick={() => { topic && settopic(false) }} style={{ color: '#999999' }}>즐겨찾기 토픽</div>
+                </div>
+                :
+                <div className={styles.topicdiv}>
+                    <div onClick={() => { topic ? null : settopic(true) }} style={{ color: '#999999' }}>추천 토픽</div>
+                    <div>즐겨찾기 토픽<div className={styles.bar} /></div>
+                </div>}
+        </div>
     )
 
 }
 export default Main;
- 
