@@ -69,7 +69,7 @@ function SignIn() {
                         else if (password == '') { alert('비밀번호를 입력해주세요!'); }
                         // if(이메일과 비밀번호가 적혀있으면){대충 엑시오스 요청해서 데이터베이스랑 데이터대조 후 로그인진행}
                     }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>로그인</button>
-                <div className={styles.help}><h6 onClick={() => { navigate('/signUp') } }>회원가입</h6><h6>|</h6><h6>비밀번호 찾기</h6></div>
+                <div className={styles.help}><h6 onClick={() => { navigate('/signUp') } }>회원가입</h6><h6>|</h6><h6 onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</h6></div>
             </div>
         </div>
     );
