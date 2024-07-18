@@ -56,7 +56,6 @@ function Main() {
                 </div>
                 <TopicBtn topic={topic} settopic={settopic} />
                 {topic == true ? <PublicBoard /> : null}
-                <button style={{ width: '150px', height: '50px' }} on Click={() => { navigate('/channel/' + '123') }}>채널 확인 URL</button>
             </div>
             {/* 오른쪽 로그인, 추천 영역 */}
             <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />

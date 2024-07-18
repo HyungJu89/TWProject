@@ -109,7 +109,7 @@
         }
         .rightDiv .userAfter .Bookmark {
             font-size: 20px;
-            font-weight: 500;
+            font-weight: 600;
             width: 318px;
             height: 20px;
             display: flex;
@@ -132,7 +132,7 @@
     padding: 30px 9px;
 
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
 }
 .rightDiv .recommendation .list{
     margin-top: 20px;
