@@ -2,10 +2,7 @@ import { useParams } from 'react-router-dom';
 import style from './style/ChannelBody.module.css';
 import axios from 'axios';
 import '../App.css'
-
-import favoritesActivation from '../icon/20px/favorites-activation.png';
-import favoritesActivationW from '../icon/20px/favorites-activation-w.png';
-import favoritesDeactivation from '../icon/20px/favorites-deactivation.png';
+import BookmarkButton from './BookmarkButton.js';
 import announcement from '../icon/20px/announcement.png';
 import { useChannel } from './ApiQuery.js';
 import { useQuery } from 'react-query';
@@ -15,8 +12,6 @@ function ChannelBody() {
 
 
     let { channelId } = useParams();
-
-    let [favoritesImg, setFavoritesImg] = useState(favoritesActivation);
 
 
 
@@ -67,11 +62,8 @@ function ChannelBody() {
                                 <div className={style.channelName}>{channelApi.channelName}</div>
                                 <div className={style.announcement}><img src={announcement} />[필수!]우리 토픽의 공지사항</div>
                             </div>
-                            <div className={style.bookmarkButton}
-                                onMouseEnter={() => setFavoritesImg(favoritesActivationW)}
-                                onMouseLeave={() => setFavoritesImg(favoritesActivation)} >
-                                <img src={favoritesImg} />
-                                <div className={style.bookmarkText}>즐겨찾기</div>
+                            <div  className={style.bookmark}>
+                                <BookmarkButton/>
                             </div>
                         </div>
                     </div>
