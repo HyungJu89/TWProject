@@ -7,7 +7,7 @@ import ChannelHome from './channel/ChannelHome.js';
 import SignIn from './signIn/SignIn.js';
 import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
-
+import Search from './search/Search.js'
 function App() {
     return (
         <div>
@@ -18,6 +18,7 @@ function App() {
             <Route path='/signIn' element={<SignIn/>}/>
             <Route path='/signUp' element={<SignUp/>}/>
             <Route path='/pwInquiry' element={<PwInquiry/>}/>
+            <Route path='/search' element={<Search/>}/>
         </Routes>
         </div>
     );
