@@ -134,14 +134,15 @@ function UserAfter({channel,setLoginOn}){
 }
 
 function UserBefore({setLoginOn}){
+    let navigate = useNavigate();
     return(
         <div className={styles.fadein}>
             <div className={styles.userBefore}>
                 스트리머 덕후들이 모이는 쥐구멍!
-                <button onClick={() => { setLoginOn(true) }} style={{ width: '318px', height: '63px' }}>로그인</button>
+                <button onClick={() => { navigate('/signIn') }} style={{ width: '318px', height: '63px' }}>로그인</button>
                 <div>
-                    <div className={styles.loginMenu} style={{ borderRight: '1px solid #999999' }}>회원가입</div>
-                    <div className={styles.loginMenu}>비밀번호 찾기</div>
+                    <div onClick={() => { navigate('/signUp') }} className={styles.loginMenu} style={{ borderRight: '1px solid #999999' }}>회원가입</div>
+                    <div className={styles.loginMenu} onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</div>
                 </div>
             </div>
         </div>
