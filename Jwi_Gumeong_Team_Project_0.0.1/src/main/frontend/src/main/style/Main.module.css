@@ -1,41 +1,271 @@
-.basic { /* 전체  사이즈  제한*/
+.basic {
+    /* 전체  사이즈  제한*/
     margin: 30px auto;
     width: 1194px;
     display: flex;
 }
+
 /*전체 채팅 CSS @임재열*/
-.publicBoard{
+.publicBoard {
     width: 786px;
     height: 386px;
 }
 
 /*왼쪽*/
-.leftDiv{
+.leftDiv {
     width: 786px;
     margin-right: 30px;
 }
-.leftDiv .hotBoard{
-    width: 786px;
-    height: 413px;
+
+.leftDiv .hotBoard {
+    width: 726px;
+    height: 353px;
     background-color: white;
     margin-bottom: 30px;
+    padding: 30px;
 }
-.leftDiv .Nav{
+
+.leftDiv .hotBoard h3 {
+    color: #101010;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 25.04px;
+    margin: 0px;
+    margin-right: 8px;
+}
+
+.leftDiv .hotBoard h6 {
+    color: #999999;
+    margin: 0px;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 18.78px;
+    text-align: center;
+}
+
+.leftDiv .hotBoard .channelDiv {
+    display: flex;
+    justify-content: space-between;
+    width: 723px;
+    height: 144px;
+    flex-wrap: wrap;
+    /* 아이템이 줄을 넘도록 설정 */
+    gap: 20px 37px;
+    /* 아이템 사이의 간격 설정 */
+}
+
+.leftDiv .hotBoard .channel {
+    cursor: pointer;
+    width: 115px;
+    height: 144px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 16px;
+    font-weight: 400;
+    color: #101010;
+}
+
+.leftDiv .hotBoard .channel img {
+    width: 90px;
+    height: 90px;
+    border-radius: 57px;
+    margin-bottom: 10px;
+}
+
+.leftDiv .Nav {
     width: 786px;
     height: 60px;
     background: #FFFFFF;
+    display: flex;
+    font-size: 20px;
+    font-weight: 600;
+    overflow: hidden;
 }
+
+.leftDiv .Nav .topicdiv {
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+.leftDiv .Nav .topicdiv div {
+    margin-right: 30px;
+    position: relative;
+}
+
+.leftDiv .Nav .topicdiv .bar {
+    position: absolute;
+    left: 50%;
+    top: 41px;
+    transform: translate(-50%, -0%);
+    width: 24px;
+    height: 2px;
+    background-color: #FF8901;
+}
+
 /*오른쪽*/
-.rightDiv{
+.rightDiv {
     width: 378px;
 }
-.rightDiv .userBefore{
-    width: 378px;
-    height: 201px;
+
+.rightDiv .userBefore button {
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.rightDiv .userBefore {
+    width: 318px;
+    height: 141px;
     background-color: white;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: #999999;
 }
-.rightDiv .userAfter{
-    width: 378px;
-    height: 951px;
+
+.rightDiv .userBefore div {
+    display: flex;
+    justify-content: space-between;
+    margin: 0px auto;
+    width: 205px;
+}
+
+.rightDiv .userBefore .loginMenu {
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0px;
+    cursor: pointer;
+
+    width: 82px;
+    height: 18px;
+}
+.fadein {
+    opacity: 0.5; /* 초기 상태: 투명 */
+    transform: translateY(-10px); /*초기 위치: 위로 10px 이동*/
+    animation: fadeIn 0.5s ease-in-out forwards; /* 애니메이션 적용 */
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1; /* 최종 상태: 불투명 */
+        transform: translateY(0); /* 최종 위치: 제자리 */
+    }
+}
+
+.rightDiv .userAfter {
+    width: 318px;
+    padding: 30px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.rightDiv .userAfter img{
+    cursor: pointer;
+}
+    .rightDiv .userAfter .userInfo{
+        width: 100%;
+        height: 49px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        font-size: 20px;
+        font-weight: 500;
+    }
+        .rightDiv .userAfter .userInfo p{
+            font-size: 14px;
+            font-weight: 400;
+            margin: 0px;
+            color: #999999;
+        }
+        .rightDiv .userAfter .userInfo button{
+            width: 84px;
+            height: 36px;
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
+            border-radius: 83px;
+            font-size: 14px;
+            font-weight: 400;
+            text-align: center;
+            color: #BBBBBB;
+        }
+        .rightDiv .userAfter .myPage{
+            width:100%;
+            height:48px;
+            border-radius: 83px;
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
+            color: #FF8901;
+            margin-top: 30px;
+            transition:0.2s;
+        }
+        .rightDiv .userAfter .myPage:hover{ 
+            color: white;
+            background-color: #FF8901;
+            border: 1px solid white;
+            transition:0.2s;
+        }
+        .rightDiv .userAfter .Bookmark {
+            font-size: 20px;
+            font-weight: 500;
+            width: 318px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .rightDiv .userAfter .bottom{
+            font-size: 16px;
+            font-weight: 400;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 318px;
+            height: 48px;
+            }
+.rightDiv .recommendation{
+    width: 360px;
+    background-color: white;
+    margin-top: 30px;
+    padding: 30px 9px;
+
+    font-size: 20px;
+    font-weight: 500;
+}
+.rightDiv .recommendation .list{
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 400;
+}
+.rightDiv .recommendation .list .reChannel{
+    display: flex;
+    align-items: center;
+    border-radius: 0px;
+    width: 360px;
+    height: 62px;
+    cursor: pointer;
+}
+.rightDiv .recommendation .list .reChannel:hover{
+    background: #F3F3F3;
+}
+.rightDiv .recommendation .list .reChannel img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-left: 21px;
+}
+.dashed {
+    border-bottom: 1px solid #F3F3F3;
+    border-radius: 0px;
     background-color: white;
 }
