@@ -4,13 +4,14 @@
     z-index: 10;
     position: relative;
     border-radius: 0px;
+    min-width: 1194px;
 }
 
 .channelInfo {
     width: 1194px;
-    height: 130px;
+    height: 132px;
     position: relative;
-    top: -70px;
+    top: -72px;
     display: flex;
     margin: auto;
 }
@@ -39,59 +40,96 @@
     border-radius: 50%;
 }
 
+.iconRight {
+    height: 132px;
+
+}
+
+.iconRightTop {
+    height: 72px;
+    width: 100%;
+}
+
 .imageBackground {
     display: flex;
+    padding: 10px 14px;
+
+
+}
+
+
+.channelTop {
     height: 52px;
-    margin-top: 10px;
-    margin-left: 14px;
 }
 
-.iconRight {
-    width: 1074px;
-}
 
-.channelTitle {
-
-    color: white;
+.channelName {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 27.54px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    color: #FFFFFF;
     display: flex;
     align-items: center;
-    height: 60%;
 }
 
 .announcement {
+    margin-top: 4px;
     display: flex;
     align-items: center;
-    color: orange;
-    height: 40%;
+    color: #FF8901;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+
+}
+
+.announcement img {
+    height: 20px;
+    width: 20px;
+    margin-right: 6px;
+
 }
 
 .bookmarkButton {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    margin-bottom: 72px;
     display: flex;
-font-size: 14px;
-font-weight: 700;
-line-height: 17.53px;
-letter-spacing: 0.0075em;
-text-align: center;
-color:  #FF8901;
-    justify-content: center;
-    align-items: center;
-    width: 106px;
-    height: 38px;
-    right: 40px;
-    border-radius: 40px;
+    color: #FF8901;
+    padding: 9px 16px;
+    height: 20px;
+    width: 74px;
     background-color: #FFEDD9;
 }
+
 .bookmarkButton:hover {
-    
-color:  #FFEDD9;
+
+    color: #FFEDD9;
     background-color: #FF8901;
 }
 
-.bookmarkButton img{
+.bookmarkButton img {
     height: 20px;
     width: 20px;
     margin-right: 2px;
-    
+
+}
+
+.bookmarkText {
+    width: 52px;
+    height: 18px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17.53px;
+    letter-spacing: 0.0075em;
+    text-align: center;
+    margin: 1px 0px;
+    user-select: none;
 }
 
 
@@ -99,29 +137,37 @@ color:  #FFEDD9;
 
 .whiteBackground {
     display: flex;
-    margin-top: 8px;
     height: 60px;
     align-items: center;
 
 }
 
 .mark {
-
     display: flex;
     align-items: center;
     margin-left: 14px;
 }
 
 .markText {
-    size: 16px;
-    margin: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    margin-right: 8px;
     color: #999999;
 }
 
 .markCount {
-    size: 18px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22.54px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+
     color: #101010;
     margin-right: 48px;
+
 }
 
 .channelInfoBackgroundColor {

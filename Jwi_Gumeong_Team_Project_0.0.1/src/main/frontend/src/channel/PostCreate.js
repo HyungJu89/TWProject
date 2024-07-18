@@ -26,9 +26,10 @@ function PostCreact() {
 
     const handleInput = () => {
         setContent(contentRef.current.innerText);
-        setContentColor(contentRef.current.innerText.length <= 300 ? 'black' : 'red')
-        setHasContent(contentRef.current.innerText.trim() !== '')
+        setContentColor(contentRef.current.innerText.length <= 300 ? '#BBBBBB' : '#EC000E')
+        setHasContent(contentRef.current.innerText.trim().length !== 0)
     }
+
 
     return (
         <div className={style.postCreact}>{/*게시글 작성 box*/}
@@ -36,7 +37,7 @@ function PostCreact() {
             }
             <div
                 contentEditable="true"
-                className={`${style.contentArea} ${!hasContent ? style.placeholder : ""}`}
+                className={`${style.contentArea}`}
                 ref={contentRef}
                 onInput={handleInput}
                 onBlur={() => setContent(contentRef.current.innerText)}

@@ -16,7 +16,7 @@ function ChannelHome() {
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
 
 
-
+    // 추후에 에러 페이지 만들기
     if (isLoadingChannel) {
         return <div>로딩중</div>;
     }

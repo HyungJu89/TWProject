@@ -4,6 +4,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    min-width: 1194px;
     margin: auto;
 }
 
@@ -11,6 +13,7 @@
 
 
 .backgroundImage {
+
     background-color: #002761;
     height: 102px;
     width: 100%;
@@ -25,7 +28,10 @@
 .gradinetMainBanner {
     width: 100%;
     height: 490px;
-    background: linear-gradient(to right, rgba(0, 0, 0, 1) calc(50% - 400px), rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) calc(50% + 400px));
+
+    background: linear-gradient(to right, rgba(16, 16, 16, 1) calc(50% - 400px), rgba(7, 7, 7, 0) 50%, rgba(16, 16, 16, 1) calc(50% + 400px)),
+        linear-gradient(180deg, rgba(16, 16, 16, 0) 27.5%, rgba(16, 16, 16, 0.9) 85.5%);
+
     display: flex;
     justify-content: center;
     border-radius: 0px;
@@ -58,12 +64,13 @@
     width: 497px;
     bottom: 162px;
     left: 0px;
-    border-radius: 50%;
+    border-radius: 0;
 
 }
 
 
 .liveIcon {
+    /* 라이브 아이콘 */
     background-color: red;
     width: 52px;
     height: 19px;
@@ -74,9 +81,16 @@
     align-items: center;
     font-size: 12px;
     color: #E5E5E5;
+    margin-bottom: 10px;
+    font-weight: 700;
+    line-height: 15.02px;
+    letter-spacing: 0.0075em;
+    text-align: center;
+    user-select: none;
+
 }
 
-.aa {
+.point {
     background-color: #E5E5E5;
     height: 4px;
     width: 4px;
@@ -85,33 +99,50 @@
 }
 
 .liveTitle {
+    /*방송 제목*/
     width: auto;
     word-wrap: break-word;
-
-
+    height: 80px;
     font-size: 32px;
     font-weight: 500;
     line-height: 40.06px;
     letter-spacing: 0.0075em;
     text-align: left;
     color: #E5E5E5;
+    margin-bottom: 20px;
 
 }
 
 .liveGoing {
-    width: 162px;
+    /*방송 바로가기*/
     height: 38px;
-    margin-top: 20px;
-    background-color: rgba(0, 0, 0, 0.5);
+    width: 162px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.liveGo {
+    padding: 9px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.liveGoText {
     font-size: 14px;
     font-weight: 700;
     line-height: 17.53px;
     letter-spacing: 0.0075em;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+    user-select: none;
     color: #F3F3F3;
+    margin: 1px;
+    width: 108px;
+    height: 18px;
+}
 
+
+.liveGoing img {
+    position: relative;
+
+    width: 20px;
+    height: 20px;
 }

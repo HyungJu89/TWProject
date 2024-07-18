@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useChannel, useLiveInfo } from './ApiQuery.js';
 import axios from 'axios';
+import openInNew from '../icon/20px/open_in_new.png'
 
 function MainBanner() {
     let { channelId } = useParams();
@@ -33,22 +34,25 @@ function MainBanner() {
 
     return (
 
-<div className={style.channelInfoBack}> {/*상단 이미지 배너 */}
-    {channelApi.openLive ? (
-        <div className={style.gradinetMainBanner}>
-            <div className={style.MainBanner}>
-                {/* 라이브 이미지 */}
-                <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                {/* 라이브 방송 정보 */}
-                <div className={style.liveInfo}>
-                    <div className={style.liveIcon}><div className={style.aa}></div>Live</div>
-                    <div className={style.liveTitle}>{liveInfoApi.liveTitle}</div>
-                    <div className={style.liveGoing} onClick={() => window.open(`https://chzzk.naver.com/live/${channelId}`)}>
-                        새창으로 방송보기 <img className='liveGoIcon'></img>
+        <div className={style.channelInfoBack}> {/*상단 이미지 배너 */}
+            {channelApi.openLive ? (
+                <div className={style.gradinetMainBanner}>
+                    <div className={style.MainBanner}>
+                        {/* 라이브 이미지 */}
+                        <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                        {/* 라이브 방송 정보 */}
+                        <div className={style.liveInfo}>
+                            <div className={style.liveIcon}><div className={style.point}></div>Live</div>
+                            <div className={style.liveTitle}>{liveInfoApi.liveTitle}</div>
+                            <div className={style.liveGoing} onClick={() => window.open(`https://chzzk.naver.com/live/${channelId}`)}>
+                                <div className={style.liveGo}>
+                                <div className={style.liveGoText}>새창으로 방송보기</div>
+                                <img className={style.liveGoIcon} src={openInNew}/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
             ) : (
                 <div className={style.backgroundImage}><img src={offBanner} /></div>
             )}
