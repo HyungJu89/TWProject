@@ -14,14 +14,20 @@ import sharing from '../icon/24px/sharing.png';
 import expand_more from '../icon/24px/expand-more.png';
 import emoticon_deactivation from '../icon/24px/emoticon-deactivation.png';
 import big_comment from '../icon/20px/bigcomment.png';
+import { useSelector, useDispatch } from 'react-redux';
+import { openImgUiModal } from '../slice/mainSlice';
 
-function PublicBoard({imgUi, setImgUi}) {
+
+function PublicBoard() {
     let [heart, setHeart] = useState(true); //좋아요 누름 확인
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
     //이미지
     let [imgBeing, setImgBeing] = useState(1);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
+
+    let state = useSelector((state)=>{ return state });
+    let disPatch = useDispatch();
 
     const [channel, setChannel] = useState('');
     // 첫 번째 쿼리: 채널 정보를 가져오기.
@@ -57,7 +63,8 @@ function PublicBoard({imgUi, setImgUi}) {
                     피드백 많이 해주셔서 원신 할거 겁나 많이 생김<br />
                     우리 백출.. 잘 키워야지<br/>
                 </div>
-                <div onClick={()=>{imgUi == true ? setImgUi(false) : setImgUi(true)}}  className={styles.imgClick}>{/* 이미지 */}
+                <div onClick={()=>disPatch(openImgUiModal())}  className={styles.imgClick}>{/* 이미지 */}
+                    {console.log(state.popUp)}
                     <div className={styles.imgArea}>
                         <img src='https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5367703706/B.jpg?675000000' />
                         {imgBeing > 0 &&
