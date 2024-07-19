@@ -29,6 +29,7 @@ html, body {
 .topFont {
     font-size: 32px;
     margin-bottom: 60px;
+    font-weight: 600;
 }
 
 .formGroup {
@@ -54,14 +55,13 @@ html, body {
     box-sizing: border-box;
     border-radius: 6px;
     border: 2px solid #E5E5E5;
-    font-size: 20px;
+    font-size: 15px;
     padding: 20px;
     padding-right: 50px; /* 아이콘을 위한 여백 추가 */
 }
 
 .inputWrapper input::placeholder {
     font-size: 16px;
-    transform: translateY(-10%);
 }
 
 .inputWrapper input:focus {
@@ -89,7 +89,7 @@ html, body {
     cursor: pointer;
     text-align: center;
     margin-top: 80px;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
 }
 .loginButton.active {

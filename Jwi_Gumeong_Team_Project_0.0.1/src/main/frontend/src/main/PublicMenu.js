@@ -2,6 +2,7 @@
 // ^워링 업애주는 친구
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './style/PublicMenu.module.css';
 import '../App.css';
 import edit from '../icon/20px/edit.png';
@@ -30,7 +31,7 @@ function PublicMenu({loginOn, setLoginOn, channel}){
 
 function UserAfter({channel,setLoginOn}){
     return(
-        <div>
+        <div className={styles.fadein}>
             <div className={styles.userAfter} style={{ borderRadius: '20px 20px 0px 0px' }}>
                 <div className={styles.userInfo}>
                     <div>
@@ -66,20 +67,20 @@ function UserAfter({channel,setLoginOn}){
 }
 
 function UserBefore({setLoginOn}){
+    let navigate = useNavigate();
     return(
-        <div className={styles.fadein}>
+        <div>
             <div className={styles.userBefore}>
                 스트리머 덕후들이 모이는 쥐구멍!
-                <button onClick={() => { setLoginOn(true) }} style={{ width: '318px', height: '63px' }}>로그인</button>
+                <button onClick={() => { navigate('/signIn') }} style={{ width: '318px', height: '63px' }}>로그인</button>
                 <div>
-                    <div className={styles.loginMenu} style={{ borderRight: '1px solid #999999' }}>회원가입</div>
-                    <div className={styles.loginMenu}>비밀번호 찾기</div>
+                    <div onClick={() => { navigate('/signUp') }} className={styles.loginMenu} style={{ borderRight: '1px solid #999999' }}>회원가입</div>
+                    <div className={styles.loginMenu} onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</div>
                 </div>
             </div>
         </div>
     )
 }
-
 
 
 export default PublicMenu;
