@@ -55,7 +55,7 @@ function Main() {
                     </div>
                 </div>
                 <TopicBtn topic={topic} settopic={settopic} />
-                {topic == true ? <PublicBoard /> : null}
+                {topic == true ? <div className={styles.fadein}><PublicBoard /></div> : null}
             </div>
             {/* 오른쪽 로그인, 추천 영역 */}
             <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />

@@ -30,7 +30,7 @@ function PublicMenu({loginOn, setLoginOn, channel}){
 
 function UserAfter({channel,setLoginOn}){
     return(
-        <div className={styles.fadein}>
+        <div>
             <div className={styles.userAfter} style={{ borderRadius: '20px 20px 0px 0px' }}>
                 <div className={styles.userInfo}>
                     <div>
