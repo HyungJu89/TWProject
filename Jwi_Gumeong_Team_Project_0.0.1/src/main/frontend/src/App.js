@@ -9,10 +9,15 @@ import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import Search from './search/Search.js'
 import CreateChannel from './createChannel/CreateChannel.js'
+import ImgUi from './imgModal/imgModal.js'
+import { useSelector } from 'react-redux';
+
 function App() {
+    let state = useSelector((state)=>{ return state })
     return (
         <div>
         <Header/> {/* 상단 공통 부분 디자인 */}
+        {state.imgUiModal.popUp && <ImgUi/>}
         <Routes>
             <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
             <Route path='/channel/:channelId' element={<ChannelHome/>}/>
