@@ -1,0 +1,128 @@
+.searchMain {
+    width: 1194px;
+    margin-top: 30px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchBody {
+
+    padding: 30px;
+    background-color: #FFFFFF;
+}
+
+.searchBodyTop {
+    display: flex;
+}
+
+.searchTitle {
+    width: 97px;
+    height: 25px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 25.04px;
+    text-align: left;
+    color: #101010;
+    margin-right: 470px;
+}
+
+.creactChannel {
+    display: flex;
+    width: 145px;
+    height: 24px;
+    margin-right: 14px;
+
+}
+
+.creactChannel img {
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+
+}
+
+
+.creactChannelText {
+    height: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17.53px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    color: #999999
+}
+.searchChannelList{
+    width: 726px;
+}
+
+/*검색된 채널*/
+.searchChannel {
+
+    display: flex;
+    margin-bottom: 20px;
+    margin-top: 20px;
+
+}
+
+/*검색된 채널아이콘*/
+.searchChannelIcon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: greenyellow;
+    margin-right: 10px;
+
+}
+
+/*검색된 채널 이름*/
+.searchChannelTitle{
+    height: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    letter-spacing: 0.0075em;
+    margin-top: 1px;
+    text-align: left;
+    color: #101010;
+
+}
+
+
+/*검색된 채널 팔로워,즐겨찾기 정보*/
+.searchChannelmark {
+    height: 19px;
+    display: flex;
+    color: #999999;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 18.78px;
+    letter-spacing: 0.0075em;
+    margin-top: 9px;
+    text-align: left;
+    margin-bottom: 1px;
+}
+
+.searchChannelmarkText {
+    margin-right: 6px;
+}
+.searchChannelmarkCount {
+    margin-right: 20px;
+}
+
+.bookmark{
+    position: relative;
+    left: 0;
+    margin: 3px;
+}
+
+.dashed {
+    /*회색줄*/
+    border-bottom: 1px solid #F3F3F3;
+    border-radius: 0px;
+    margin: 20px 0px;
+}
