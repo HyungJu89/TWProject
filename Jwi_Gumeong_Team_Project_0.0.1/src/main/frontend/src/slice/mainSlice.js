@@ -13,6 +13,6 @@ let imgUiModal = createSlice({
 
     }
 })
-export let {openImgUiModal} = imgUiModal.actions
+export let {openImgUiModal, openImgUiModalFalse} = imgUiModal.actions
 
 export default imgUiModal;
