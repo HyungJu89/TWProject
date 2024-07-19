@@ -64,7 +64,6 @@ function PublicBoard() {
                     우리 백출.. 잘 키워야지<br/>
                 </div>
                 <div onClick={()=>disPatch(openImgUiModal())}  className={styles.imgClick}>{/* 이미지 */}
-                    {console.log(state.popUp)}
                     <div className={styles.imgArea}>
                         <img src='https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5367703706/B.jpg?675000000' />
                         {imgBeing > 0 &&

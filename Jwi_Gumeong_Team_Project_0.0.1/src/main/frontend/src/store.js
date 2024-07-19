@@ -1,4 +1,4 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import imgUiModal from './slice/mainSlice'
 /**
  * -리덕스 쓰는이유 
