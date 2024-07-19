@@ -1,0 +1,88 @@
+.createMain {
+    margin-top: 30px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.createTop {
+    padding: 30px;
+    width: 726px;
+    background-color: #FFFFFF;
+}
+.createChannelTitle{
+    display: flex;
+    height: 32px;
+    margin-bottom: 20px;
+}
+.createChannelTitle img{
+    background-color: red;
+    height: 32px;
+    width: 32px;
+}
+
+.createChannelTitleText {
+    margin: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    color: #101010;
+
+}
+
+.dashed {
+    /*회색줄*/
+    border-bottom: 1px solid #F3F3F3;
+    border-radius: 0px;
+    margin: 20px 0px;
+}
+
+.createChannel{
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.createChannelText{
+font-size: 16px;
+font-weight: 500;
+line-height: 20.03px;
+letter-spacing: 0.0075em;
+text-align: left;
+color: #101010;
+margin-left: 3px;
+}
+
+.createChannelInput{
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 19px;
+    width: 666px;
+    padding: 15px 20px;
+}
+
+.createChannelInput::placeholder{
+font-size: 15px;
+font-weight: 400;
+line-height: 18.78px;
+letter-spacing: 0.0075em;
+text-align: left;
+color: #BBBBBB;
+}
+
+
+.createManager {
+    margin-top: 10px;
+    padding: 30px;
+    background-color: #FFFFFF;
+}
+
+.deleteManager {
+    margin-top: 10px;
+    padding: 30px;
+    background-color: #FFFFFF;
+}
