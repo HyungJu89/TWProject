@@ -41,10 +41,15 @@ function ImgUi(){
             </div>
             </div>
             <div className={styles.mainContent}>
-                <div onClick={()=>{content== true ? setContent(false):setContent(true)}} className={styles.btn_content}>
-                {content == true ? <img src={btn_content_close}/>:<img src={btn_content_open}/>}
+                <div onClick={()=>{content== true ? setContent(false):setContent(true)}} className={styles.btn_contentA}>
                 </div>
-               { content && <Content content={content} setContent={setContent}/>}
+                {content == true ? null:
+                <div className={styles.fadeOut}>
+                <div className={styles.move}>
+                    <Content content={content} setContent={setContent}/>
+                    </div>
+                </div>}
+               { content && <div className={styles.fadeIn}><Content content={content} setContent={setContent}/></div>}
             </div>
             </div>
         </div>
@@ -52,14 +57,12 @@ function ImgUi(){
 }
 function Content({setContent,content}){
     return(
-        <div className={styles.fadeIn}>
         <div className={styles.mainContent}>
         <div onClick={()=>{content== true ? setContent(false):setContent(true)}} className={styles.btn_content}>
         {content == true ? <img src={btn_content_close}/>:<img src={btn_content_open}/>}
         </div>
         <div className={styles.mainArea}>
             ㅇㅅㅇ
-        </div>
         </div>
         </div>
     )
