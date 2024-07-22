@@ -4,6 +4,7 @@ import { Routes, Route} from 'react-router-dom';
 import Main from './main/Main.js'
 import AllTopic from './allTopic/AllTopic.js'
 import Header from './header/Header.js'
+import Bottom from './bottom/Bottom.js'
 import ChannelHome from './channel/ChannelHome.js';
 import SignIn from './signIn/SignIn.js';
 import SignUp from './signUp/SignUp.js';
@@ -29,6 +30,7 @@ function App() {
             <Route path='/search' element={<Search page={1} search={1}/>}/>
             <Route path='/CreateChannel' element={<CreateChannel/>}/>
         </Routes>
+        <Bottom/> {/* 하단 공통 부분 디자인 */}
         </div>
     );
 }
