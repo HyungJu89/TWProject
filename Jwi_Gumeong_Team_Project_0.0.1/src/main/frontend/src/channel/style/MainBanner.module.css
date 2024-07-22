@@ -27,7 +27,7 @@
 
 .gradinetMainBanner {
     width: 100%;
-    height: 490px;
+    height: 550px;
 
     background: linear-gradient(to right, rgba(16, 16, 16, 1) calc(50% - 400px), rgba(7, 7, 7, 0) 50%, rgba(16, 16, 16, 1) calc(50% + 400px)),
         linear-gradient(180deg, rgba(16, 16, 16, 0) 27.5%, rgba(16, 16, 16, 0.9) 85.5%);
@@ -43,7 +43,7 @@
 .MainBanner {
     /* 라이브 이미지 영역*/
     width: 1194px;
-    height: 490px;
+    height: 550px;
     position: relative;
     overflow: hidden;
     display: flex;
