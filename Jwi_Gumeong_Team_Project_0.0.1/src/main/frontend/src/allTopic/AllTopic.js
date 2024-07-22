@@ -9,9 +9,10 @@ import styles from './style/AllTopic.module.css';
 import '../App.css';
 import PublicBoard from '../main/PublicBoard.js'
 import PublicMenu from '../main/PublicMenu.js'
+import Paging from '../Paging/Paging.js'
 import illustration01 from '../icon/img/illustration01.png';
 
-function Main() {
+function AllTopic() {
     let navigate = useNavigate();
     let [topic, settopic] = useState(true);
     let [loginOn, setLoginOn] = useState(false);
@@ -45,6 +46,7 @@ function Main() {
                 <div className={styles.leftDiv}>{/*게시판 영역*/}
                     <TopicBtn topic={topic} settopic={settopic} />
                     {topic == true ? <div className={styles.fadein}><PublicBoard /></div> : null}
+                    <Paging/>
                 </div>
                 {/* 오른쪽 로그인, 추천 영역 */}
                 <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
@@ -71,4 +73,4 @@ function TopicBtn({ topic, settopic }) {
 }
 
 
-export default Main;
+export default AllTopic;
