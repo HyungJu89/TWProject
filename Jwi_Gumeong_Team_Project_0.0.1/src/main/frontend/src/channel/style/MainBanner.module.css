@@ -62,7 +62,7 @@
     position: absolute;
     z-index: 0;
     width: 497px;
-    bottom: 162px;
+    top: 161px;
     left: 0px;
     border-radius: 0;
 
@@ -102,7 +102,6 @@
     /*방송 제목*/
     width: auto;
     word-wrap: break-word;
-    height: 80px;
     font-size: 32px;
     font-weight: 500;
     line-height: 40.06px;
@@ -110,7 +109,7 @@
     text-align: left;
     color: #E5E5E5;
     margin-bottom: 20px;
-
+    
 }
 
 .liveGoing {

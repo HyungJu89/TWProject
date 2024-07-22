@@ -20,11 +20,11 @@ function App() {
         {state.imgUiModal.popUp && <ImgUi/>}
         <Routes>
             <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
-            <Route path='/channel/:channelId' element={<ChannelHome/>}/>
+            <Route path='/channel/:channelId' element={<ChannelHome/>}/>{/*채널*/}
             <Route path='/signIn' element={<SignIn/>}/>
             <Route path='/signUp' element={<SignUp/>}/>
             <Route path='/pwInquiry' element={<PwInquiry/>}/>
-            <Route path='/search' element={<Search page={1} search={1}/>}/>
+            <Route path='/search' element={<Search page={1} search={1}/>}/>{/*채널 검색*/}
             <Route path='/CreateChannel' element={<CreateChannel/>}/>
         </Routes>
         </div>

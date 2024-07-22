@@ -57,6 +57,8 @@ function PostCreact() {
         //모든 파일을 읽은 후에 상태를 한번에 업데이트 되도록 하는 함수
         Promise.all(newFiles).then(fileArray => {
             setSelectedImage(prevFiles => [...prevFiles, ...fileArray]);
+        // 리셋
+            fileInputRef.current.value = null
         });
 
 
