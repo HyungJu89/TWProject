@@ -33,7 +33,7 @@ function ChannelHome() {
     return (
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
-                <MainBanner />
+                <MainBanner channelId={channelId}/>
 
                 <ChannelBody />
             </div>

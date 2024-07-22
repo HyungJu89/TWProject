@@ -12,8 +12,7 @@ import { useChannel, useLiveInfo } from './ApiQuery.js';
 import axios from 'axios';
 import openInNew from '../icon/20px/open_in_new.png'
 
-function MainBanner() {
-    let { channelId } = useParams();
+function MainBanner({ channelId }) {
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
