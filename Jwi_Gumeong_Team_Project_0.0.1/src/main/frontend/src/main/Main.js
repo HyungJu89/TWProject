@@ -10,6 +10,8 @@ import '../App.css';
 import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
+import chevron_left_w from '../icon/40px/chevron-left-w.png'
+import chevron_right_w from '../icon/40px/chevron-right-w.png'
 
 function Main() {
     let navigate = useNavigate();
@@ -38,7 +40,20 @@ function Main() {
 
     return (
         <div>
-        <MainBanner channelId={123}/>
+            <div className={styles.bannerPosition}>
+            <MainBanner channelId={123}/>
+            <div className={styles.liveDiv}>
+                <img style={{marginRight:'30px'}} src={chevron_left_w}/>
+                <div className={styles.liveImg}>
+                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
+                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
+                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
+                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
+                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
+                </div>
+                <img style={{marginLeft:'30px'}} src={chevron_right_w}/>
+            </div>
+            </div>
         <div className={styles.basic}> {/*전체 DIV*/}
             <div className={styles.leftDiv}>{/*게시판 영역*/}
                 <div className={styles.hotBoard}>{/*인기 게시판*/}
