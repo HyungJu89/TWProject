@@ -56,6 +56,28 @@
     
 }
 
+.imageContainer{
+    /*선택된 이미지 컨테이너*/
+    position: relative;
+    margin: 5px;
+}
+
+.imagePreview{
+    /*선택된 이미지 뷰*/
+    width: 100px;
+    height: 100px;
+}
+
+.deleteButton{
+    /*이미지 삭제 버튼*/
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+}
+.imageContainer:hover .deleteButton {
+    display: block;
+  }
 
 .dashed {
     /*회색줄*/

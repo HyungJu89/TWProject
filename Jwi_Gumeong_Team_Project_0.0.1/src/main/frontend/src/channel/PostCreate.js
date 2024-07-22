@@ -20,15 +20,59 @@ function PostCreact() {
     const contentRef = useRef(null);
     //size 계산 상태 색깔
     const [contentColor, setContentColor] = useState('black');
+    // 이미지와 input 태그 연결
+    const fileInputRef = useRef(null);
+    // 이미지 어레이
+    const [selectedImage, setSelectedImage] = useState([]);
 
 
-
-
+    // text 의 상태 저장시켜줌, 길이가 300이 넘어갈때 글자 색 변경
     const handleInput = () => {
         setContent(contentRef.current.innerText);
         setContentColor(contentRef.current.innerText.length <= 300 ? '#BBBBBB' : '#EC000E')
         setHasContent(contentRef.current.innerText.trim().length !== 0)
     }
+    // 이미지 선택할때 input='file' 를 실행시켜줌
+    const imageFileClick = () => {
+        fileInputRef.current.click();
+    }
+    // 파일 선택 
+    const imageChange = (e) => {
+        let files = Array.from(e.target.files);
+
+        if (files.length + selectedImage.length > 4) {
+            alert('파일이 너무 많아요')
+            return
+        }
+
+        const newFiles = files.map(file => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve({ file, preview: reader.result });
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+        //모든 파일을 읽은 후에 상태를 한번에 업데이트 되도록 하는 함수
+        Promise.all(newFiles).then(fileArray => {
+            setSelectedImage(prevFiles => [...prevFiles, ...fileArray]);
+        });
+
+
+
+    }
+    //선택된 파일 삭제
+    const imageDelete = (indexToDelete) => {
+        setSelectedImage(prevFiles => prevFiles.filter((_, index) => index !== indexToDelete));
+    }
+
+
+    //서버로 게시글 정보를 넘김
+    const postCreact = () => {
+        console.log('서버로 가는중')
+    }
+
 
 
     return (
@@ -42,14 +86,31 @@ function PostCreact() {
                 onInput={handleInput}
                 onBlur={() => setContent(contentRef.current.innerText)}
             />
-
+            <div style={{display : 'flex'}}>
+                {selectedImage.length > 0 && (
+                    selectedImage.map(({ file, preview }, index) => (
+                        <div key={index} className={style.imageContainer}>
+                            <img src={preview} alt={`preview ${index}`} className={style.imagePreview} />
+                                <div onClick={() => imageDelete(index)} className={style.deleteButton}>삭제</div>
+                        </div>
+                    ))
+                )}
+            </div>
 
             <div className={style.dashed} />{/* 회색줄 */}
             <div className={style.postCreactIconBox}> {/*게시글 작성 하단 아이콘*/}
-                <div className={style.emotIcon}><img src={emotIcon} /></div>{/*이모티콘 아이콘*/}
-                <div className={style.imageIcon}><img src={imageIcon} /></div>{/*이미지 아이콘*/}
+                <div className={style.emotIcon}><img src={emotIcon} alt='이모티콘'/></div>{/*이모티콘 아이콘*/}
+                <div className={style.imageIcon}><img src={imageIcon} alt='이미지' onClick={imageFileClick} /></div>{/*이미지 아이콘*/}
+                <input 
+                    type='file' 
+                    ref={fileInputRef} 
+                    accept=".jpg, .jpeg, .png" 
+                    style={{ display: 'none' }} 
+                    onChange={imageChange} 
+                    multiple 
+                />{/*이미지 업로드용 아이콘 */}
                 <div className={style.textareaSize} style={{ color: contentColor }}>{content.length}/{contentLimit}</div>{/*작성된 글자수*/}
-                <div className={style.postCreactButton}>등록</div>{/*게시글 작성 버튼*/}
+                <div className={style.postCreactButton} onClick={postCreact}>등록</div>{/*게시글 작성 버튼*/}
             </div>
         </div>
     )

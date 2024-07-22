@@ -3,7 +3,7 @@
 
 
 
-import { useParams } from 'react-router-dom';
+import { useParams , useNavigate } from 'react-router-dom';
 import style from './style/MainBanner.module.css';
 import offBanner from '../icon/img/illustration02.png';
 import { useState } from 'react';
@@ -12,9 +12,8 @@ import { useChannel, useLiveInfo } from './ApiQuery.js';
 import axios from 'axios';
 import openInNew from '../icon/20px/open_in_new.png'
 
-function MainBanner() {
-    let { channelId } = useParams();
-
+function MainBanner({ channelId }) {
+    let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
 

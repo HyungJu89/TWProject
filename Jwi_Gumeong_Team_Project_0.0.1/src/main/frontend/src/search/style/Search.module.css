@@ -1,5 +1,4 @@
 .searchMain {
-    width: 1194px;
     margin-top: 30px;
     display: flex;
     margin-left: auto;
@@ -56,7 +55,8 @@
     margin-bottom: 3px;
     color: #999999
 }
-.searchChannelList{
+
+.searchChannelList {
     width: 726px;
 }
 
@@ -64,9 +64,13 @@
 .searchChannel {
 
     display: flex;
+    justify-content: space-between;
     margin-bottom: 20px;
     margin-top: 20px;
+}
 
+.sratchChannelIconInfo {
+    display: flex;
 }
 
 /*검색된 채널아이콘*/
@@ -80,7 +84,7 @@
 }
 
 /*검색된 채널 이름*/
-.searchChannelTitle{
+.searchChannelTitle {
     height: 20px;
     font-size: 16px;
     font-weight: 500;
@@ -110,13 +114,12 @@
 .searchChannelmarkText {
     margin-right: 6px;
 }
+
 .searchChannelmarkCount {
     margin-right: 20px;
 }
 
-.bookmark{
-    position: relative;
-    left: 0;
+.bookmark {
     margin: 3px;
 }
 
@@ -125,4 +128,36 @@
     border-bottom: 1px solid #F3F3F3;
     border-radius: 0px;
     margin: 20px 0px;
+}
+
+.nonPostText{
+    display: flex;
+    margin: 119px 273px;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17.53px;
+    text-align: center;
+    color: #999999;
+}
+
+
+.pageing{
+    display: flex;
+    justify-content:center;
+}
+
+.pageBtn {
+    /*페이징 부분*/
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 318px;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20.03px;
+    text-align: center;
+
 }
