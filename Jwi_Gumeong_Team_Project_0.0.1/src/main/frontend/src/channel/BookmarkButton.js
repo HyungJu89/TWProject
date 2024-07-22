@@ -1,19 +1,18 @@
-import favoritesActivation from '../icon/20px/favorites-activation.png';
-import favoritesActivationW from '../icon/20px/favorites-activation-w.png';
-import favoritesDeactivation from '../icon/20px/favorites-deactivation.png';
+import bookmarkActivation from '../icon/20px/bookmark-activation.png';
+import bookmarkActivationW from '../icon/20px/bookmark-activation-w.png';
+import bookmarkDeactivation from '../icon/20px/bookmark-deactivation.png';
 import style from './style/BookmarkButton.module.css'
 import '../App.css'
 import { useState } from 'react';
 
 function BookmarkButton() {
 
-    let [favoritesImg, setFavoritesImg] = useState(favoritesActivation);
-
+    let [bookmarkImg, setBookmarkImg] = useState(bookmarkActivation);
     return (
         <div className={style.bookmarkButton}
-            onMouseEnter={() => setFavoritesImg(favoritesActivationW)}
-            onMouseLeave={() => setFavoritesImg(favoritesActivation)} >
-            <img src={favoritesImg} />
+            onMouseEnter={() => setBookmarkImg(bookmarkActivationW)}
+            onMouseLeave={() => setBookmarkImg(bookmarkActivation)} >
+            <img src={bookmarkImg} />
             <div className={style.bookmarkText}>즐겨찾기</div>
         </div>
     )
