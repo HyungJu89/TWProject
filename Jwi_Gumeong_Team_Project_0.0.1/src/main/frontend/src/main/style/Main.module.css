@@ -85,6 +85,7 @@
 }
 
 .leftDiv .Nav .topicdiv {
+    cursor: pointer;
     display: flex;
     align-items: center;
     margin-left: 30px;

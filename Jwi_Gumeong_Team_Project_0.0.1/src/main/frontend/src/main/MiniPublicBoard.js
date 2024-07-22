@@ -83,7 +83,7 @@ function ChannelTitle({ channel }) {
     return (
         <div>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                <img src={channel.channelImageUrl} />{channel.channelName}
+                <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.channelName}</div>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
         </div>
