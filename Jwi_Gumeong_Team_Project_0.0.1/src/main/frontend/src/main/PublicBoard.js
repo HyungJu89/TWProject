@@ -59,11 +59,11 @@ function PublicBoard() {
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
-                    뉴비라 오늘 조합 검사 받았는데. 진짜 할거 많더라.<br />
+                    뉴비라 오늘 조합 검 사 받았는데. 진짜 할거 많더라.<br />
                     피드백 많이 해주셔서 원신 할거 겁나 많이 생김<br />
                     우리 백출.. 잘 키워야지<br/>
                 </div>
-                <div onClick={()=>disPatch(openImgUiModal())}  className={styles.imgClick}>{/* 이미지 */}
+                 <div onClick={()=>disPatch(openImgUiModal())}  className={styles.imgClick}>{/* 이미지 */}
                     <div className={styles.imgArea}>
                         <img src='https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5367703706/B.jpg?675000000' />
                         {imgBeing > 0 &&

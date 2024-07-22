@@ -4,13 +4,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import '../App.css';
 import styles from './style/imgModal.module.css';
+import MiniPublicBoard from '../main/MiniPublicBoard.js';
 import btn_image_Close from '../icon/btn/btn-image-Close.png';
 import btn_image_Close_a from '../icon/btn/btn-image-Close-a.png';
 import btn_content_close from '../icon/btn/btn-content-close.png';
 import btn_content_open from '../icon/btn/btn-content-open.png';
 import chevron_left_w from '../icon/40px/chevron-left-w.png';
 import chevron_right_w from '../icon/40px/chevron-right-w.png';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { openImgUiModalFalse } from '../slice/mainSlice';
 
 function ImgUi(){
@@ -61,8 +62,8 @@ function Content({setContent,content}){
         <div onClick={()=>{content== true ? setContent(false):setContent(true)}} className={styles.btn_content}>
         {content == true ? <img src={btn_content_close}/>:<img src={btn_content_open}/>}
         </div>
-        <div className={styles.mainArea}>
-            ㅇㅅㅇ
+        <div className={styles.mainArea}>.
+        <MiniPublicBoard/>
         </div>
         </div>
     )
