@@ -103,7 +103,7 @@
 .fadeIn{
     opacity: 1; /* 초기 상태: 투명 */
     transform: translateX(500px); /*초기 위치: 위로 10px 이동*/
-    animation: fadeIn 0.5s ease-in-out forwards; /* 애니메이션 적용 */
+    animation: fadeIn 0.2s ease-in-out forwards; /* 애니메이션 적용 */
 }
 @keyframes fadeIn {
     to {
@@ -114,7 +114,7 @@
 
 .fadeOut{
     transform: translateX(0px); 
-    animation: fadeOut 0.5s ease-in-out forwards; /* 애니메이션 적용 */
+    animation: fadeOut 0.2s ease-in-out forwards; /* 애니메이션 적용 */
 }
 @keyframes fadeOut {
     to {

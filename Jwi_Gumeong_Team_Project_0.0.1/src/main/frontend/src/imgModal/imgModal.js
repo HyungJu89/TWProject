@@ -62,7 +62,7 @@ function Content({setContent,content}){
         <div onClick={()=>{content== true ? setContent(false):setContent(true)}} className={styles.btn_content}>
         {content == true ? <img src={btn_content_close}/>:<img src={btn_content_open}/>}
         </div>
-        <div className={styles.mainArea}>.
+        <div className={styles.mainArea}>
         <MiniPublicBoard/>
         </div>
         </div>
