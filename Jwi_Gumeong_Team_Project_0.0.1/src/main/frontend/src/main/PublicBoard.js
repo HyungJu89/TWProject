@@ -4,6 +4,7 @@
 import axios from 'axios';
 import React, { useState, useRef, useEffect} from 'react';
 import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import styles from './style/PublicBoard.module.css';
 import more from '../icon/24px/more.png';
@@ -89,8 +90,9 @@ function PublicBoard() {
     )
 }
 function ChannelTitle({ channel }) {
+    let navigate = useNavigate();
     return (
-        <div>
+        <div onClick={()=>{navigate('/channel/123')}}>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
                 <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.channelName}</div>
             </div>

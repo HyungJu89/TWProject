@@ -55,6 +55,7 @@ function Main() {
                 </div>
                 <TopicBtn topic={topic} settopic={settopic} />
                 {topic == true ? <div className={styles.fadein}><PublicBoard/></div> : null}
+                <div onClick={()=>{navigate('/allTopic')}} className={styles.moreAllTopic}>더보기</div>
             </div>
             {/* 오른쪽 로그인, 추천 영역 */}
             <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
