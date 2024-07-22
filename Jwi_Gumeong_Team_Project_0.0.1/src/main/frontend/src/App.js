@@ -8,7 +8,7 @@ import SignIn from './signIn/SignIn.js';
 import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import Search from './search/Search.js'
-import CreateChannel from './createChannel/CreateChannel.js'
+import ChannelManagement from './channelManagement/ChannelManagement.js'
 import ImgUi from './imgModal/imgModal.js'
 import { useSelector } from 'react-redux';
 
@@ -25,7 +25,7 @@ function App() {
             <Route path='/signUp' element={<SignUp/>}/>
             <Route path='/pwInquiry' element={<PwInquiry/>}/>
             <Route path='/search' element={<Search page={1} search={1}/>}/>{/*채널 검색*/}
-            <Route path='/CreateChannel' element={<CreateChannel/>}/>
+            <Route path='/channelManagement' element={<ChannelManagement/>}/>
         </Routes>
         </div>
     );

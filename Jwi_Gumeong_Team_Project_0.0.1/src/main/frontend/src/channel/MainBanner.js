@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useChannel, useLiveInfo } from './ApiQuery.js';
 import LiveLink from './LiveLink.js'
-function MainBanner({  channelId,route }) {
+function MainBanner({  channelId , route }) {
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
