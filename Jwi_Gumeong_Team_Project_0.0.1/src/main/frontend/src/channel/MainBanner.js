@@ -9,10 +9,8 @@ import offBanner from '../icon/img/illustration02.png';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useChannel, useLiveInfo } from './ApiQuery.js';
-import axios from 'axios';
-import openInNew from '../icon/20px/open_in_new.png'
-
-function MainBanner({ channelId }) {
+import LiveLink from './LiveLink.js'
+function MainBanner({  channelId,route }) {
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
@@ -40,15 +38,10 @@ function MainBanner({ channelId }) {
                         {/* 라이브 이미지 */}
                         <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
                         {/* 라이브 방송 정보 */}
-                        <div className={style.liveInfo}>
-                            <div className={style.liveIcon}><div className={style.point}></div>Live</div>
-                            <div className={style.liveTitle}>{liveInfoApi.liveTitle}</div>
-                            <div className={style.liveGoing} onClick={() => window.open(`https://chzzk.naver.com/live/${channelId}`)}>
-                                <div className={style.liveGo}>
-                                <div className={style.liveGoText}>새창으로 방송보기</div>
-                                <img className={style.liveGoIcon} src={openInNew}/>
-                                </div>
-                            </div>
+                        <div className={style.liveInfo}> 
+                            <div className={style.liveIcon}><div className={style.point}></div>Live</div> {/* 라이브 아이콘 */}
+                            <div className={style.liveTitle}>{liveInfoApi.liveTitle}</div> {/* 라이브 제목 */}
+                            {route == 'channel' ? <LiveLink channelId={channelId}/>:<div>여기에 메인화면일때</div>}
                         </div>
                     </div>
                 </div>

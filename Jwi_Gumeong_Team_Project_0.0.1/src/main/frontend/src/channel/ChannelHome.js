@@ -10,6 +10,7 @@ import MainBanner from './MainBanner.js';
 import PublicBoard from '../main/PublicBoard.js'
 import ChannelBody from './ChannelBody.js';
 import PublicMenu from '../main/PublicMenu.js'
+
 function ChannelHome() {
     let { channelId } = useParams();
 
@@ -33,9 +34,11 @@ function ChannelHome() {
     return (
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
-                <MainBanner channelId={channelId}/>
+            
+            <MainBanner channelId={channelId} route={'channel'}/>
 
-                <ChannelBody />
+
+            <ChannelBody />
             </div>
             <div className={style.channelInfoBack}>
                 <div className={style.mainList}>
@@ -56,8 +59,6 @@ function ChannelHome() {
     );
 
 }
-
-
 
 
 
