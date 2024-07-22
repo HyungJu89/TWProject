@@ -9,6 +9,7 @@ import styles from './style/AllTopic.module.css';
 import '../App.css';
 import PublicBoard from '../main/PublicBoard.js'
 import PublicMenu from '../main/PublicMenu.js'
+import illustration01 from '../icon/img/illustration01.png';
 
 function Main() {
     let navigate = useNavigate();
@@ -36,13 +37,18 @@ function Main() {
     }
 
     return (
-        <div className={styles.basic}> {/*전체 DIV*/}
-            <div className={styles.leftDiv}>{/*게시판 영역*/}
-                <TopicBtn topic={topic} settopic={settopic} />
-                {topic == true ? <div className={styles.fadein}><PublicBoard/></div> : null}
+        <div >
+            <div className={styles.topBanner}>
+                <img src={illustration01}/>
             </div>
-            {/* 오른쪽 로그인, 추천 영역 */}
-            <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
+            <div className={styles.basic}> {/*전체 DIV*/}
+                <div className={styles.leftDiv}>{/*게시판 영역*/}
+                    <TopicBtn topic={topic} settopic={settopic} />
+                    {topic == true ? <div className={styles.fadein}><PublicBoard /></div> : null}
+                </div>
+                {/* 오른쪽 로그인, 추천 영역 */}
+                <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
+            </div>
         </div>
     );
 }

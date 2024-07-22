@@ -1,3 +1,16 @@
+.topBanner {
+    background: #FBB54B;
+    width: 100%;
+    height: 102px;
+    border-radius: 0px;
+}
+.topBanner img{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .basic {
     /* 전체  사이즈  제한*/
     margin: 30px auto;
