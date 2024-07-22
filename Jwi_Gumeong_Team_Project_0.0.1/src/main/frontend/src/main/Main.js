@@ -7,8 +7,9 @@ import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styles from './style/Main.module.css';
 import '../App.css';
-import PublicBoard from './PublicBoard.js'
-import PublicMenu from './PublicMenu.js'
+import PublicBoard from './PublicBoard.js';
+import PublicMenu from './PublicMenu.js';
+import MainBanner from '../channel/MainBanner.js';
 
 function Main() {
     let navigate = useNavigate();
@@ -36,6 +37,8 @@ function Main() {
     }
 
     return (
+        <div>
+        <MainBanner channelId={123}/>
         <div className={styles.basic}> {/*전체 DIV*/}
             <div className={styles.leftDiv}>{/*게시판 영역*/}
                 <div className={styles.hotBoard}>{/*인기 게시판*/}
@@ -58,6 +61,7 @@ function Main() {
                 <div onClick={()=>{navigate('/allTopic');window.scrollTo(0, 0)}} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}
                 </div>
             <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
+        </div>
         </div>
     );
 }
