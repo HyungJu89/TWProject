@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './style/MyPage.module.css';
 import InfoEdit from './InfoEdit.js';
+import MyPosts from './MyPosts.js';
+import FavoritesManagement from './FavoritesManagement.js';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -51,23 +53,5 @@ function TopicBtn({ topic, settopic }) {
     );
 }
 
-
-//내가 쓴 글 페이지
-function MyPosts() {
-    return(
-        <div className={styles.MyPageContainer}>
-            내가 쓴 글
-        </div>
-    );
-}
-
-//즐겨찾기 관리페이지
-function FavoritesManagement() {
-    return(
-        <div className={styles.MyPageContainer}>
-            즐겨찾기 관리
-        </div>
-    )
-}
 
 export default MyPage;
