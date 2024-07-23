@@ -7,6 +7,7 @@ import ChannelHome from './channel/ChannelHome.js';
 import SignIn from './signIn/SignIn.js';
 import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
+import MyPage from './myPage/MyPage.js';
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
             <Route path='/channel/:channelId' element={<ChannelHome/>}/>
             <Route path='/signIn' element={<SignIn/>}/>
             <Route path='/signUp' element={<SignUp/>}/>
+            <Route path='/myPage' element={<MyPage/>}/>
             <Route path='/pwInquiry' element={<PwInquiry/>}/>
         </Routes>
         </div>

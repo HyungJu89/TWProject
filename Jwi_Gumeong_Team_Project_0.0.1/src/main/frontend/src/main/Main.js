@@ -97,6 +97,7 @@ function TopicBtn({ topic, settopic }) {
 }
 
 function UserAfter({channel,setLoginOn}){
+    let navigate = useNavigate();
     return(
         <div className={styles.fadein}>
             <div className={styles.userAfter} style={{ borderRadius: '20px 20px 0px 0px' }}>
@@ -107,7 +108,7 @@ function UserAfter({channel,setLoginOn}){
                     </div>
                     <button onClick={()=>{setLoginOn(false)}} >로그아웃</button>
                 </div>
-                <button className={styles.myPage}>마이페이지</button>
+                <button className={styles.myPage} onClick={()=>{ navigate('/myPage') }}>마이페이지</button>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
             <div className={styles.userAfter} style={{ borderRadius: '00px 00px 20px 20px' }}>
@@ -139,7 +140,7 @@ function UserBefore({setLoginOn}){
         <div className={styles.fadein}>
             <div className={styles.userBefore}>
                 스트리머 덕후들이 모이는 쥐구멍!
-                <button onClick={() => { navigate('/signIn') }} style={{ width: '318px', height: '63px' }}>로그인</button>
+                <button onClick={() => { {setLoginOn(true)} }} style={{ width: '318px', height: '63px' }}>로그인</button>
                 <div>
                     <div onClick={() => { navigate('/signUp') }} className={styles.loginMenu} style={{ borderRight: '1px solid #999999' }}>회원가입</div>
                     <div className={styles.loginMenu} onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</div>
