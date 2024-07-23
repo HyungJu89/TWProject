@@ -16,8 +16,10 @@
 }
 .bannerPosition .liveDiv .liveImg{
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    gap: 0px 30px;
     width: 990px;
+    overflow: hidden;
 }
 .bannerPosition .liveDiv .liveImg img{
     width: 174px;
