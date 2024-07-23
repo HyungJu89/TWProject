@@ -16,7 +16,6 @@ public class CustomUserDetails implements UserDetails {
         this.userSecurityDto = userSecurityDto;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 

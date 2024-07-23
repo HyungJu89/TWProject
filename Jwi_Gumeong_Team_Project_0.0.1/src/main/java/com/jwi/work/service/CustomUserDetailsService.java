@@ -19,8 +19,6 @@ public class CustomUserDetailsService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String adminId) throws UsernameNotFoundException{
-	
-		
 		
 		if(mapper.lodeAdminCount(adminId) == 1) {
 			
