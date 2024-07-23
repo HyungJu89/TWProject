@@ -34,7 +34,7 @@ function MainBanner({  channelId,route }) {
                         <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
                         {/* 라이브 방송 정보 */}
                         <div className={style.liveInfo}> 
-                            <div className={style.liveIcon}><div className={style.point}></div>Live</div> {/* 라이브 아이콘 */}
+                            <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
                             <div className={style.liveTitle}>{liveInfoApi.liveTitle}</div> {/* 라이브 제목 */}
                             {route == 'channel' ? <LiveLink channelId={channelId}/>:
                                 <div className={style.mainbannerDiv}>
