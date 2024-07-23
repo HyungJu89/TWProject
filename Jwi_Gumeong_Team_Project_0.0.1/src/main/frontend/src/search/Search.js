@@ -6,7 +6,7 @@ import btnRight from '../icon/btn/btn-right.png'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 function Search() {
-
+ 
 const [searchChannelList,setSearchChannelList] = useState([]);
 
 

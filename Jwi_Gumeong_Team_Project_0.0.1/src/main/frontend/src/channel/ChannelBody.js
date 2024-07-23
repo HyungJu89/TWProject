@@ -57,7 +57,6 @@ function ChannelBody() {
                 <div className={style.iconRight}>
                     <div className={style.iconRightTop}>
                         <div className={style.imageBackground}>
-
                             <div className={style.channelTop}>
                                 <div className={style.channelName}>{channelApi.channelName}</div>
                                 <div className={style.announcement}><img src={announcement} />[필수!]우리 토픽의 공지사항</div>

@@ -58,24 +58,29 @@
 
 .imageContainer{
     /*선택된 이미지 컨테이너*/
+    margin-top: 20px;
     position: relative;
-    margin: 5px;
+    margin-right: 9px;
+
 }
 
 .imagePreview{
     /*선택된 이미지 뷰*/
-    width: 100px;
-    height: 100px;
+    width: 138px;
+    height: 138px;
 }
 
 .deleteButton{
     /*이미지 삭제 버튼*/
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 4px;
+    right: 4px;
     display: none;
+    width: 30px;
+    height: 30px;
 }
 .imageContainer:hover .deleteButton {
+    /*이미지 호버할때*/
     display: block;
   }
 
@@ -112,6 +117,8 @@
     height: 24px;
     width: 24px;
     margin-right: 502px;
+    cursor: pointer;
+    border-radius: 50%;
 }
 
 /* 이미지 아이콘 img*/
@@ -119,7 +126,7 @@
 
     height: 24px;
     width: 24px;
-
+    cursor: pointer;
 }
 
 .textareaSize {
@@ -150,4 +157,5 @@
     height: 40px;
     background-color: orange;
     user-select: none;
+    cursor: pointer;
 }
