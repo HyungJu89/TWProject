@@ -1,10 +1,11 @@
+
+
 .MyPageContainer {
     background-color: #FFFFFF; 
     width: 626px;
     padding: 80px;
-    margin: auto;
+    margin: 0px auto;
     border-radius: 20px;
-    margin-top: 200px;
     
 }
 
@@ -106,4 +107,39 @@
 }
 .loginButton.active {
     background-color: #FF8901; /* 활성화된 배경색 */
+}
+
+ .Nav {
+    width: 786px;
+    height: 60px;
+    background: #FFFFFF;
+    display: flex;
+    font-size: 20px;
+    font-weight: 600;
+    overflow: hidden;
+    margin:auto;
+    position: relative;
+    top: 190px;
+}
+
+ .Nav .topicdiv {
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+ .Nav .topicdiv div { 
+    margin-right: 30px;
+    position: relative;
+    cursor: pointer;
+}
+
+ .Nav .topicdiv .bar {
+    position: absolute;
+    left: 50%;
+    top: 41px;
+    transform: translate(-50%, -0%);
+    width: 24px;
+    height: 2px;
+    background-color: #FF8901;
 }
