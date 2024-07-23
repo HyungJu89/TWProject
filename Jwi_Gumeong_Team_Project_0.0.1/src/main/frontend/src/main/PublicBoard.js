@@ -17,6 +17,7 @@ import emoticon_deactivation from '../icon/24px/emoticon-deactivation.png';
 import big_comment from '../icon/20px/bigcomment.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
+import Emogi from '../Emogi/Emogi.js';
 
 
 function PublicBoard() {
@@ -102,7 +103,17 @@ function ChannelTitle({ channel }) {
 }
 
 function Comments() {
-    let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off    
+    let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off   
+    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
+    const textareaRef = useRef(null); //
+
+    const handleInput = (e) => {
+        const textareaHeight = textareaRef.current;//영역 제한
+        if (textareaHeight) {
+            textareaHeight.style.height = `${textareaHeight.scrollHeight}px`; // textarea영역 변동값
+        }
+    };
+
     return (
         <div>
             <div className={styles.dashed} />{/* 회색줄 */}
@@ -113,9 +124,14 @@ function Comments() {
                 </div>
             </div>
             <div className={styles.commentDiv}>{/* 댓글 달기 */}
-                <textarea placeholder='댓글 달기' />
+                    <textarea
+                        ref={textareaRef}
+                        placeholder='댓글 달기'
+                        onInput={handleInput}
+                    />
                 <div className={styles.commentNav}>
-                    <img style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
+                    <img onClick={()=>{EmojiOn == true ? setEmojiOn(false): setEmojiOn(true)}} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
+                    {EmojiOn && <Emogi/>}
                     <div>0/200<button>등록</button></div>
                 </div>
             </div>
