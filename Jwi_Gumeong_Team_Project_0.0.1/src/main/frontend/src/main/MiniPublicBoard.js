@@ -4,9 +4,8 @@
 import axios from 'axios';
 import React, { useState, useRef, useEffect} from 'react';
 import { useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 import '../App.css';
-import styles from './style/PublicBoard.module.css';
+import styles from './style/MiniPublicBoard.module.css';
 import more from '../icon/24px/more.png';
 import heart_deactivation from '../icon/24px/heart-deactivation.png';
 import heart_activation from '../icon/24px/heart-activation.png';
@@ -19,7 +18,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
 
 
-function PublicBoard() {
+function MiniPublicBoard() {
     let [heart, setHeart] = useState(true); //좋아요 누름 확인
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
@@ -64,15 +63,6 @@ function PublicBoard() {
                     피드백 많이 해주셔서 원신 할거 겁나 많이 생김<br />
                     우리 백출.. 잘 키워야지<br/>
                 </div>
-                 <div onClick={()=>disPatch(openImgUiModal())}  className={styles.imgClick}>{/* 이미지 */}
-                    <div className={styles.imgArea}>
-                        <img src='https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5367703706/B.jpg?675000000' />
-                        {imgBeing > 0 &&
-                            <div onMouseEnter={() => { setImgCount('+3') }} onMouseLeave={() => { setImgCount('') }} className={styles.imgArea}>
-                                {imgCount}
-                            </div>}
-                    </div>
-                </div>
             </div>
             <div className={styles.widthNav} style={{ marginBottom: '0px' }}>{/* 하단 댓글,좋아요,공유 */}
                 <div className={styles.commentsDiv}>
@@ -90,9 +80,8 @@ function PublicBoard() {
     )
 }
 function ChannelTitle({ channel }) {
-    let navigate = useNavigate();
     return (
-        <div onClick={()=>{navigate('/channel/123')}}>
+        <div>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
                 <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.channelName}</div>
             </div>
@@ -103,6 +92,7 @@ function ChannelTitle({ channel }) {
 
 function Comments() {
     let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off    
+    let [commentsZero, setCommentsZero] = useState(0) //★추후에 댓글 수 카운트로 바꿔야함
     return (
         <div>
             <div className={styles.dashed} />{/* 회색줄 */}
@@ -119,9 +109,23 @@ function Comments() {
                     <div>0/200<button>등록</button></div>
                 </div>
             </div>
+            {commentsZero > 0 ? <CommentsSet/> : <CommentsZero/>}
+        </div>
+    )
+}
+function CommentsZero(){
+    return(
+        <div className={styles.CommentsZero}>
+           댓글이 없어요.
+        </div>
+    )
+}
+function CommentsSet(){
+    return(
+        <>
             <CommentsList/>
             <BigCommentsList/>
-        </div>
+        </>
     )
 }
 function CommentsList() {
@@ -190,7 +194,7 @@ function BigCommentsList() {
 function MoreDelete() {
     let [deleteWrote, setDeleteWrote] = useState(true) //★내가 쓴 글이면 활성화 코드 추가★
     return (
-        <div  className={styles.moreUi} style={{right:'-82px',top:'30px'}}>
+        <div  className={styles.moreUi} style={{right:'0px',top:'30px'}}>
             {deleteWrote == true ?
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <div className={styles.text}>수정하기</div>
@@ -204,7 +208,7 @@ function MoreDelete() {
 function MoreDeleteMini() {
     let [deleteWrote, setDeleteWrote] = useState(true) //★내가 쓴 댓글이면 활성화 코드 추가★
     return (
-        <div  className={styles.moreUi} style={{right:'-90px',top:'24px'}}>
+        <div  className={styles.moreUi} style={{right:'0px',top:'24px'}}>
             {deleteWrote == true ?
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <div className={styles.text}>수정하기</div>
@@ -224,4 +228,4 @@ function MoreAlign() {
     )
 }
 
-export default PublicBoard;
+export default MiniPublicBoard;

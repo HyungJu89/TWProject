@@ -1,12 +1,12 @@
 .mainDiv {
-    width: 726px;
+    width: 440px;
     background-color: white;
     margin: 10px 0px;
     padding: 20px 30px;
 }
 
 .title {
-    width: 726px;
+    width: 440px;
     height: 25px;
     padding: 7.5px 0px;
     font-size: 20px;
@@ -34,7 +34,7 @@
 .widthNav {
     z-index: 1;
     position: relative;
-    width: 726px;
+    width: 440px;
     height: 24px;
     display: flex;
     text-align: center;
@@ -77,7 +77,7 @@
 /*본문*/
 .contentArea {
     position: relative;
-    width: 726px;
+    width: 440px;
     display: flex;
 }
 
@@ -118,7 +118,7 @@
 
 /* 댓글창 컴포넌트 */
 .commentDiv {
-    width: 698px;
+    width: 412px;
     border: 1px solid #F3F3F3;
     border-radius: 10px;
     padding: 14px;
@@ -129,7 +129,7 @@
     outline: none;
     resize: none;
     margin-bottom: 10px;
-    width: 698px;
+    width: 412;
     font-family: Spoqa Han Sans Neo;
     font-size: 16px;
     font-weight: 500;
@@ -138,7 +138,7 @@
 }
 
 .commentNav {
-    width: 698px;
+    width: 412;
     height: 34px;
     display: flex;
     align-items: center;
@@ -170,8 +170,8 @@
 .listNav {
     display: flex;
     justify-content: space-between;
-    max-width: 726px;
-    min-width: 696px;
+    max-width: 440px;
+    min-width: 410px;
     position: relative;
 }
 
@@ -243,4 +243,16 @@
 
 .moreUi .text:hover {
     background: #F3F3F3;
+}
+
+/*추가-댓글 없을 경우 */
+.CommentsZero{
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 85px;
+    height: 390px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #999999;
 }

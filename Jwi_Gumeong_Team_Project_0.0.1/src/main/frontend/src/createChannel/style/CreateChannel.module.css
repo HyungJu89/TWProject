@@ -1,0 +1,109 @@
+.createMain {
+    /* 전채영역*/
+    margin-top: 30px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.create {
+    /*채널 개설하기 부분*/
+    padding: 30px;
+    width: 726px;
+    background-color: #FFFFFF;
+}
+.createChannelTitle{
+    /*채널 개설하기 부분 컨테이너*/
+    display: flex;
+    height: 32px;
+    margin-bottom: 20px;
+}
+.createChannelTitle img{
+    /*채널 개설하기 이미지*/
+    background-color: red;
+    height: 32px;
+    width: 32px;
+}
+
+.createChannelTitleText {
+    /*채널 개설하기 Text 색깔*/
+    margin: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    color: #101010;
+
+}
+
+.dashed {
+    /*회색줄*/
+    border-bottom: 1px solid #F3F3F3;
+    border-radius: 0px;
+    margin: 20px 0px;
+}
+
+.createChannel{
+    /*채널 검색 부분 컨테이너*/
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.createChannelText{
+    /*채널 검색 설명 Text*/
+font-size: 16px;
+font-weight: 500;
+line-height: 20.03px;
+letter-spacing: 0.0075em;
+text-align: left;
+color: #101010;
+margin-left: 3px;
+}
+
+.createChannelInput{
+    /* 채널 검색 input*/
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 19px;
+    width: 666px;
+    padding: 15px 20px;
+}
+
+.createChannelInput::placeholder{
+    /* placeholder 양식 */
+font-size: 15px;
+font-weight: 400;
+line-height: 18.78px;
+letter-spacing: 0.0075em;
+text-align: left;
+color: #BBBBBB;
+}
+
+.warningText{
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    
+}
+
+
+.createManager {
+    /*매니저 신청 부분 컨테이너*/
+    margin-top: 10px;
+    padding: 30px;
+    background-color: #FFFFFF;
+}
+
+.deleteManager {
+    /*매니저 포기 부분 컨테이너*/
+    margin-top: 10px;
+    padding: 30px;
+    background-color: #FFFFFF;
+}

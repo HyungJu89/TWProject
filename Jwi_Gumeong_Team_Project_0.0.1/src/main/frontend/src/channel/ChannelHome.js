@@ -7,8 +7,10 @@ import { useEffect, useState } from 'react';
 import PostCreate from './PostCreate.js';
 import { useChannel } from './ApiQuery.js';
 import MainBanner from './MainBanner.js';
-
+import PublicBoard from '../main/PublicBoard.js'
 import ChannelBody from './ChannelBody.js';
+import PublicMenu from '../main/PublicMenu.js'
+
 function ChannelHome() {
     let { channelId } = useParams();
 
@@ -16,7 +18,7 @@ function ChannelHome() {
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
 
 
-
+    // 추후에 에러 페이지 만들기
     if (isLoadingChannel) {
         return <div>로딩중</div>;
     }
@@ -32,21 +34,24 @@ function ChannelHome() {
     return (
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
-                <MainBanner />
+            
+            <MainBanner channelId={channelId} route={'channel'}/>
 
-                <ChannelBody />
+
+            <ChannelBody />
             </div>
             <div className={style.channelInfoBack}>
                 <div className={style.mainList}>
                     <div className={style.listLeft}>
                         <PostCreate channelId={channelId} />
-                        <div className={style.postList}>글리스트</div>
+                        <div className={style.postList}>
+                            <PublicBoard />
+                        </div>
                         <div className={style.bottomPaging}>페이징</div>
                     </div>
                     <div className={style.listRight}>
-                        <div className={style.sideBar}>사이드 바</div>
-                        <div className={style.suggestionChannel}>추천바</div>
-                        <div className={style.sideBanner}>배너</div>
+                
+                        <div className={style.sideBar}><PublicMenu loginOn={1} setLoginOn={1} channel={1} /></div>
                     </div>
                 </div>
             </div>
@@ -54,8 +59,6 @@ function ChannelHome() {
     );
 
 }
-
-
 
 
 

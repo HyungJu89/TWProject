@@ -7,10 +7,11 @@ import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styles from './style/Main.module.css';
 import '../App.css';
-import PublicBoard from './PublicBoard.js'
-import edit from '../icon/20px/edit.png';
-import btn_left from '../icon/btn/btn-left.png';
-import btn_right from '../icon/btn/btn-right.png';
+import PublicBoard from './PublicBoard.js';
+import PublicMenu from './PublicMenu.js';
+import MainBanner from '../channel/MainBanner.js';
+import chevron_left_w from '../icon/40px/chevron-left-w.png'
+import chevron_right_w from '../icon/40px/chevron-right-w.png'
 
 function Main() {
     let navigate = useNavigate();
@@ -38,42 +39,58 @@ function Main() {
     }
 
     return (
-        <div className={styles.basic}> {/*전체 DIV*/}
-            <div className={styles.leftDiv}>{/*게시판 영역*/}
-                <div className={styles.hotBoard}>{/*인기 게시판*/}
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
-                    <div className={styles.channelDiv}>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+        <div>
+            <div className={styles.bannerPosition}>
+                <MainBanner channelId={123} />
+                <div className={styles.liveDiv}>
+                    <img style={{ marginRight: '30px' }} src={chevron_left_w} />
+                    <div className={styles.liveImg}>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
                     </div>
+                    <img style={{ marginLeft: '30px' }} src={chevron_right_w} />
                 </div>
-                <TopicBtn topic={topic} settopic={settopic} />
-                {console.log(topic)}
-                {topic == true ? <PublicBoard /> : null}
-                <button style={{ width: '150px', height: '50px' }} on Click={() => { navigate('/channel/' + '123') }}>채널 확인 URL</button>
             </div>
-            <div className={styles.rightDiv}>{/*유저 영역 */}
-                {loginOn ? <UserAfter setLoginOn={setLoginOn} channel={channel}/>:<UserBefore setLoginOn={setLoginOn}/>}
-                <div className={styles.recommendation}>{/* 추천 */}
-                    <p style={{margin:'0px',marginLeft:'21px'}}>추천</p>
-                    <div className={styles.list}>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+            <div className={styles.basic}> {/*전체 DIV*/}
+                <div className={styles.leftDiv}>{/*게시판 영역*/}
+                    <div className={styles.hotBoard}>{/*인기 게시판*/}
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
+                        <div className={styles.channelDiv}>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        </div>
                     </div>
+                    <TopicBtn topic={topic} settopic={settopic} />
+                    {topic == true ? <div className={styles.fadein}><PublicBoard /></div> : null}
+                    <div onClick={() => { navigate('/allTopic'); window.scrollTo(0, 0) }} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}
                 </div>
+                <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
             </div>
         </div>
     );
@@ -92,60 +109,6 @@ function TopicBtn({ topic, settopic }) {
                     <div onClick={() => { topic ? null : settopic(true) }} style={{ color: '#999999' }}>추천 토픽</div>
                     <div>즐겨찾기 토픽<div className={styles.bar} /></div>
                 </div>}
-        </div>
-    )
-}
-
-function UserAfter({channel,setLoginOn}){
-    let navigate = useNavigate();
-    return(
-        <div className={styles.fadein}>
-            <div className={styles.userAfter} style={{ borderRadius: '20px 20px 0px 0px' }}>
-                <div className={styles.userInfo}>
-                    <div>
-                        김박최조임권강이
-                        <p>aaaaaa1234@naver.Com</p>
-                    </div>
-                    <button onClick={()=>{setLoginOn(false)}} >로그아웃</button>
-                </div>
-                <button className={styles.myPage} onClick={()=>{ navigate('/myPage') }}>마이페이지</button>
-            </div>
-            <div className={styles.dashed} />{/* 회색줄 */}
-            <div className={styles.userAfter} style={{ borderRadius: '00px 00px 20px 20px' }}>
-                <div className={styles.Bookmark}>즐겨찾기<img src={edit} /></div>
-                <div className={styles.recommendation} style={{ marginTop: '0px', paddingTop: '20px' }}>{/* 추천 */}
-                    <div className={styles.list} style={{ marginTop: '0px' }}>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.reChannel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                    </div>
-                </div>
-                <div className={styles.bottom}>
-                <img src={btn_left} />
-                1/5
-                <img src={btn_right} />
-                </div>
-            </div>
-        </div>
-    )
-}
-
-function UserBefore({setLoginOn}){
-    let navigate = useNavigate();
-    return(
-        <div className={styles.fadein}>
-            <div className={styles.userBefore}>
-                스트리머 덕후들이 모이는 쥐구멍!
-                <button onClick={() => { {setLoginOn(true)} }} style={{ width: '318px', height: '63px' }}>로그인</button>
-                <div>
-                    <div onClick={() => { navigate('/signUp') }} className={styles.loginMenu} style={{ borderRight: '1px solid #999999' }}>회원가입</div>
-                    <div className={styles.loginMenu} onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</div>
-                </div>
-            </div>
         </div>
     )
 }
