@@ -10,8 +10,8 @@ import '../App.css';
 
 function Emogi() {
     return(
-        <div>
-            qㅂㅇㅂㅋㅁㄻㄴㄹ
+        <div className={styles.EmogiMain}>
+          gd
         </div>
     )
 }

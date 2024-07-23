@@ -140,6 +140,7 @@
 }
 
 .commentNav {
+    position: relative;
     width: 698px;
     height: 34px;
     display: flex;

@@ -1,3 +1,11 @@
 .EmogiMain{
-        
+        z-index: 1000;
+        position: absolute;
+        top: 30px;
+        width: 444px;
+        height: 271px;
+        border-radius: 7px;
+        background: #FFFFFF;
+        box-shadow: 0px 2px 3.9px 0px rgb(0, 0, 0,0.2);
+        border: 1px solid #F3F3F3
 }
