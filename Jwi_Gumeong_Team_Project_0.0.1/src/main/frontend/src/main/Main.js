@@ -41,42 +41,57 @@ function Main() {
     return (
         <div>
             <div className={styles.bannerPosition}>
-            <MainBanner channelId={123}/>
-            <div className={styles.liveDiv}>
-                <img style={{marginRight:'30px'}} src={chevron_left_w}/>
-                <div className={styles.liveImg}>
-                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
-                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
-                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
-                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
-                <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg'/>
-                </div>
-                <img style={{marginLeft:'30px'}} src={chevron_right_w}/>
-            </div>
-            </div>
-        <div className={styles.basic}> {/*전체 DIV*/}
-            <div className={styles.leftDiv}>{/*게시판 영역*/}
-                <div className={styles.hotBoard}>{/*인기 게시판*/}
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
-                    <div className={styles.channelDiv}>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                        <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                <MainBanner channelId={123} />
+                <div className={styles.liveDiv}>
+                    <img style={{ marginRight: '30px' }} src={chevron_left_w} />
+                    <div className={styles.liveImg}>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
+                        <div className={styles.box}>
+                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
+                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
+                        </div>
                     </div>
+                    <img style={{ marginLeft: '30px' }} src={chevron_right_w} />
                 </div>
-                <TopicBtn topic={topic} settopic={settopic} />
-                {topic == true ? <div className={styles.fadein}><PublicBoard/></div> : null}
-                <div onClick={()=>{navigate('/allTopic');window.scrollTo(0, 0)}} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}
+            </div>
+            <div className={styles.basic}> {/*전체 DIV*/}
+                <div className={styles.leftDiv}>{/*게시판 영역*/}
+                    <div className={styles.hotBoard}>{/*인기 게시판*/}
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
+                        <div className={styles.channelDiv}>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                        </div>
+                    </div>
+                    <TopicBtn topic={topic} settopic={settopic} />
+                    {topic == true ? <div className={styles.fadein}><PublicBoard /></div> : null}
+                    <div onClick={() => { navigate('/allTopic'); window.scrollTo(0, 0) }} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}
                 </div>
-            <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
-        </div>
+                <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
+            </div>
         </div>
     );
 }

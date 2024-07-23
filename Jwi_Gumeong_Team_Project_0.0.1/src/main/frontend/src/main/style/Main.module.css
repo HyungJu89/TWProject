@@ -21,10 +21,34 @@
     width: 990px;
     overflow: hidden;
 }
-.bannerPosition .liveDiv .liveImg img{
+.bannerPosition .liveDiv .liveImg .box{
+    position: relative;
+    width: 174px;
+    height: 98px;
+}
+.bannerPosition .liveDiv .liveImg .box img{
+    position: absolute;
     width: 174px;
     height: 98px;
     border-radius: 10px;
+}
+.bannerPosition .liveDiv .liveImg .box .liveRed{
+    position: absolute;
+    background-color: red;
+    margin: 4px 0px 0px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #FFFFFF;
+    display: flex;
+
+    width: 41px;
+    height: 15px;
+}
+.bannerPosition .liveDiv .liveImg .box .liveRed .pointer{
+    background-color: white;
+    margin: 6px 5px 6px 6px;
+    width: 3px;
+    height: 3px;
 }
 
 .basic {
