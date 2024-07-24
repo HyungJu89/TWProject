@@ -8,7 +8,6 @@
 .formGroup {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
 }
 .formGroup img{
     width: 24px;
@@ -62,6 +61,7 @@
 
 .horizontalLine {
     border-top: 1px solid #F3F3F3; /* 원하는 색상과 두께로 변경 */
+    margin: 26px
 }
 
 .PagingNum{
