@@ -1,0 +1,32 @@
+
+
+.createChannel {
+    /*채널 검색 부분 컨테이너*/
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.createChannelText {
+    /*채널 검색 설명 Text*/
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    color: #101010;
+    margin-left: 3px;
+}
+
+
+
+
+.warningText {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+
+}
+
