@@ -196,6 +196,7 @@ body{
     cursor: pointer;
 }
 
+
 /* 이미지 박스 */
 .imgContainer {
     width: 118px;
@@ -203,6 +204,10 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.imgContainer:hover {
+    background-color: #FFEDD9;
 }
 
 /* 모달 내 이미지 */
@@ -219,14 +224,17 @@ body{
     overflow-x: hidden;
 }
 
+/* 스크롤 바 */
 .notificationContent::-webkit-scrollbar {
     width: 6px;
 }
 
+/* 스크롤 바 트랙 */
 .notificationContent::-webkit-scrollbar-track {
     display: none;
 }
 
+/* 스크롤 바 기둥 */
 .notificationContent::-webkit-scrollbar-thumb {
     border-radius: 15px;
     background-color: #DFE1E7;
