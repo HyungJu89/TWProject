@@ -1,0 +1,33 @@
+.liveGoing {
+    /*방송 바로가기*/
+    height: 38px;
+    width: 162px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.liveGo {
+    padding: 9px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.liveGoText {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17.53px;
+    letter-spacing: 0.0075em;
+    user-select: none;
+    color: #F3F3F3;
+    margin: 1px;
+    width: 108px;
+    height: 18px;
+}
+
+
+.liveGoing img {
+    position: relative;
+
+    width: 20px;
+    height: 20px;
+}

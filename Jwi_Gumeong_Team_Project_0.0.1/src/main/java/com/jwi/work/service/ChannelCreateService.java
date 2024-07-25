@@ -24,7 +24,6 @@ public class ChannelCreateService {
 		
 	}
 	
-	
 	public boolean createChannel(createChannelDto channelDto) {
 		
 		if(mapper.createChannelCheck(channelDto.getChannelId())== 0) {

@@ -1,0 +1,152 @@
+/*오른쪽*/
+.rightDiv {
+    width: 378px;
+}
+
+.rightDiv .userBefore button {
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.rightDiv .userBefore {
+    width: 318px;
+    height: 141px;
+    background-color: white;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: #999999;
+}
+
+.rightDiv .userBefore div {
+    display: flex;
+    justify-content: space-between;
+    margin: 0px auto;
+    width: 205px;
+}
+
+.rightDiv .userBefore .loginMenu {
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 0px;
+    cursor: pointer;
+
+    width: 82px;
+    height: 18px;
+}
+
+.rightDiv .userAfter {
+    width: 318px;
+    padding: 30px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.rightDiv .userAfter img{
+    cursor: pointer;
+}
+    .rightDiv .userAfter .userInfo{
+        width: 100%;
+        height: 49px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        font-size: 20px;
+        font-weight: 500;
+    }
+        .rightDiv .userAfter .userInfo p{
+            font-size: 14px;
+            font-weight: 400;
+            margin: 0px;
+            color: #999999;
+        }
+        .rightDiv .userAfter .userInfo button{
+            width: 84px;
+            height: 36px;
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
+            border-radius: 83px;
+            font-size: 14px;
+            font-weight: 400;
+            text-align: center;
+            color: #BBBBBB;
+        }
+        .rightDiv .userAfter .myPage{
+            width:100%;
+            height:48px;
+            border-radius: 83px;
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
+            color: #FF8901;
+            margin-top: 30px;
+            transition:0.2s;
+        }
+        .rightDiv .userAfter .myPage:hover{ 
+            color: white;
+            background-color: #FF8901;
+            border: 1px solid white;
+            transition:0.2s;
+        }
+        .rightDiv .userAfter .Bookmark {
+            font-size: 20px;
+            font-weight: 600;
+            width: 318px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .rightDiv .userAfter .bottom{
+            font-size: 16px;
+            font-weight: 400;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 318px;
+            height: 48px;
+            }
+.rightDiv .recommendation{
+    width: 360px;
+    background-color: white;
+    margin-top: 30px;
+    padding: 30px 9px;
+
+    font-size: 20px;
+    font-weight: 600;
+}
+.rightDiv .recommendation .list{
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: 400;
+}
+.rightDiv .recommendation .list .reChannel{
+    display: flex;
+    align-items: center;
+    border-radius: 0px;
+    width: 360px;
+    height: 62px;
+    cursor: pointer;
+}
+.rightDiv .recommendation .list .reChannel:hover{
+    background: #F3F3F3;
+}
+.rightDiv .recommendation .list .reChannel img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-left: 21px;
+}
+.dashed {
+    border-bottom: 1px solid #F3F3F3;
+    border-radius: 0px;
+    background-color: white;
+}

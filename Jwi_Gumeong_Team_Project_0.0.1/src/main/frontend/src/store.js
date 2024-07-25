@@ -1,5 +1,5 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit'
-
+import { configureStore } from '@reduxjs/toolkit'
+import imgUiModal from './slice/mainSlice'
 /**
  * -리덕스 쓰는이유 
  * -컴포넌트간 state 공유 편해짐
@@ -20,6 +20,6 @@ import { configureStore, createSlice } from '@reduxjs/toolkit'
 
 export default configureStore({
   reducer: { 
-
+    imgUiModal : imgUiModal.reducer
   }
 }) 

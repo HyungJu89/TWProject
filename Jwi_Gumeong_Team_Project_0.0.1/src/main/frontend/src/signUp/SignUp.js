@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './style/SignUp.module.css';
 import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 
 
 
@@ -15,7 +15,7 @@ function SignUp() {
         <div className={styles.section}>
            {
                AgreeCheck ? <Join/> : <Agree setAgreeCheck={setAgreeCheck} />
-            }
+           }
         </div>
     );
 }
@@ -49,8 +49,8 @@ function Agree({ setAgreeCheck }) {
         <div className={styles.joinContainer}>
                 <div className={styles.topFont}>회원가입</div>
                 {/* 필수 동의 항목 */}
-                <div className={styles.topAgreeFont}>필수 동의 항목</div>
-                <div className={styles.agree}>
+                <div className={styles.topAgreeFont} >필수 동의 항목</div>
+                <div className={styles.agree} style={{ marginBottom: '20px'}}>
                     <div className={styles.textBox} style={{ marginBottom: '12px' }}>
 
                         <h4>이용약관</h4>
@@ -135,7 +135,7 @@ function Join() {
     const [nickname, setNickname] = useState('');
     const [gender, setGender] = useState('');
     const [certification, setCertification] = useState('인증번호');
-    
+    const [userInput,setUserInput] = useState(0);
     
     const [isButtonActive, setIsButtonActive] = useState(false);
     const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
@@ -150,9 +150,11 @@ function Join() {
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
+
     const toggleShowPasswordCheck = () => {
         setShowPasswordCheck(!showPasswordCheck);
     };
+
 
     useEffect(() => {
         if (email !== '' && password !== '') {
@@ -161,24 +163,33 @@ function Join() {
             setIsButtonActive(false);
         }
     }, [email, password]);
-
+    //input에 넣는값으로 state바꿔주는 함수
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
+    //input에 넣는값으로 state바꿔주는 함수
     const handleEmailCheckChange = (e) => {
         setEmailCheck(e.target.value);
     };
-
+    //input에 넣는값으로 state바꿔주는 함수
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
+    //input에 넣는값으로 state바꿔주는 함수
     const handlepasswordCheckChange = (e) => {
         setpasswordCheck(e.target.value);
     };
-
+    //input에 넣는값으로 state바꿔주는 함수
     const handleNickname = (e) => {
-        setNickname(e.target.value);
+        if( e.target.value.length == 0 || e.target.value.length<=8){
+            setNickname(e.target.value);
+            setUserInput(e.target.value.length);
+        } 
+        if(e.target.value.length >= 9){
+            alert('닉네임은 8자 이하만 사용가능 합니다!');
+        }
     };
+
 
 
     return(
@@ -235,7 +246,7 @@ function Join() {
                             value={passwordCheck}
                             onChange={handlepasswordCheckChange}
                         />
-                        <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPasswordCheck}/>
+                        <img src={showPasswordCheck ? show : hide} className={styles.icon} onClick={toggleShowPasswordCheck}/>
                     </div>
                 </div>
                 <div className={styles.formGroup}>
@@ -248,12 +259,15 @@ function Join() {
                             value={nickname}
                             onChange={handleNickname}
                         />
+                        {
+                            userInput !== 0 ? <div className={styles.icon} style={{color : '#999999'}}>{'('}{userInput}/8{')'}</div> : ''
+                        }
                     </div>
                 </div>
 
                 <div className={styles.formGroup}>
                     <p>성별</p>
-                    <label>
+                    <label className={styles.customLabel}>
                         <input
                             type="radio"
                             value="비밀"
@@ -262,22 +276,26 @@ function Join() {
                             className={styles.customRadio}
                         />
                         비밀
-                        <input style={{ marginLeft: '48px' }}
+                    </label>
+                    <label className={styles.customLabel} style={{ marginLeft: '48px' }}>
+                        <input
                             type="radio"
                             value="남성"
                             checked={gender === '남성'}
                             onChange={handleGenderChange}
                             className={styles.customRadio}
                         />
-                       남성
-                        <input style={{ marginLeft: '48px' }}
+                        남성
+                    </label>
+                    <label className={styles.customLabel} style={{ marginLeft: '48px' }}>
+                        <input
                             type="radio"
                             value="여성"
                             checked={gender === '여성'}
                             onChange={handleGenderChange}
                             className={styles.customRadio}
                         />
-                       여성
+                        여성
                     </label>
                 </div>
         <button

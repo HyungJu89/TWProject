@@ -1,0 +1,26 @@
+.basic {
+    /* 전체  사이즈  제한*/
+    margin: auto;
+    width: 1194px;
+    height: 160px;
+    display: flex;
+
+    font-size: 15px;
+    font-weight: 400;
+    color:  #999999;
+}
+.point{
+    width: 4px;
+    height: 4px;
+    background: #BBBBBB;
+    margin: 7.5px 20px;
+}
+.info{
+    margin-left: 36px;   
+}
+/**/
+.dashed {
+    border-top: 1px solid #DFE1E7;
+    border-radius: 0px;
+    margin-bottom: 30px;
+}
