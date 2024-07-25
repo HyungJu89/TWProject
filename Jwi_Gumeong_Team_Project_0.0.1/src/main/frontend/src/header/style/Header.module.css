@@ -214,13 +214,34 @@ body{
 /* 알림 내용 창 */
 .notificationModal .notificationContent {
     margin: 10px 20px 20px 20px;
+    height: 364px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.notificationContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notificationContent::-webkit-scrollbar-track {
+    display: none;
+}
+
+.notificationContent::-webkit-scrollbar-thumb {
+    border-radius: 15px;
+    background-color: #DFE1E7;
+}
+
+.notificationBox {
+    display: grid;
+    row-gap :14px;
 }
 
 /* 알림 내용 1개 박스 */
 .notificationModal .notificationContent .notificationItem {
     width: 314px;
     height: 40px;
-    gap: 6px;
+    gap: 0px 14px;
     display: flex;
     align-items: center;
     cursor: pointer;
