@@ -85,31 +85,141 @@ function NotificationModal() { /* 알림 모달찰 */
         switch (activeButton) {
             case 1:
                 return (
-                    <div className={styles.notificationItem}>
-                        <img src={searching} alt="icon" />
-                        <div>
-                            <p>공무원이 축하해야 할까?</p>
-                            <span>충주시님이 댓글을 달았어요.</span>
+                    <div className={styles.notificationBox}>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
                         </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        <div className={styles.notificationItem}>
+                            <span className={styles.notificationDot}>•</span>
+                            <img src={searching} alt="icon" />
+                            <div className={styles.notificationItemContent}>
+                                <span className={styles.applyContent}>공무원이 축하해야 할까?</span><br/>
+                                <span className={styles.applyId}>충주시님이 댓글을 달았어요.</span>
+                            </div>
+                        </div>
+                        
                     </div>
                 );
             case 2:
                 return (
                     <div className={styles.notificationItem}>
+                        <span className={styles.notificationDot}>•</span>
                         <img src={searching} alt="icon" />
-                        <div>
-                            <p>성우가 다른 성우 ARS를 들었을 때 찐반응</p>
-                            <span>무야호님이 댓글을 달았어요.</span>
+                        <div className={styles.notificationItemContent}>
+                            <span className={styles.applyContent}>성우가 다른 성우 ARS를 들었을 때 찐반응</span><br/>
+                            <span className={styles.applyId}>무야호님이 댓글을 달았어요.</span>
                         </div>
                     </div>
                 );
             case 3:
                 return (
                     <div className={styles.notificationItem}>
+                        <span className={styles.notificationDot}>•</span>
                         <img src={searching} alt="icon" />
-                        <div>
-                            <p>소맥의 소개팅</p>
-                            <span>무야호님이 댓글을 달았어요.</span>
+                        <div className={styles.notificationItemContent}>
+                            <span className={styles.applyContent}>소맥의 소개팅</span><br/>
+                            <span className={styles.applyId}>무야호님이 댓글을 달았어요.</span>
                         </div>
                     </div>
                 );
@@ -123,25 +233,25 @@ function NotificationModal() { /* 알림 모달찰 */
             <h4 className={styles.notificationTitle}>알림</h4>
             <div className={styles.divider}></div>
             <div className={styles.buttonContainer}>
-                <div className={styles.imgContainer}>
+                <div className={styles.imgContainer} 
+                onClick={() => handleButtonClick(1)}>
                     <img
                         src={activeButton === 1 ? n_comments_activation : n_comments_deactivation}
                         alt="Comments"
-                        onClick={() => handleButtonClick(1)}
                     />
                 </div>
-                <div className={styles.imgContainer}>
+                <div className={styles.imgContainer} 
+                onClick={() => handleButtonClick(2)}>
                     <img
                         src={activeButton === 2 ? n_heart_activation : n_heart_deactivation}
                         alt="Heart"
-                        onClick={() => handleButtonClick(2)}
                     />
                 </div>
-                <div className={styles.imgContainer}>
+                <div className={styles.imgContainer}
+                onClick={() => handleButtonClick(3)}>
                     <img
                         src={activeButton === 3 ? n_service_activation : n_service_deactivation}
                         alt="Service"
-                        onClick={() => handleButtonClick(3)}
                     />
                 </div>
             </div>
