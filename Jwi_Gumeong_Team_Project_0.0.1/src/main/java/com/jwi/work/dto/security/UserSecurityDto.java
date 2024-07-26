@@ -9,13 +9,10 @@ public class UserSecurityDto {
 	private String password;
 	private String username;
 	
-	
 	public UserSecurityDto(String role,String userName,String password) {
-		
 		this.role = role;
 		this.username = userName;
-		this.password = password;
-		
+		this.password = password;	
 	}
 	
 }
