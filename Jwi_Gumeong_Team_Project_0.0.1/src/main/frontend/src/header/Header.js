@@ -11,6 +11,9 @@ import {Link, useNavigate} from 'react-router-dom';
 //이미지 import
 import Logo from '../icon/logo/logo.png'; //로고 이미지
 import searching from '../icon/24px/searching.png';
+import asking from '../icon/img/ask-ing.png';
+import reply from '../icon/img/reply-ing.png';
+import report from '../icon/img/report-ing.png';
 import deletion from '../icon/14px/deletion.png';
 import search from '../icon/24px/search.png';
 import Open_channel from '../icon/24px/Open-channel.png';
@@ -77,45 +80,172 @@ function Icon() { /* 로그인 시 노출되는 알림 아이콘 UI */
 function NotificationModal() { /* 알림 모달찰 */
     const [activeButton, setActiveButton] = useState(1); /* 현재 활성화된 버튼 상태 */
 
+    // 툴팁
+    const Tooltip = ({ children, message }) => {
+        const [visible, setVisible] = useState(false);
+        const [animationStarted, setAnimationStarted] = useState(false);
+    
+        useEffect(() => {
+            if (visible) {
+                const timer = setTimeout(() => {
+                    setAnimationStarted(true);
+                }, 2000); // 2초 뒤에 애니메이션 시작
+                return () => clearTimeout(timer);
+            }
+        }, [visible]);
+    
+        // 마우스 올렸을 때
+        const handleMouseEnter = () => {
+            setVisible(true);
+            setAnimationStarted(false);
+        };
+    
+        // 마우스가 나갔을 때
+        const handleMouseLeave = () => {
+            setVisible(false);
+            setAnimationStarted(false);
+        };
+    
+        return (
+            <div
+                className={styles.tooltip}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            >
+                {children}
+                {visible && (
+                    <div
+                        className={`${styles.tooltipMsg} ${
+                            animationStarted ? styles.tooltipAnimation : ''
+                        }`}
+                    >
+                        {message}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
     const handleButtonClick = (buttonNumber) => {
         setActiveButton(buttonNumber);
     };
 
+
+    /* 내용 배열로 변경 */
     const renderContent = () => {
+        let notifications = [];
         switch (activeButton) {
             case 1:
-                return (
-                    <div className={styles.notificationItem}>
-                        <img src={searching} alt="icon" />
-                        <div>
-                            <p>공무원이 축하해야 할까?</p>
-                            <span>충주시님이 댓글을 달았어요.</span>
+                notifications = [
+                    {
+                        icon: asking,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: reply,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: report,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: report,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: report,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: report,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: report,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: report,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: report,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: report,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    },
+                    {
+                        icon: report,
+                        content: "공무원이 축하해야 할까?",
+                        id: "충주시님이 댓글을 달았어요."
+                    }
+                ];
+
+                // 배열이 비어있을 경우 (알림이 없을 때)
+                if (notifications.length === 0) {
+                    return (
+                        <div className={styles.emptyNotification}>
+                            <span>소식이 온 댓글이 없어요.</span>
                         </div>
-                    </div>
-                );
+                    );
+                }
+                break;
             case 2:
-                return (
-                    <div className={styles.notificationItem}>
-                        <img src={searching} alt="icon" />
-                        <div>
-                            <p>성우가 다른 성우 ARS를 들었을 때 찐반응</p>
-                            <span>무야호님이 댓글을 달았어요.</span>
+                notifications = [
+                    {
+                        icon: asking,
+                        content: "성우가 다른 성우 ARS를 들었을 때 찐반응",
+                        id: "무야호님이 댓글을 달았어요."
+                    }
+                ];
+                if (notifications.length === 0) {
+                    return (
+                        <div className={styles.emptyNotification}>
+                            <span>소식이 온 좋아요가 없어요.</span>
                         </div>
-                    </div>
-                );
+                    );
+                }
+                break;
             case 3:
-                return (
-                    <div className={styles.notificationItem}>
-                        <img src={searching} alt="icon" />
-                        <div>
-                            <p>소맥의 소개팅</p>
-                            <span>무야호님이 댓글을 달았어요.</span>
+                notifications = [];
+                if (notifications.length === 0) {
+                    return (
+                        <div className={styles.emptyNotification}>
+                            <span>소식이 온 내용이 없어요.</span>
                         </div>
-                    </div>
-                );
+                    );
+                }
+                break;
             default:
                 return null;
         }
+        return (
+            <div className={styles.notificationBox}>
+                {notifications.map((notification, index) => (
+                    <div key={index} className={styles.notificationItem}>
+                        <span className={styles.notificationDot}>•</span> {/* 안 읽은 알림 */}
+                        <img src={notification.icon} alt="icon" />  {/* 프로필 or 이미지 */}
+                        <div className={styles.notificationItemContent}> {/* 내용 div */}
+                            <span className={styles.applyContent}>{notification.content}</span> {/* 게시글 제목 */}
+                            <span className={styles.applyId}>{notification.id}</span> {/* 알림 설명 */}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
     };
 
     return (
@@ -123,28 +253,36 @@ function NotificationModal() { /* 알림 모달찰 */
             <h4 className={styles.notificationTitle}>알림</h4>
             <div className={styles.divider}></div>
             <div className={styles.buttonContainer}>
-                <div className={styles.imgContainer}>
-                    <img
-                        src={activeButton === 1 ? n_comments_activation : n_comments_deactivation}
-                        alt="Comments"
-                        onClick={() => handleButtonClick(1)}
-                    />
-                </div>
-                <div className={styles.imgContainer}>
-                    <img
-                        src={activeButton === 2 ? n_heart_activation : n_heart_deactivation}
-                        alt="Heart"
-                        onClick={() => handleButtonClick(2)}
-                    />
-                </div>
-                <div className={styles.imgContainer}>
-                    <img
-                        src={activeButton === 3 ? n_service_activation : n_service_deactivation}
-                        alt="Service"
-                        onClick={() => handleButtonClick(3)}
-                    />
-                </div>
+                {/* 버튼이 눌렸을 때 그 버튼을 활성화 시키고 이미지 변경 */}
+                <Tooltip message={'댓글&대댓글'}>
+                    <div className={styles.imgContainer} 
+                    onClick={() => handleButtonClick(1)}>
+                        <img
+                            src={activeButton === 1 ? n_comments_activation : n_comments_deactivation}
+                            alt="Comments"
+                        />
+                    </div>
+                </Tooltip>
+                <Tooltip message={'좋아요'}>
+                    <div className={styles.imgContainer} 
+                    onClick={() => handleButtonClick(2)}>
+                        <img
+                            src={activeButton === 2 ? n_heart_activation : n_heart_deactivation}
+                            alt="Heart"
+                        />
+                    </div>
+                </Tooltip>
+                <Tooltip message={'신고&고객센터'}>
+                    <div className={styles.imgContainer}
+                    onClick={() => handleButtonClick(3)}>
+                        <img
+                            src={activeButton === 3 ? n_service_activation : n_service_deactivation}
+                            alt="Service"
+                        />
+                    </div>
+                </Tooltip>
             </div>
+
             <div className={styles.divider}></div>
             <div className={styles.notificationContent}>
                 {renderContent()}
