@@ -1,11 +1,50 @@
-.EmogiMain{
+.emogiMain div{ border-radius: 0px;}
+.emogiMain{
         z-index: 1000;
         position: absolute;
+        padding: 0px 20px;
         top: 30px;
-        width: 444px;
-        height: 271px;
+        width: 402px;
         border-radius: 7px;
         background: #FFFFFF;
         box-shadow: 0px 2px 3.9px 0px rgb(0, 0, 0,0.2);
-        border: 1px solid #F3F3F3
+        border: 1px solid #F3F3F3;
+
+        font-size: 12px;
+        font-weight: 400;
+        color: #BBBBBB;
+}
+.emogiMain .emogiIcon{
+        margin: 20px auto 10px auto;
+        background-color: white;
+        width: 200px;
+        height: 20px;
+        display: flex;
+        gap: 0px 10px;
+}
+.emogiMain .emogiIcon img{cursor: pointer;}
+
+/*이모티콘*/
+.emogiMain .emogiArea{
+        width: 404.2px;
+        max-height: 135px;
+        background-color: white;
+        margin-bottom: 20px;
+        margin-top: 9px;
+        gap: 2px 1.35px;
+        display: flex;
+        flex-wrap: wrap;
+        overflow-y: auto;
+        overflow-x: hidden;
+}
+.emogiMain .emogiArea .emogi{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        font-size: 25px;
+        border-radius: 0px;
+        background-color: white;
+        cursor: pointer;
 }

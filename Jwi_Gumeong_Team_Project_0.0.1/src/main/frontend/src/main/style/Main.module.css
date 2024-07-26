@@ -97,10 +97,10 @@
 }
 
 .leftDiv .hotBoard .channelDiv {
-    display: flex;
-    justify-content: space-between;
     width: 723px;
     height: 144px;
+    display: flex;
+    /* justify-content: space-between; */
     flex-wrap: wrap;
     /* 아이템이 줄을 넘도록 설정 */
     gap: 20px 37px;
