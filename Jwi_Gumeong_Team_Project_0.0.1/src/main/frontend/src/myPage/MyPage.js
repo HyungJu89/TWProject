@@ -13,12 +13,12 @@ function MyPage() {
     let [topic, settopic] = useState('정보 수정');
 
     return (
-        <>
+        <div className={styles.MyPage}>
             <TopicBtn topic={topic} settopic={settopic} />
             {topic === '정보 수정' && <InfoEdit/>}
             {topic === '내가 쓴 글' && <MyPosts />}
             {topic === '즐겨찾기 관리' && <FavoritesManagement />}
-        </>
+        </div>
     );
 }
 

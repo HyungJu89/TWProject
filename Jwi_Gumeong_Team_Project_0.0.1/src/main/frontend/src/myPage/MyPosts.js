@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './style/MyPosts.module.css';
 import { useQuery } from 'react-query';
 import PublicBoard from '../main/PublicBoard.js';
+import Paging from '../Paging/Paging.js'
 import axios from 'axios';
 
 //내가 쓴 글 페이지
@@ -34,6 +35,7 @@ function MyPosts() {
             <PublicBoard className={styles.PublicBoard}></PublicBoard>
             <PublicBoard className={styles.PublicBoard}></PublicBoard>
             <PublicBoard className={styles.PublicBoard}></PublicBoard>
+            <Paging/>
         </div>
     );
 }

@@ -69,6 +69,9 @@ html, body {
     outline: none; 
     border-width: 2px;
 }
+.passwordInput.error {
+    border-color: #EC000E; /* 빨간색 테두리 */
+}
 
 .inputWrapper .icon {
     position: absolute;

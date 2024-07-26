@@ -69,7 +69,7 @@ function Agree({ setAgreeCheck }) {
                 <div className={styles.formGroup} style={{ marginBottom: '30px' }}>
                     <p>해당 사항에 어긋나는 행위를 하면 제제를 가합니다?</p>
                     <label>
-                        <input
+                        <input style={{ marginRight: '8px'}}
                             type="radio"
                             value="true"
                             checked={selectedOption === true}
@@ -77,7 +77,9 @@ function Agree({ setAgreeCheck }) {
                             className={styles.customRadio}
                         />
                         동의 합니다.
-                        <input style={{ marginLeft: '48px' }}
+                    </label>
+                    <label>
+                        <input style={{ marginLeft: '48px' , marginRight: '8px' }}
                             type="radio"
                             value="false"
                             checked={selectedOption === false}
@@ -90,7 +92,7 @@ function Agree({ setAgreeCheck }) {
                 <div className={styles.formGroup}>
                     <p>이메일 수신 동의</p>
                     <label>
-                        <input
+                        <input style={{ marginRight: '8px'}}
                             type="radio"
                             value="true"
                             checked={selectedOption2 === true}
@@ -98,7 +100,9 @@ function Agree({ setAgreeCheck }) {
                             className={styles.customRadio}
                         />
                         동의 합니다.
-                        <input style={{ marginLeft: '48px' }}
+                    </label>
+                    <label>
+                        <input style={{ marginLeft: '48px', marginRight: '8px'}}
                             type="radio"
                             value="false"
                             checked={selectedOption2 === false}
