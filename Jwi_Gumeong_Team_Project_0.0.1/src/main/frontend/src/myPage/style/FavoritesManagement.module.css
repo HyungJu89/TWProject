@@ -23,6 +23,7 @@
 }
 .formGroup .streammerInfo{
     width: 479px;
+    margin-right: 30px;
 }
 .formGroup .streammerInfo .channelName{
     font-size: 16px;
