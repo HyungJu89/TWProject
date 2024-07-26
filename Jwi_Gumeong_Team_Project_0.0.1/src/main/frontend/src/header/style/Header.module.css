@@ -196,7 +196,6 @@ body{
     cursor: pointer;
 }
 
-
 /* 이미지 박스 */
 .imgContainer {
     width: 118px;
@@ -206,6 +205,7 @@ body{
     justify-content: center;
 }
 
+/* 알림창 내 알림, 좋아요 버튼에 마우스 올렸을 때 */
 .imgContainer:hover {
     background-color: #FFEDD9;
 }
@@ -254,13 +254,19 @@ body{
     align-items: center;
     cursor: pointer;
 }
+/* 알림 내용 마우스 올렸을 때 */
+.notificationItem :hover {
+    text-decoration: underline;
+}
 
+/* 안 읽은 알림 */
 .notificationDot {
     width: 4px;
     gap: 6px;
     color:#FF8901;
 }
 
+/* 프로필 or 이미지 */
 .notificationItem img {
     width: 40px;
     height: 40px;
@@ -270,12 +276,15 @@ body{
 
 /* 알림 내 내용 박스 */
 .notificationItemContent {
+    display: flex;
+    flex-direction: column;
     width: 258px;
     height: 37px;
     gap: 4px;
     opacity: 0px;
 }
 
+/* 알림창 게시글 제목 */
 .notificationItem .notificationItemContent .applyContent {
     font-size: 14px;
     font-weight: 500;
@@ -283,11 +292,83 @@ body{
     text-align: left;
     color: #101010;
 }
-
+/* 알림창 상세 내용 */
 .notificationItem .notificationItemContent .applyId {
     font-size: 12px;
     font-weight: 400;
     height: 15px;
     text-align: left;
     color: #999999;
+}
+
+/* 알림이 비어 있을 시 */
+.emptyNotification {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #999999;
+}
+
+/* 툴팁 */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltipMsg {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    background-color: #424242;
+    border: #424242 solid 1px;
+    color: #FFFFFF;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 12px;
+    text-align: center;
+    padding: 2px 6px;
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+    white-space: nowrap; /* 줄 바꿈 방지 */
+}
+
+/* 말풍선 꼬리 */
+.tooltipMsg::before {
+    border-color: #424242 transparent;
+    border-style: solid;
+    border-width: 6px 6px 0 6px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    top: 100%;
+    width: 0;
+    transform: translateX(-50%);
+    z-index: 0;
+}
+
+.tooltip:hover > .tooltipMsg,
+.tooltip:active > .tooltipMsg {
+    visibility: visible;
+}
+
+.tooltipAnimation {
+    visibility: visible;
+    animation: tooltipAnimation 0.5s forwards;
+}
+
+@keyframes tooltipAnimation {
+    0% { 
+        transform: translate(-50%, -30%);
+        opacity: 0;
+    }
+    
+    100% { 
+        transform: translate(-50%, -30%);
+        opacity: 1;
+    }
 }
