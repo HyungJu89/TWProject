@@ -64,7 +64,7 @@ function Icon({navigate}) { /* 로그인 시 노출되는 알림 아이콘 UI */
     return (
         <div className={styles.iconContainer}>
             <div className={styles.icon_notification}>
-                <img onClick={() => { navigate('/CreateChannel') }} src={Open_channel} alt="Open Channel" />
+                <img onClick={() => { navigate('/channelManagement') }} src={Open_channel} alt="Open Channel" />
             </div>
             <div className={styles.icon_notification}
                 onMouseEnter={() => setImg(notification_activation)}
