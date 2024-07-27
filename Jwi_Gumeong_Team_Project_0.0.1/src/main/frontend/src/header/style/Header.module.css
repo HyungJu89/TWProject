@@ -249,7 +249,7 @@ body{
 .notificationModal .notificationContent .notificationItem {
     width: 314px;
     height: 40px;
-    gap: 0px 14px;
+    gap: 0px 6px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -303,9 +303,8 @@ body{
 
 /* 알림이 비어 있을 시 */
 .emptyNotification {
-    height: 100%;
     display: flex;
-    align-items: center;
+    padding-top: 147px;
     justify-content: center;
     font-size: 14px;
     font-weight: 500;
@@ -318,6 +317,7 @@ body{
     display: inline-block;
 }
 
+/* 툴팁 내용 */
 .tooltipMsg {
     position: absolute;
     bottom: 100%;
@@ -351,11 +351,13 @@ body{
     z-index: 0;
 }
 
+/* 툴팁 활성화 시 - 없으면 툴팁 안보임 */
 .tooltip:hover > .tooltipMsg,
 .tooltip:active > .tooltipMsg {
     visibility: visible;
 }
 
+/* 툴팁 애니메이션 */
 .tooltipAnimation {
     visibility: visible;
     animation: tooltipAnimation 0.5s forwards;
