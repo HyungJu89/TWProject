@@ -30,6 +30,7 @@ function PublicMenu({loginOn, setLoginOn, channel}){
 }
 
 function UserAfter({channel,setLoginOn}){
+    let navigate = useNavigate();
     return(
         <div className={styles.fadein}>
             <div className={styles.userAfter} style={{ borderRadius: '20px 20px 0px 0px' }}>
@@ -40,7 +41,7 @@ function UserAfter({channel,setLoginOn}){
                     </div>
                     <button onClick={()=>{setLoginOn(false)}} >로그아웃</button>
                 </div>
-                <button className={styles.myPage}>마이페이지</button>
+                <button onClick={() => { navigate('/myPage') }}  className={styles.myPage}>마이페이지</button>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
             <div className={styles.userAfter} style={{ borderRadius: '00px 00px 20px 20px' }}>

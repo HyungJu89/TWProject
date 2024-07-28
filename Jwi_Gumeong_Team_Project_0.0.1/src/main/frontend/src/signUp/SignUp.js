@@ -15,7 +15,7 @@ function SignUp() {
         <div className={styles.section}>
            {
                AgreeCheck ? <Join/> : <Agree setAgreeCheck={setAgreeCheck} />
-            }
+           }
         </div>
     );
 }
@@ -69,7 +69,7 @@ function Agree({ setAgreeCheck }) {
                 <div className={styles.formGroup} style={{ marginBottom: '30px' }}>
                     <p>해당 사항에 어긋나는 행위를 하면 제제를 가합니다?</p>
                     <label>
-                        <input
+                        <input style={{ marginRight: '8px'}}
                             type="radio"
                             value="true"
                             checked={selectedOption === true}
@@ -77,7 +77,9 @@ function Agree({ setAgreeCheck }) {
                             className={styles.customRadio}
                         />
                         동의 합니다.
-                        <input style={{ marginLeft: '48px' }}
+                    </label>
+                    <label>
+                        <input style={{ marginLeft: '48px' , marginRight: '8px' }}
                             type="radio"
                             value="false"
                             checked={selectedOption === false}
@@ -90,7 +92,7 @@ function Agree({ setAgreeCheck }) {
                 <div className={styles.formGroup}>
                     <p>이메일 수신 동의</p>
                     <label>
-                        <input
+                        <input style={{ marginRight: '8px'}}
                             type="radio"
                             value="true"
                             checked={selectedOption2 === true}
@@ -98,7 +100,9 @@ function Agree({ setAgreeCheck }) {
                             className={styles.customRadio}
                         />
                         동의 합니다.
-                        <input style={{ marginLeft: '48px' }}
+                    </label>
+                    <label>
+                        <input style={{ marginLeft: '48px', marginRight: '8px'}}
                             type="radio"
                             value="false"
                             checked={selectedOption2 === false}
@@ -267,7 +271,7 @@ function Join() {
 
                 <div className={styles.formGroup}>
                     <p>성별</p>
-                    <label>
+                    <label className={styles.customLabel}>
                         <input
                             type="radio"
                             value="비밀"
@@ -276,22 +280,26 @@ function Join() {
                             className={styles.customRadio}
                         />
                         비밀
-                        <input style={{ marginLeft: '48px' }}
+                    </label>
+                    <label className={styles.customLabel} style={{ marginLeft: '48px' }}>
+                        <input
                             type="radio"
                             value="남성"
                             checked={gender === '남성'}
                             onChange={handleGenderChange}
                             className={styles.customRadio}
                         />
-                       남성
-                        <input style={{ marginLeft: '48px' }}
+                        남성
+                    </label>
+                    <label className={styles.customLabel} style={{ marginLeft: '48px' }}>
+                        <input
                             type="radio"
                             value="여성"
                             checked={gender === '여성'}
                             onChange={handleGenderChange}
                             className={styles.customRadio}
                         />
-                       여성
+                        여성
                     </label>
                 </div>
         <button

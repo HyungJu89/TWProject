@@ -1,0 +1,43 @@
+.createMain {
+    /* 전채영역*/
+    margin-top: 30px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.container {
+    /*각 영역 컨테이너*/
+    margin-bottom: 10px;
+    padding: 30px;
+    width: 726px;
+    background-color: #FFFFFF;
+    cursor: pointer;
+}
+
+.createChannelTitle {
+    /*채널 개설하기 부분 컨테이너*/
+    display: flex;
+    height: 32px;
+}
+
+.createChannelTitle img {
+    /*채널 개설하기 이미지*/
+    height: 32px;
+    width: 32px;
+}
+
+.createChannelTitleText {
+    /*채널 개설하기 Text 색깔*/
+    margin: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    color: #101010;
+
+}

@@ -1,0 +1,30 @@
+
+.dashed {
+    /*회색줄*/
+    
+    margin-top: 20px;
+    border-bottom: 1px solid #F3F3F3;
+    border-radius: 0px;
+    margin: 20px 0px;
+}
+
+.channelInputBox {
+    /* 채널 검색 input*/
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 19px;
+    width: 666px;
+    padding: 20px;
+    outline: none;
+    border: 1px solid #E5E5E5;    
+}
+
+.channelInputBox::placeholder {
+    /* placeholder 양식 */
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 18.78px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    color: #BBBBBB;
+}

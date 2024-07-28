@@ -49,7 +49,7 @@ function Header() {
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
                 <div className={styles.icon}>
-                    {loginOn === true && <Icon/>} {/* 로그인 체크 */}
+                    {loginOn === true && <Icon navigate={navigate}/>} {/* 로그인 체크 */}
                     <div onClick={() => { navigate('/signIn') }} className={styles.signInBtn}>로그인</div>
                 </div>
             </div>
@@ -57,14 +57,14 @@ function Header() {
     );
 }
 
-function Icon() { /* 로그인 시 노출되는 알림 아이콘 UI */
+function Icon({navigate}) { /* 로그인 시 노출되는 알림 아이콘 UI */
     let [img, setImg] = useState(notification_deactivation); /*알림 hover 이팩트 변환용*/
     let [showNotifications, setShowNotifications] = useState(false); /* 알림 모달 표시 여부 */
 
     return (
         <div className={styles.iconContainer}>
             <div className={styles.icon_notification}>
-                <img src={Open_channel} alt="Open Channel" />
+                <img onClick={() => { navigate('/channelManagement') }} src={Open_channel} alt="Open Channel" />
             </div>
             <div className={styles.icon_notification}
                 onMouseEnter={() => setImg(notification_activation)}
