@@ -31,6 +31,7 @@ function App() {
             <Route path='/pwInquiry' element={<PwInquiry/>}/>
             <Route path='/search' element={<Search page={1} search={1}/>}/>{/*채널 검색*/}
             <Route path='/channelManagement' element={<ChannelManagement/>}/>
+            <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
         </Routes>
         <Bottom/> {/* 하단 공통 부분 디자인 */}
         </div>

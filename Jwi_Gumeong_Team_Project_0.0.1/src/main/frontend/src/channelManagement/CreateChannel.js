@@ -17,7 +17,7 @@ function CreateChannel() {
     return (
 
         <div className={style.createChannel}> {/*개설 할 스트리머 URL 입력부분 */}
-            <div className={style.createChannelText}>개설 할 스트리머 URL입력</div>
+            <div className={style.createChannelText}>개설 할 스트리머 URL 입력</div>
             <input className={styleManagement.channelInputBox} placeholder='개설하고 싶은 스트리머의 URL을 넣어주세요.' />
             {sign && (
                 <div className={style.warningText} style={{ color: `${signColor}` }}>{signText}</div>/*URL 검토하고 가능유무 안내Text*/
