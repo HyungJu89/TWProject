@@ -10,9 +10,10 @@ import SignIn from './signIn/SignIn.js';
 import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import MyPage from './myPage/MyPage.js';
-import Search from './search/Search.js'
-import ChannelManagement from './channelManagement/ChannelManagement.js'
-import ImgUi from './imgModal/imgModal.js'
+import Search from './search/Search.js';
+import CustomerService from './customerService/CustomerServiceCenter.js';
+import ChannelManagement from './channelManagement/ChannelManagement.js';
+import ImgUi from './imgModal/imgModal.js';
 import { useSelector } from 'react-redux';
 
 function App() {
