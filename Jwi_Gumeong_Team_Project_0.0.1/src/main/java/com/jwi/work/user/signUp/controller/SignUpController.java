@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jwi.work.user.signUp.entity.User;
+import com.jwi.work.user.dto.User;
 import com.jwi.work.user.signUp.service.SignUpService;
 
 @RestController
@@ -20,10 +20,6 @@ public class SignUpController {
 
     @GetMapping("/register")
     public boolean getUsersInfo(@RequestBody User userData) {
-    	System.out.println("들어오긴하니?");
-        userData.setCreatedAt(LocalDateTime.now());
-        userData.setUpdatedAt(LocalDateTime.now());
-        signUpService.saveUser(userData);
        return true;	
     }
 }
