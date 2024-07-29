@@ -9,7 +9,9 @@ import com.jwi.work.user.mapper.UserMapper;
 @Service
 public class SignUpService {
     
+	@Autowired
+	UserMapper userMapper;
     public void saveUser(User user) {
-
+    	
     }
 }
