@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.api.chzzk.ChzzkChannelInfo;
-import com.jwi.work.dto.api.chzzkApi.ResponseDto;
 import com.jwi.work.dto.channel.createChannelDto;
 import com.jwi.work.mapper.ChannelMapper;
 
