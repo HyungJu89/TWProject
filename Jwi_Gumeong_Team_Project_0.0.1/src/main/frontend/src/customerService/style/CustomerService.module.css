@@ -1,27 +1,138 @@
-.serviceBanner {
-    background-color:#6FCBFF;
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    border-radius: 0;
+}
+
+.serviceBanner {
+    background-color: #40B9D8;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 102px;
-    top: 60px;
+    border-radius: 0px;
 }
 
-.serviceBannerContents{
+.bannerPosition {
+    width: 786px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 50%;
+    height: 102px;
+}
+
+.logoPosition {
+    margin-top: 5px;
 }
 
 .logoTitle {
     font-weight: 500;
     font-size: 32px;
     color: #FFFFFF;
+    width: 118px;
 }
 
-.logoPosition{
-    margin-top: 5px;
+.serviceContents {
+    width: 786px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px; 
+}
+
+.serviceNav {
+    width: 100%;
+    display: flex;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+}
+
+.serviceNav .navContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #333;
+    margin-left: 30px;
+    gap: 30px;
+    height: 60px;
+}
+
+.navItems {
+    font-weight: 500;
+    font-size: 20px;
+    color: #999999;
+    position: relative;
+}
+
+.navItems.active {
+    color: #101010;
+}
+
+.navItems:hover::after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 2px;
+    background-color: #FF8901;
+    border-radius: 18px;
+}
+
+.serviceTabContent {
+    width: 100%;
+}
+
+.serviceTitle {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    text-align: left;
+}
+
+
+.inquiryList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.inquiryItem {
+    display: flex;
+    padding: 30px;
+    border-radius: 10px;
+    align-items: center;
+    background-color: #ffffff;
+}
+
+.inquiryIcon {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.inquiryDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.inquiryTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #101010;
+}
+
+.inquirySubtitle {
+    font-size: 15px;
+    font-weight: 400;
+    color: #999999;
+    letter-spacing: 0.75%;
 }
