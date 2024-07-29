@@ -21,7 +21,7 @@ function Main() {
     const [channel, setChannel] = useState('');
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useQuery('channel', () =>
-        axios.get(`/channelRest/search/123123`)
+        axios.get(`/channelAPI/search/123123`)
             .then((response) => {
                 setChannel(response.data.content)
                 return response.data.content
