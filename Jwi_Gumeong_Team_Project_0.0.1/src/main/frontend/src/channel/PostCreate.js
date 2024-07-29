@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 import style from './style/PostCreate.module.css';
 import emotIcon from '../icon/24px/emoticon-activation.png';
 import imageIcon from '../icon/24px/photo.png'
+import closeIcon from '../icon/btn/btn-image-Close.png'
 import '../App.css'
 import { useParams } from 'react-router-dom';
 
@@ -93,7 +94,9 @@ function PostCreact() {
                     selectedImage.map(({ file, preview }, index) => (
                         <div key={index} className={style.imageContainer}>
                             <img src={preview} alt={`preview ${index}`} className={style.imagePreview} />
-                                <div onClick={() => imageDelete(index)} className={style.deleteButton}>삭제</div>
+                                <div onClick={() => imageDelete(index)} className={style.deleteButton}>
+                                    <img src = {closeIcon}/>
+                                </div>
                         </div>
                     ))
                 )}
