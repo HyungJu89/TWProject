@@ -32,3 +32,29 @@
     margin: 1px 0px;
     user-select: none;
 }
+
+
+
+
+ .bookMark{
+    width: 123px;
+    height: 38px;
+    border-radius: 83px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E5E5E5;
+    cursor: pointer;
+}
+ .bookMark img{
+  width: 20px;
+  height: 20px;
+  margin-right: 2px;
+}
+
+ .bookMark .text{
+    font-size: 14px;
+    font-weight: 700;
+    color: #999999;
+    padding: 0px;
+}
