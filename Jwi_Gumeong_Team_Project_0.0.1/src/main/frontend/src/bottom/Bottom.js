@@ -18,7 +18,9 @@ function Header() {
         <div style={{marginTop:'100px'}}>        
         <div className={styles.dashed} />{/* 회색줄 */}
         <div className={styles.basic}>
-           고객센터<div className={styles.point}/>
+           <div style={{cursor:'pointer'}}  onClick={() => { navigate('/customerService'); window.scrollTo(0, 0) }}>
+            고객센터
+            </div><div className={styles.point}/>
            이용약관<div className={styles.point}/>
            광고문의<div className={styles.point}/>
            의견제안
