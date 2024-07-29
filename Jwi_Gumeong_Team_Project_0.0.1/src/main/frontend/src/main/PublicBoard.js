@@ -4,6 +4,7 @@
 import axios from 'axios';
 import React, { useState, useRef, useEffect} from 'react';
 import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import styles from './style/PublicBoard.module.css';
 import more from '../icon/24px/more.png';
@@ -16,6 +17,7 @@ import emoticon_deactivation from '../icon/24px/emoticon-deactivation.png';
 import big_comment from '../icon/20px/bigcomment.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
+import Emogi from '../Emogi/Emogi.js';
 
 
 function PublicBoard() {
@@ -59,11 +61,11 @@ function PublicBoard() {
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
-                    뉴비라 오늘 조합 검사 받았는데. 진짜 할거 많더라.<br />
+                    뉴비라 오늘 조합 검 사 받았는데. 진짜 할거 많더라.<br />
                     피드백 많이 해주셔서 원신 할거 겁나 많이 생김<br />
                     우리 백출.. 잘 키워야지<br/>
                 </div>
-                <div onClick={()=>disPatch(openImgUiModal())}  className={styles.imgClick}>{/* 이미지 */}
+                 <div onClick={()=>disPatch(openImgUiModal())}  className={styles.imgClick}>{/* 이미지 */}
                     <div className={styles.imgArea}>
                         <img src='https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5367703706/B.jpg?675000000' />
                         {imgBeing > 0 &&
@@ -82,17 +84,18 @@ function PublicBoard() {
                         <div className={styles.comments}>123123</div>
                     </div>
                 </div>
-                <img src={sharing} />
+                {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
             {commentsON && <Comments />}
         </div>
     )
 }
 function ChannelTitle({ channel }) {
+    let navigate = useNavigate();
     return (
-        <div>
+        <div onClick={()=>{navigate('/channel/123')}}>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                <img src={channel.channelImageUrl} />{channel.channelName}
+                <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.channelName}</div>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
         </div>
@@ -100,7 +103,17 @@ function ChannelTitle({ channel }) {
 }
 
 function Comments() {
-    let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off    
+    let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off   
+    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
+    const textareaRef = useRef(null); //
+
+    const handleInput = (e) => {
+        const textareaHeight = textareaRef.current;//영역 제한
+        if (textareaHeight) {
+            textareaHeight.style.height = `${textareaHeight.scrollHeight}px`; // textarea영역 변동값
+        }
+    };
+
     return (
         <div>
             <div className={styles.dashed} />{/* 회색줄 */}
@@ -111,9 +124,14 @@ function Comments() {
                 </div>
             </div>
             <div className={styles.commentDiv}>{/* 댓글 달기 */}
-                <textarea placeholder='댓글 달기' />
+                    <textarea
+                        ref={textareaRef}
+                        placeholder='댓글 달기'
+                        onInput={handleInput}
+                    />
                 <div className={styles.commentNav}>
-                    <img style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
+                    <img onClick={()=>{EmojiOn == true ? setEmojiOn(false): setEmojiOn(true)}} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
+                    {EmojiOn && <Emogi/>}
                     <div>0/200<button>등록</button></div>
                 </div>
             </div>

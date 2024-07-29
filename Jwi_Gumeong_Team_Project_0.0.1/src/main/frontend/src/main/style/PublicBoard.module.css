@@ -130,6 +130,8 @@
     resize: none;
     margin-bottom: 10px;
     width: 698px;
+    max-height: 100px;
+    
     font-family: Spoqa Han Sans Neo;
     font-size: 16px;
     font-weight: 500;
@@ -138,6 +140,7 @@
 }
 
 .commentNav {
+    position: relative;
     width: 698px;
     height: 34px;
     display: flex;

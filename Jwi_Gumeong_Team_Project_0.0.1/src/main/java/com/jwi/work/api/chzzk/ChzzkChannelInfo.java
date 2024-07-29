@@ -50,7 +50,6 @@ public class ChzzkChannelInfo {
 							
 			API_URL = "https://api.chzzk.naver.com/service/v1/channels/"+ encodedChanneId+"/data?fields=banners,topExposedVideos,missionDonationChannelHomeExposure";
 		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
 		}
 		
 		

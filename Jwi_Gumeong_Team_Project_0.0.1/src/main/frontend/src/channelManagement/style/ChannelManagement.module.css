@@ -15,6 +15,7 @@
     padding: 30px;
     width: 726px;
     background-color: #FFFFFF;
+    cursor: pointer;
 }
 
 .createChannelTitle {
@@ -25,7 +26,6 @@
 
 .createChannelTitle img {
     /*채널 개설하기 이미지*/
-    background-color: red;
     height: 32px;
     width: 32px;
 }

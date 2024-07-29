@@ -35,12 +35,9 @@
     justify-content: space-between;
     width: 90%;
     min-width: 300px;
-    height: 100%;
+    height: 90%;
+    min-height: 300px;
     margin: auto;
-    /* position: fixed; */
-    /* left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%); */
 }
 .mainImgShow .chevron_left_w{
     cursor: pointer;
@@ -52,8 +49,10 @@
     align-items: center;
     justify-content: center;
     width: 90%;
+    height: 90%; 
     max-height: 100%;
     padding: 25px;
+    margin-bottom:10px;
 }
 .mainImgShow .mainImg img{
     max-width: 100%;
@@ -81,20 +80,44 @@
     margin-top: 40px;
     cursor: pointer;
 }
+.mainContent .move{
+    position: fixed;
+    right: 0px;
+    transform: 0.8s
+
+}
+.mainContent .btn_contentA{
+    /* margin-top: 40px; */
+    height: 76px;
+    cursor: pointer;
+    background-color: red;
+}
 /* 댓글 영역 */
 .mainContent .mainArea{
     background-color: white;
     border-radius: 0px;
-    width: 440px;
+    width: 500px;
 }
+
+/*애니메이션*/
 .fadeIn{
-    opacity: 0.5; /* 초기 상태: 투명 */
-    transform: translateX(50px); /*초기 위치: 위로 10px 이동*/
-    animation: fadeIn 0.5s ease-in-out forwards; /* 애니메이션 적용 */
+    opacity: 1; /* 초기 상태: 투명 */
+    transform: translateX(500px); /*초기 위치: 위로 10px 이동*/
+    animation: fadeIn 0.2s ease-in-out forwards; /* 애니메이션 적용 */
 }
 @keyframes fadeIn {
     to {
         opacity: 1; /* 최종 상태: 불투명 */
-        transform: translateY(0); /* 최종 위치: 제자리 */
+        transform: translateX(0); /* 최종 위치: 제자리 */
+    }
+}
+
+.fadeOut{
+    transform: translateX(0px); 
+    animation: fadeOut 0.2s ease-in-out forwards; /* 애니메이션 적용 */
+}
+@keyframes fadeOut {
+    to {
+        transform: translateX(500px); 
     }
 }
