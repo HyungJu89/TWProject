@@ -4,9 +4,73 @@ import serviceLogo from '../icon/img/service-Illustration.png';
 import asking from '../icon/img/ask-ing.png';
 import reply from '../icon/img/reply-ing.png';
 import report from '../icon/img/report-ing.png';
+import btnLeft from '../icon/btn/btn-left.png';
+import btnRight from '../icon/btn/btn-right.png';
 
 function CustomerServiceCenter() {
     let [tab, setTab] = useState(0);
+    const sanctions = [
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        },
+        {
+            date: "~ 9999.12.12까지",
+            title: "재열님은 댓글달기 정지 30일을 받았어요.",
+            reason: "욕설, 악의적인 주도, 선동"
+        }
+    ];
+    let [currentPage, setCurrentPage] = useState(1);
+    const sanctionsPerPage = 10;
+    const indexOfLastSanction = currentPage * sanctionsPerPage;
+    const indexOfFirstSanction = indexOfLastSanction - sanctionsPerPage;
+    const currentSanctions = sanctions.slice(indexOfFirstSanction, indexOfLastSanction);
 
     const renderTabContent = () => {
         switch (tab) {
@@ -57,8 +121,32 @@ function CustomerServiceCenter() {
             case 3:
                 return (
                     <div>
-                        <h2>내 제제 내역</h2>
-                        <div>내 제제 내역</div>
+                        <div className={styles.sanctionContainer}>
+                            <div className={styles.sanctionList}>
+                                {currentSanctions.map((sanction, index) => (
+                                    <div key={index} className={styles.sanctionItem}>
+                                        <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
+                                        <div className={styles.sanctionDetails}>
+                                            <div className={styles.sanctionTitle}>{sanction.title}</div>
+                                            <div className={styles.sanctionContent}>
+                                                <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
+                                                <div className={styles.sanctionDate}>{sanction.date}</div>
+                                            </div>
+                                        </div>
+                                        {index < currentSanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className={styles.pagination}>
+                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pageButton}>
+                                    <img src={btnLeft} alt="Previous Page" />
+                                </button>
+                                <span className={styles.pageInfo}>{currentPage} / {Math.ceil(sanctions.length / sanctionsPerPage)}</span>
+                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sanctionsPerPage)} className={styles.pageButton}>
+                                    <img src={btnRight} alt="Next Page" />
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 );
             default:
@@ -105,4 +193,4 @@ function CustomerServiceCenter() {
     );
 }
 
-export default CustomerServiceCenter;  
+export default CustomerServiceCenter;
