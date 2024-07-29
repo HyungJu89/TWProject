@@ -1,7 +1,7 @@
 import style from './style/CreateChannel.module.css'
 import { useEffect, useRef, useState } from 'react';
 import CreateChannelNext from './CreateChannelNext.js';
-
+import {fetchChannel} from '../channel/Api.js'
 import styleManagement from './style/Management.module.css';
 import '../App.css'
 
@@ -12,6 +12,7 @@ function CreateChannel() {
     const [notice, setNotice] = useState(true);
     const [signText, setSignText] = useState('해당 스트리머의 게시판은 이미 존재합니다.');
     const [signColor, setSignColor] = useState('#EC000E');
+    
 
 
     return (
