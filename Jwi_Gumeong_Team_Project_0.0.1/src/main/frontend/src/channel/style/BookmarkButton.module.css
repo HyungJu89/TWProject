@@ -1,6 +1,7 @@
 .bookmarkButton {
 
     display: flex;
+    justify-content: space-between;
     color: #FF8901;
     padding: 9px 16px;
     height: 20px;
@@ -22,18 +23,22 @@
 }
 
 .bookmarkText {
-    width: 52px;
+    /* width: 106px; */
     height: 18px;
     font-size: 14px;
     font-weight: 700;
-    line-height: 17.53px;
-    letter-spacing: 0.0075em;
     text-align: center;
-    margin: 1px 0px;
     user-select: none;
 }
 
 
+
+.bookmark{
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    margin-bottom: 72px;
+}
 
 
  .bookMark{

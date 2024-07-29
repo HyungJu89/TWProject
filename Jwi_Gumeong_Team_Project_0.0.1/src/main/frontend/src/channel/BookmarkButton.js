@@ -7,7 +7,7 @@ import '../App.css'
 import { useState } from 'react';
 
 function BookmarkButton() {
-    let [bookmarkOn, setBookMarkOn] = useState(false);
+    let [bookmarkOn, setBookMarkOn] = useState(true);
     let [bookmarkImg, setBookmarkImg] = useState(bookmarkActivation);
 
     return (
