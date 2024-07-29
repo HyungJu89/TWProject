@@ -1,0 +1,27 @@
+.serviceBanner {
+    background-color:#6FCBFF;
+    width: 100%;
+    border-radius: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 102px;
+    top: 60px;
+}
+
+.serviceBannerContents{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+}
+
+.logoTitle {
+    font-weight: 500;
+    font-size: 32px;
+    color: #FFFFFF;
+}
+
+.logoPosition{
+    margin-top: 5px;
+}

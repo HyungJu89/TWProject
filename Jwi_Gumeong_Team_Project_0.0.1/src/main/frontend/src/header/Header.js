@@ -89,7 +89,7 @@ function NotificationModal() { /* 알림 모달찰 */
             if (visible) {
                 const timer = setTimeout(() => {
                     setAnimationStarted(true);
-                }, 2000); // 2초 뒤에 애니메이션 시작
+                }, 1000); // 1초 뒤에 애니메이션 시작
                 return () => clearTimeout(timer);
             }
         }, [visible]);
