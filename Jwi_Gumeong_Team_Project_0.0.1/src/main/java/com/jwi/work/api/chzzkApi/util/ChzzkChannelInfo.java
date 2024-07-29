@@ -1,4 +1,4 @@
-package com.jwi.work.api.chzzk;
+package com.jwi.work.api.chzzkApi.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
