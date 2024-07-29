@@ -1,6 +1,5 @@
 package com.jwi.work.user.signUp.controller;
 
-import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
