@@ -1,4 +1,4 @@
-package com.jwi.work.api.chzzk;
+package com.jwi.work.api.chzzkApi.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class ChzzkChannelInfo {
+public class ChzzkAPIInfo {
 	
 	public Object chzzkChannelInfo(String channelId) {
 		

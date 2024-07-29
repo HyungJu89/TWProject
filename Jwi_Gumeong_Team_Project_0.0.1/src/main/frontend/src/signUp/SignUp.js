@@ -204,12 +204,20 @@ function Join() {
             alert('비밀번호가 일치하지 않습니다.');
             return;
         }
+        if(email == ''){
+            alert('이메일을 입력해주세요!');
+            return;
+        }
+        if(nickname == ''){
+            alert('닉네임을 입력해주세요!');
+            return;
+        }
 
         try {
             // 서버로 보낼 데이터 객체 생성
             const userData = {
                 email: email,
-                password: password,
+                pw: password,
                 nickName: nickname,
                 gender: gender
             };
@@ -220,7 +228,6 @@ function Join() {
             // 응답 처리
             if (response.status === 200) {
                 alert('가입이 완료되었습니다.');
-                navigate('/some-page'); // 가입 완료 후 이동할 페이지
             }
         } catch (error) {
             console.error('가입 중 오류 발생:', error);
