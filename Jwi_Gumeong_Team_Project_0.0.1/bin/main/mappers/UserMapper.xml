@@ -2,10 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.user.mapper.UserMapper">
-    
-    
-    <select id="register" parameterType="com.jwi.work.user.dto.User">
-    	INSERT INTO user (email,pw,nickName,gender)value(#{email},#{pw},#{nickName},#{gender})
-    </select>
 
-</mapper>
+
+	<select id="register" parameterType="com.jwi.work.user.dto.User">
+		INSERT INTO user
+		(email,pw,nickName,gender)value(#{email},#{pw},#{nickName},#{gender})
+	</select>
+
+	<select id="emailTest" resultType="int" parameterType="String">
+		select count(*) from user where email=#{email}
+	</select>
+
+	<select id="nickNameTest" resultType="int" parameterType="String">
+		select count(*) from user where nickName=#{nickName}
+	</select>
+
+
+</mapper>	
