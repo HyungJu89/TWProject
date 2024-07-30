@@ -1,154 +1,182 @@
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
+
 use jwi;
 drop DATABASE jwi;
--- 유저 테이블
+
 CREATE TABLE `user` (
-	`userEmail`	VARCHAR(30) PRIMARY KEY	NOT NULL, -- 아이디
-	`userPw`	VARCHAR(255)	NOT NULL, -- 비번
-	`userName`	VARCHAR(30) UNIQUE	NOT NULL, -- 유저 닉네임
-	`userGender`	enum('man','girl','undisclosed')	NOT NULL	DEFAULT 'undisclosed', -- 성별
-	`userBirthday`	DATETIME, -- 생일
-	`userState`	ENUM('activate','deactivate','secession')	NOT NULL	DEFAULT 'activate', -- 로그인할때 체크 필요, deactivate 는 정지, secession는 탈퇴
-	`userCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
-	`userUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '유저키',
+	`email`	VARCHAR(50) UNIQUE	NOT NULL	COMMENT '이메일',
+	`pw`	VARCHAR(255)	NOT NULL	COMMENT '비밀번호',
+	`nickName`	VARCHAR(30) UNIQUE	NOT NULL	COMMENT '닉네임',
+	`gender`	VARCHAR(30)	NOT NULL	DEFAULT 'undisclosed'	COMMENT '성별 "man","girl","undisclosed"',
+	`birthday`	DATETIME	NULL	COMMENT '생년월일',
+	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'activate'	COMMENT '유저 상태 "activate","deactivate","secession"',
+	`ceatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
--- 즐겨찾기
 CREATE TABLE `favorites` (
-	`favoritesKey`	int PRIMARY KEY AUTO_INCREMENT	NOT NULL,
-	`channelId`	VARCHAR(50)	NOT NULL, -- 채널 아이디
-	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 아이디
-	`favoritesCreatedAt`	datetime	NOT NULL	DEFAULT NOW(),
-	`favoritesUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+	`favoritesKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`userKey`	INT	NOT NULL	COMMENT '유저키',
+	`channelKey`	INT	NOT NULL	COMMENT '채널키',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
--- 체널 정보
 CREATE TABLE `channel` (
-	`channelId`	VARCHAR(50) PRIMARY KEY	NOT NULL, #채널아이디
-	`channelName`	VARCHAR(255)	NOT NULL, # 채널이름
-	`channelImageUrl`	VARCHAR(255)	NOT NULL, # 채널 이미지 URL
-	`followerCount`	int	NOT NULL, # 팔로워수
-	`channelCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(), # 생성시간
-	`channelUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW() # 업데이트 시간
+	`channelKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`id`	VARCHAR(32)	NOT NULL	COMMENT '채널 아이디',
+	`name`	VARCHAR(255)	NOT NULL	COMMENT '채널 이름',
+	`imageUrl`	TEXT	NOT NULL	COMMENT '배너 URL 업데이트 시간에서 주기적으로 업데이트 하는걸로',
+	`followerCount`	INT	NOT NULL	COMMENT '이것도 같이 업데이트 되는걸로',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
--- 게시글
+
 CREATE TABLE `post` (
-    `postKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 게시글 키
-    `channelId` VARCHAR(50) NOT NULL, -- 체널 아이디
-    `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
-    `postTitle` VARCHAR(30) NOT NULL, -- 게시글 타이틀
-    `postContent` VARCHAR(200) NOT NULL, -- 게시글 내용
-    `postImg`    BLOB    NULL,
-    `postState`	ENUM('common','delete','disabled')	NOT NULL	DEFAULT 'common', -- 게시글 활성 유무 0: 활성 1: 비활성
-    `postCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `postUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
-);
--- 댓글
-CREATE TABLE `commentLog` (
-	`commentLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 댓글키
-	`postKey`	INT	NOT NULL, -- 게시글 키
-	`userEmail`	VARCHAR(30)	NOT NULL, -- 작성자 이메일
-	`comment`	VARCHAR(200)	NOT NULL, -- 댓글
-	`commentState`	ENUM('common','delete','disabled')	NOT NULL	DEFAULT 'common', -- 댓글상태
-	`commentCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(), -- 생성시간
-	`commentUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+	`postKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`userKey`	INT	NOT NULL,
+	`channelKey`	INT	NOT NULL,
+	`content`	VARCHAR(300)	NOT NULL	COMMENT '게시글 내용',
+	`image`	TEXT	NOT NULL	COMMENT '이미지 배열, 최대 4개',
+	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'common'	COMMENT '"common","delete","disabled"',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
--- 대댓글
-CREATE TABLE `replyLog` (
-	`replyLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 대댓글 키
-	`commentKey`	INT	NOT NULL, -- 댓글 키
-	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 이메일
-	`reply`	VARCHAR(200)	NOT NULL, -- 댓글내용
-	`replyState`	ENUM('common','delete','disabled')	NOT NULL	DEFAULT 'common', -- 
-	`replyCreatedAt`	datetime	NOT NULL	DEFAULT NOW(),
-	`replyUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+CREATE TABLE `comment` (
+	`commentLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`userKey`	INT	NOT NULL,
+	`postKey`	INT	NOT NULL,
+	`comment`	VARCHAR(200)	NOT NULL	COMMENT '댓글 내용',
+	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'common'	COMMENT '"common","delete","disabled"',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
- -- 좋아요 로그
-CREATE TABLE `likeLog` (
-    `likeLogKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 좋아요 키
-    `userEmail` VARCHAR(30) NOT NULL, -- 유저 이메일
-    `postKey` INT NOT NULL, -- 게시글 키
-    `likeLogCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `likeLogUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+CREATE TABLE `like` (
+	`likeLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`userKey`	INT	NOT NULL,
+	`postKey`	INT	NOT NULL,
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW()
 );
 
--- 게시판 관리자
 CREATE TABLE `manager` (
-    `managerKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL, -- 관리가 키
-    `userEmail` VARCHAR(30) NOT NULL, -- 관리자 이메일
-    `channelId` VARCHAR(50) NOT NULL, -- 채널 아이디 
-    `managerCreatedAt` DATETIME NOT NULL DEFAULT NOW(), -- 생성시간
-    `managerUpdatedAt` DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() -- 업데이트 시간
+	`managerKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`userKey`	INT	NOT NULL	COMMENT '유저키',
+	`channelKey`	INT	NOT NULL	COMMENT '채널키',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
--- 유저 신고
-CREATE TABLE `reportLog` (
-	`reportLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 신고기록 키
-	`reportReferenceType`	ENUM('post','comment','replyLog')	NOT NULL, -- 신고 참조 타입
-	`reportReferenceKey`	INT	NOT NULL, -- 심고 참조 키
-	`userEmail`	VARCHAR(30)	NOT NULL, -- 신고자 이메일
-	`reportEmail`	VARCHAR(30)	NOT NULL, -- 신고 당한사람 이메일
-	`reportCategory`	INT	NOT NULL, -- 신고 카테고리
-	`reportContent`	TEXT	NOT NULL, -- 신고 내용
-	`reportState`	ENUM('unprocessed','process')	NOT NULL	DEFAULT 'unprocessed', -- 신고 처리 여부
-	`reportCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
-	`reportUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+
+CREATE TABLE `report` (
+	`reportKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '신고키',
+	`reportUserKey`	INT	NOT NULL	COMMENT '신고당한 유저',
+	`userKey`	INT	NOT NULL	COMMENT '신고한 유저',
+	`referenceType`	VARCHAR(50)	NOT NULL	COMMENT '신고 종류 "post","comment","reply" 테이블 이름 넣기',
+	`referenceKey`	INT	NOT NULL	COMMENT '참조키',
+	`category`	INT	NOT NULL	COMMENT '신고 사유',
+	`content`	TEXT	NOT NULL	COMMENT '신고 내용',
+	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'unprocessed'	COMMENT '처리현황 "unprocessed","process" 작업자와 상의',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
--- 밴 로그
-CREATE TABLE `bannedLog` (
-	`bannedKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 밴키
-	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 이메일
-	`bannedReason`	VARCHAR(50)	NOT NULL, -- 밴 사유
-	`reasonDate`	DATETIME	NOT NULL	DEFAULT NOW(), -- 정지 날짜
-	`bannedContent`	INT	NOT NULL, -- 정지 일수 
-	`bannedState`	ENUM('activate','deactivate')	NOT NULL	DEFAULT 'activate', -- 밴 활성화 여부(시간이 지나 정지가 풀리면 비활성화가 됨)
-	`bannedCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
-	`bannedUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
-);
--- 운영자
+
 CREATE TABLE `admin` (
-	`adminId`	VARCHAR(30) PRIMARY KEY	NOT NULL, -- 어드민 아이디
-	`adminPw`	VARCHAR(255)	NOT NULL, -- 어드민 비밀번호
-	`adminState`	ENUM('activate','deactivate','secession')	NOT NULL	DEFAULT 'activate', -- 어드민 아이디 상태
-	`adminCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
-	`adminUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+	`adminKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '어드민 키',
+	`id`	VARCHAR(30) PRIMARY KEY	NOT NULL	COMMENT '어드민아이디',
+	`pw`	VARCHAR(255)	NOT NULL	COMMENT '비밀번호',
+	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'activate'	COMMENT '어드민 상태 "activate","deactivate","secession"  작업자와 상의',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
--- 운영자 접속 기록
-CREATE TABLE `adminLoginLog` (
-	`adminLoginLog`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 로그인 기록 키
-	`adminId`	VARCHAR(30) NOT NULL, -- 어드민 아이디
-	`adminLogTime`	DATETIME	NOT NULL	DEFAULT NOW(), -- 로그인 시간
-	`adminLogUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW() -- 변경시간
+CREATE TABLE `adminLog` (
+	`adminLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`adminKey`	INT	NOT NULL,
+	`activityLog`	VARCHAR(255)	NOT NULL	COMMENT '로그인 했을때, 어떤 활동을했을때 등등 모든 활동에 이게 들어가야 된다고 생각함',
+	`referenceType`	VARCHAR(50)	NULL	COMMENT '게시글 삭제 , 댓글 삭제 등을 했을때 어떤 게시글을 삭제했는지 테이블 이름으로',
+	`referenceKey`	INT	NULL	COMMENT '활동했을때 그 게시글, 댓글 등의 키가 무엇인지',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
- -- 알람
 CREATE TABLE `alarm` (
-	`alarmKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 알람 키
-	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 이메일
-	`alarmReferenceType`	ENUM('inquiry','post','comment','system','lick')	NOT NULL, -- 알람 참조 타입
-	`alarmReferenceKey`	INT	NOT NULL	DEFAULT '0', -- 알람 참조 키
-	`alarmTitle`	VARCHAR(50)	NOT NULL, -- 알람 제목
-	`alarmContent`	VARCHAR(255)	NOT NULL, -- 알람 내용
-	`alarmCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
-	`alarmUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+	`alarmKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '알람키',
+	`userKey`	INT	NOT NULL	COMMENT '유저키',
+	`referenceType`	VARCHAR(50)	NOT NULL	COMMENT '알람종류 "inquiry","post","comment","system","like" 테이블 이름으로  시스템 메세지는 system 으로',
+	`referenceKey`	INT	NULL	COMMENT '참조 키',
+	`read`	TINYINT	NOT NULL	DEFAULT 0	COMMENT 'read유무',
+	`title`	VARCHAR(50)	NOT NULL	COMMENT '알람제목',
+	`content`	VARCHAR(255)	NOT NULL	COMMENT '알람내용',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
 CREATE TABLE `inquiry` (
-	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 문의하기 키
-	`userEmail`	VARCHAR(30)	NOT NULL, -- 유저 이메일
-	`inquiryCategory`	VARCHAR(30)	NOT NULL, -- 문의 카태고리
-	`inquiryDetails`	text	NOT NULL, -- 문의 내용
-	`reportCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
-	`reportUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 키',
+	`userKey`	INT	NOT NULL	COMMENT '유저 키',
+	`Title`	VARCHAR(30)	NOT NULL	COMMENT '문의 제목',
+	`category`	VARCHAR(30)	NOT NULL	COMMENT '문의 주제',
+	`details`	TEXT	NOT NULL	COMMENT '문의 내용',
+	`image`	TEXT	NOT NULL	COMMENT '이미지 URL',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
 CREATE TABLE `inquiryResponse` (
-	`inquiryResponseKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL, -- 문의 답변
-	`adminId`	VARCHAR(30)	NOT NULL, -- 답변한 어드민 아이디
-	`inquiryKey`	INT	NOT NULL, -- 문의 키값 (어떤 문의에 대답했는지)
-	`inquiryResponseText`	text	NOT NULL, -- 답변 내용
-	`inquiryCreatedAt`	DATETIME	NOT NULL	DEFAULT NOW(),
-	`inquiryUpdatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+	`responseKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 답변 키',
+	`inquiryKey`	INT	NOT NULL	COMMENT '문의 키',
+	`adminKey`	INT	NOT NULL	COMMENT '어드민 키',
+	`Title`	VARCHAR(30)	NOT NULL	COMMENT '제목',
+	`responseText`	TEXT	NOT NULL	COMMENT '답변 내용',
+	`image`	TEXT	NOT NULL	COMMENT '이미지 URL',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
+
+CREATE TABLE `reply` (
+	`replyKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`commentKey`	INT	NOT NULL	COMMENT '댓글 키',
+	`replyreplyKey`	INT	NULL	COMMENT '대대댓글 일때 참조 키, 댓글과 대댓글 2명에게 알람을 가게 해야함 ex) 유튜브',
+	`userKey`	INT	NOT NULL	COMMENT '유저 키',
+	`reply`	VARCHAR(200)	NOT NULL	COMMENT '내용',
+	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'common'	COMMENT '"common","delete","disabled"',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE `banned` (
+	`bannedKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '정지 키',
+	`userKey`	INT	NOT NULL	COMMENT '유저 키',
+	`reason`	VARCHAR(50)	NOT NULL	COMMENT '정지 사유',
+	`reasonDate`	DATETIME	NOT NULL	DEFAULT NOW()	COMMENT '정지 날짜',
+	`date`	INT	NOT NULL	COMMENT '정지일수',
+	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'activate'	COMMENT '밴 상태 "activate","deactivate"',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE `managerLog` (
+	`managerLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '매니저 활동로그키',
+	`managerKey`	INT	NOT NULL	COMMENT '매니저 키',
+	`activityLog`	VARCHAR(255)	NOT NULL	COMMENT '활동 기록',
+	`referenceType`	VARCHAR(255)	NULL	COMMENT '참조 타입, 테이블 이름으로',
+	`referenceKey`	INT	NULL	COMMENT '참조 키',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE `channelRules` (
+	`channelRulesKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`channelKey`	INT	NOT NULL,
+	`title`	VARCHAR(30)	NOT NULL	COMMENT '채널 규칙 제목',
+	`content`	Text	NOT NULL	COMMENT '채널 규칙은 배열로 처리',
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
+);
+
+
+
+
+

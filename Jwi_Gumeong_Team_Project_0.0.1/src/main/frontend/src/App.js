@@ -10,9 +10,10 @@ import SignIn from './signIn/SignIn.js';
 import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import MyPage from './myPage/MyPage.js';
-import Search from './search/Search.js'
-import ChannelManagement from './channelManagement/ChannelManagement.js'
-import ImgUi from './imgModal/imgModal.js'
+import Search from './search/Search.js';
+import CustomerService from './customerService/CustomerServiceCenter.js';
+import ChannelManagement from './channelManagement/ChannelManagement.js';
+import ImgUi from './imgModal/imgModal.js';
 import { useSelector } from 'react-redux';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path='/pwInquiry' element={<PwInquiry/>}/>
             <Route path='/search' element={<Search page={1} search={1}/>}/>{/*채널 검색*/}
             <Route path='/channelManagement' element={<ChannelManagement/>}/>
+            <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
         </Routes>
         <Bottom/> {/* 하단 공통 부분 디자인 */}
         </div>

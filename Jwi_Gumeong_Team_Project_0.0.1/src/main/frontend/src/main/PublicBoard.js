@@ -34,7 +34,7 @@ function PublicBoard() {
     const [channel, setChannel] = useState('');
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useQuery('channel', () =>
-        axios.get(`/channelRest/search/123123`)
+        axios.get(`/channelAPI/search/0b33823ac81de48d5b78a38cdbc0ab94`)
             .then((response) => {
                 setChannel(response.data.content)
                 return response.data.content
@@ -93,7 +93,7 @@ function PublicBoard() {
 function ChannelTitle({ channel }) {
     let navigate = useNavigate();
     return (
-        <div onClick={()=>{navigate('/channel/123')}}>
+        <div onClick={()=>{navigate('/channel/0b33823ac81de48d5b78a38cdbc0ab94')}}>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
                 <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.channelName}</div>
             </div>
@@ -105,14 +105,44 @@ function ChannelTitle({ channel }) {
 function Comments() {
     let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off   
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
+    let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
+    let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
     const textareaRef = useRef(null); //
 
+
+    // 이모지 삽입 함수
+    const insertEmogiAtCursor = (emoji) => {
+        const textarea = textareaRef.current;
+        if (!textarea) return;
+
+        const start = textarea.selectionStart;//선택된 텍스트의 시작 위치 또는 커서의 위치
+        const end = textarea.selectionEnd;//선택된 텍스트의 마지막
+        const value = textarea.value;// textarea의 현재 값을 가져옴
+        
+        // 현재 커서 위치 기준으로 텍스트를 나누고 이모지 삽입
+        const newValue = value.slice(0, start) + emoji + value.slice(end);
+
+        // 텍스트를 업데이트하고 커서를 이모지 뒤에 위치시킴
+        textarea.value = newValue;
+        textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+        
+        // 커서 위치 유지
+        textarea.focus();
+    };
+
     const handleInput = (e) => {
-        const textareaHeight = textareaRef.current;//영역 제한
-        if (textareaHeight) {
-            textareaHeight.style.height = `${textareaHeight.scrollHeight}px`; // textarea영역 변동값
+        const textarea = textareaRef.current;
+        if (textarea) {
+            textarea.style.height = `${textarea.scrollHeight}px`;
         }
     };
+
+    useEffect(() => {
+        if (emogiAdd) {
+            insertEmogiAtCursor(emogiAdd);
+            setEmogiAdd(''); // 이모지 추가 후 초기화
+        }
+    }, [emogiAdd]);
 
     return (
         <div>
@@ -131,7 +161,7 @@ function Comments() {
                     />
                 <div className={styles.commentNav}>
                     <img onClick={()=>{EmojiOn == true ? setEmojiOn(false): setEmojiOn(true)}} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
-                    {EmojiOn && <Emogi/>}
+                    {EmojiOn && <Emogi setEmogiAdd={setEmogiAdd}/>}
                     <div>0/200<button>등록</button></div>
                 </div>
             </div>

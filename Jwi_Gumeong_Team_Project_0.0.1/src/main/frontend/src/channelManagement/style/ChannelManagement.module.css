@@ -19,13 +19,14 @@
 
 .createChannelTitle {
     /*채널 개설하기 부분 컨테이너*/
+    
+    cursor: pointer;
     display: flex;
     height: 32px;
 }
 
 .createChannelTitle img {
     /*채널 개설하기 이미지*/
-    background-color: red;
     height: 32px;
     width: 32px;
 }
