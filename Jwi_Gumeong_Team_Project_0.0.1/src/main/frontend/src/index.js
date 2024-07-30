@@ -15,11 +15,11 @@ const queryClient = new QueryClient();
 root.render(
 <QueryClientProvider client={queryClient}>
     <Provider store={store}>
-      <React.StrictMode>
+      
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </React.StrictMode>
+      
     </Provider>
   </QueryClientProvider>
 );

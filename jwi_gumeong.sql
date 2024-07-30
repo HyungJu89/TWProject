@@ -3,7 +3,6 @@ CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
 
-
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '유저키',
 	`email`	VARCHAR(50) UNIQUE	NOT NULL	COMMENT '이메일',
@@ -39,7 +38,7 @@ CREATE TABLE `post` (
 	`userKey`	INT	NOT NULL,
 	`channelKey`	INT	NOT NULL,
 	`content`	VARCHAR(300)	NOT NULL	COMMENT '게시글 내용',
-	`image`	TEXT	NOT NULL	DEFAULT ''	COMMENT '이미지 배열, 최대 4개',
+	`image`	TEXT	NOT NULL	COMMENT '이미지 배열, 최대 4개',
 	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'common'	COMMENT '"common","delete","disabled"',
 	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
 	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
@@ -120,7 +119,7 @@ CREATE TABLE `inquiry` (
 	`Title`	VARCHAR(30)	NOT NULL	COMMENT '문의 제목',
 	`category`	VARCHAR(30)	NOT NULL	COMMENT '문의 주제',
 	`details`	TEXT	NOT NULL	COMMENT '문의 내용',
-	`image`	TEXT	NOT NULL	DEFAULT ''	COMMENT '이미지 URL',
+	`image`	TEXT	NOT NULL	COMMENT '이미지 URL',
 	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
 	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
@@ -131,7 +130,7 @@ CREATE TABLE `inquiryResponse` (
 	`adminKey`	INT	NOT NULL	COMMENT '어드민 키',
 	`Title`	VARCHAR(30)	NOT NULL	COMMENT '제목',
 	`responseText`	TEXT	NOT NULL	COMMENT '답변 내용',
-	`image`	TEXT	NOT NULL	DEFAULT ''	COMMENT '이미지 URL',
+	`image`	TEXT	NOT NULL	COMMENT '이미지 URL',
 	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
 	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
@@ -172,10 +171,12 @@ CREATE TABLE `channelRules` (
 	`channelRulesKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`channelKey`	INT	NOT NULL,
 	`title`	VARCHAR(30)	NOT NULL	COMMENT '채널 규칙 제목',
-	`content`	Text	NOT NULL	DEFAULT ''	COMMENT '채널 규칙은 배열로 처리',
+	`content`	Text	NOT NULL	COMMENT '채널 규칙은 배열로 처리',
 	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
 	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
+
+
 
 
 

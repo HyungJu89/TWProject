@@ -34,7 +34,7 @@ function PublicBoard() {
     const [channel, setChannel] = useState('');
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useQuery('channel', () =>
-        axios.get(`/channelAPI/search/123123`)
+        axios.get(`/channelAPI/search/0b33823ac81de48d5b78a38cdbc0ab94`)
             .then((response) => {
                 setChannel(response.data.content)
                 return response.data.content
@@ -93,7 +93,7 @@ function PublicBoard() {
 function ChannelTitle({ channel }) {
     let navigate = useNavigate();
     return (
-        <div onClick={()=>{navigate('/channel/123')}}>
+        <div onClick={()=>{navigate('/channel/0b33823ac81de48d5b78a38cdbc0ab94')}}>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
                 <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.channelName}</div>
             </div>

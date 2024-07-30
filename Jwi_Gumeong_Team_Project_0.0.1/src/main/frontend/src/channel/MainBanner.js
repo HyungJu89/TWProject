@@ -9,15 +9,17 @@ import offBanner from '../icon/img/illustration02.png';
 import game from '../icon/20px/game.png';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { useChannel, useLiveInfo } from './ApiQuery.js';
+import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import LiveLink from './LiveLink.js'
 function MainBanner({  channelId , route }) {
-    let navigate = useNavigate();
+
+    
+    let navigate = useNavigate(); 
     // 첫 번째 쿼리: 채널 정보를 가져오기.
-    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
+    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId); 
     // 두 번째 쿼리: 라이브 정보 가져오기
     const { data: liveInfoApi, isLoading: isLoadingLiveInfo, isError: isErrorLiveInfo } = useLiveInfo(channelId);
-
+ 
     
     if (isLoadingLiveInfo || isLoadingChannel) {
         return <div>로딩중</div>;
