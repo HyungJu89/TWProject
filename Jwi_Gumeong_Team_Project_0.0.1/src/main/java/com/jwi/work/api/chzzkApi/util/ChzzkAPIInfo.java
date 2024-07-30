@@ -68,4 +68,5 @@ public class ChzzkAPIInfo {
 		
 		return channelInfo;
 	}
+	
 }
