@@ -2,9 +2,10 @@ import { useState } from 'react';
 import style from './style/CreateChannelNext.module.css'
 import '../App.css'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function CreateChannelNext({notice,channelInfo}) {
-
+    let navigate = useNavigate();
 
     const [buttonColor, setButtonColor] = useState('#BBBBBB');
     const [iconColor, setIconColor] = useState('#BBBBBB');
@@ -39,7 +40,7 @@ function CreateChannelNext({notice,channelInfo}) {
             };
             try{
                 let {data} = await axios.post(`/channel/create`, channelCreate);
-                navigator(data)
+                navigate(data)
             }catch (error){
             console.error('Error creating channel:', error);
             alert('채널 생성 중 오류가 발생했습니다. 다시 시도해 주세요.');
