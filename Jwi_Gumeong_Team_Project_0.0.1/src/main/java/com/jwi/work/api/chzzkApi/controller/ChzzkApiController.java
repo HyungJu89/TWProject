@@ -20,8 +20,7 @@ public class ChzzkApiController {
 		@GetMapping("/search/{channelId}")
 		public Object channelCreateRest(@PathVariable("channelId") String channelId) {
 
-			System.out.println(channelId);
-			return ChzzkApiService.chzzkChannelInfo("0b33823ac81de48d5b78a38cdbc0ab94");
+			return ChzzkApiService.chzzkChannelInfo(channelId);
 		}
 
 
@@ -29,8 +28,7 @@ public class ChzzkApiController {
 		
 		@GetMapping("/live/{channelId}")
 		public Object searchChanner(@PathVariable("channelId") String channelId) {
-			
-			return ChzzkApiService.chzzkLiveInfo("0b33823ac81de48d5b78a38cdbc0ab94");
+			return ChzzkApiService.chzzkLiveInfo(channelId);
 		}
 		
 	

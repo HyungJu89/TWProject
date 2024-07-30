@@ -23,8 +23,8 @@ public class ChannelCreateController {
 	}
 
 	@PostMapping("/create")
-	public String channelCreate(ChannelDto channelCreate) {
-
+	public String channelCreate(@RequestBody ChannelDto channelCreate) {
+		System.out.println(channelCreate);
 		return createChannelService.channelCreate(channelCreate);
 
 	}

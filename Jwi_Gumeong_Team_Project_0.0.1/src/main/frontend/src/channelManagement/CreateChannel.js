@@ -9,6 +9,7 @@ import axios from 'axios';
 function CreateChannel() {
 
     const [channelUrl, setChannelUrl] = useState();
+    const [channelInfo,setChannelInfo] = useState();
     const [sign, setSign] = useState(false);
     const [notice, setNotice] = useState(false);
     const [signText, setSignText] = useState('해당 스트리머의 게시판은 이미 존재합니다.');
@@ -34,8 +35,8 @@ function CreateChannel() {
             return;
         }
         try {
-
-            let { data } = await axios.get(`/channelAPI/search/${value}`);
+            // 추후 방송인의 간단한 정보를 띄울땐 이 data 를 사용하면된다
+            let { data } = await axios.get(`/channelAPI/search/${value}`); 
 
             if (data.content.channelId == null) {
                 setSignText('해당 스트리머는 존재하지 않습니다.')
@@ -51,16 +52,18 @@ function CreateChannel() {
 
             let channelCheck = await axios.post(`/channel/check`, value);
 
-            if (!channelCheck.data) {
+            if (channelCheck.data) {
+                setSignText('해당 스트리머의 게시판 개설이 가능합니다.');
+                setChannelUrl(value)
+                setSignColor('#FF8901');
+                setNotice(true);
+                setChannelInfo(data.content);
+            } else {
                 setSignText('해당 스트리머의 게시판은 이미 존재합니다.')
                 noticeFalse()
                 return
             }
 
-            setSignText('해당 스트리머의 게시판 개설이 가능합니다.');
-            setChannelUrl(value)
-            setSignColor('#FF8901');
-            setNotice(true);
 
         } catch {
             setSignText('서버 통신중 에러가 발생하였습니다 다시한번 시도해주세요.')
@@ -85,7 +88,7 @@ function CreateChannel() {
                 <div className={style.warningText} style={{ color: `${signColor}` }}>{signText}</div>/*URL 검토하고 가능유무 안내Text*/
             )}
             {notice && (
-                <CreateChannelNext />
+                <CreateChannelNext notice = {notice} channelInfo={channelInfo}/>
             )}
         </div>
 

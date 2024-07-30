@@ -9,7 +9,7 @@
     </select>
     
     <insert id="channelCreate" parameterType="map">
-    	INSERT INTO channel (id,name,imgeUrl,followerCount) value (#{id},#{name},#{imgeUrl},#{followerCount})
+    	INSERT INTO channel (id,name,imageUrl,followerCount) value (#{id},#{name},#{imageUrl},#{followerCount})
     </insert>
 
 </mapper>

@@ -1,22 +1,51 @@
 import { useState } from 'react';
 import style from './style/CreateChannelNext.module.css'
 import '../App.css'
+import axios from 'axios';
 
-function CreateChannelNext() {
+function CreateChannelNext({notice,channelInfo}) {
 
 
     const [buttonColor, setButtonColor] = useState('#BBBBBB');
-
+    const [iconColor, setIconColor] = useState('#BBBBBB');
     const [checkBoxIcon, setCheckBoxIcon] = useState(false);
 
     const onClickCheckBoxIcon = () => {
         if (checkBoxIcon) {
-            setButtonColor('#FF8901')
+            setIconColor('#BBBBBB')
             setCheckBoxIcon(false)
         } else { 
-            setButtonColor('#BBBBBB')
+            setIconColor('#FF8901')
             setCheckBoxIcon(true)
         }
+
+        notice && !checkBoxIcon ? setButtonColor('#FF8901') : setButtonColor('#BBBBBB')
+        
+    }
+
+
+    const onClickButton = async() => {
+        if(!checkBoxIcon){
+            alert("주의사항 숙지후 체크버튼을 눌러주세요")
+            return
+        }
+
+        if(notice && checkBoxIcon){
+            let channelCreate = {
+                id : channelInfo.channelId,
+                name : channelInfo.channelName,
+                imageUrl : channelInfo.channelImageUrl,
+                followerCount : channelInfo.followerCount
+            };
+            try{
+                let {data} = await axios.post(`/channel/create`, channelCreate);
+                navigator(data)
+            }catch (error){
+            console.error('Error creating channel:', error);
+            alert('채널 생성 중 오류가 발생했습니다. 다시 시도해 주세요.');
+            }
+        }
+
 
     }
 
@@ -35,9 +64,9 @@ function CreateChannelNext() {
             </div>
             <div className={style.bottom}>{/*하단 동의하기 체크*/}
                 <div className={style.bottomText}>위 내용을 동의 하십니까?</div>{/* 동의하기부분 text*/}
-                <div className={style.bottomCheckBox}><img src={checkBoxIcon} className={style.checkBoxIcon} onClick={onClickCheckBoxIcon} style={{ backgroundColor: buttonColor }} />위 주의사항을 숙지했으며 동의합니다.</div> {/*동의하기 체크박스*/}
+                <div className={style.bottomCheckBox}><img  className={style.checkBoxIcon} onClick={onClickCheckBoxIcon} style={{ backgroundColor: iconColor }} />위 주의사항을 숙지했으며 동의합니다.</div> {/*동의하기 체크박스*/}
             </div>
-            <div className={style.createButton} style={{ backgroundColor: '#BBBBBB' }} onClick={() => console.log('채널 개설중')}> {/*개설하기 버튼*/}
+            <div className={style.createButton} style={{ backgroundColor: buttonColor }} onClick={onClickButton}> {/*개설하기 버튼*/}
                 개설하기
             </div>
         </div>

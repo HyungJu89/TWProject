@@ -6,8 +6,11 @@ import lombok.Data;
 public class ChannelDto {
 
 	private String id;
+	
 	private String name;
+	
 	private String imageUrl;
-	private String followerCount;
+	
+	private int followerCount;
 	
 }
