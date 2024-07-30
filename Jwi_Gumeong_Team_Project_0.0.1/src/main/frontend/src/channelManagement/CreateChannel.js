@@ -1,10 +1,11 @@
 import style from './style/CreateChannel.module.css'
 import { useEffect, useRef, useState } from 'react';
 import CreateChannelNext from './CreateChannelNext.js';
-import { fetchChannel } from '../channel/Api.js'
+import { fetchChannel } from '../recycleCode/Api.js'
 import styleManagement from './style/Management.module.css';
 import '../App.css'
 import axios from 'axios';
+import { checkChannel } from '../recycleCode/axios.js';
 
 function CreateChannel() {
 
@@ -36,28 +37,27 @@ function CreateChannel() {
         }
         try {
             // 추후 방송인의 간단한 정보를 띄울땐 이 data 를 사용하면된다
-            let { data } = await axios.get(`/channelAPI/search/${value}`); 
-
-            if (data.content.channelId == null) {
+            let channelInfo = await fetchChannel(value); 
+            if (channelInfo.channelId == null) {
                 setSignText('해당 스트리머는 존재하지 않습니다.')
                 noticeFalse()
                 return;
             }
 
-            if (data.content.followerCount < limitefollowerCount) {
+            if (channelInfo.followerCount < limitefollowerCount) {
                 setSignText('해당 스트리머의 팔로우 수가 부족해 개설이 불가합니다. (최소 150명 필요)')
                 noticeFalse()
                 return;
             }
 
-            let channelCheck = await axios.post(`/channel/check`, value);
-
-            if (channelCheck.data) {
+            let data = await checkChannel(value)
+            
+            if (data) {
                 setSignText('해당 스트리머의 게시판 개설이 가능합니다.');
                 setChannelUrl(value)
                 setSignColor('#FF8901');
                 setNotice(true);
-                setChannelInfo(data.content);
+                setChannelInfo(channelInfo);
             } else {
                 setSignText('해당 스트리머의 게시판은 이미 존재합니다.')
                 noticeFalse()

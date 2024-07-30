@@ -15,11 +15,12 @@
     padding: 30px;
     width: 726px;
     background-color: #FFFFFF;
-    cursor: pointer;
 }
 
 .createChannelTitle {
     /*채널 개설하기 부분 컨테이너*/
+    
+    cursor: pointer;
     display: flex;
     height: 32px;
 }

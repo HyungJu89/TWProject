@@ -3,6 +3,7 @@ import style from './style/CreateChannelNext.module.css'
 import '../App.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { createChannel } from '../recycleCode/axios';
 
 function CreateChannelNext({notice,channelInfo}) {
     let navigate = useNavigate();
@@ -39,7 +40,7 @@ function CreateChannelNext({notice,channelInfo}) {
                 followerCount : channelInfo.followerCount
             };
             try{
-                let {data} = await axios.post(`/channel/create`, channelCreate);
+                let data = await createChannel(channelCreate);
                 navigate(data)
             }catch (error){
             console.error('Error creating channel:', error);

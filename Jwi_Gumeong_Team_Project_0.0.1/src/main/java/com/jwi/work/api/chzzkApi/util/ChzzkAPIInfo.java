@@ -33,8 +33,7 @@ public class ChzzkAPIInfo {
 		}
 							
 		Object channelInfo = restTemplate.getForObject(uri, Object.class); 	
-		System.out.println(API_URL);
-		System.out.println(channelInfo);
+
 		
 		return channelInfo;
 	}
@@ -63,8 +62,7 @@ public class ChzzkAPIInfo {
 		}
 							
 		Object channelInfo = restTemplate.getForObject(uri, Object.class); 	
-		System.out.println(API_URL);
-		System.out.println(channelInfo);
+
 		
 		return channelInfo;
 	}

@@ -15,6 +15,8 @@ public class CreateChannelService {
 	public boolean channelCheck(String channelId) {
 		// 채널 생성이 안되어있으면 true 가 리턴이 된다.
 		return channelMapper.channelCheck(channelId) == 0;
+		
+		
 
 	}
 

@@ -9,7 +9,7 @@ import offBanner from '../icon/img/illustration02.png';
 import game from '../icon/20px/game.png';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { useChannel, useLiveInfo } from './ApiQuery.js';
+import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import LiveLink from './LiveLink.js'
 function MainBanner({  channelId , route }) {
 

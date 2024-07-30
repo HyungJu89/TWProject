@@ -4,7 +4,7 @@ import axios from 'axios';
 import '../App.css'
 import BookmarkButton from './BookmarkButton.js';
 import announcement from '../icon/20px/announcement.png';
-import { useChannel } from './ApiQuery.js';
+import { useChannel } from '../recycleCode/ApiQuery.js';
 import { useQuery } from 'react-query';
 import { useState } from 'react';
 
