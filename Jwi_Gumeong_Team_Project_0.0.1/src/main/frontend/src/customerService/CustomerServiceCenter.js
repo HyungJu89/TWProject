@@ -11,57 +11,57 @@ function CustomerServiceCenter() {
     let [tab, setTab] = useState(0);
     const sanctions = [
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         },
         {
-            date: "~ 9999.12.12까지",
+            date: "9999.12.12",
             title: "재열님은 댓글달기 정지 30일을 받았어요.",
             reason: "욕설, 악의적인 주도, 선동"
         }
@@ -130,7 +130,7 @@ function CustomerServiceCenter() {
                                             <div className={styles.sanctionTitle}>{sanction.title}</div>
                                             <div className={styles.sanctionContent}>
                                                 <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
-                                                <div className={styles.sanctionDate}>{sanction.date}</div>
+                                                <div className={styles.sanctionDate}>~ {sanction.date} 까지</div>
                                             </div>
                                         </div>
                                         {index < currentSanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
@@ -138,11 +138,11 @@ function CustomerServiceCenter() {
                                 ))}
                             </div>
                             <div className={styles.pagination}>
-                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pageButton}>
+                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
                                     <img src={btnLeft} alt="Previous Page" />
                                 </button>
                                 <span className={styles.pageInfo}>{currentPage} / {Math.ceil(sanctions.length / sanctionsPerPage)}</span>
-                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sanctionsPerPage)} className={styles.pageButton}>
+                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sanctionsPerPage)} className={styles.pageNextButton}>
                                     <img src={btnRight} alt="Next Page" />
                                 </button>
                             </div>

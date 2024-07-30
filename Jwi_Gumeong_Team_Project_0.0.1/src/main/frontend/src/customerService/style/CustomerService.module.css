@@ -164,13 +164,16 @@
     margin-right: 10px;
 }
 
+/* 제제내역 상세 */
 .sanctionDetails {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 726px;
     flex: 1;
 }
 
+/* 몇일 정지인지 */
 .sanctionTitle {
     font-size: 16px;
     font-weight: 700;
@@ -180,21 +183,22 @@
 .sanctionContent {
     width: 100%;
     display: flex;
+    justify-content: space-between;
 }
 
+/* 신고 내용 */
 .sanctionSubtitle {
     font-size: 15px;
     font-weight: 400;
     color: #999999;
-    width: 505px;
 }
 
+/* 제제 날짜 (~yyyy.mm.dd까지) */
 .sanctionDate {
     font-size: 15px;
     font-weight: 400;
     color: #999999;
     text-align: right;
-    width: 119px;
 }
 
 .sanctionDivider {
@@ -210,14 +214,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
-    gap: 10px;
+    margin: 14px;
 }
 
-.pageButton {
+.pagePreButton {
     border: none;
     background-color: transparent;
     cursor: pointer;
+    margin-right: 84px;
+}
+
+.pageNextButton {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    margin-left: 84px;
 }
 
 .pageInfo {
