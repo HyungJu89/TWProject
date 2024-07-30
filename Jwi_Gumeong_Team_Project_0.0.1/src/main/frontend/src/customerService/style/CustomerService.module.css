@@ -85,6 +85,7 @@
 
 .serviceTabContent {
     width: 100%;
+    margin-top: 11px;
 }
 
 .serviceTitle {
@@ -92,6 +93,182 @@
     font-weight: 500;
     line-height: 20.03px;
     text-align: left;
+}
+
+/* FAQ */
+.faqContainer {
+    background-color: #FFFFFF;
+    margin-top: 11px;
+    width: 100%;
+    border-radius: 20px;
+}
+
+.faqTitle {
+    padding: 36px;
+    margin-left: 32px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #101010;
+}
+
+.faqItem {
+    display: flex;
+    padding: 20px;
+    border-radius: 20px;
+    align-items: center;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+
+}
+
+.faqQuestion {
+    font-size: 16px;
+    font-weight: 500;
+    color: #101010;
+}
+
+/* 문의하기 */
+.inqContainer {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    margin-top: 11px;
+    padding: 20px;
+}
+
+.inyHeader {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 500;
+    padding: 10px;
+}
+
+.inqIcon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+
+.inqDivider {
+    width: 726px;
+    height: 1px;
+    background-color: #F3F3F3;
+    margin: 10px 0;
+}
+
+.inqForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin:0 10px 0 10px;
+}
+
+.inqField {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+}
+
+.inqField label {
+    font-weight: 500;
+    font-size: 16px;
+    color: #101010;
+}
+
+/* 문의 내용 선택 창 */
+.inqSelect {
+    padding: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #FF8901;
+    width: 106px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: absolute;
+    width: 106px;
+    border: 1px solid #F3F3F3;
+    background-color: white;
+    transform: translateX(45%) translateY(55%);
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    box-shadow: 0px 2px 3.9px 0px #00000080;
+
+}
+
+.dropdownItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 31px;
+}
+
+.dropdownItem:hover {
+    width: 106px;
+    background-color: #F3F3F3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0px;
+}
+
+.inqInput,
+.inqTextarea {
+    border: none;
+}
+
+.inqInput {
+    width:683.77px;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.inqTextarea {
+    width: 100%;
+    resize: none;
+    font-weight: 500;
+    font-size: 15px;
+    height: 309px;
+}
+
+.fileUpload {
+    width: 138px;
+    height: 138px;
+    border: 1px solid #E3E3E3;
+    background-color: #E3E3E3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 0px;
+}
+
+/* 문의넣기 버튼 구간 */
+.submitButtonContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.submitButton {
+    background-color: #BBBBBB;
+    color: #FFFFFF;
+    width: 100%;
+    height: 60px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 40px 0 50px 0;
 }
 
 /* 문의 내역 */
@@ -105,7 +282,7 @@
 .inquiryItem {
     display: flex;
     padding: 30px;
-    border-radius: 10px;
+    border-radius: 20px;
     align-items: center;
     background-color: #ffffff;
 }
@@ -123,12 +300,14 @@
     height: 50px;
 }
 
+/* 문의 답변 */
 .inquiryTitle {
     font-size: 16px;
     font-weight: 700;
     color: #101010;
 }
 
+/* 문의 제목 */
 .inquirySubtitle {
     font-size: 15px;
     font-weight: 400;
@@ -144,11 +323,13 @@
     padding: 20px;
 }
 
+/* 제재 리스트 */
 .sanctionList {
     display: flex;
     flex-direction: column;
 }
 
+/* 아이콘 포함 내용 */
 .sanctionItem {
     display: flex;
     padding: 30px;

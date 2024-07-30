@@ -6,6 +6,8 @@ import reply from '../icon/img/reply-ing.png';
 import report from '../icon/img/report-ing.png';
 import btnLeft from '../icon/btn/btn-left.png';
 import btnRight from '../icon/btn/btn-right.png';
+import inquireIcon from '../icon/32px/inquire.png';
+import addIcon from '../icon/40px/add.png';
 
 function CustomerServiceCenter() {
     let [tab, setTab] = useState(0);
@@ -67,24 +69,73 @@ function CustomerServiceCenter() {
         }
     ];
     let [currentPage, setCurrentPage] = useState(1);
+    let [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    let [selectedOption, setSelectedOption] = useState("선택하세요");
     const sanctionsPerPage = 10;
     const indexOfLastSanction = currentPage * sanctionsPerPage;
     const indexOfFirstSanction = indexOfLastSanction - sanctionsPerPage;
     const currentSanctions = sanctions.slice(indexOfFirstSanction, indexOfLastSanction);
 
+    const handleOptionSelect = (option) => {
+        setSelectedOption(option);
+        setIsDropdownOpen(false);
+    };
+
     const renderTabContent = () => {
         switch (tab) {
             case 0:
                 return (
-                    <div>
-                        <div className={styles.serviceTitle}>자주묻는 질문</div>
+                    <div className={styles.faqContainer}>
+                        <div className={styles.faqTitle}>자주 묻는 질문</div>
+                        {[...Array(10)].map((_, index) => (
+                            <div key={index} className={styles.faqItem}>
+                                <div className={styles.faqQuestion}>자주 묻는 질문 {index + 1}</div>
+                            </div>
+                        ))}
                     </div>
                 );
             case 1:
                 return (
                     <div>
-                        <h2>문의하기</h2>
-                        <div>문의</div>
+                        <div className={styles.inqContainer}>
+                            <div className={styles.inyHeader}>
+                                <img src={inquireIcon} className={styles.inqIcon} alt="문의하기 아이콘" />
+                                <span>문의하기</span>
+                            </div>
+                            <div className={styles.inqDivider}></div>
+                            <div className={styles.inqForm}>
+                                <div className={styles.inqField}>
+                                    <label>문의 종류</label>
+                                    <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className={styles.inqSelect}>
+                                        {selectedOption}
+                                    </div>
+                                    {isDropdownOpen && (
+                                        <ul className={styles.dropdown}>
+                                            {["시스템 관련", "오류", "이용 제한", "요청", "도용.보안", "권리 보호", "계정 관리"].map((option, index) => (
+                                                <div key={index} className={styles.dropdownItem} onClick={() => handleOptionSelect(option)}>
+                                                    {option}
+                                                </div>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                                <div className={styles.inqField}>
+                                    <label>제목: </label>
+                                    <input type="text" placeholder="문의 제목을 입력하세요." className={styles.inqInput} />
+                                </div>
+                                <div className={styles.inqField}>
+                                    <textarea className={styles.inqTextarea} placeholder="문의 내용을 입력하세요.&#13;&#13;내용 중 욕설, 비판, 악의적인 글, 악의적인 신고 등은 역제제 당할 수 있습니다. 올바른 문의 내용을 입력해주시기 바랍니다."></textarea>
+                                </div>
+                                <div className={styles.inqField}>
+                                    <div className={styles.fileUpload}>
+                                        <img src={addIcon} alt="추가 아이콘" className={styles.uploadIcon} />
+                                    </div>
+                                </div>
+                                <div className={styles.submitButtonContainer}>
+                                    <button className={styles.submitButton}>문의 넣기</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 );
             case 2:
