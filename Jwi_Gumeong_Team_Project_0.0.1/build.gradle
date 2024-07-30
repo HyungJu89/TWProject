@@ -33,6 +33,7 @@ sourceSets {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'
@@ -43,8 +44,12 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+<<<<<<< HEAD
 	implementation group: 'org.glassfish.web', name: 'jakarta.servlet.jsp.jstl', version: '2.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+=======
+	
+>>>>>>> d4f7a025720be3378a023dbb28a7eac7dc105e4b
 }
 
 

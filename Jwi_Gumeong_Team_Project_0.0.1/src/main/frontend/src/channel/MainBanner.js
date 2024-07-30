@@ -17,6 +17,8 @@ function MainBanner({  channelId , route }) {
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
     // 두 번째 쿼리: 라이브 정보 가져오기
     const { data: liveInfoApi, isLoading: isLoadingLiveInfo, isError: isErrorLiveInfo } = useLiveInfo(channelId);
+
+    
     if (isLoadingLiveInfo || isLoadingChannel) {
         return <div>로딩중</div>;
     }

@@ -8,6 +8,7 @@ import { useQuery } from 'react-query';
 import PublicBoard from '../main/PublicBoard.js';
 import Paging from '../Paging/Paging.js'
 import axios from 'axios';
+import BookmarkButton from '../channel/BookmarkButton.js'
 
 //즐겨찾기 관리페이지
 function FavoritesManagement() {
@@ -62,68 +63,11 @@ function FavoritesManagement() {
                         <div className={styles.markCount}> 10000만</div>
                     </div>
                 </div>
-                <div className={styles.bookMark}><img src={Star}/><div className={styles.text}>즐겨찾기 중</div> </div>
+                <div className={styles.bookMark}>
+                <BookmarkButton/>
+                </div>
             </div>
             <hr className={styles.horizontalLine} />
-            <div className={styles.formGroup}>
-                <img src={List} />
-                <ChannelTitle channel={channel} />
-                <div className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
-                    <div className={styles.channelName}>{channel.channelName}</div>
-                    <div className={styles.follower}>
-                        <div className={styles.markText}>팔로워</div>
-                        <div className={styles.markCount}> {formatUnit(channelApi.followerCount)}</div>
-                        <div className={styles.markText}>즐겨찾기</div>
-                        <div className={styles.markCount}> 10000만</div>
-                    </div>
-                </div>
-                <div className={styles.bookMark}><img src={Star}/><div className={styles.text}>즐겨찾기 중</div> </div>
-            </div>
-            <hr className={styles.horizontalLine} />
-            <div className={styles.formGroup}>
-                <img src={List} />
-                <ChannelTitle channel={channel} />
-                <div className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
-                    <div className={styles.channelName}>{channel.channelName}</div>
-                    <div className={styles.follower}>
-                        <div className={styles.markText}>팔로워</div>
-                        <div className={styles.markCount}> {formatUnit(channelApi.followerCount)}</div>
-                        <div className={styles.markText}>즐겨찾기</div>
-                        <div className={styles.markCount}> 10000만</div>
-                    </div>
-                </div>
-                <div className={styles.bookMark}><img src={Star}/><div className={styles.text}>즐겨찾기 중</div> </div>
-            </div>
-            <hr className={styles.horizontalLine} />
-            <div className={styles.formGroup}>
-                <img src={List} />
-                <ChannelTitle channel={channel} />
-                <div className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
-                    <div className={styles.channelName}>{channel.channelName}</div>
-                    <div className={styles.follower}>
-                        <div className={styles.markText}>팔로워</div>
-                        <div className={styles.markCount}> {formatUnit(channelApi.followerCount)}</div>
-                        <div className={styles.markText}>즐겨찾기</div>
-                        <div className={styles.markCount}> 10000만</div>
-                    </div>
-                </div>
-                <div className={styles.bookMark}><img src={Star}/><div className={styles.text}>즐겨찾기 중</div> </div>
-            </div>
-            <hr className={styles.horizontalLine} />
-            <div className={styles.formGroup}>
-                <img src={List} />
-                <ChannelTitle channel={channel} />
-                <div className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
-                    <div className={styles.channelName}>{channel.channelName}</div>
-                    <div className={styles.follower}>
-                        <div className={styles.markText}>팔로워</div>
-                        <div className={styles.markCount}> {formatUnit(channelApi.followerCount)}</div>
-                        <div className={styles.markText}>즐겨찾기</div>
-                        <div className={styles.markCount}> 10000만</div>
-                    </div>
-                </div>
-                <div className={styles.bookMark}><img src={Star}/><div className={styles.text}>즐겨찾기 중</div> </div>
-            </div>
             <div className={styles.Paging}>
                 <div className={styles.PagingNum} style={{marginTop : '30px'}}><img src={Left}/><div>1/5</div><img src={Right}/></div>
             </div>

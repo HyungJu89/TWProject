@@ -42,12 +42,12 @@
 .formGroup .bookMark{
     width: 123px;
     height: 38px;
-    padding: 4px 8px 4px 8px;
     border-radius: 83px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #E5E5E5;
+    cursor: pointer;
+    /* background-color: #E5E5E5; */
 }
 .formGroup .bookMark img{
   width: 20px;
@@ -64,7 +64,7 @@
 
 .horizontalLine {
     border-top: 1px solid #F3F3F3; /* 원하는 색상과 두께로 변경 */
-    margin: 26px
+    margin: 26px 0px;
 }
 
 .PagingNum{

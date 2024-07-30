@@ -10,7 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 @Configuration
-@MapperScan(basePackages = "com.jwi.work.mapper") // interface(mapper)가 있는 패키지 경로
+@MapperScan(basePackages = {"com.jwi.work.mapper","com.jwi.work.user.mapper"}) // interface(mapper)가 있는 패키지 경로
 //root-context.xml 경로 짜주는 애
 public class DatabaseConfig {
 	@Bean
@@ -24,4 +24,4 @@ public class DatabaseConfig {
 	
 
 	
-}
+} 

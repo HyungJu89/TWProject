@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jwi.work.mapper.UserMapper">
-
-    	<!-- 회원가입 db에 넣기 -->
-	<insert id="signUp" parameterType="com.jwi.work.dto.userDto.UserDto">
-		INSERT INTO user (userEmail,userPw,userName,userGender,userAge) 
-		values (#{userEmail}, #{userPw},#{userName}, #{userGender}, #{userAge})
-	</insert>
-	
-	<select id="userCheck"  parameterType="com.jwi.work.dto.userDto.UserDto" resultType="int">
-        select count(*) from user where userEmail = #{userEmail} and userPw = #{userPw} 
+<mapper namespace="com.jwi.work.user.mapper.UserMapper">
+    
+    
+    <select id="register" parameterType="com.jwi.work.user.dto.User">
+    	INSERT INTO user (email,pw,nickName,gender)value(#{email},#{pw},#{nickName},#{gender})
     </select>
-	
+
 </mapper>
