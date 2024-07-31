@@ -2,11 +2,7 @@ import axios from "axios";
 
 export const checkChannel = async (channelId) => {
     try {
-        const { data } = await axios.post(`/channel/check`, channelId, {
-            headers: {
-                'Content-Type': 'text/plain'
-            }
-        });
+        const { data } = await axios.post(`/channel/check`, {"channelId" : channelId});
         return data;
     } catch (error) {
         console.error('Channel API Error:', error);

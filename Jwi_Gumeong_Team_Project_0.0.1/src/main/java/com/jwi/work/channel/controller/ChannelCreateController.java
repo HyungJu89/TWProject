@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.channel.dto.ChannelDto;
+import com.jwi.work.channel.dto.ChannelIdDto;
 import com.jwi.work.channel.service.CreateChannelService;
 
 @RestController
@@ -17,14 +18,15 @@ public class ChannelCreateController {
 	private CreateChannelService createChannelService;
 
 	@PostMapping("/check")
-	public boolean channelCheck(@RequestBody String channelId) {
-		return createChannelService.channelCheck(channelId);
+	public boolean channelCheck(@RequestBody ChannelIdDto channelId) {
+		
+		return createChannelService.channelCheck(channelId.getChannelId());
 
 	}
 
 	@PostMapping("/create")
 	public String channelCreate(@RequestBody ChannelDto channelCreate) {
-		System.out.println(channelCreate);
+		
 		return createChannelService.channelCreate(channelCreate);
 
 	}
