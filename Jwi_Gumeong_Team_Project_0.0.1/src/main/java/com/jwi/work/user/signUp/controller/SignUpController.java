@@ -35,4 +35,3 @@ public class SignUpController {
     	return signUpService.nickNameTest(nickName);
     }
 }
-	

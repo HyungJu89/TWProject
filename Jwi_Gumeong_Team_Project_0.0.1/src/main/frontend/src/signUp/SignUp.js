@@ -29,8 +29,8 @@ function SignUp() {
 function Agree({ setAgreeCheck }) {
     const [isButtonActive, setIsButtonActive] = useState(false);
     const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
-    const [selectedOption, setSelectedOption] = useState(true);
-    const [selectedOption2, setSelectedOption2] = useState(true);
+    const [selectedOption, setSelectedOption] = useState(false);
+    const [selectedOption2, setSelectedOption2] = useState(false);
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value === 'true');
@@ -46,6 +46,9 @@ function Agree({ setAgreeCheck }) {
             setIsButtonActive(false);
         }
     }, [selectedOption, selectedOption2]);
+    useEffect(()=>{
+        alert('★이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!')
+    },[])
     return (
         <div className={styles.joinContainer}>
             <div className={styles.topFont}>회원가입</div>
@@ -140,6 +143,8 @@ function Join() {
     //비밀번호 관련 state
     const [password, setPassword] = useState('');
     const [passwordCheck, setpasswordCheck] = useState('');
+    const [passwordWarning, setpasswordWarning] = useState('');
+    const [passwordWarning2, setpasswordWarning2] = useState('');
     const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
     const [showPasswordCheck, setShowPasswordCheck] = useState(false); //비밀번호 보임,안보임 state
 
@@ -150,16 +155,20 @@ function Join() {
 
     //잡다 state
     const [gender, setGender] = useState('비밀');
-    const [certification, setCertification] = useState('');
+    const [certification, setCertification] = useState(''); 
     const [userInput, setUserInput] = useState(0);
     const [isButtonActive, setIsButtonActive] = useState(false);
     let navigate = useNavigate();
 
     //이메일 비밀번호 유효성 검사
     const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
-    const passwordRegEx = /^[A-Za-z0-9]{8,20}$/
+    //닉네임 유효성 검사
     const nickNameRegEx = /^[A-Za-z0-9\uAC00-\uD7A3]{2,8}$/;
-
+    //비밀번호 유효성 검사
+    const passwordRegEx = /^[A-Za-z0-9!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]{8,20}$/;
+    const numberRegEx = /[0-9]/;
+    const specialCharRegEx = /[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]/;
+    const letterRegEx = /[A-Za-z]/;
     //이메일 유효성 검사로직
     const emailChecks = (email) => {
         if (emailRegEx.test(email)) {
@@ -169,6 +178,22 @@ function Join() {
             return false;
         }
     }
+    //비밀번호 유효성 검사로직
+    const PasswordCheck = (password) => {
+        setpasswordWarning2('');
+        if (!passwordRegEx.test(password)) {
+          setpasswordWarning2('비밀번호는 8자 이상 20자 이하이어야 합니다.');
+        }
+        if (!numberRegEx.test(password)) {
+            setpasswordWarning2('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.');
+        }
+        if (!specialCharRegEx.test(password)) {
+            setpasswordWarning2('비밀번호는 적어도 하나의 특수 문자를 포함해야 합니다.');
+        }
+        if (!letterRegEx.test(password)) {
+            setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
+        }
+      };
     //닉네임 유효성 검사로직
     const nickNameChecks = (nickName) => {
         if (nickNameRegEx.test(nickName)) {
@@ -178,7 +203,8 @@ function Join() {
             return false;
         }
     }
-
+    //이메일 인증 로직
+    
 
     const handleGenderChange = (event) => {
         setGender(event.target.value);
@@ -207,7 +233,14 @@ function Join() {
          else {
             setIsButtonActive(false);
         }
-    }, [email, password]);
+        if(password !== passwordCheck){
+            setpasswordWarning('재확인 비밀번호와 비밀번호가 일치하지 않습니다.');
+        }
+        if(password == passwordCheck){
+            setpasswordWarning('');
+        }
+        PasswordCheck(password)  
+    }, [email, password,passwordCheck]);
 
     useEffect(()=>{
     if(!nickNameChecks(nickName)){
@@ -231,18 +264,18 @@ function Join() {
     },[nickName])
 
 
-    //input에 넣는값으로 state바꿔주는 함수
+    //이메일 state input에 넣는값으로 state바꿔주는 함수
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
 
-    //input에 넣는값으로 state바꿔주는 함수
+    //비밀번호 state input에 넣는값으로 state바꿔주는 함수
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
 
 
-    //input에 넣는값으로 state바꿔주는 함수
+    //비밀번호 재확인 state input에 넣은값으로 바꿔주는 함수
     const handlepasswordCheckChange = (e) => {
         setpasswordCheck(e.target.value);
     };
@@ -261,20 +294,23 @@ function Join() {
 
     //이메일 중복검사 로직
     const emailTest = (userEmail) => {
-        axios.get('/signUp/emailTest', { params: { email: userEmail } }).then((response) => {
-            if(!response.data){
-                setEmailWarning('이미 사용한 이메일 입니다.');
-                setEmailCheck(response.data);
-            }else {
-                setEmailWarning('유효한 이메일입니다! 인증번호를 전송했습니다. 메일함에서 확인해주세요.');
-                setEmailCheck(response.data);
-            }
-        })
-        .catch(error => {
-            console.error('Channel API Error:', error);
-            throw error;
-        })
+        if(!email == ''){
+            axios.get('/signUp/emailTest', { params: { email: userEmail } }).then((response) => {
+                if(!response.data){
+                    setEmailWarning('이미 사용한 이메일 입니다.');
+                    setEmailCheck(response.data);
+                }else {
+                    setEmailWarning('유효한 이메일입니다! 인증번호를 전송했습니다. 메일함에서 확인해주세요.');
+                    setEmailCheck(response.data);
+                }
+            })
+            .catch(error => {
+                console.error('Channel API Error:', error);
+                throw error;
+            })
+        }
     }
+
 
     // POST 요청 보내는 함수 회원가입 버튼로직
     const handleSubmit = async () => {
@@ -369,16 +405,19 @@ function Join() {
                         placeholder="비밀번호를 입력하세요"
                         value={password}
                         onChange={handlePasswordChange}
-                        style={{ marginBottom: '60px' }}
+                        style={{ marginBottom: '10px' }}
                     />
                     <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} />
                 </div>
             </div>
+            {
+                passwordWarning2 == '' ? <div style={{ marginBottom: '50px' }}></div> : <div className={styles.emailWarn} style={{ marginBottom: '30px' }}>{passwordWarning2}</div>
+            }
             <div className={styles.formGroup}>
                 <p>비밀번호 재확인</p>
                 <div className={styles.inputWrapper}>
                     <input
-                        style={{ marginBottom: '60px' }}
+                        style={{ marginBottom: '10px' }}
                         type={showPasswordCheck ? "text" : "password"}
                         placeholder="비밀번호를 한번 더 입력하세요."
                         value={passwordCheck}
@@ -387,6 +426,9 @@ function Join() {
                     <img src={showPasswordCheck ? show : hide} className={styles.icon} onClick={toggleShowPasswordCheck} />
                 </div>
             </div>
+            {
+                passwordWarning == '' ? <div style={{ marginBottom: '50px' }}></div> : <div className={styles.emailWarn} style={{ marginBottom: '30px' }}>{passwordWarning}</div>
+            }
             <div className={styles.formGroup}>
                 <p>닉네임</p>
                 <div className={styles.inputWrapper}>
