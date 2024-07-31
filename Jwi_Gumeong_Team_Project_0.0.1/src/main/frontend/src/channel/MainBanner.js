@@ -22,10 +22,14 @@ function MainBanner({  channelId , route }) {
  
     
     if (isLoadingLiveInfo || isLoadingChannel) {
-        return <div>로딩중</div>;
+        return <div className={style.channelInfoBack}> {/*상단 이미지 배너 */}
+                <div className={style.gradinetMainBanner} style={{background:'#000000'}}></div>
+                </div>;
     }
     if (isErrorLiveInfo || isErrorChannel) {
-        return <div>에러남</div>;
+        return <div className={style.channelInfoBack}> {/*상단 이미지 배너 */}
+        <div className={style.gradinetMainBanner} style={{background:'#000000'}}>에러</div>
+        </div>;
     }
 
     return (
