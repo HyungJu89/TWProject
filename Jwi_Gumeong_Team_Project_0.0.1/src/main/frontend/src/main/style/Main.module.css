@@ -2,54 +2,6 @@
 .bannerPosition{
     position: relative;
 }
-.bannerPosition .liveDiv{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: absolute;
-    width: 1130px;
-    height: 98px;
-    top: 422px;
-    left: 50%;
-    transform: translate(-50%, -0%);
-    border-radius: 10px;
-}
-.bannerPosition .liveDiv .liveImg{
-    display: flex;
-    /* justify-content: space-between; */
-    gap: 0px 30px;
-    width: 990px;
-    overflow: hidden;
-}
-.bannerPosition .liveDiv .liveImg .box{
-    position: relative;
-    width: 174px;
-    height: 98px;
-}
-.bannerPosition .liveDiv .liveImg .box img{
-    position: absolute;
-    width: 174px;
-    height: 98px;
-    border-radius: 10px;
-}
-.bannerPosition .liveDiv .liveImg .box .liveRed{
-    position: absolute;
-    background-color: red;
-    margin: 4px 0px 0px 4px;
-    font-size: 10px;
-    font-weight: 700;
-    color: #FFFFFF;
-    display: flex;
-
-    width: 41px;
-    height: 15px;
-}
-.bannerPosition .liveDiv .liveImg .box .liveRed .pointer{
-    background-color: white;
-    margin: 6px 5px 6px 6px;
-    width: 3px;
-    height: 3px;
-}
 
 .basic {
     /* 전체  사이즈  제한*/

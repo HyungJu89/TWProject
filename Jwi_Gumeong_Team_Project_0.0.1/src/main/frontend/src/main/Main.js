@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styles from './style/Main.module.css';
 import '../App.css';
+import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
@@ -19,62 +20,40 @@ function Main() {
     let [loginOn, setLoginOn] = useState(false);
 
     const [channel, setChannel] = useState('');
-    const [partnersLive, setPartnersLive] = useState('');
+    const [partnersLive, setPartnersLive] = useState([]);
 
-    useEffect(()=>{ /*특정 URL 방송--대체예정*/
+    useEffect(() => { /*특정 URL 방송--대체예정*/
         axios.get(`/channelAPI/search/0b33823ac81de48d5b78a38cdbc0ab94`)
-        .then((response) => {
-            setChannel(response.data.content);
-        })
-        .catch(error => {
-            console.error('Channel API Error:', error);
-            throw error;
-        })
-    },[]);
+            .then((response) => {
+                setChannel(response.data.content);
+            })
+            .catch(error => {
+                console.error('Channel API Error:', error);
+                throw error;
+            })
+    }, []);
 
-    useEffect(()=>{ /*파트너스 Live*/
+    useEffect(() => { /*파트너스 Live*/
         axios.get(`/partnersLiveApi/`)
-        .then((response) => {
-            console.log(response.data.content.streamerPartners);
-            setPartnersLive(response.data.content.streamerPartners)
-        })
-        .catch(error => {
-            console.error('Channel API Error:', error);
-            throw error;
-        })
-    },[]);
-
+            .then((response) => {
+                console.log(response.data.content.streamerPartners);
+                setPartnersLive(response.data.content.streamerPartners)
+            })
+            .catch(error => {
+                console.error('Channel API Error:', error);
+                throw error;
+            })
+    }, []);
 
     return (
         <div>
             <div className={styles.bannerPosition}>
-                <MainBanner channelId={partnersLive[0]?.channelId ? partnersLive[0].channelId : '오류'} />
-                <div className={styles.liveDiv}>
-                    <img style={{ marginRight: '30px' }} src={chevron_left_w} />
-                    <div className={styles.liveImg}>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                    </div>
-                    <img style={{ marginLeft: '30px' }} src={chevron_right_w} />
-                </div>
+                <MainBanner channelId={partnersLive[0]?.channelId ? partnersLive[0].channelId : '오류'}
+                            channelIdSub1={partnersLive[1]?.channelId ? partnersLive[1].channelId : '오류'}
+                            channelIdSub2={partnersLive[2]?.channelId ? partnersLive[2].channelId : '오류'}
+                            channelIdSub3={partnersLive[3]?.channelId ? partnersLive[3].channelId : '오류'}
+                
+                />
             </div>
             <div className={styles.basic}> {/*전체 DIV*/}
                 <div className={styles.leftDiv}>{/*게시판 영역*/}
