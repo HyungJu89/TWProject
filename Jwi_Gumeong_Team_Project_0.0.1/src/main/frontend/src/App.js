@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { Routes, Route} from 'react-router-dom';
+import { Routes, Route, useNavigate} from 'react-router-dom';
 import Main from './main/Main.js'
 import AllTopic from './allTopic/AllTopic.js'
 import Header from './header/Header.js'
@@ -15,12 +15,24 @@ import CustomerService from './customerService/CustomerServiceCenter.js';
 import ChannelManagement from './channelManagement/ChannelManagement.js';
 import ImgUi from './imgModal/imgModal.js';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 function App() {
     let state = useSelector((state)=>{ return state })
+    //---------------------------------- 검색 부분
+    const navigate = useNavigate();
+
+    let [searchText,setSearchText] = useState('');
+
+    const onClickSearch= (text) => {
+        setSearchText(text)
+        navigate('/search')
+    }
+
+    //----------------------------------
     return (
         <div>
-        <Header/> {/* 상단 공통 부분 디자인 */}
+        <Header onClickSearch={onClickSearch}/> {/* 상단 공통 부분 디자인 */}
         {state.imgUiModal.popUp && <ImgUi/>}{/*이미지 팝업*/}
         <Routes>
             <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
@@ -30,7 +42,7 @@ function App() {
             <Route path='/signUp' element={<SignUp/>}/>
             <Route path='/myPage' element={<MyPage/>}/>
             <Route path='/pwInquiry' element={<PwInquiry/>}/>
-            <Route path='/search' element={<Search page={1} search={1}/>}/>{/*채널 검색*/}
+            <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
             <Route path='/channelManagement' element={<ChannelManagement/>}/>
             <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
         </Routes>

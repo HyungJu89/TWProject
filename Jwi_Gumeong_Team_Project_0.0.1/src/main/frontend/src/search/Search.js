@@ -5,15 +5,14 @@ import btnLeft from '../icon/btn/btn-left.png'
 import btnRight from '../icon/btn/btn-right.png'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-function Search() {
- 
+function Search({page , search}) {
 const [searchChannelList,setSearchChannelList] = useState([]);
 
 
 let navigate = useNavigate();
 //임시 변수
 let postTrue = true; 
-
+console.log(search)
 useEffect(()=>{
     //ajax 로 서버에서 글 리스트 요청
 
