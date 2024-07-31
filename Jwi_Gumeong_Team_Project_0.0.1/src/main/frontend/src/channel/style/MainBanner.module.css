@@ -69,7 +69,7 @@
 
 /*메인 라이브 배너용 코드추가*/
 .liveInfo .mainbannerDiv{
-    width: 250px;
+    width: 400px;
     display: flex;
     color: #E5E5E5;
     display: flex;
@@ -135,7 +135,7 @@
 .liveTitle {
     /* 방송 제목 */
     max-width: 500px;
-    height: 80px;
+    max-height: 80px;
     word-wrap: break-word;
     font-size: 32px;
     font-weight: 500;
