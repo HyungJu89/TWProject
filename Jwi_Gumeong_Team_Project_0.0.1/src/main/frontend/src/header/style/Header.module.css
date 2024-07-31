@@ -153,6 +153,7 @@ body{
     height: 20px;
 }
 
+/* ----------알림 영역---------- */
 /* 모달 CSS */
 .iconContainer {
     position: relative;
@@ -254,10 +255,6 @@ body{
     align-items: center;
     cursor: pointer;
 }
-/* 알림 내용 마우스 올렸을 때 */
-.notificationItem :hover {
-    text-decoration: underline;
-}
 
 /* 안 읽은 알림 */
 .notificationDot {
@@ -299,6 +296,15 @@ body{
     height: 15px;
     text-align: left;
     color: #999999;
+}
+
+/* 알림 내용 마우스 올렸을 때 */
+.applyContent:hover {
+    text-decoration: underline;
+}
+
+.applyId:hover {
+    text-decoration: underline;
 }
 
 /* 알림이 비어 있을 시 */
