@@ -48,7 +48,6 @@ function Main() {
     return (
         <div>
             <div className={styles.bannerPosition}>
-            {/* {data[0]?.no ? data[0].no :  <div>데이터 없슴ㅋㅋ</div>} */}
                 <MainBanner channelId={partnersLive[0]?.channelId ? partnersLive[0].channelId : '오류'} />
                 <div className={styles.liveDiv}>
                     <img style={{ marginRight: '30px' }} src={chevron_left_w} />
