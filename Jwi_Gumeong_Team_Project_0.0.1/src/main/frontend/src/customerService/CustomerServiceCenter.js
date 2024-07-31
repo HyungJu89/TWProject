@@ -68,17 +68,41 @@ function CustomerServiceCenter() {
             reason: "욕설, 악의적인 주도, 선동"
         }
     ];
+
+    const faqs = [
+        {
+            title: "우리 사이트는요?",
+            type: "시스템 관련",
+            content: "쥐구멍이란 사이트에요~"
+        },
+        {
+            title: "재열이는요?",
+            type: "시스템 관련",
+            content: "재열이에요~"
+        },
+        {
+            title: "형주는요?",
+            type: "시스템 관련",
+            content: "당근을 흔들어요~"
+        }
+    ];
+
     let [currentPage, setCurrentPage] = useState(1);
-    let [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    let [dropdownOpen, setDropdownOpen] = useState(false);
     let [selectedOption, setSelectedOption] = useState("선택하세요");
-    const sanctionsPerPage = 10;
-    const indexOfLastSanction = currentPage * sanctionsPerPage;
-    const indexOfFirstSanction = indexOfLastSanction - sanctionsPerPage;
+    let [faqContent, setFaqContent] = useState(null);
+    const sectionsPerPage = 10;
+    const indexOfLastSanction = currentPage * sectionsPerPage;
+    const indexOfFirstSanction = indexOfLastSanction - sectionsPerPage;
     const currentSanctions = sanctions.slice(indexOfFirstSanction, indexOfLastSanction);
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
-        setIsDropdownOpen(false);
+        setDropdownOpen(false);
+    };
+
+    const openedFaq = (idx) => {
+        setFaqContent(faqContent === idx ? null : idx);
     };
 
     const renderTabContent = () => {
@@ -86,10 +110,24 @@ function CustomerServiceCenter() {
             case 0:
                 return (
                     <div className={styles.faqContainer}>
-                        <div className={styles.faqTitle}>자주 묻는 질문</div>
-                        {[...Array(10)].map((_, index) => (
-                            <div key={index} className={styles.faqItem}>
-                                <div className={styles.faqQuestion}>자주 묻는 질문 {index + 1}</div>
+                        {faqs.map((faq, idx) => (
+                            <div key={idx} onClick={() => openedFaq(idx)} className={styles.faqItem}>
+                                <div className={styles.faqHeader}>
+                                    <img src={asking} className={styles.faqIcon} alt="답변 아이콘"/>
+                                    <div className={styles.faqDetails}>
+                                        <div className={styles.faqTitle}>{faq.title}</div>
+                                        <div className={styles.faqSubtitle}>{faq.type}</div>
+                                    </div>
+                                </div>
+                                {faqContent === idx && (
+                                    <div>
+                                        <div className={styles.faqDivider}></div>
+                                        <div className={styles.faqContent}>
+                                            {faq.image && <img src={faq.image} className={styles.faqContentImage} alt="FAQ 이미지" />}
+                                            <div className={styles.faqContentText}>{faq.content}</div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -106,10 +144,10 @@ function CustomerServiceCenter() {
                             <div className={styles.inqForm}>
                                 <div className={styles.inqField}>
                                     <label>문의 종류</label>
-                                    <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className={styles.inqSelect}>
+                                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
                                         {selectedOption}
                                     </div>
-                                    {isDropdownOpen && (
+                                    {dropdownOpen && (
                                         <ul className={styles.dropdown}>
                                             {["시스템 관련", "오류", "이용 제한", "요청", "도용.보안", "권리 보호", "계정 관리"].map((option, index) => (
                                                 <div key={index} className={styles.dropdownItem} onClick={() => handleOptionSelect(option)}>
@@ -192,8 +230,8 @@ function CustomerServiceCenter() {
                                 <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
                                     <img src={btnLeft} alt="Previous Page" />
                                 </button>
-                                <span className={styles.pageInfo}>{currentPage} / {Math.ceil(sanctions.length / sanctionsPerPage)}</span>
-                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sanctionsPerPage)} className={styles.pageNextButton}>
+                                <span className={styles.pageInfo}>{currentPage} / {Math.ceil(sanctions.length / sectionsPerPage)}</span>
+                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sectionsPerPage)} className={styles.pageNextButton}>
                                     <img src={btnRight} alt="Next Page" />
                                 </button>
                             </div>
