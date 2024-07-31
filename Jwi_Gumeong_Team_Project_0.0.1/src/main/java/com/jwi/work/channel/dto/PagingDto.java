@@ -8,6 +8,5 @@ public class PagingDto {
 	
 	private int offset;
 	private int limit;
-	
 
 }

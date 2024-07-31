@@ -17,6 +17,7 @@ public class ChzzkAPIInfo {
 		
 		try {
 			String encodedChanneId = URLEncoder.encode(channelId, "UTF-8");
+			
 			API_URL = API_URL + encodedChanneId;
 			
 			
