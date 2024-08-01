@@ -8,9 +8,13 @@ import { useNavigate } from 'react-router-dom';
 function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    //모든 정보가 입력되면 버튼 활성화
     const [isButtonActive, setIsButtonActive] = useState(false);
-    const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
+    //비밀번호 보임,안보임 state
+    const [showPassword, setShowPassword] = useState(false);
+    //로그인 유저정보 맞는지 대조하고 결과값 저장하는 state 
     const [loginCheck, setLoginCheck] = useState(false);
+    const [loginWarn, setLoginWarn] = useState('');
     let navigate = useNavigate();
     // 눈 아이콘 클릭시 바꾸게 설정하기
     const toggleShowPassword = () => {
@@ -19,9 +23,9 @@ function SignIn() {
     //엔터 키 다운 이벤트
     const handleEnter = (e) => {
         if (e.key === "Enter") {
-          handleLogin();
+        handleLogin();
         }
-      };
+    };
           // 로그인 버튼 클릭 핸들러
     const handleLogin = () => {
         if (loginCheck) {
@@ -31,6 +35,8 @@ function SignIn() {
             alert('이메일을 입력해주세요!');
         } else if (password === '') {
             alert('비밀번호를 입력해주세요!');
+        } else if(!loginCheck){
+            setLoginWarn('아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.')
         } else {
             alert('로그인 실패');
         }
@@ -90,6 +96,9 @@ function SignIn() {
                         <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} />
                     </div>
                 </div>
+                {
+                    loginWarn !== '' ? <div className={styles.warning} style={{marginTop : '40px' , marginBottom : '40px'}}>{loginWarn}</div> : <div style={{ marginBottom : '80px'}}></div> 
+                }
                 <button 
                 onClick={
                     () => {

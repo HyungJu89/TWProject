@@ -18,10 +18,12 @@
 	</select>
 	
 	<!-- 로그인 부분 -->
-	
+	<!-- 유저 정보체크 -->
 	<select id="loginCheck" resultType="int" parameterType="com.jwi.work.user.dto.User">
 		select count(*) from user where email=#{email} and pw=#{pw}
 	</select>
-
-
+	<!-- 벤 아이디 리스트 -->
+	<select id="banEmailList" resultType="String">
+		select email from user where state = 'deactivate'
+	</select>
 </mapper>	
