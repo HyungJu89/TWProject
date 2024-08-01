@@ -22,7 +22,7 @@ public class SignUpController {
     @PostMapping("/register")
     public void getUsersInfo(@RequestBody User userData) {
     	signUpService.saveUser(userData);
-    }
+    }	
     //이메일 중복검사 로직
     @GetMapping("/emailTest")
     public boolean emailTest(@RequestParam("email") String email) {
