@@ -7,7 +7,17 @@ spring:
     url: jdbc:mysql://localhost:3306/jwi?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: root
-    
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: gimhyeongju89@gmail.com
+    password: xoihtkkzsybdmgty
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true    
         
   jpa:
     hibernate:

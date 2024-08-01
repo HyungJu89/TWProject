@@ -19,29 +19,36 @@ function Main() {
     let [loginOn, setLoginOn] = useState(false);
 
     const [channel, setChannel] = useState('');
-    // 첫 번째 쿼리: 채널 정보를 가져오기.
-    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useQuery('channel', () =>
-        axios.get(`/channelAPI/search/123123`)
-            .then((response) => {
-                setChannel(response.data.content)
-                return response.data.content
-            })
-            .catch(error => {
-                console.error('Channel API Error:', error);
-                throw error;
-            }),
-    );
-    if (isLoadingChannel) {
-        return <div>로딩중</div>;
-    }
-    if (isErrorChannel) {
-        return <div>에러남</div>;
-    }
+    const [partnersLive, setPartnersLive] = useState('');
+
+    useEffect(()=>{ /*특정 URL 방송--대체예정*/
+        axios.get(`/channelAPI/search/0b33823ac81de48d5b78a38cdbc0ab94`)
+        .then((response) => {
+            setChannel(response.data.content);
+        })
+        .catch(error => {
+            console.error('Channel API Error:', error);
+            throw error;
+        })
+    },[]);
+
+    useEffect(()=>{ /*파트너스 Live*/
+        axios.get(`/partnersLiveApi/`)
+        .then((response) => {
+            console.log(response.data.content.streamerPartners);
+            setPartnersLive(response.data.content.streamerPartners)
+        })
+        .catch(error => {
+            console.error('Channel API Error:', error);
+            throw error;
+        })
+    },[]);
+
 
     return (
         <div>
             <div className={styles.bannerPosition}>
-                <MainBanner channelId={123} />
+                <MainBanner channelId={partnersLive[0]?.channelId ? partnersLive[0].channelId : '오류'} />
                 <div className={styles.liveDiv}>
                     <img style={{ marginRight: '30px' }} src={chevron_left_w} />
                     <div className={styles.liveImg}>

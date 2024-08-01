@@ -29,8 +29,8 @@ function SignUp() {
 function Agree({ setAgreeCheck }) {
     const [isButtonActive, setIsButtonActive] = useState(false);
     const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
-    const [selectedOption, setSelectedOption] = useState(true);
-    const [selectedOption2, setSelectedOption2] = useState(true);
+    const [selectedOption, setSelectedOption] = useState(false);
+    const [selectedOption2, setSelectedOption2] = useState(false);
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value === 'true');
@@ -46,6 +46,9 @@ function Agree({ setAgreeCheck }) {
             setIsButtonActive(false);
         }
     }, [selectedOption, selectedOption2]);
+    useEffect(()=>{
+        alert('★이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!')
+    },[])
     return (
         <div className={styles.joinContainer}>
             <div className={styles.topFont}>회원가입</div>
@@ -132,24 +135,82 @@ function Agree({ setAgreeCheck }) {
 //회원가입 페이지
 
 function Join() {
-    //유저입력 state
+    //email 관련 state
     const [email, setEmail] = useState('');
-    const [emailCheck, setEmailCheck] = useState('');
+    const [emailWarning, setEmailWarning] = useState('');
+    const [emailCheck, setEmailCheck] = useState(false);
+
+    //비밀번호 관련 state
     const [password, setPassword] = useState('');
     const [passwordCheck, setpasswordCheck] = useState('');
-    const [nickname, setNickname] = useState('');
-    const [gender, setGender] = useState('');
-    const [certification, setCertification] = useState('인증번호');
-    const [userInput, setUserInput] = useState(0);
-
-    const [isButtonActive, setIsButtonActive] = useState(false);
+    const [passwordWarning, setpasswordWarning] = useState('');
+    const [passwordWarning2, setpasswordWarning2] = useState('');
     const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
     const [showPasswordCheck, setShowPasswordCheck] = useState(false); //비밀번호 보임,안보임 state
+
+    //닉네임 관련 state
+    const [nickName, setNickname] = useState('');
+    const [nickNameWarning, setNickNameWarning] = useState('');
+    const [nickNameCheck, setNickNameCheck] = useState(false);
+
+    //잡다 state
+    const [gender, setGender] = useState('비밀');
+    const [certification, setCertification] = useState(''); 
+    const [userInput, setUserInput] = useState(0);
+    const [isButtonActive, setIsButtonActive] = useState(false);
     let navigate = useNavigate();
-    // 눈 아이콘 클릭시 바꾸게 설정하기
+
+    //이메일 비밀번호 유효성 검사
+    const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
+    //닉네임 유효성 검사
+    const nickNameRegEx = /^[A-Za-z0-9\uAC00-\uD7A3]{2,8}$/;
+    //비밀번호 유효성 검사
+    const passwordRegEx = /^[A-Za-z0-9!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]{8,20}$/;
+    const numberRegEx = /[0-9]/;
+    const specialCharRegEx = /[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]/;
+    const letterRegEx = /[A-Za-z]/;
+    //이메일 유효성 검사로직
+    const emailChecks = (email) => {
+        if (emailRegEx.test(email)) {
+            setEmailWarning('');
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //비밀번호 유효성 검사로직
+    const PasswordCheck = (password) => {
+        setpasswordWarning2('');
+        if (!passwordRegEx.test(password)) {
+          setpasswordWarning2('비밀번호는 8자 이상 20자 이하이어야 합니다.');
+        }
+        if (!numberRegEx.test(password)) {
+            setpasswordWarning2('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.');
+        }
+        if (!specialCharRegEx.test(password)) {
+            setpasswordWarning2('비밀번호는 적어도 하나의 특수 문자를 포함해야 합니다.');
+        }
+        if (!letterRegEx.test(password)) {
+            setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
+        }
+      };
+    //닉네임 유효성 검사로직
+    const nickNameChecks = (nickName) => {
+        if (nickNameRegEx.test(nickName)) {
+            setNickNameWarning('');
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //이메일 인증 로직
+    
 
     const handleGenderChange = (event) => {
         setGender(event.target.value);
+    };
+    const handleCertification = (event) => {
+        setCertification(event.target.value);
     };
 
     const toggleShowPassword = () => {
@@ -164,26 +225,62 @@ function Join() {
     useEffect(() => {
         if (email !== '' && password !== '') {
             setIsButtonActive(true);
-        } else {
+        } 
+        if (!emailChecks(email)) {
+            setEmailWarning('이메일 형식이 맞지 않습니다.');
+            setEmailCheck(false);
+        }
+         else {
             setIsButtonActive(false);
         }
-    }, [email, password]);
-    //input에 넣는값으로 state바꿔주는 함수
+        if(password !== passwordCheck){
+            setpasswordWarning('재확인 비밀번호와 비밀번호가 일치하지 않습니다.');
+        }
+        if(password == passwordCheck){
+            setpasswordWarning('');
+        }
+        PasswordCheck(password)  
+    }, [email, password,passwordCheck]);
+
+    useEffect(()=>{
+    if(!nickNameChecks(nickName)){
+        setNickNameWarning('닉네임 형식이 맞지 않습니다.');
+        setNickNameCheck(false);
+    } if(nickNameChecks(nickName)){
+        axios.get('/signUp/nickNameTest', { params: { nickName: nickName } }).then((response) => {
+            if(!response.data){
+                setNickNameWarning('이미 사용한 닉네임 입니다.');
+                setNickNameCheck(response.data);
+            }else {
+                setNickNameWarning('사용가능한 닉네임 입니다.');
+                setNickNameCheck(response.data);
+            }
+        })
+        .catch(error => {
+            console.error('Channel API Error:', error);
+            throw error;
+        })
+    }
+    },[nickName])
+
+
+    //이메일 state input에 넣는값으로 state바꿔주는 함수
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
-    //input에 넣는값으로 state바꿔주는 함수
-    const handleEmailCheckChange = (e) => {
-        setEmailCheck(e.target.value);
-    };
-    //input에 넣는값으로 state바꿔주는 함수
+
+    //비밀번호 state input에 넣는값으로 state바꿔주는 함수
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
-    //input에 넣는값으로 state바꿔주는 함수
+
+
+    //비밀번호 재확인 state input에 넣은값으로 바꿔주는 함수
     const handlepasswordCheckChange = (e) => {
         setpasswordCheck(e.target.value);
     };
+
+
     //input에 넣는값으로 state바꿔주는 함수
     const handleNickname = (e) => {
         if (e.target.value.length == 0 || e.target.value.length <= 8) {
@@ -195,21 +292,51 @@ function Join() {
         }
     };
 
+    //이메일 중복검사 로직
+    const emailTest = (userEmail) => {
+        if(!email == ''){
+            axios.get('/signUp/emailTest', { params: { email: userEmail } }).then((response) => {
+                if(!response.data){
+                    setEmailWarning('이미 사용한 이메일 입니다.');
+                    setEmailCheck(response.data);
+                }else {
+                    setEmailWarning('유효한 이메일입니다! 인증번호를 전송했습니다. 메일함에서 확인해주세요.');
+                    setEmailCheck(response.data);
+                }
+            })
+            .catch(error => {
+                console.error('Channel API Error:', error);
+                throw error;
+            })
+        }
+    }
 
 
-    // POST 요청 보내는 함수
+    // POST 요청 보내는 함수 회원가입 버튼로직
     const handleSubmit = async () => {
-        // 폼 유효성 검사
+        // 회원가입 유효성 검사
+        if (email == '') {
+            alert('이메일이 비었습니다!');
+            return;
+        }
+        if (!emailCheck){
+            alert('중복된 이메일 입니다.')
+            return;
+        }
+        if (password == '') {
+            alert('비밀번호를 제대로 입력해주세요!')
+            return;
+        }
         if (password !== passwordCheck) {
-            alert('비밀번호가 일치하지 않습니다.');
+            alert('비밀번호와 재확인 비밀번호가 일치하지 않습니다.');
             return;
         }
-        if(email == ''){
-            alert('이메일을 입력해주세요!');
-            return;
-        }
-        if(nickname == ''){
+        if (nickName == '') {
             alert('닉네임을 입력해주세요!');
+            return;
+        }
+        if (!emailChecks(email)) {
+            setEmailWarning('이메일 형식이 맞지않습니다.');
             return;
         }
 
@@ -218,16 +345,17 @@ function Join() {
             const userData = {
                 email: email,
                 pw: password,
-                nickName: nickname,
+                nickName: nickName,
                 gender: gender
             };
 
             // POST 요청 보내기
-            const response = await axios.post('http://localhost:9090/signUp/register', userData);
+            const response = await axios.post('/signUp/register', userData);
 
             // 응답 처리
             if (response.status === 200) {
                 alert('가입이 완료되었습니다.');
+                navigate('/');
             }
         } catch (error) {
             console.error('가입 중 오류 발생:', error);
@@ -242,16 +370,19 @@ function Join() {
                 <p>이메일</p>
                 <div className={styles.inputWrapper}>
                     <input
-                        style={{ marginBottom: '60px' }}
+                        style={{ marginBottom: '10px' }}
                         type="email"
                         placeholder="사용할 이메일을 입력하세요"
                         value={email}
                         onChange={handleEmailChange}
                         className={styles.email}
                     />
-                    <button className={`${styles.emailButton} ${email !== '' ? styles.active : ''}`}>중복체크</button>
-                </div>
+                    <button className={`${styles.emailButton} ${email !== '' ? styles.active : ''}`} onClick={()=>{emailTest(email)}}>중복체크</button>
+                </div> 
             </div>
+            {
+                emailWarning == '' ? <div style={{ marginBottom: '50px' }}></div> : <div className={`${styles.emailWarn} ${emailCheck ? styles.active : ''}`} style={{ marginBottom: '30px' }}>{emailWarning}</div>
+            }
             <div className={styles.formGroup}>
                 <p>이메일 인증</p>
                 <div className={styles.inputWrapper}>
@@ -259,11 +390,11 @@ function Join() {
                         style={{ marginBottom: '60px' }}
                         type="text"
                         placeholder="인증번호"
-                        value={emailCheck}
-                        onChange={handleEmailCheckChange}
+                        value={certification}
+                        onChange={handleCertification}
                         className={styles.email}
                     />
-                    <button className={`${styles.emailButton} ${emailCheck !== '' ? styles.active : ''}`}>인증</button>
+                    <button className={`${styles.emailButton} ${certification !== '' ? styles.active : ''}`}>인증</button>
                 </div>
             </div>
             <div className={styles.formGroup}>
@@ -274,16 +405,19 @@ function Join() {
                         placeholder="비밀번호를 입력하세요"
                         value={password}
                         onChange={handlePasswordChange}
-                        style={{ marginBottom: '60px' }}
+                        style={{ marginBottom: '10px' }}
                     />
                     <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} />
                 </div>
             </div>
+            {
+                passwordWarning2 == '' ? <div style={{ marginBottom: '50px' }}></div> : <div className={styles.emailWarn} style={{ marginBottom: '30px' }}>{passwordWarning2}</div>
+            }
             <div className={styles.formGroup}>
                 <p>비밀번호 재확인</p>
                 <div className={styles.inputWrapper}>
                     <input
-                        style={{ marginBottom: '60px' }}
+                        style={{ marginBottom: '10px' }}
                         type={showPasswordCheck ? "text" : "password"}
                         placeholder="비밀번호를 한번 더 입력하세요."
                         value={passwordCheck}
@@ -292,14 +426,17 @@ function Join() {
                     <img src={showPasswordCheck ? show : hide} className={styles.icon} onClick={toggleShowPasswordCheck} />
                 </div>
             </div>
+            {
+                passwordWarning == '' ? <div style={{ marginBottom: '50px' }}></div> : <div className={styles.emailWarn} style={{ marginBottom: '30px' }}>{passwordWarning}</div>
+            }
             <div className={styles.formGroup}>
                 <p>닉네임</p>
                 <div className={styles.inputWrapper}>
                     <input
-                        style={{ marginBottom: '60px' }}
+                        style={{ marginBottom: '10px' }}
                         type="text"
                         placeholder="활동에 사용할 닉네임을 입력하세요."
-                        value={nickname}
+                        value={nickName}
                         onChange={handleNickname}
                     />
                     {
@@ -307,7 +444,9 @@ function Join() {
                     }
                 </div>
             </div>
-
+            {
+                nickNameWarning == '' ? <div style={{ marginBottom: '50px' }}></div> : <div className={`${styles.emailWarn} ${nickNameCheck ? styles.active : ''}`} style={{ marginBottom: '30px' }}>{nickNameWarning}</div>
+            }
             <div className={styles.formGroup}>
                 <p>성별</p>
                 <label className={styles.customLabel}>
