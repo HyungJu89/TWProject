@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styles from './style/AlarmModal.module.css';
+import styles from './style/AlarmTwoModal.module.css';
 
 // 알림 모달
 function AlarmTwoModal({ content, onClose }) {

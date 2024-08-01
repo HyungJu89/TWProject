@@ -22,7 +22,7 @@ function AlarmModal({ content, onClose }) {
                 </div>
                 <div className={styles.footer}>
                     <button className={styles.closeBtn} onClick={ onClose }>
-                        닫기
+                        확인
                     </button>
                 </div>
             </div>
