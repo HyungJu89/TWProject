@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwi.work.channel.mapper.ChannelMapper">
+    
+    
+    <select id="channelCheck" parameterType="String" resultType="int">
+    	SELECT COUNT(*) FROM channel  WHERE id =  #{channelId}
+    </select>
+    
+    <insert id="channelCreate" parameterType="map">
+    	INSERT INTO channel (id,name,imageUrl,followerCount) value (#{id},#{name},#{imageUrl},#{followerCount})
+    </insert>
+
+</mapper>

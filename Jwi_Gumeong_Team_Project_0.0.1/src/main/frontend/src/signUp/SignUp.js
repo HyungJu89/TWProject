@@ -4,9 +4,7 @@ import styles from './style/SignUp.module.css';
 import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { redirect, useNavigate } from 'react-router-dom';
-
-
-
+import AlarmModal from '../modal/AlarmModal.js';
 
 //회원가입 전체 페이지
 function SignUp() {
@@ -21,15 +19,13 @@ function SignUp() {
     );
 }
 
-
-
-
 // 필수 동의 사항 페이지
-
 function Agree({ setAgreeCheck }) {
     const [isButtonActive, setIsButtonActive] = useState(false);
     const [selectedOption, setSelectedOption] = useState(false);
     const [selectedOption2, setSelectedOption2] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value === 'true');
@@ -46,8 +42,22 @@ function Agree({ setAgreeCheck }) {
         }
     }, [selectedOption, selectedOption2]);
 
+    useEffect(() => {
+        setModalOpen(true);
+    }, []);
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     return (
         <div className={styles.joinContainer}>
+            {modalOpen && (
+                <AlarmModal 
+                    content={<div>이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!</div>} 
+                    onClose={closeModal} 
+                />
+            )}
             <div className={styles.topFont}>회원가입</div>
             {/* 필수 동의 항목 */}
             <div className={styles.topAgreeFont} >필수 동의 항목</div>
@@ -122,15 +132,12 @@ function Agree({ setAgreeCheck }) {
                 className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} >
                 다음
             </button>
+            
         </div>
     );
 }
 
-
-
-
 //회원가입 페이지
-
 function Join() {
     //email 관련 state
     const [email, setEmail] = useState('');
@@ -162,7 +169,15 @@ function Join() {
     const [showCerti, SetShowCerti] = useState(false);
     const [userInput, setUserInput] = useState(0);
     const [isButtonActive, setIsButtonActive] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+
     let navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
 
     //이메일 비밀번호 유효성 검사
     const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
@@ -243,7 +258,6 @@ function Join() {
         setShowPasswordCheck(!showPasswordCheck);
     };
 
-
     useEffect(() => {
         if (email !== '' && password !== '' && nickName !== '' && checkCerti && passwordWarning == '') {
             setIsButtonActive(true);
@@ -252,7 +266,11 @@ function Join() {
             setEmailWarning('이메일 형식이 맞지 않습니다.');
             setEmailCheck(false);
         }
-        if (password !== passwordCheck) {
+        else {
+            setIsButtonActive(false);
+        }
+
+        if(password !== passwordCheck){
             setpasswordWarning('재확인 비밀번호와 비밀번호가 일치하지 않습니다.');
         }
         if (password == passwordCheck) {
@@ -310,7 +328,8 @@ function Join() {
             setUserInput(e.target.value.length);
         }
         if (e.target.value.length >= 9) {
-            alert('닉네임은 8자 이하만 사용가능 합니다!');
+            AlarmModal(
+                '닉네임은 8자 이하만 사용가능 합니다!');
         }
     };
 
@@ -334,32 +353,37 @@ function Join() {
         }
     }
 
-
     // POST 요청 보내는 함수 회원가입 버튼로직
     const handleSubmit = async () => {
         // 회원가입 유효성 검사
         if (email == '') {
-            alert('이메일이 비었습니다!');
+            setModalContent('이메일이 비었습니다!');
+            setModalOpen(true);
             return;
         }
         if (!emailCheck) {
-            alert('중복된 이메일 입니다.');
+            setModalContent('중복된 이메일 입니다.');
+            setModalOpen(true);
             return;
         }
         if (!checkCerti) {
-            alert('인증번호가 올바르지 않습니다.');
+            setModalContent('인증번호가 올바르지 않습니다.');
+            setModalOpen(true);
             return;
         }
         if (password == '') {
-            alert('비밀번호를 제대로 입력해주세요!')
+            setModalContent('비밀번호를 제대로 입력해주세요!');
+            setModalOpen(true);
             return;
         }
         if (password !== passwordCheck) {
-            alert('비밀번호와 재확인 비밀번호가 일치하지 않습니다.');
+            setModalContent('비밀번호와 재확인 비밀번호가 일치하지 않습니다.');
+            setModalOpen(true);
             return;
         }
         if (nickName == '') {
-            alert('닉네임을 입력해주세요!');
+            setModalContent('닉네임을 입력해주세요!');
+            setModalOpen(true);
             return;
         }
         if (!emailChecks(email)) {
@@ -392,6 +416,7 @@ function Join() {
 
     return (
         <div className={styles.joinContainer}>
+            {modalOpen && <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />}
             <div className={styles.topFont}>회원가입</div>
             <div className={styles.formGroup}>
                 <p>이메일</p>
@@ -518,6 +543,5 @@ function Join() {
         </div>
     );
 }
-
 
 export default SignUp;

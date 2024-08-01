@@ -15,7 +15,7 @@
 .backgroundImage {
 
     background-color: #002761;
-    height: 102px;
+    height: 162px;
     width: 100%;
     border-radius: 0px;
 }
@@ -69,7 +69,7 @@
 
 /*메인 라이브 배너용 코드추가*/
 .liveInfo .mainbannerDiv{
-    width: 250px;
+    width: 400px;
     display: flex;
     color: #E5E5E5;
     display: flex;
@@ -133,8 +133,9 @@
 }
 
 .liveTitle {
-    /*방송 제목*/
-    width: auto;
+    /* 방송 제목 */
+    max-width: 500px;
+    max-height: 80px;
     word-wrap: break-word;
     font-size: 32px;
     font-weight: 500;
@@ -143,6 +144,11 @@
     text-align: left;
     color: #E5E5E5;
     margin-bottom: 20px;
-    
-}
 
+    overflow: hidden; /* 넘치는 부분을 숨김 */
+    display: -webkit-box; /* Flexbox와 유사한 레이아웃 모드 설정 */
+    -webkit-box-orient: vertical; /* 수직 레이아웃 설정 */
+    -webkit-line-clamp: 2; /* 줄 수 제한 */
+    white-space: normal; /* 텍스트가 여러 줄로 표시되도록 설정 */
+    text-overflow: ellipsis; /* 넘치는 부분을 '...'으로 표시 */
+}
