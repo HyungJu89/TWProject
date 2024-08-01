@@ -25,7 +25,7 @@ function Agree({ setAgreeCheck }) {
     const [selectedOption, setSelectedOption] = useState(false);
     const [selectedOption2, setSelectedOption2] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-
+    
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value === 'true');
@@ -132,6 +132,7 @@ function Agree({ setAgreeCheck }) {
                 className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} >
                 다음
             </button>
+            
         </div>
     );
 }
@@ -168,7 +169,15 @@ function Join() {
     const [showCerti, SetShowCerti] = useState(false);
     const [userInput, setUserInput] = useState(0);
     const [isButtonActive, setIsButtonActive] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+
     let navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
 
     //이메일 비밀번호 유효성 검사
     const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
@@ -260,7 +269,7 @@ function Join() {
         else {
             setIsButtonActive(false);
         }
-        
+
         if(password !== passwordCheck){
             setpasswordWarning('재확인 비밀번호와 비밀번호가 일치하지 않습니다.');
         }
@@ -319,7 +328,8 @@ function Join() {
             setUserInput(e.target.value.length);
         }
         if (e.target.value.length >= 9) {
-            alert('닉네임은 8자 이하만 사용가능 합니다!');
+            AlarmModal(
+                '닉네임은 8자 이하만 사용가능 합니다!');
         }
     };
 
@@ -347,27 +357,33 @@ function Join() {
     const handleSubmit = async () => {
         // 회원가입 유효성 검사
         if (email == '') {
-            alert('이메일이 비었습니다!');
+            setModalContent('이메일이 비었습니다!');
+            setModalOpen(true);
             return;
         }
         if (!emailCheck) {
-            alert('중복된 이메일 입니다.');
+            setModalContent('중복된 이메일 입니다.');
+            setModalOpen(true);
             return;
         }
         if (!checkCerti) {
-            alert('인증번호가 올바르지 않습니다.');
+            setModalContent('인증번호가 올바르지 않습니다.');
+            setModalOpen(true);
             return;
         }
         if (password == '') {
-            alert('비밀번호를 제대로 입력해주세요!')
+            setModalContent('비밀번호를 제대로 입력해주세요!');
+            setModalOpen(true);
             return;
         }
         if (password !== passwordCheck) {
-            alert('비밀번호와 재확인 비밀번호가 일치하지 않습니다.');
+            setModalContent('비밀번호와 재확인 비밀번호가 일치하지 않습니다.');
+            setModalOpen(true);
             return;
         }
         if (nickName == '') {
-            alert('닉네임을 입력해주세요!');
+            setModalContent('닉네임을 입력해주세요!');
+            setModalOpen(true);
             return;
         }
         if (!emailChecks(email)) {
@@ -400,6 +416,7 @@ function Join() {
 
     return (
         <div className={styles.joinContainer}>
+            {modalOpen && <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />}
             <div className={styles.topFont}>회원가입</div>
             <div className={styles.formGroup}>
                 <p>이메일</p>
