@@ -334,13 +334,18 @@ function Join() {
     };
 
     //이메일 중복검사 로직
-    const emailTest = (userEmail) => {
+    const emailTest = async (userEmail) => {
         if (!email == '') {
             axios.get('/signUp/emailTest', { params: { email: userEmail } }).then((response) => {
                 if (!response.data) {
                     setEmailWarning('이미 사용한 이메일 입니다.');
                     setEmailCheck(response.data);
-                } else {
+                }
+                if(!emailChecks(email)){
+                    setEmailWarning('이메일 형식이 맞지 않습니다.')
+                    return;
+                }
+                else {
                     setEmailWarning('유효한 이메일입니다! 인증번호를 전송했습니다. 메일함에서 확인해주세요.');
                     handleEmailCheck();
                     setEmailCheck(response.data);
