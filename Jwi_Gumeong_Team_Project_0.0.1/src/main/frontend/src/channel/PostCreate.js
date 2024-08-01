@@ -6,7 +6,6 @@ import imageIcon from '../icon/24px/photo.png'
 import closeIcon from '../icon/btn/btn-image-Close.png'
 import '../App.css'
 import { useParams } from 'react-router-dom';
-
 function PostCreact() {
 
 

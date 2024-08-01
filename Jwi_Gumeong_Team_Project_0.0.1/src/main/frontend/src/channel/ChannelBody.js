@@ -7,6 +7,7 @@ import announcement from '../icon/20px/announcement.png';
 import { useChannel } from '../recycleCode/ApiQuery.js';
 import { useQuery } from 'react-query';
 import { useState } from 'react';
+import {formatUnit} from '../recycleCode/Util.js';
 
 function ChannelBody() {
 
@@ -28,21 +29,7 @@ function ChannelBody() {
     }
 
 
-    const formatUnit = (number) => {
-        let unit = ['만', '천']
-        let num = [10000, 1000]
 
-
-        if (number/num[0] >= 1) {
-            let int = Math.floor(number / num[1]);
-
-            return Math.floor(int / 10) + unit[0] + Math.floor(int % 10) + unit[1]
-        }
-        if (number/num[1]  >= 1) {
-            return Math.floor(number / num[1]) + unit[1];
-        }
-        return number
-    }
 
 
 

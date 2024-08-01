@@ -1,47 +1,79 @@
 package com.jwi.work.channel.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jwi.work.channel.dto.ChannelDto;
+import com.jwi.work.channel.dto.PostDto;
+import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.mapper.SearchMapper;
 import com.jwi.work.channel.util.PagingUtil;
 
 @Service
 public class SearchService {
 
-	private final int LIMIT_PAGE = 80;
+	
 	
 	@Autowired
 	private SearchMapper searchMapper; 
 	
 	private PagingUtil pagingUtil = new PagingUtil();
 	
-	public Object searchChannel(String search, int page){
+	public SearchDto<ChannelDto> searchChannel(String search, int page){
+		
+		final int LIMIT_PAGE = 8;
+		
+		SearchDto<ChannelDto> searchChannel = new SearchDto<>();
 		
 		// 검색된 채널의 갯수
 		int channelCount = searchMapper.searchChannelCount(search);
 		
-		// 몇번째 있는 채널부터 가져올껀지 정한다.
-		int offset = pagingUtil.paging(page, channelCount,LIMIT_PAGE);
+		//검색 결과가 없을때 표시할 부분
+		if(channelCount == 0) {
+			// Count 가 0 일땐 검색이 안된것이니 false 로 설정
+			searchChannel.setSearchSuccess(false);
+			// searchChannel값을 바로 리턴시킨다.
+			return searchChannel; 
+		}
+		// Count가 0이 아니기때문에 빠져나왔으니 검색결과 있음
+		searchChannel.setSearchSuccess(true);
 		
-		// Math.min 함수는 괄호 안에 있는 두 수 중에 작은 값을 가진 숫자가 뽑힌다.
-		// 전체 페이지에서 offset 의 값을 뺀값과 페이징의 기준이 되는 LIMIT 값 중에 더 작은 값이 출력된다
-		int limit = Math.min(LIMIT_PAGE, channelCount - offset);
-		
+		searchChannel.setPaging(pagingUtil.paging(page, channelCount,LIMIT_PAGE)); 
+
 		//채널의 갯수리턴
-		return searchMapper.searchChannel(search, offset, limit);
+		List<ChannelDto> channels = searchMapper.searchChannel(search, searchChannel.getPaging().getOffset(),searchChannel.getPaging().getLimit());
+		
+		searchChannel.setSearch(channels);
+		
+		return searchChannel;
 		
 	}
 	
-	public Object searchPost(String search, int page) {
+	public SearchDto<PostDto> searchPost(String search, int page) {
 		
+		final int LIMIT_PAGE = 10;
+		
+		SearchDto<PostDto> searchPost = new SearchDto<>();
+		
+		//검색된 개시글 갯수
 		int postCount = searchMapper.searchPostCount(search);
 		
-		int offset = pagingUtil.paging(page, postCount,LIMIT_PAGE);
+		if(postCount == 0) {
+			searchPost.setSearchSuccess(false);
+			
+			return searchPost; 
+		}
+		searchPost.setSearchSuccess(true);
 		
-		int limit = Math.min(LIMIT_PAGE, postCount - offset);
+		searchPost.setPaging(pagingUtil.paging(page, postCount,LIMIT_PAGE)); 
 		
-		return searchMapper.searchPost(search, offset, limit);
+		List<PostDto> posts = searchMapper.searchPost(search, searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
+		
+		searchPost.setSearch(posts);
+		
+		return searchPost;
 		
 	}
 	

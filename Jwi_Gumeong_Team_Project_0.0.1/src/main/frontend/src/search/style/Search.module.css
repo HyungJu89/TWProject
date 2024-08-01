@@ -1,4 +1,5 @@
 .searchMain {
+    width: 786px;
     margin-top: 30px;
     display: flex;
     margin-left: auto;
@@ -83,6 +84,17 @@
 
 }
 
+.searchChannelIcon img {
+    height: 50px;
+    width: 50px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 50%;
+}
+
 /*검색된 채널 이름*/
 .searchChannelTitle {
     height: 20px;
@@ -160,4 +172,22 @@
     line-height: 20.03px;
     text-align: center;
 
+}
+
+
+/* 검색어와 관련된 토픽~~~~*/
+
+.searchBodybottom{
+    margin-top: 30px;
+    margin-bottom: 10px;
+    background-color: #FFFFFF;
+    height: 60px;
+}
+
+.searchBodybottomText{
+    padding: 19px 0px 0px 30px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 25.04px;
+    color: #999999;
 }

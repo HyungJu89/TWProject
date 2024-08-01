@@ -1,14 +1,21 @@
 package com.jwi.work.channel.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.jwi.work.channel.dto.ChannelDto;
+import com.jwi.work.channel.dto.PostDto;
+
 public interface SearchMapper {
 
-public int searchChannelCount(String search);
+public int searchChannelCount(@Param("search") String search);
 
-public Object searchChannel(String search,int offset,int limit);
+public List<ChannelDto> searchChannel(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
 
-public int searchPostCount(String search);
+public int searchPostCount(@Param("search") String search);
 
-public Object  searchPost(String search,int offset,int limit);
+public List<PostDto> searchPost(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
 
 
 }

@@ -11,22 +11,16 @@ public class ChzzkApiService {
 	@Autowired
 	private ChzzkAPIInfo channelInfo;
 
-
 	public Object chzzkChannelInfo(String channelId) {
-		
-		
+
 		return channelInfo.chzzkChannelInfo(channelId);
-		
-		
+
 	}
-	
-	
+
 	public Object chzzkLiveInfo(String channelId) {
-		
+
 		return channelInfo.chzzkLiveInfo(channelId);
-		
-		
+
 	}
-	
-	
+
 }

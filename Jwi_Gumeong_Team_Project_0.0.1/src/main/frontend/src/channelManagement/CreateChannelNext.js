@@ -3,14 +3,29 @@ import style from './style/CreateChannelNext.module.css'
 import '../App.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { createChannel } from '../recycleCode/axios';
 
-function CreateChannelNext({notice,channelInfo}) {
+function CreateChannelNext({notice,channelInfo,channelUrl}) {
     let navigate = useNavigate();
 
     const [buttonColor, setButtonColor] = useState('#BBBBBB');
     const [iconColor, setIconColor] = useState('#BBBBBB');
     const [checkBoxIcon, setCheckBoxIcon] = useState(false);
+
+
+
+const createChannel = async (channelCreate) => {
+    
+    try {
+        //post 요청을 할때 Json 형식으로 데이터를 발송한다.
+        const { data } = await axios.post(`/channel/create`, channelCreate);
+        return data;
+    } catch (error) {
+        console.error('Channel API Error:', error);
+        throw new Error('Failed to fetch channel data');
+    }
+
+};
+
 
     const onClickCheckBoxIcon = () => {
         if (checkBoxIcon) {
@@ -27,9 +42,16 @@ function CreateChannelNext({notice,channelInfo}) {
 
 
     const onClickButton = async() => {
+        // 체크박스 예외처리
         if(!checkBoxIcon){
             alert("주의사항 숙지후 체크버튼을 눌러주세요")
             return
+        }
+
+        //input 의 값과 API 의 값이 다를때 예외처리
+        if(channelUrl != channelInfo.channelId){
+            alert("입력한 ID와 생성할 채널의 ID가 다릅니다.")
+            return navigate("/channelManagement")
         }
 
         if(notice && checkBoxIcon){

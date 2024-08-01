@@ -17,30 +17,7 @@
 	</insert>
 
 
-	<!-- 채널 검색시 -->
 
-	<select id="searchChannelCount" parameterType="map">
-		SELECT COUNT(*) FROM channel WHERE name LIKE
-		CONCAT('%',#{search},'%')
-	</select>
-
-	<select id="searchChannel" parameterType="map" >
-		SELECT * FROM channel WHERE name LIKE
-		CONCAT('%',#{search},'%')
-		LIMIT	#{offset},#{limit}
-	</select>
-
-	<!-- 개시글 검색시 -->
-	<select id="searchPostCount" parameterType="map">
-		SELECT COUNT(*) FROM channel WHERE post LIKE
-		CONCAT('%',#{search},'%')
-	</select>
-
-	<select id="searchPost" parameterType="map">
-		SELECT * FROM channel WHERE post LIKE
-		CONCAT('%',#{search},'%')
-		LIMIT	#{offset},#{limit}
-	</select>
 
 
 
