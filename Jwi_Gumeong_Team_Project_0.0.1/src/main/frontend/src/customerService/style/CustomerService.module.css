@@ -315,7 +315,7 @@
 }
 
 /* 문의 내역 */
-.inquiryList {
+.inquiryContainer {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -324,10 +324,16 @@
 
 .inquiryItem {
     display: flex;
-    padding: 30px;
+    flex-direction: column;
     border-radius: 20px;
-    align-items: center;
     background-color: #ffffff;
+}
+
+.inquiryHeader {
+    display: flex;
+    padding: 30px;
+    align-items: center;
+    cursor: pointer;
 }
 
 .inquiryIcon {
@@ -343,19 +349,56 @@
     height: 50px;
 }
 
-/* 문의 답변 */
 .inquiryTitle {
     font-size: 16px;
     font-weight: 700;
+    line-height: 20.03px;
     color: #101010;
 }
 
-/* 문의 제목 */
 .inquirySubtitle {
     font-size: 15px;
     font-weight: 400;
+    line-height: 18.78px;
     color: #999999;
-    letter-spacing: 0.75%;
+}
+
+.inquiryContent {
+    padding: 30px;
+    border-radius: 20px;
+    background-color: #ffffff;
+}
+
+.inquiryContentImage {
+    width: 100%;
+    max-width: 726px;
+    margin: auto;
+}
+
+.inquiryContentText {
+    font-size: 15px;
+    font-weight: 500;
+    color: #101010;
+    line-height: 18.78px;
+}
+
+.noHistory {
+    display: flex;
+    width: 786px;
+    height: 240px;
+    gap: 0px;
+    border-radius: 20px;
+    opacity: 0px;
+    background-color: #FFFFFF;
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17.53px;
+    align-items: center;
+    justify-content: center;
+    color: #999999;
+
+
 }
 
 /* 제재 내역 */
@@ -363,7 +406,7 @@
     background-color: #FFFFFF;
     border-radius: 20px;
     margin-top: 11px;
-    padding: 20px;
+    /* padding: 20px; */
 }
 
 /* 제재 리스트 */

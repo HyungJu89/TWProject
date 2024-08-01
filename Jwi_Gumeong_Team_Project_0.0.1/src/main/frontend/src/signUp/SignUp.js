@@ -4,9 +4,7 @@ import styles from './style/SignUp.module.css';
 import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { redirect, useNavigate } from 'react-router-dom';
-
-
-
+import AlarmModal from '../modal/AlarmModal.js';
 
 //회원가입 전체 페이지
 function SignUp() {
@@ -21,16 +19,14 @@ function SignUp() {
     );
 }
 
-
-
-
 // 필수 동의 사항 페이지
-
 function Agree({ setAgreeCheck }) {
     const [isButtonActive, setIsButtonActive] = useState(false);
     const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
     const [selectedOption, setSelectedOption] = useState(false);
     const [selectedOption2, setSelectedOption2] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value === 'true');
@@ -46,11 +42,23 @@ function Agree({ setAgreeCheck }) {
             setIsButtonActive(false);
         }
     }, [selectedOption, selectedOption2]);
-    useEffect(()=>{
-        alert('★이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!')
-    },[])
+
+    useEffect(() => {
+        setModalOpen(true);
+    }, []);
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     return (
         <div className={styles.joinContainer}>
+            {modalOpen && (
+                <AlarmModal 
+                    content={<div>이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!</div>} 
+                    onClose={closeModal} 
+                />
+            )}
             <div className={styles.topFont}>회원가입</div>
             {/* 필수 동의 항목 */}
             <div className={styles.topAgreeFont} >필수 동의 항목</div>
@@ -129,11 +137,7 @@ function Agree({ setAgreeCheck }) {
     );
 }
 
-
-
-
 //회원가입 페이지
-
 function Join() {
     //email 관련 state
     const [email, setEmail] = useState('');
@@ -182,7 +186,7 @@ function Join() {
     const PasswordCheck = (password) => {
         setpasswordWarning2('');
         if (!passwordRegEx.test(password)) {
-          setpasswordWarning2('비밀번호는 8자 이상 20자 이하이어야 합니다.');
+            setpasswordWarning2('비밀번호는 8자 이상 20자 이하이어야 합니다.');
         }
         if (!numberRegEx.test(password)) {
             setpasswordWarning2('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.');
@@ -193,7 +197,7 @@ function Join() {
         if (!letterRegEx.test(password)) {
             setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
         }
-      };
+    };
     //닉네임 유효성 검사로직
     const nickNameChecks = (nickName) => {
         if (nickNameRegEx.test(nickName)) {
@@ -221,7 +225,6 @@ function Join() {
         setShowPasswordCheck(!showPasswordCheck);
     };
 
-
     useEffect(() => {
         if (email !== '' && password !== '') {
             setIsButtonActive(true);
@@ -230,7 +233,7 @@ function Join() {
             setEmailWarning('이메일 형식이 맞지 않습니다.');
             setEmailCheck(false);
         }
-         else {
+        else {
             setIsButtonActive(false);
         }
         if(password !== passwordCheck){
@@ -310,7 +313,6 @@ function Join() {
             })
         }
     }
-
 
     // POST 요청 보내는 함수 회원가입 버튼로직
     const handleSubmit = async () => {
@@ -488,6 +490,5 @@ function Join() {
         </div>
     );
 }
-
 
 export default SignUp;
