@@ -19,6 +19,7 @@
 }
 
 .searchTitle {
+    user-select: none;
     width: 97px;
     height: 25px;
     font-size: 20px;
@@ -54,7 +55,8 @@
     text-align: left;
     margin-top: 3px;
     margin-bottom: 3px;
-    color: #999999
+    color: #999999;
+    cursor: pointer;
 }
 
 .searchChannelList {
@@ -72,6 +74,7 @@
 
 .sratchChannelIconInfo {
     display: flex;
+    cursor: pointer;
 }
 
 /*검색된 채널아이콘*/
@@ -161,6 +164,7 @@
 }
 
 .pageBtn {
+    user-select: none;
     /*페이징 부분*/
     display: flex;
     justify-content: space-between;

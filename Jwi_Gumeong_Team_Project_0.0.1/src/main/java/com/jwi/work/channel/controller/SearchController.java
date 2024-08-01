@@ -23,8 +23,6 @@ public class SearchController {
 			@RequestParam(value = "search", defaultValue = "") String search,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
 		
-		System.out.println(search + "" + page);
-		System.out.println(searchService.searchChannel(search, page));
 		return searchService.searchChannel(search, page);
 
 	}

@@ -71,7 +71,7 @@ function Search({ search }) {
                         <div className={style.searchTitle}>토픽 게시판</div>
                         <div className={style.creactChannel}>
                             <img className={style.creactChannelIcon} src={OpenChannel} />
-                            <div className={style.creactChannelText}>토픽 게시판 만들기</div>
+                            <div className={style.creactChannelText} onClick={() => navigate(`/channelManagement`)}>토픽 게시판 만들기</div>
                         </div>
                     </div>
                     {channelInfo.searchSuccess ?
@@ -79,12 +79,12 @@ function Search({ search }) {
                             {channelInfo.search.map((channelInfo, index) =>
                                 <div key={index}>
                                     <div className={style.searchChannel}>
-                                        <div className={style.sratchChannelIconInfo}>
+                                        <div className={style.sratchChannelIconInfo} onClick={() => navigate(`/channel/${channelInfo.id}`)}>
                                             <div className={style.searchChannelIcon}>
                                                 <img src={channelInfo.imageUrl}/>
                                             </div>
                                             <div className={style.searchChannelInfo}>
-                                                <div className={style.searchChannelTitle} onClick={() => navigate(`/channel/${channelInfo.id}`)}>{/*게시판 제목*/}{channelInfo.name}</div>
+                                                <div className={style.searchChannelTitle}>{/*게시판 제목*/}{channelInfo.name}</div>
                                                 <div className={style.searchChannelmark}>{/*게시판 팔로워,즐찾수*/}
                                                     <div className={style.searchChannelmarkText}>팔로워</div>
                                                     <div className={style.searchChannelmarkCount}>
