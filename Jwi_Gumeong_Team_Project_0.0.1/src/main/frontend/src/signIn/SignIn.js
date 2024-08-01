@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styles from './style/SignIn.module.css';
 import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
@@ -15,14 +16,38 @@ function SignIn() {
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
-
-
+    //엔터 키 다운 이벤트
+    const handleEnter = (e) => {
+        if (e.key === "Enter") {
+          handleLogin();
+        }
+      };
+          // 로그인 버튼 클릭 핸들러
+    const handleLogin = () => {
+        if (loginCheck) {
+            alert('로그인 성공');
+            navigate('/');
+        } else if (email === '') {
+            alert('이메일을 입력해주세요!');
+        } else if (password === '') {
+            alert('비밀번호를 입력해주세요!');
+        } else {
+            alert('로그인 실패');
+        }
+    };
     useEffect(() => {
         if (email !== '' && password !== '') {
             setIsButtonActive(true);
-        } else {
-            setIsButtonActive(false);
+            axios.get('/signIn/userCheck', { params: { email: email, pw : password } }).then((response) => {
+                setLoginCheck(response.data);
+            })
+                .catch(error => {
+                    console.error('Channel API Error:', error);
+                    throw error;
+            })
         }
+        else if (email == '') {setIsButtonActive(false); } 
+        else if (password == '') {setIsButtonActive(false);}                        
     }, [email, password]);
 
     const handleEmailChange = (e) => {
@@ -47,6 +72,7 @@ function SignIn() {
                             placeholder="이메일을 입력하세요"
                             value={email}
                             onChange={handleEmailChange}
+                            onKeyDown={handleEnter}
                         />
                     </div>
                 </div>
@@ -59,16 +85,19 @@ function SignIn() {
                             placeholder="비밀번호를 입력하세요"
                             value={password}
                             onChange={handlePasswordChange}
+                            onKeyDown={handleEnter}
                         />
                         <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} />
                     </div>
                 </div>
-                <button onClick={
+                <button 
+                onClick={
                     () => {
-                        if (email == '') { alert('이메일을 입력해주세요!'); }
-                        else if (password == '') { alert('비밀번호를 입력해주세요!'); }
-                        // if(이메일과 비밀번호가 적혀있으면){대충 엑시오스 요청해서 데이터베이스랑 데이터대조 후 로그인진행}
-                    }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>로그인</button>
+                        handleLogin();
+                    }}  
+                className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>
+                로그인
+                </button>
                 <div className={styles.help}><h6 onClick={() => { navigate('/signUp') } }>회원가입</h6><h6>|</h6><h6 onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</h6></div>
             </div>
         </div>

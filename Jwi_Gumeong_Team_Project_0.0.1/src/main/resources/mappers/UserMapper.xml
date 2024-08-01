@@ -3,11 +3,11 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.user.mapper.UserMapper">
 
-
-	<select id="register" parameterType="com.jwi.work.user.dto.User">
+	<!-- 회원가입 부분 -->
+	<insert id="register" parameterType="com.jwi.work.user.dto.User">
 		INSERT INTO user
 		(email,pw,nickName,gender)value(#{email},#{pw},#{nickName},#{gender})
-	</select>
+	</insert>
 
 	<select id="emailTest" resultType="int" parameterType="String">
 		select count(*) from user where email=#{email}
@@ -15,6 +15,12 @@
 
 	<select id="nickNameTest" resultType="int" parameterType="String">
 		select count(*) from user where nickName=#{nickName}
+	</select>
+	
+	<!-- 로그인 부분 -->
+	
+	<select id="loginCheck" resultType="int" parameterType="com.jwi.work.user.dto.User">
+		select count(*) from user where email=#{email} and pw=#{pw}
 	</select>
 
 

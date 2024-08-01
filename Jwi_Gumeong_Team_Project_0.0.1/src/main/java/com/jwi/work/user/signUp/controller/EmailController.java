@@ -1,5 +1,8 @@
 package com.jwi.work.user.signUp.controller;
 import com.jwi.work.user.signUp.service.EmailService;
+
+import java.util.UUID;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,9 +16,13 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/sendEmail")
-    public String sendEmail() {
-//        emailService.sendSimpleEmail("dsfs3975@naver.com", "안녕하세요 김형주입니다.", "살려주세요.");
-        return "Email sent successfully";
+    @GetMapping("/certification")
+    public String sendEmail(@RequestParam("email") String email) {
+    	System.out.println("들어왔음?");
+    	System.out.println(email);
+    	String checkNum;
+    	checkNum = UUID.randomUUID().toString().replaceAll("-", "").substring(0,8);
+        emailService.EmailCheck(email,checkNum);
+        return checkNum;
     }
 }
