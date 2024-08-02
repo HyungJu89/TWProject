@@ -1,5 +1,7 @@
 package com.jwi.work.user.mapper;
 
+import java.util.ArrayList;
+
 import com.jwi.work.user.dto.User;
 
 public interface UserMapper{
@@ -13,5 +15,7 @@ public interface UserMapper{
 	//여기부터 로그인
 		//로그인 유저정보 검사
 		public int loginCheck(User user);
+		//벤 된 사람 체크
+		public ArrayList<String> banEmailList();
 }
 
