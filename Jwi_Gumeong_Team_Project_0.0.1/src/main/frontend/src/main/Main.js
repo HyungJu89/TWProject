@@ -20,7 +20,6 @@ function Main() {
     let [loginOn, setLoginOn] = useState(false);
 
     const [channel, setChannel] = useState('');
-    const [partnersLive, setPartnersLive] = useState([]);
 
     useEffect(() => { /*특정 URL 방송--대체예정*/
         axios.get(`/channelAPI/search/0b33823ac81de48d5b78a38cdbc0ab94`)
@@ -33,16 +32,37 @@ function Main() {
             })
     }, []);
 
+    const [partnersLive, setPartnersLive] = useState([]);
     useEffect(() => { /*파트너스 Live*/
-        axios.get(`/partnersLiveApi/`)
-            .then((response) => {
-                console.log(response.data.content.streamerPartners);
-                setPartnersLive(response.data.content.streamerPartners)
-            })
-            .catch(error => {
+        const addPartners = async () =>{
+            let ArrayPartners = []; //12개 배열 저장할 장소
+            try{
+                while (ArrayPartners.length < 12){ //배열이 12가 되면 참이다.
+                    const response = await axios.get(`/partnersLiveApi/`);
+                    ArrayPartners  = [...ArrayPartners, ...response.data.content.streamerPartners];
+
+                    if (ArrayPartners.length >= 12) {//불러온 데이터 12개 초과 시 잘라내기
+                        setPartnersLive(ArrayPartners.slice(0,12));
+                        break;
+                    }
+                }
+            } catch(error){
                 console.error('Channel API Error:', error);
-                throw error;
-            })
+            }
+        }
+        addPartners();
+        console.log("ㅎㅇ");
+        console.log(partnersLive);
+
+        // axios.get(`/partnersLiveApi/`)
+        //     .then((response) => {
+        //         console.log(response.data.content.streamerPartners);
+        //         setPartnersLive(response.data.content.streamerPartners)
+        //     })
+        //     .catch(error => {
+        //         console.error('Channel API Error:', error);
+        //         throw error;
+        //     })
     }, []);
 
     return (
