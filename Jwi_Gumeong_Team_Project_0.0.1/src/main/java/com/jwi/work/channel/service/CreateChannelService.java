@@ -3,6 +3,7 @@ package com.jwi.work.channel.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.ChannelCreateDto;
 import com.jwi.work.channel.mapper.ChannelMapper;
 
@@ -18,13 +19,36 @@ public class CreateChannelService {
 
 	}
 
-	public String channelCreate(ChannelCreateDto channelCreate) {
+	public AnswerDto channelCreate(ChannelCreateDto channelCreate) {
 		// 최종 중복체크
-		if (channelMapper.channelCheck(channelCreate.getId()) == 0) {
-			channelMapper.channelCreate(channelCreate);
+		AnswerDto answer = new AnswerDto();
+
+		try {
+			
+			if (channelMapper.channelCheck(channelCreate.getId()) == 0) {
+
+				channelMapper.channelCreate(channelCreate);
+
+				answer.setCreateSuccess(true);
+
+			} else {
+
+				answer.setCreateSuccess(false);
+
+			}
+			
+		} catch (Exception e) {
+			
+			answer.setCreateSuccess(false);
+			
+			answer.setNavigate("/");
+			
 		}
 
-		return "/channel/" + channelCreate.getId();
+
+		answer.setNavigate("/channel/" + channelCreate.getId());
+
+		return answer;
 
 	}
 

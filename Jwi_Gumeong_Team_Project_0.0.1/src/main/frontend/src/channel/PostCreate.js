@@ -6,6 +6,7 @@ import imageIcon from '../icon/24px/photo.png'
 import closeIcon from '../icon/btn/btn-image-Close.png'
 import '../App.css'
 import { useParams } from 'react-router-dom';
+import {formatUnit} from '../recycleCode/Util.js';
 function PostCreact() {
 
 
@@ -72,7 +73,32 @@ function PostCreact() {
 
     //서버로 게시글 정보를 넘김
     const postCreact = () => {
-        console.log('서버로 가는중')
+        // JSP 에서 FORM 과 비슷함
+        const formData = new FormData();
+
+        formData.append('content',content);
+        // 로그인 기능 완성되면 유저 키값이 들어가도록 변경
+        formData.append('userKey',1);
+
+        formData.append('channelKey',4);
+
+        selectedImage.forEach(({file}) => {
+            formData.append('files',file);
+        });
+
+        try{
+            //서버로 데이터 전달
+            const data = await axios.post(`/post/create`,formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log('서버 응답:', data);
+            // 성공적으로 업로드된 경우 추가적인 처리
+        } catch (error) {
+            console.error('업로드 실패:', error);
+        }
+
     }
 
 

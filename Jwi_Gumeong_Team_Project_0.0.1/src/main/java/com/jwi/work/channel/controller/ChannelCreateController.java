@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.ChannelCreateDto;
 import com.jwi.work.channel.service.CreateChannelService;
 
@@ -26,7 +27,7 @@ public class ChannelCreateController {
 	}
 
 	@PostMapping("/create")
-	public String channelCreate(@RequestBody ChannelCreateDto channelCreate) {
+	public AnswerDto channelCreate(@RequestBody ChannelCreateDto channelCreate) {
 
 		return createChannelService.channelCreate(channelCreate);
 

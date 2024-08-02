@@ -19,7 +19,8 @@ public class SearchService {
 	@Autowired
 	private SearchMapper searchMapper; 
 	
-	private PagingUtil pagingUtil = new PagingUtil();
+	@Autowired
+	private PagingUtil pagingUtil;
 	
 	public SearchDto<ChannelDto> searchChannel(String search, int page){
 		

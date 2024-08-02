@@ -63,7 +63,11 @@ const createChannel = async (channelCreate) => {
             };
             try{
                 let data = await createChannel(channelCreate);
-                navigate(data)
+                if(!data.createSuccess){
+                    alert("이미 생성된 채널입니다. 해당 채널로 이동합니다.")
+                }
+
+                navigate(data.navigate)
             }catch (error){
             console.error('Error creating channel:', error);
             alert('채널 생성 중 오류가 발생했습니다. 다시 시도해 주세요.');

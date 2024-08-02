@@ -16,7 +16,7 @@
 		(#{id},#{name},#{imageUrl},#{followerCount})
 	</insert>
 
-
+	
 
 
 

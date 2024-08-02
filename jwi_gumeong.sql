@@ -2,7 +2,9 @@ CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 
 use jwi;
 drop DATABASE jwi;
-
+SELECT COUNT(*) FROM channel  WHERE id = '0b33823ac81de48d5b78a38cdbc0ab94';
+select * from channel;
+delete from channel;
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '유저키',
 	`email`	VARCHAR(50) UNIQUE	NOT NULL	COMMENT '이메일',
@@ -11,7 +13,7 @@ CREATE TABLE `user` (
 	`gender`	VARCHAR(30)	NOT NULL	DEFAULT 'undisclosed'	COMMENT '성별 "man","girl","undisclosed"',
 	`birthday`	DATETIME	NULL	COMMENT '생년월일',
 	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'activate'	COMMENT '유저 상태 "activate","deactivate","secession"',
-	`ceatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
+	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
 	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
@@ -45,7 +47,7 @@ CREATE TABLE `post` (
 );
 
 CREATE TABLE `comment` (
-	`commentLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`commentLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,	
 	`userKey`	INT	NOT NULL,
 	`postKey`	INT	NOT NULL,
 	`comment`	VARCHAR(200)	NOT NULL	COMMENT '댓글 내용',
@@ -84,7 +86,7 @@ CREATE TABLE `report` (
 
 CREATE TABLE `admin` (
 	`adminKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '어드민 키',
-	`id`	VARCHAR(30) PRIMARY KEY	NOT NULL	COMMENT '어드민아이디',
+	`id`	VARCHAR(30) COMMENT '어드민아이디',
 	`pw`	VARCHAR(255)	NOT NULL	COMMENT '비밀번호',
 	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'activate'	COMMENT '어드민 상태 "activate","deactivate","secession"  작업자와 상의',
 	`createdAt`	TIMESTAMP	NOT NULL	DEFAULT NOW(),
@@ -176,7 +178,11 @@ CREATE TABLE `channelRules` (
 	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
-
-
+drop table Image;
+CREATE TABLE `Image` (
+	`imageKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`imageUrl`	VARCHAR(300) UNIQUE	NOT NULL,
+    `hash`  CHAR(64) NOT NULL UNIQUE
+);
 
 
