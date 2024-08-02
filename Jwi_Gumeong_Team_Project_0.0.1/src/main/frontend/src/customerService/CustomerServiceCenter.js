@@ -228,7 +228,7 @@ function CustomerServiceCenter() {
                 <div className={styles.bannerPosition}>
                     <div className={styles.logoTitle}>고객센터</div>
                     <div className={styles.logoPosition}>
-                        <img src={serviceLogo} alt="고객센터 로고"/>
+                        <img src={serviceLogo} className={styles.serviceLogo} alt="고객센터 로고"/>
                     </div>
                 </div>
             </div>
