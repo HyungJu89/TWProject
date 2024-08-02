@@ -39,6 +39,37 @@ function ChannelHome() {
     },[])
 
 //------------------------------------------------------------------------------
+const [channel, setChannel] = useState('');
+useEffect(() => { /*파트너스 추천*/
+    const addPartners = async () =>{
+        let arrayPartners = []; //12개 배열 저장할 장소
+        let filterArrayPartners = new Set(); // 고유 파트너를 저장할 Set
+
+        try{
+            while (arrayPartners.length < 12){ //배열이 12가 되면 참이다.
+                const response = await axios.get(`/partnersLiveApi/`);
+                const newPartners = response.data.content.streamerPartners;
+
+                // API 호출 데이터를 Set에 추가하여 중복을 자동으로 제거
+                newPartners.forEach(partner => filterArrayPartners.add(partner));
+                
+                if (filterArrayPartners.size >= 12) {//불러온 데이터 12개 초과 시 실행
+                    arrayPartners = Array.from(filterArrayPartners).slice(0, 12);
+                    setChannel(arrayPartners); // 상태 업데이트
+                    break;
+                }
+            }
+        } catch(error){
+            console.error('Channel API Error:', error);
+        }
+    };
+    addPartners();
+}, []);
+
+    //컴포넌트 전송 최적화 구문
+    const ChannelIndex = (i) =>{
+        return channel[i]?.channelId || '오류';
+    };
 
 
 
@@ -49,16 +80,12 @@ function ChannelHome() {
 
     // 추후에 에러 페이지 만들기
     if (isLoadingChannel) {
-        return <div>로딩중</div>;
+        return <div>채널 홈 로딩중</div>;
     }
 
     if (isErrorChannel || !channelApi) {
         return <div>에러남</div>;
     }
-
-    
-
-
 
 
     return (
@@ -81,7 +108,16 @@ function ChannelHome() {
                     </div>
                     <div className={style.listRight}>
                 
-                        <div className={style.sideBar}><PublicMenu loginOn={1} setLoginOn={1} channel={1} /></div>
+                        <div className={style.sideBar}>
+                            <PublicMenu loginOn={1} setLoginOn={1} channel={1} 
+                                        channelId={ChannelIndex(0)}
+                                        channelIdSub1={ChannelIndex(1)}
+                                        channelIdSub2={ChannelIndex(2)}
+                                        channelIdSub3={ChannelIndex(3)}
+                                        channelIdSub4={ChannelIndex(4)}
+                                        channelIdSub5={ChannelIndex(5)}
+                                        channelIdSub6={ChannelIndex(6)}/>
+                        </div>
                     </div>
                 </div>
             </div>

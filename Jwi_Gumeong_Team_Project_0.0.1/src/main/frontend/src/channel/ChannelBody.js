@@ -20,7 +20,7 @@ function ChannelBody() {
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
 
     if (isLoadingChannel) {
-        return <div>로딩중</div>;
+        return <div>채널바디 로딩중</div>;
     }
 
     if (isErrorChannel) {
@@ -51,7 +51,7 @@ function ChannelBody() {
             <div className={style.channelInfo}>
                 <div className={style.iconBack}>
                     <div className={style.channelIcon}>
-                        <img className={style.icon} src={channelApi.channelImageUrl} alt="Channel Icon" />
+                        <img className={style.icon} src={channelApi?.channelImageUrl} alt="Channel Icon" />
                     </div>
                 </div>
                 <div className={style.iconRight}>
