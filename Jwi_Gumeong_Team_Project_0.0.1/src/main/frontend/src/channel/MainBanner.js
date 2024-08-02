@@ -13,10 +13,13 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import LiveLink from './LiveLink.js'
-function MainBanner({ channelId, route,channelIdSub1,channelIdSub2,channelIdSub3 }) {
+function MainBanner({ channelId, route, channelIdSub1, channelIdSub2, channelIdSub3 }) {
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
+    const { data: channelApi1, isLoading: isLoadingChannel1, isError: isErrorChannel1 } = useChannel(channelIdSub1);
+    const { data: channelApi2, isLoading: isLoadingChannel2, isError: isErrorChannel2 } = useChannel(channelIdSub2);
+    const { data: channelApi3, isLoading: isLoadingChannel3, isError: isErrorChannel3 } = useChannel(channelIdSub3);
     // 두 번째 쿼리: 라이브 정보 가져오기
     const { data: liveInfoApi, isLoading: isLoadingLiveInfo, isError: isErrorLiveInfo } = useLiveInfo(channelId);
     const { data: liveInfoApi1, isLoading: isLoadingLiveInfo1, isError: isErrorLiveInfo1 } = useLiveInfo(channelIdSub1);
@@ -28,6 +31,12 @@ function MainBanner({ channelId, route,channelIdSub1,channelIdSub2,channelIdSub3
     useEffect(() => {
         setPartnersLive(liveInfoApi);
     }, [liveInfoApi, channelId, channelIdSub1, channelIdSub2, channelIdSub3]);
+
+    // 라이브 정보 변경 시 partnersLiveInfo 업데이트
+    let [partnersLiveInfo, setPartnersLiveInfo] = useState(channelApi);
+    useEffect(() => {
+        setPartnersLiveInfo(channelApi);
+    }, [channelApi, channelId, channelIdSub1, channelIdSub2, channelIdSub3]);
 
 
     console.log(partnersLive);
@@ -50,56 +59,59 @@ function MainBanner({ channelId, route,channelIdSub1,channelIdSub2,channelIdSub3
                     <div className={style.MainBanner}>
                         {/* 라이브 이미지 */}
                         {route == 'channel' ?
-                        <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                        :
-                        <img src={partnersLive?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                        }  
+                            <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                            :
+                            <img src={partnersLive?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                        }
                         {/* 라이브 방송 정보 */}
                         <div className={style.liveInfo}>
                             <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
-                                                        {route == 'channel' ?/* 라이브 제목 */
-                            <div className={style.liveTitle}>{liveInfoApi.liveTitle}</div> 
-                            :
-                            <div className={style.liveTitle}>{liveInfoApi.liveTitle}</div> 
+                            {route == 'channel' ?/* 라이브 제목 */
+                                <div className={style.liveTitle}>{liveInfoApi.liveTitle}</div>
+                                :
+                                <div className={style.liveTitle}>{partnersLive?.liveTitle}</div>
                             }
                             {route == 'channel' ? <LiveLink channelId={channelId} /> :
                                 <div className={style.mainbannerDiv}>
-                                    <img className={style.icon} src={channelApi.channelImageUrl} alt="Channel Icon" />
+                                    <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
                                     <div className={style.textArea}>
-                                        {channelApi.channelName}
-                                        <div className={style.category}><img src={game} />{liveInfoApi.liveCategoryValue}</div>
+                                        {partnersLiveInfo?.channelName}
+                                        <div className={style.category}><img src={game} />{partnersLive?.liveCategoryValue}</div>
                                     </div>
                                 </div>
                             }
                         </div>
                     </div>
-
-                    <div className={style.liveDiv}>
-                        <img style={{ marginRight: '30px' }} src={chevron_left_w} />
-                        <div className={style.liveImg}>
-                            <div onClick={()=>{setPartnersLive(liveInfoApi)}} className={style.box}>
-                                <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                                <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+                    
+                    {/*메인 선택 배너*/}
+                    {route == 'channel' ? null :
+                        <div className={style.liveDiv}>
+                            <img style={{ marginRight: '30px' }} src={chevron_left_w} />
+                            <div className={style.liveImg}>
+                                <div onClick={() => { setPartnersLive(liveInfoApi); setPartnersLiveInfo(channelApi) }} className={style.box}>
+                                    <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+                                </div>
+                                <div onClick={() => { setPartnersLive(liveInfoApi1); setPartnersLiveInfo(channelApi1)  }} className={style.box}>
+                                    <img src={liveInfoApi1?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+                                </div>
+                                <div onClick={() => { setPartnersLive(liveInfoApi2); setPartnersLiveInfo(channelApi2)  }} className={style.box}>
+                                    <img src={liveInfoApi2?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+                                </div>
+                                <div onClick={() => { setPartnersLive(liveInfoApi3); setPartnersLiveInfo(channelApi3)  }} className={style.box}>
+                                    <img src={liveInfoApi3?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+                                </div>
+                                <div onClick={() => { setPartnersLive(liveInfoApi); setPartnersLiveInfo(channelApi)  }} className={style.box}>
+                                    <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+                                </div>
                             </div>
-                            <div onClick={()=>{setPartnersLive(liveInfoApi1)}} className={style.box}>
-                                <img src={liveInfoApi1?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                                <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
-                            </div>
-                            <div onClick={()=>{setPartnersLive(liveInfoApi2)}}  className={style.box}>
-                                <img src={liveInfoApi2?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                                <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
-                            </div>
-                            <div onClick={()=>{setPartnersLive(liveInfoApi3)}} className={style.box}>
-                                <img src={liveInfoApi3?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                                <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
-                            </div>
-                            <div onClick={()=>{setPartnersLive(liveInfoApi)}} className={style.box}>
-                                <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                                <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
-                            </div>
+                            <img style={{ marginLeft: '30px' }} src={chevron_right_w} />
                         </div>
-                        <img style={{ marginLeft: '30px' }} src={chevron_right_w} />
-                    </div>
+                    }
 
 
                 </div>
