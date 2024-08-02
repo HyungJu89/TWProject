@@ -20,6 +20,13 @@ public class PartnersApiController {
 	
 	@GetMapping("/")
 	public Object PartnersLive() {
+		
+		if (PartnersApiService.PartnersLiveInfo() == null) {
+			System.out.println("데이터 오류");
+		}else {
+			System.out.println("파트너스 API 통과");
+		}
+		
 		return PartnersApiService.PartnersLiveInfo();
 	};
 	
