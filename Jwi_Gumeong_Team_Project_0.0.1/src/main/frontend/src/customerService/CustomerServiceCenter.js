@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styles from './style/CustomerService.module.css';
 import serviceLogo from '../icon/img/service-Illustration.png';
 import asking from '../icon/img/ask-ing.png';
@@ -19,25 +20,28 @@ function CustomerServiceCenter() {
     // 문의 내역
     const inquiryList = [
         // 비워둔거임!!
+        {
+            content:"aa",
+            title:"aa"
+
+        }
     ]
 
-    const faqs = [
-        {
-            title: "우리 사이트는요?",
-            type: "시스템 관련",
-            content: "쥐구멍이란 사이트에요~"
-        },
-        {
-            title: "재열이는요?",
-            type: "시스템 관련",
-            content: "재열이에요~"
-        },
-        {
-            title: "형주는요?",
-            type: "시스템 관련",
-            content: "당근을 흔들어요~"
-        }
-    ];
+    const [faqs, setFaqs] = useState([]);
+
+    useEffect(() => {
+        axios.get('/faq/list')
+            .then(response => {
+                if (response.data.result === "success") {
+                    setFaqs(response.data.list);
+                } else {
+                    console.log("FAQ 리스트 불러오기 실패");
+                }
+            })
+            .catch(error => {
+                console.log("API 호출 오류: " + error.message);
+            });
+    }, []);
 
     let [currentPage, setCurrentPage] = useState(1);
     let [dropdownOpen, setDropdownOpen] = useState(false);
@@ -77,7 +81,7 @@ function CustomerServiceCenter() {
                                     <img src={asking} className={styles.faqIcon} alt="답변 아이콘"/>
                                     <div className={styles.faqDetails}>
                                         <div className={styles.faqTitle}>{faq.title}</div>
-                                        <div className={styles.faqSubtitle}>{faq.type}</div>
+                                        <div className={styles.faqSubtitle}>{faq.category}</div>
                                     </div>
                                 </div>
                                 {/* FAQ의 번호와 인덱스가 같으면 열림 */}
@@ -155,7 +159,7 @@ function CustomerServiceCenter() {
                                         <div className={styles.inquiryHeader}>
                                             <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
                                             <div className={styles.inquiryDetails}>
-                                                <div className={styles.inquiryTitle}>문의하신 내용을 답변 받았습니다. ({inquiry.date})</div>
+                                                <div className={styles.inquiryTitle}>문의하신 내용을 답변 받았습니다.</div>
                                                 <div className={styles.inquirySubtitle}>문의 제목: {inquiry.title}</div>
                                             </div>
                                         </div>
@@ -245,7 +249,7 @@ function CustomerServiceCenter() {
                         </div>
                         <div className={`${styles.navItems} ${tab === 3 ? styles.active : ''}`} 
                             onClick={() => setTab(3)}>
-                            내 제제 내역
+                            내 제재 내역
                         </div>
                     </div>
                 </div>
