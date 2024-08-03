@@ -4,9 +4,7 @@ import styles from './style/SignUp.module.css';
 import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { redirect, useNavigate } from 'react-router-dom';
-
-
-
+import AlarmModal from '../modal/AlarmModal.js';
 
 //회원가입 전체 페이지
 function SignUp() {
@@ -21,16 +19,13 @@ function SignUp() {
     );
 }
 
-
-
-
 // 필수 동의 사항 페이지
-
 function Agree({ setAgreeCheck }) {
     const [isButtonActive, setIsButtonActive] = useState(false);
-    const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
     const [selectedOption, setSelectedOption] = useState(false);
     const [selectedOption2, setSelectedOption2] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    
 
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value === 'true');
@@ -46,11 +41,23 @@ function Agree({ setAgreeCheck }) {
             setIsButtonActive(false);
         }
     }, [selectedOption, selectedOption2]);
-    useEffect(()=>{
-        alert('★이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!')
-    },[])
+
+    useEffect(() => {
+        setModalOpen(true);
+    }, []);
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     return (
         <div className={styles.joinContainer}>
+            {modalOpen && (
+                <AlarmModal 
+                    content={<div>이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!</div>} 
+                    onClose={closeModal} 
+                />
+            )}
             <div className={styles.topFont}>회원가입</div>
             {/* 필수 동의 항목 */}
             <div className={styles.topAgreeFont} >필수 동의 항목</div>
@@ -125,15 +132,12 @@ function Agree({ setAgreeCheck }) {
                 className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} >
                 다음
             </button>
+            
         </div>
     );
 }
 
-
-
-
 //회원가입 페이지
-
 function Join() {
     //email 관련 state
     const [email, setEmail] = useState('');
@@ -155,10 +159,25 @@ function Join() {
 
     //잡다 state
     const [gender, setGender] = useState('비밀');
-    const [certification, setCertification] = useState(''); 
+    //랜덤으로 발송한 인증번호
+    const [certification, setCertification] = useState('');
+    //유저가 친 인증번호 
+    const [userCertification, setUserCertification] = useState('');
+    //인증번호 확인
+    const [checkCerti, SetCheckCerti] = useState(false);
+    //인증상태 보여주기 
+    const [showCerti, SetShowCerti] = useState(false);
     const [userInput, setUserInput] = useState(0);
     const [isButtonActive, setIsButtonActive] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+
     let navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
 
     //이메일 비밀번호 유효성 검사
     const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
@@ -175,14 +194,14 @@ function Join() {
             setEmailWarning('');
             return true;
         } else {
-            return false;
+            return false; 
         }
     }
     //비밀번호 유효성 검사로직
     const PasswordCheck = (password) => {
         setpasswordWarning2('');
         if (!passwordRegEx.test(password)) {
-          setpasswordWarning2('비밀번호는 8자 이상 20자 이하이어야 합니다.');
+            setpasswordWarning2('비밀번호는 8자 이상 20자 이하이어야 합니다.');
         }
         if (!numberRegEx.test(password)) {
             setpasswordWarning2('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.');
@@ -193,7 +212,7 @@ function Join() {
         if (!letterRegEx.test(password)) {
             setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
         }
-      };
+    };
     //닉네임 유효성 검사로직
     const nickNameChecks = (nickName) => {
         if (nickNameRegEx.test(nickName)) {
@@ -203,14 +222,32 @@ function Join() {
             return false;
         }
     }
-    //이메일 인증 로직
-    
+    //이메일 인증번호 발송 로직
+    const handleEmailCheck = () => {
+        axios.get('/certification', { params: { email: email } }).then((response) => {
+            setCertification(response.data);
+        })
+            .catch(error => {
+                console.error('Channel API Error:', error);
+                throw error;
+            })
+
+    }
+    //인증번호 대조로직
+    const contrastCertification = () => {
+        if (certification == userCertification) {
+            SetCheckCerti(true);
+            console.log("잘됫음");
+        } else {
+            SetCheckCerti(false);
+        }
+    }
 
     const handleGenderChange = (event) => {
         setGender(event.target.value);
     };
-    const handleCertification = (event) => {
-        setCertification(event.target.value);
+    const handleUserCertification = (event) => {
+        setUserCertification(event.target.value);
     };
 
     const toggleShowPassword = () => {
@@ -221,47 +258,50 @@ function Join() {
         setShowPasswordCheck(!showPasswordCheck);
     };
 
-
     useEffect(() => {
-        if (email !== '' && password !== '') {
+        if (email !== '' && password !== '' && nickName !== '' && checkCerti && passwordWarning == '') {
             setIsButtonActive(true);
-        } 
+        }
         if (!emailChecks(email)) {
             setEmailWarning('이메일 형식이 맞지 않습니다.');
             setEmailCheck(false);
         }
-         else {
+        else {
             setIsButtonActive(false);
         }
+
         if(password !== passwordCheck){
             setpasswordWarning('재확인 비밀번호와 비밀번호가 일치하지 않습니다.');
         }
-        if(password == passwordCheck){
+        if (password == passwordCheck) {
             setpasswordWarning('');
+        } else {
+            setIsButtonActive(false);
         }
-        PasswordCheck(password)  
-    }, [email, password,passwordCheck]);
+        PasswordCheck(password)
+    }, [email, password, passwordCheck, nickName, checkCerti]);
 
-    useEffect(()=>{
-    if(!nickNameChecks(nickName)){
-        setNickNameWarning('닉네임 형식이 맞지 않습니다.');
-        setNickNameCheck(false);
-    } if(nickNameChecks(nickName)){
-        axios.get('/signUp/nickNameTest', { params: { nickName: nickName } }).then((response) => {
-            if(!response.data){
-                setNickNameWarning('이미 사용한 닉네임 입니다.');
-                setNickNameCheck(response.data);
-            }else {
-                setNickNameWarning('사용가능한 닉네임 입니다.');
-                setNickNameCheck(response.data);
-            }
-        })
-        .catch(error => {
-            console.error('Channel API Error:', error);
-            throw error;
-        })
-    }
-    },[nickName])
+    useEffect(() => {
+        if (!nickNameChecks(nickName)) {
+            setNickNameWarning('닉네임 형식이 맞지 않습니다.(2~8자)');
+            setNickNameCheck(false);
+            setIsButtonActive(false);
+        } if (nickNameChecks(nickName)) {
+            axios.get('/signUp/nickNameTest', { params: { nickName: nickName } }).then((response) => {
+                if (!response.data) {
+                    setNickNameWarning('이미 사용한 닉네임 입니다.');
+                    setNickNameCheck(response.data);
+                } else {
+                    setNickNameWarning('사용가능한 닉네임 입니다.');
+                    setNickNameCheck(response.data);
+                }
+            })
+                .catch(error => {
+                    console.error('Channel API Error:', error);
+                    throw error;
+                })
+        }
+    }, [nickName])
 
 
     //이메일 state input에 넣는값으로 state바꿔주는 함수
@@ -288,51 +328,67 @@ function Join() {
             setUserInput(e.target.value.length);
         }
         if (e.target.value.length >= 9) {
-            alert('닉네임은 8자 이하만 사용가능 합니다!');
+            AlarmModal(
+                '닉네임은 8자 이하만 사용가능 합니다!');
         }
     };
 
     //이메일 중복검사 로직
-    const emailTest = (userEmail) => {
-        if(!email == ''){
+    const emailTest = async (userEmail) => {
+        if (!email == '') {
             axios.get('/signUp/emailTest', { params: { email: userEmail } }).then((response) => {
-                if(!response.data){
+                if (!response.data) {
                     setEmailWarning('이미 사용한 이메일 입니다.');
                     setEmailCheck(response.data);
-                }else {
+                }
+                if(!emailChecks(email)){
+                    setEmailWarning('이메일 형식이 맞지 않습니다.')
+                    return;
+                }
+                else {
                     setEmailWarning('유효한 이메일입니다! 인증번호를 전송했습니다. 메일함에서 확인해주세요.');
+                    handleEmailCheck();
                     setEmailCheck(response.data);
                 }
             })
-            .catch(error => {
-                console.error('Channel API Error:', error);
-                throw error;
-            })
+                .catch(error => {
+                    console.error('Channel API Error:', error);
+                    throw error;
+                })
         }
     }
-
 
     // POST 요청 보내는 함수 회원가입 버튼로직
     const handleSubmit = async () => {
         // 회원가입 유효성 검사
         if (email == '') {
-            alert('이메일이 비었습니다!');
+            setModalContent('이메일이 비었습니다!');
+            setModalOpen(true);
             return;
         }
-        if (!emailCheck){
-            alert('중복된 이메일 입니다.')
+        if (!emailCheck) {
+            setModalContent('중복된 이메일 입니다.');
+            setModalOpen(true);
+            return;
+        }
+        if (!checkCerti) {
+            setModalContent('인증번호가 올바르지 않습니다.');
+            setModalOpen(true);
             return;
         }
         if (password == '') {
-            alert('비밀번호를 제대로 입력해주세요!')
+            setModalContent('비밀번호를 제대로 입력해주세요!');
+            setModalOpen(true);
             return;
         }
         if (password !== passwordCheck) {
-            alert('비밀번호와 재확인 비밀번호가 일치하지 않습니다.');
+            setModalContent('비밀번호와 재확인 비밀번호가 일치하지 않습니다.');
+            setModalOpen(true);
             return;
         }
         if (nickName == '') {
-            alert('닉네임을 입력해주세요!');
+            setModalContent('닉네임을 입력해주세요!');
+            setModalOpen(true);
             return;
         }
         if (!emailChecks(email)) {
@@ -365,6 +421,7 @@ function Join() {
 
     return (
         <div className={styles.joinContainer}>
+            {modalOpen && <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />}
             <div className={styles.topFont}>회원가입</div>
             <div className={styles.formGroup}>
                 <p>이메일</p>
@@ -377,8 +434,8 @@ function Join() {
                         onChange={handleEmailChange}
                         className={styles.email}
                     />
-                    <button className={`${styles.emailButton} ${email !== '' ? styles.active : ''}`} onClick={()=>{emailTest(email)}}>중복체크</button>
-                </div> 
+                    <button className={`${styles.emailButton} ${email !== '' ? styles.active : ''}`} onClick={() => { emailTest(email) }}>중복체크</button>
+                </div>
             </div>
             {
                 emailWarning == '' ? <div style={{ marginBottom: '50px' }}></div> : <div className={`${styles.emailWarn} ${emailCheck ? styles.active : ''}`} style={{ marginBottom: '30px' }}>{emailWarning}</div>
@@ -387,16 +444,19 @@ function Join() {
                 <p>이메일 인증</p>
                 <div className={styles.inputWrapper}>
                     <input
-                        style={{ marginBottom: '60px' }}
+                        style={{ marginBottom: '10px' }}
                         type="text"
                         placeholder="인증번호"
-                        value={certification}
-                        onChange={handleCertification}
+                        value={userCertification}
+                        onChange={handleUserCertification}
                         className={styles.email}
                     />
-                    <button className={`${styles.emailButton} ${certification !== '' ? styles.active : ''}`}>인증</button>
+                    <button onClick={() => { contrastCertification(); SetShowCerti(true); }} className={`${styles.emailButton} ${userCertification !== '' ? styles.active : ''}`}>인증</button>
                 </div>
             </div>
+            {
+                showCerti ? checkCerti ? <div className={styles.certifiOk} style={{ marginBottom: '30px' }}>인증되었습니다.</div> : <div className={styles.emailWarn} style={{ marginBottom: '30px' }}>인증번호가 알맞지 않습니다.</div> : <div style={{ marginBottom: '50px' }}></div>
+            }
             <div className={styles.formGroup}>
                 <p>비밀번호</p>
                 <div className={styles.inputWrapper}>
@@ -488,6 +548,5 @@ function Join() {
         </div>
     );
 }
-
 
 export default SignUp;

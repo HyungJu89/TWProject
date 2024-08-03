@@ -91,7 +91,6 @@ html, body {
     border: none;
     cursor: pointer;
     text-align: center;
-    margin-top: 80px;
     font-size: 16px;
     font-weight: 500;
 }
@@ -113,4 +112,8 @@ html, body {
     color: #999999;
     margin-top: 0px;
     cursor: pointer;
+}
+
+.warning {
+    color: #EC000E;
 }

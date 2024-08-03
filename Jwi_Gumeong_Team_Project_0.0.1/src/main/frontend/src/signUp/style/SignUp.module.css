@@ -204,3 +204,7 @@ body { */
 .emailWarn.active {
     color: #FF8901;
 }
+
+.certifiOk {
+    color: #FF8901;
+}

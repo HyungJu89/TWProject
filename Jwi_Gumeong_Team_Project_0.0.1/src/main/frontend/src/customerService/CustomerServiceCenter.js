@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styles from './style/CustomerService.module.css';
 import serviceLogo from '../icon/img/service-Illustration.png';
 import asking from '../icon/img/ask-ing.png';
@@ -11,74 +12,62 @@ import addIcon from '../icon/40px/add.png';
 
 function CustomerServiceCenter() {
     let [tab, setTab] = useState(0);
+    // 제재내역
     const sanctions = [
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        },
-        {
-            date: "9999.12.12",
-            title: "재열님은 댓글달기 정지 30일을 받았어요.",
-            reason: "욕설, 악의적인 주도, 선동"
-        }
+        // 일부러
     ];
+
+    // 문의 내역
+    const inquiryList = [
+        // 비워둔거임!!
+        {
+            content:"aa",
+            title:"aa"
+
+        }
+    ]
+
+    const [faqs, setFaqs] = useState([]);
+
+    useEffect(() => {
+        axios.get('/faq/list')
+            .then(response => {
+                if (response.data.result === "success") {
+                    setFaqs(response.data.list);
+                } else {
+                    console.log("FAQ 리스트 불러오기 실패");
+                }
+            })
+            .catch(error => {
+                console.log("API 호출 오류: " + error.message);
+            });
+    }, []);
+
     let [currentPage, setCurrentPage] = useState(1);
-    let [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    let [dropdownOpen, setDropdownOpen] = useState(false);
     let [selectedOption, setSelectedOption] = useState("선택하세요");
-    const sanctionsPerPage = 10;
-    const indexOfLastSanction = currentPage * sanctionsPerPage;
-    const indexOfFirstSanction = indexOfLastSanction - sanctionsPerPage;
+    let [faqContent, setFaqContent] = useState(null);
+    let [inquiryContent, setInquiryContent] = useState(null);
+    /* 임시 페이징(백엔드로 바꿀 예정) */
+    const sectionsPerPage = 10;
+    const indexOfLastSanction = currentPage * sectionsPerPage;
+    const indexOfFirstSanction = indexOfLastSanction - sectionsPerPage;
     const currentSanctions = sanctions.slice(indexOfFirstSanction, indexOfLastSanction);
 
-    const handleOptionSelect = (option) => {
+    // 문의하기 종류 선택 모달
+    const optionSelect = (option) => {
         setSelectedOption(option);
-        setIsDropdownOpen(false);
+        setDropdownOpen(false);
+    };
+
+    /* FAQ 클릭시 열림 */
+    const openedFaq = (idx) => { // idx = 인덱스
+        setFaqContent(faqContent === idx ? null : idx);
+    };
+
+    /* 문의 내역 클릭시 열림 */
+     const openedInquiry = (idx) => { // idx = 인덱스
+        setInquiryContent(inquiryContent === idx ? null : idx);
     };
 
     const renderTabContent = () => {
@@ -86,12 +75,30 @@ function CustomerServiceCenter() {
             case 0:
                 return (
                     <div className={styles.faqContainer}>
-                        <div className={styles.faqTitle}>자주 묻는 질문</div>
-                        {[...Array(10)].map((_, index) => (
-                            <div key={index} className={styles.faqItem}>
-                                <div className={styles.faqQuestion}>자주 묻는 질문 {index + 1}</div>
+                        {faqs.map((faq, idx) => (
+                            <div key={idx} onClick={() => openedFaq(idx)} className={styles.faqItem}>
+                                <div className={styles.faqHeader}>
+                                    <img src={asking} className={styles.faqIcon} alt="답변 아이콘"/>
+                                    <div className={styles.faqDetails}>
+                                        <div className={styles.faqTitle}>{faq.title}</div>
+                                        <div className={styles.faqSubtitle}>{faq.category}</div>
+                                    </div>
+                                </div>
+                                {/* FAQ의 번호와 인덱스가 같으면 열림 */}
+                                {faqContent === idx && (
+                                    <div>
+                                        {/* 선 */}
+                                        <div className={styles.faqDivider}></div>
+                                        <div className={styles.faqContent}>
+                                            {/* 일단 이미지 넣었는데 내용 중간에 넣는건 아직 현재 내용 맨위 */}
+                                            {faq.image && <img src={faq.image} className={styles.faqContentImage} alt="FAQ 이미지" />}
+                                            <div className={styles.faqContentText}>{faq.content}</div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ))}
+                        
                     </div>
                 );
             case 1:
@@ -106,13 +113,13 @@ function CustomerServiceCenter() {
                             <div className={styles.inqForm}>
                                 <div className={styles.inqField}>
                                     <label>문의 종류</label>
-                                    <div onClick={() => setIsDropdownOpen(!isDropdownOpen)} className={styles.inqSelect}>
+                                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
                                         {selectedOption}
                                     </div>
-                                    {isDropdownOpen && (
+                                    {dropdownOpen && (
                                         <ul className={styles.dropdown}>
                                             {["시스템 관련", "오류", "이용 제한", "요청", "도용.보안", "권리 보호", "계정 관리"].map((option, index) => (
-                                                <div key={index} className={styles.dropdownItem} onClick={() => handleOptionSelect(option)}>
+                                                <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
                                                     {option}
                                                 </div>
                                             ))}
@@ -124,11 +131,13 @@ function CustomerServiceCenter() {
                                     <input type="text" placeholder="문의 제목을 입력하세요." className={styles.inqInput} />
                                 </div>
                                 <div className={styles.inqField}>
-                                    <textarea className={styles.inqTextarea} placeholder="문의 내용을 입력하세요.&#13;&#13;내용 중 욕설, 비판, 악의적인 글, 악의적인 신고 등은 역제제 당할 수 있습니다. 올바른 문의 내용을 입력해주시기 바랍니다."></textarea>
+                                    {/* &#13; = 엔터 */}
+                                    <textarea className={styles.inqTextarea} 
+                                    placeholder="문의 내용을 입력하세요.&#13;&#13;내용 중 욕설, 비판, 악의적인 글, 악의적인 신고 등은 역제제 당할 수 있습니다. 올바른 문의 내용을 입력해주시기 바랍니다."></textarea>
                                 </div>
                                 <div className={styles.inqField}>
                                     <div className={styles.fileUpload}>
-                                        <img src={addIcon} alt="추가 아이콘" className={styles.uploadIcon} />
+                                        <img src={addIcon} className={styles.uploadIcon} alt="파일 추가 버튼 아이콘" />
                                     </div>
                                 </div>
                                 <div className={styles.submitButtonContainer}>
@@ -142,30 +151,32 @@ function CustomerServiceCenter() {
                 return (
                     <div>
                         <div className={styles.inquiryContainer}>
-                            <div className={styles.inquiryList}>
-                                {[
-                                    {
-                                        date: "24.06.09",
-                                        title: "테스트1"
-                                    },
-                                    {
-                                        date: "24.06.09",
-                                        title: "테스트2"
-                                    },
-                                    {
-                                        date: "24.06.09",
-                                        title: "테스트3"
-                                    }
-                                ].map((inquiry, index) => (
-                                    <div key={index} className={styles.inquiryItem}>
-                                        <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
-                                        <div className={styles.inquiryDetails}>
-                                            <div className={styles.inquiryTitle}>문의하신 내용을 답변 받았습니다. ({inquiry.date})</div>
-                                            <div className={styles.inquirySubtitle}>문의 제목: {inquiry.title}</div>
+                            {inquiryList.length === 0 ? (
+                                <div className={styles.noHistory}>문의 내역이 없습니다.</div>
+                            ) : (
+                            inquiryList.map((inquiry, idx) => (
+                                    <div onClick={() => openedInquiry(idx)} className={styles.inquiryItem}>
+                                        <div className={styles.inquiryHeader}>
+                                            <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
+                                            <div className={styles.inquiryDetails}>
+                                                <div className={styles.inquiryTitle}>문의하신 내용을 답변 받았습니다.</div>
+                                                <div className={styles.inquirySubtitle}>문의 제목: {inquiry.title}</div>
+                                            </div>
                                         </div>
+                                        {inquiryContent === idx && (
+                                            <div>
+                                                {/* 선 */}
+                                                <div className={styles.faqDivider}></div>
+                                                <div className={styles.faqContent}>
+                                                    {/* 일단 이미지 넣었는데 내용 중간에 넣는건 아직 현재 내용 맨위 */}
+                                                    {inquiry.image && <img src={inquiry.image} className={styles.faqContentImage} alt="FAQ 이미지" />}
+                                                    <div className={styles.faqContentText}>{inquiry.content}</div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                ))}
-                            </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 );
@@ -174,7 +185,10 @@ function CustomerServiceCenter() {
                     <div>
                         <div className={styles.sanctionContainer}>
                             <div className={styles.sanctionList}>
-                                {currentSanctions.map((sanction, index) => (
+                                {currentSanctions.length === 0 ? (
+                                    <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
+                                ) : (
+                                currentSanctions.map((sanction, index) => (
                                     <div key={index} className={styles.sanctionItem}>
                                         <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
                                         <div className={styles.sanctionDetails}>
@@ -186,17 +200,20 @@ function CustomerServiceCenter() {
                                         </div>
                                         {index < currentSanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
                                     </div>
-                                ))}
+                                ))
+                            )}
                             </div>
-                            <div className={styles.pagination}>
-                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
-                                    <img src={btnLeft} alt="Previous Page" />
-                                </button>
-                                <span className={styles.pageInfo}>{currentPage} / {Math.ceil(sanctions.length / sanctionsPerPage)}</span>
-                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sanctionsPerPage)} className={styles.pageNextButton}>
-                                    <img src={btnRight} alt="Next Page" />
-                                </button>
-                            </div>
+                            {Math.ceil(sanctions.length / sectionsPerPage) > 1 && (
+                                <div className={styles.pagination}>
+                                    <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
+                                        <img src={btnLeft} alt="Previous Page" />
+                                    </button>
+                                    <span className={styles.pageInfo}>{currentPage} / {Math.ceil(sanctions.length / sectionsPerPage)}</span>
+                                    <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sectionsPerPage)} className={styles.pageNextButton}>
+                                        <img src={btnRight} alt="Next Page" />
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 );
@@ -211,7 +228,7 @@ function CustomerServiceCenter() {
                 <div className={styles.bannerPosition}>
                     <div className={styles.logoTitle}>고객센터</div>
                     <div className={styles.logoPosition}>
-                        <img src={serviceLogo} alt="고객센터 로고"/>
+                        <img src={serviceLogo} className={styles.serviceLogo} alt="고객센터 로고"/>
                     </div>
                 </div>
             </div>
@@ -232,7 +249,7 @@ function CustomerServiceCenter() {
                         </div>
                         <div className={`${styles.navItems} ${tab === 3 ? styles.active : ''}`} 
                             onClick={() => setTab(3)}>
-                            내 제제 내역
+                            내 제재 내역
                         </div>
                     </div>
                 </div>
