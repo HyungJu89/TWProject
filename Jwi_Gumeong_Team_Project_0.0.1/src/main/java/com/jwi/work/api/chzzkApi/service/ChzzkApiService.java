@@ -22,7 +22,8 @@ public class ChzzkApiService {
 	
 	
 	public Object chzzkLiveInfo(String channelId) {
-		
+		System.out.println("라이브 api 오류 체크용");
+		System.out.println(channelInfo.chzzkLiveInfo(channelId));
 		return channelInfo.chzzkLiveInfo(channelId);
 		
 		

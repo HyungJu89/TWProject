@@ -25,6 +25,7 @@ public class PartnersApiController {
 			System.out.println("데이터 오류");
 		}else {
 			System.out.println("파트너스 API 통과");
+			System.out.println(PartnersApiService.PartnersLiveInfo());
 		}
 		
 		return PartnersApiService.PartnersLiveInfo();

@@ -23,6 +23,7 @@ CREATE TABLE `favorites` (
 	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
+select * from `channel`;
 CREATE TABLE `channel` (
 	`channelKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`id`	VARCHAR(32)	NOT NULL	COMMENT '채널 아이디',
@@ -176,6 +177,11 @@ CREATE TABLE `channelRules` (
 	`updatedAt`	TIMESTAMP	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
+CREATE TABLE `Image` (
+   `imageKey`   INT PRIMARY KEY AUTO_INCREMENT   NOT NULL,
+   `imageUrl`   VARCHAR(300) UNIQUE   NOT NULL,
+    `imageHash`  CHAR(64) NOT NULL UNIQUE
+);
 
 
 
