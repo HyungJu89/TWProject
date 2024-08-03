@@ -3,6 +3,7 @@
 
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
+import _ from 'lodash';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styles from './style/Main.module.css';
@@ -19,78 +20,71 @@ function Main() {
     let [topic, settopic] = useState(true);
     let [loginOn, setLoginOn] = useState(false);
     const [partnersLive, setPartnersLive] = useState([]);
-    useEffect(() => { /*파트너스 Live*/
-        const addPartners = async () =>{
-            let arrayPartners = []; //12개 배열 저장할 장소
-            let filterArrayPartners = new Set(); // 고유 파트너를 저장할 Set
-
-            try{
-                while (arrayPartners.length < 12){ //배열이 12가 되면 참이다.
-                    const response = await axios.get(`/partnersLiveApi/`);
-                    const newPartners = response.data.content.streamerPartners;
-
-                    // API 호출 데이터를 Set에 추가하여 중복을 자동으로 제거
-                    newPartners.forEach(partner => filterArrayPartners.add(partner));
-                    
-                    if (filterArrayPartners.size >= 12) {//불러온 데이터 12개 초과 시 실행
-                        arrayPartners = Array.from(filterArrayPartners).slice(0, 12);
-                        setPartnersLive(arrayPartners); // 상태 업데이트
-                        break;
-                    }
-                }
-            } catch(error){
-                console.error('Channel API Error:', error);
+    useEffect(() => {
+        const addPartners = async () => {
+          let arrayPartners = [];
+    
+          try {
+            while (arrayPartners.length < 12) {
+              const response = await axios.get(`/partnersLiveApi/`);
+              const newPartners = response.data.content.streamerPartners;
+    
+              // 기존 배열과 새 데이터를 합쳐서 중복 제거
+              arrayPartners = _.uniq([...arrayPartners, ...newPartners], 'channelId');
+    
+              // 배열의 길이가 12 이상이면 slice로 자르고 상태 업데이트
+              if (arrayPartners.length >= 12) {
+                arrayPartners = _.uniq([...arrayPartners, ...newPartners], 'channelId');
+                arrayPartners = arrayPartners.slice(0, 12);
+                setPartnersLive(arrayPartners);
+                break;
+              }
             }
+          } catch (error) {
+            console.error('Channel API Error:', error);
+          }
         };
+    
         addPartners();
-    }, []);
+      }, []);
     
     //컴포넌트 전송 최적화 구문
     const partnerChannelIndex = (i) =>{
+        console.log('파트너스라이브 중복체크');
+        console.log(partnersLive);
         return partnersLive[i]?.channelId || '오류';
     };
 
-    const [channelHot, setChannelHot] = useState('');
-    useEffect(() => { /*특정 URL 방송--대체예정*/
-        axios.get(`/channelAPI/search/${partnerChannelIndex(1)}`)
-            .then((response) => {
-                setChannelHot(response.data.content);
-            })
-            .catch(error => {
-                console.error('Channel API Error:', error);
-                throw error;
-            })
-    }, []);
-
     const [channel, setChannel] = useState('');
-    useEffect(() => { /*파트너스 추천*/
-        const addPartners = async () =>{
-            let arrayPartners = []; //12개 배열 저장할 장소
-            let filterArrayPartners = new Set(); // 고유 파트너를 저장할 Set
-
-            try{
-                while (arrayPartners.length < 12){ //배열이 12가 되면 참이다.
-                    const response = await axios.get(`/partnersLiveApi/`);
-                    const newPartners = response.data.content.streamerPartners;
-
-                    // API 호출 데이터를 Set에 추가하여 중복을 자동으로 제거
-                    newPartners.forEach(partner => filterArrayPartners.add(partner));
-                    
-                    if (filterArrayPartners.size >= 12) {//불러온 데이터 12개 초과 시 실행
-                        arrayPartners = Array.from(filterArrayPartners).slice(0, 12);
-                        setChannel(arrayPartners); // 상태 업데이트
-                        break;
-                    }
-                }
-            } catch(error){
-                console.error('Channel API Error:', error);
+    useEffect(() => {
+        const addRandomPartners = async () => {
+          let arrayPartners = []; // 6개 배열 저장할 장소
+    
+          try {
+            while (arrayPartners.length < 6) { // 배열이 6개가 되면 종료
+              const response = await axios.get(`/partnersLiveApi/`);
+              const newPartners = response.data.content.streamerPartners;
+    
+              // 기존 배열 + 새 데이터 (중복제거) = 중복이 제거된 데이터
+              arrayPartners = _.uniqBy([...arrayPartners, ...newPartners], 'channelId');
+    
+              if (arrayPartners.length >= 6) { // 불러온 데이터 6개 이상 시 실행
+                arrayPartners = arrayPartners.slice(0, 6);
+                setChannel(arrayPartners); // 상태 업데이트
+                break;
+              }
             }
+          } catch (error) {
+            console.error('Channel API Error:', error);
+          }
         };
-        addPartners();
-    }, []);
+        addRandomPartners();
+      }, []);
 
         //컴포넌트 전송 최적화 구문
         const ChannelIndex = (i) =>{
+            console.log('추천 중복체크');
+            console.log(channel);
             return channel[i]?.channelId || '오류';
         };
 
@@ -118,16 +112,16 @@ function Main() {
                     <div className={styles.hotBoard}>{/*인기 게시판*/}
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
                         <div className={styles.channelDiv}>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
-                            <div className={styles.channel}><img src={channelHot.channelImageUrl} />{channelHot.channelName}</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
                         </div>
                     </div>
                     <TopicBtn topic={topic} settopic={settopic} />
