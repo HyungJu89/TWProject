@@ -1,7 +1,5 @@
 package com.jwi.work.channel.dto;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data

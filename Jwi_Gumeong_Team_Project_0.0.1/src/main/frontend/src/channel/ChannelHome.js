@@ -35,6 +35,7 @@ function ChannelHome() {
     //들어오자마자 작동
     useEffect(()=>{
     // 비동기 함수 호출
+    
     handleCheckChannel(channelId);
     },[])
 

@@ -24,7 +24,7 @@ public class PostController {
 			@RequestParam("channelKey") int channelKey,
 			@RequestParam("userKey") int userKey,
             @RequestParam("content") String content,
-            @RequestParam("files") List<MultipartFile> files
+            @RequestParam(value = "files", required = false) List<MultipartFile> files
 			) {
 		
 		

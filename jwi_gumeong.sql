@@ -182,7 +182,7 @@ drop table Image;
 CREATE TABLE `Image` (
 	`imageKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`imageUrl`	VARCHAR(300) UNIQUE	NOT NULL,
-    `hash`  CHAR(64) NOT NULL UNIQUE
+    `imageHash`  CHAR(64) NOT NULL UNIQUE
 );
 
 

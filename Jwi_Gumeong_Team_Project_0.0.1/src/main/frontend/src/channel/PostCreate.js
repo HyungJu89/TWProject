@@ -7,6 +7,7 @@ import closeIcon from '../icon/btn/btn-image-Close.png'
 import '../App.css'
 import { useParams } from 'react-router-dom';
 import {formatUnit} from '../recycleCode/Util.js';
+import axios from 'axios';
 function PostCreact() {
 
 
@@ -72,7 +73,7 @@ function PostCreact() {
 
 
     //서버로 게시글 정보를 넘김
-    const postCreact = () => {
+    const postCreact = async() => {
         // JSP 에서 FORM 과 비슷함
         const formData = new FormData();
 

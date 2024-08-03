@@ -3,7 +3,7 @@ package com.jwi.work.channel.util;
 import org.springframework.stereotype.Component;
 
 import com.jwi.work.channel.dto.PagingDto;
-@Component
+
 public class PagingUtil {
 
 	public PagingDto paging(int page, int count, int limitPage) {

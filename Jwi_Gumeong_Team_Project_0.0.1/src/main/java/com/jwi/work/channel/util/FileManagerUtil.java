@@ -1,5 +1,6 @@
 package com.jwi.work.channel.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,20 +11,17 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.ServletContext;
+
 @Component
 public class FileManagerUtil {
 
-	private static ServletContext servletContext;
-	
-
-	private static final String REAL_PATH = servletContext.getRealPath("/");
-	
-	public static final String FILE_ROOT = REAL_PATH + "resources/fileupload/";
-	
+	@Autowired
+	private ServletContext servletContext;
 
 	private static Logger logger = LoggerFactory.getLogger(FileManagerUtil.class);
 
@@ -35,8 +33,7 @@ public class FileManagerUtil {
 		return calculateFileHash(file);
 
 	}
-	
-	
+
 	
 	private String calculateFileHash(MultipartFile file) throws IOException, NoSuchAlgorithmException {
 		// 파일의 SHA-256 해시 값을 계산하여 16진수 문자열로 반환하는 메서드
@@ -76,6 +73,22 @@ public class FileManagerUtil {
 		// 저장될 파일 명
 		String savedFileName = UUID.randomUUID() + extension; 
 		
+		
+		String realPath = servletContext.getRealPath("/");
+		
+		String fileRoot = realPath + "resources/fileupload/";
+		
+		File directory = new File(fileRoot);
+        // 디렉토리 존재 여부 체크
+        if (!directory.exists()) {
+            // 디렉토리 생성
+            if (!directory.mkdirs()) {
+                logger.error("saveFile : 디렉토리 생성 실패 - " + directory);
+                return null;
+            }
+        }
+		
+		
 //		String originalFileName = file.getOriginalFilename();	//오리지날 파일명 <- 요친구 날리고
 //    	String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자 만 가져와서 
 //     UUID.randomUUID() 랜덤으로다 돌리면 맥에서도 괜찮지않을까요?
@@ -85,7 +98,7 @@ public class FileManagerUtil {
 		try {
 			byte[] bytes = file.getBytes();
 
-			filePath = FILE_ROOT + savedFileName;
+			filePath = fileRoot + savedFileName;
 			Path path = Paths.get(filePath);
 			Files.write(path, bytes);
 
@@ -102,7 +115,11 @@ public class FileManagerUtil {
 	// 파일 삭제 메소드
 	public boolean removeFile(String filePath) { // /images/2_38239823/test.png
 
-		String realFilePath = FILE_ROOT + filePath;
+		String realPath = servletContext.getRealPath("/");
+		
+		String fileRoot = realPath + "resources/fileupload/";
+		
+		String realFilePath = fileRoot + filePath;
 		Path path = Paths.get(realFilePath);
 
 		// 파일이 존재하는지
