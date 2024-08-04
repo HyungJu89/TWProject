@@ -8,7 +8,6 @@ export const fetchSessionId = createAsyncThunk(
           var jsonSessionInfo = localStorage.getItem('sessionId');
           const response = await axios.get(`/signIn/getSessionId`, { params: { email: email } });
           localStorage.setItem('sessionId', JSON.stringify({email:email , sessionId:response.data , count:0}));
-          console.log(response.data);
         return response.data;
       } catch (error) {
         return rejectWithValue(error.response.data);
@@ -21,7 +20,7 @@ export const fetchSessionId = createAsyncThunk(
     async (sessionId,{ rejectWithValue }) => {
       try {
           const response = await axios.get(`/signIn/checkSessionId`, { params: { sessionId: sessionId } });
-          console.log(response.data.email);
+
         return response.data;
       } catch (error) {
         return rejectWithValue(error.response.data);

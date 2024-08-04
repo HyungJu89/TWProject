@@ -38,7 +38,6 @@ public class SignInController {
 	//sessioinId 확인 후 유저정보 넘기기
 	@GetMapping("/checkSessionId")
 	public User checkSessionId(@RequestParam("sessionId") String sessionId) {
-		System.out.println("들어옴");
 		return signInService.getUserInfo(sessionId);
 	}
 }
