@@ -18,8 +18,6 @@ public class EmailController {
 
     @GetMapping("/certification")
     public String sendEmail(@RequestParam("email") String email) {
-    	System.out.println("들어왔음?");
-    	System.out.println(email);
     	String checkNum;
     	checkNum = UUID.randomUUID().toString().replaceAll("-", "").substring(0,8);
         emailService.EmailCheck(email,checkNum);

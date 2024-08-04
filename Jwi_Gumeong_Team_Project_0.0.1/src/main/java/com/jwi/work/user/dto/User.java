@@ -12,5 +12,11 @@ public class User {
     private String nickName;
 
     private String gender;
+    
+    private String birthday;
+    
+    private String state;
+    
+    private String sessionId;
 
 }

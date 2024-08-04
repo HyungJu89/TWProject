@@ -17,5 +17,11 @@ public interface UserMapper{
 		public int loginCheck(User user);
 		//벤 된 사람 체크
 		public ArrayList<String> banEmailList();
+		//이메일 체크
+		public int emailCheck(String email);
+		//sessionId 발급 및 저장
+		public void updateSessionId(User user);
+		//sessonId로 유저확인
+		public User userInfo(String sessionId);
 }
 

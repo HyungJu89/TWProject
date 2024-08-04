@@ -167,6 +167,8 @@ function Join() {
     const [checkCerti, SetCheckCerti] = useState(false);
     //인증상태 보여주기 
     const [showCerti, SetShowCerti] = useState(false);
+    //인증횟수 확인
+    const [countCerti, setCountCerti] = useState(true);
     const [userInput, setUserInput] = useState(0);
     const [isButtonActive, setIsButtonActive] = useState(false);
     const [modalContent, setModalContent] = useState('');
@@ -178,6 +180,15 @@ function Join() {
         setModalOpen(false);
     };
 
+    useEffect(() => {
+        // 10초 후에 countCerti를 false로 변경
+        const timer = setTimeout(() => {
+            setCountCerti(true);
+        }, 10000); // 10,000ms = 10초
+
+        // 컴포넌트 언마운트 시 타이머를 클리어하여 메모리 누수를 방지
+        return () => clearTimeout(timer);
+    }, [countCerti]);
 
     //이메일 비밀번호 유효성 검사
     const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
@@ -224,14 +235,21 @@ function Join() {
     }
     //이메일 인증번호 발송 로직
     const handleEmailCheck = () => {
-        axios.get('/certification', { params: { email: email } }).then((response) => {
-            setCertification(response.data);
-        })
-            .catch(error => {
-                console.error('Channel API Error:', error);
-                throw error;
+        if(countCerti){
+            axios.get('/certification', { params: { email: email } }).then((response) => {
+                setCertification(response.data);
             })
-
+                .catch(error => {
+                    console.error('Channel API Error:', error);
+                    throw error;
+                })
+            setCountCerti(false);
+        }
+        if(!countCerti){
+            setModalContent('이미 인증번호를 보냈습니다. 이메일을 확인 해주세요. 다시 보내기는 10초 후에 가능합니다.');
+            setEmailWarning('이미 인증번호를 보냈습니다. 이메일을 확인 해주세요.');
+            setModalOpen(true);
+        }    
     }
     //인증번호 대조로직
     const contrastCertification = () => {
@@ -266,10 +284,6 @@ function Join() {
             setEmailWarning('이메일 형식이 맞지 않습니다.');
             setEmailCheck(false);
         }
-        else {
-            setIsButtonActive(false);
-        }
-
         if(password !== passwordCheck){
             setpasswordWarning('재확인 비밀번호와 비밀번호가 일치하지 않습니다.');
         }
