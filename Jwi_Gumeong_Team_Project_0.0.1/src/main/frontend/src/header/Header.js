@@ -25,11 +25,13 @@ import n_heart_activation from '../icon/32px/n-heart-activation.png';
 import n_heart_deactivation from '../icon/32px/n-heart-deactivation.png';
 import n_service_activation from '../icon/32px/n-service-activation.png';
 import n_service_deactivation from '../icon/32px/n-service-deactivation.png';
+import more from '../icon/24px/more.png';
 import '../App.css';
 
-function Header() {
+function Header({onClickSearch}) {
     let [loginOn, setLoginOn] = useState(true); //로그인 확인 변수
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
+    const [searchInput,setSearchInput] = useState('');
     let navigate = useNavigate();
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
@@ -39,13 +41,17 @@ function Header() {
             , [])
     })
 
+    const onClickPointer = () => {
+        onClickSearch(searchInput)
+    }
+
     return (
         <>
             <div className={styles.basicNav}>
                 <div className={styles.divWidth}><Link to="/"><img src={Logo} /></Link></div>
                 <div className={styles.inputDiv}>
-                    <input onClick={() => { setJustSearchOn(true) }}onBlur={()=>{setJustSearchOn(false)}}placeholder='검색어를 입력하세요' />
-                    <img style={{cursor: 'pointer'}} src={search}/>
+                    <input onClick={() => { setJustSearchOn(true) }} onBlur={()=>{setJustSearchOn(false)}}placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} />
+                    <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
                 <div className={styles.icon}>
@@ -64,7 +70,7 @@ function Icon({navigate}) { /* 로그인 시 노출되는 알림 아이콘 UI */
     return (
         <div className={styles.iconContainer}>
             <div className={styles.icon_notification}>
-                <img onClick={() => { navigate('/channelManagement') }} src={Open_channel} alt="Open Channel" />
+                <img onClick={() => { navigate('/channelManagement') }} src={Open_channel} alt="채널 이동" />
             </div>
             <div className={styles.icon_notification}
                 onMouseEnter={() => setImg(notification_activation)}
@@ -79,6 +85,11 @@ function Icon({navigate}) { /* 로그인 시 노출되는 알림 아이콘 UI */
 
 function NotificationModal() { /* 알림 모달찰 */
     const [activeButton, setActiveButton] = useState(1); /* 현재 활성화된 버튼 상태 */
+    const [showDropdown, setShowDropdown] = useState(false); /* more 아이콘 클릭 시 드롭다운 */
+
+    const handleMoreClick = () => {
+        setShowDropdown(!showDropdown);
+    };
 
     // 툴팁
     const Tooltip = ({ children, message }) => {
@@ -236,7 +247,7 @@ function NotificationModal() { /* 알림 모달찰 */
             <div className={styles.notificationBox}>
                 {notifications.map((notification, index) => (
                     <div key={index} className={styles.notificationItem}>
-                        <span className={styles.notificationDot}>•</span> {/* 안 읽은 알림 */}
+                        <div className={styles.notificationDot}></div> {/* 안 읽은 알림 */}
                         <img src={notification.icon} alt="icon" />  {/* 프로필 or 이미지 */}
                         <div className={styles.notificationItemContent}> {/* 내용 div */}
                             <span className={styles.applyContent}>{notification.content}</span> {/* 게시글 제목 */}
@@ -250,7 +261,18 @@ function NotificationModal() { /* 알림 모달찰 */
 
     return (
         <div className={styles.notificationModal}>
-            <h4 className={styles.notificationTitle}>알림</h4>
+            <div className={styles.notificationHeader}>
+                <div className={styles.notificationTitle}>알림</div>
+                <div className={styles.moreBtnContainer}>
+                    <img src={more} className={styles.moreBtn} alt="더보기" onClick={handleMoreClick} />
+                    {showDropdown && (
+                        <div className={styles.dropdownMenu}>
+                            <div className={styles.dropdownItem}>모두 읽음</div>
+                            <div className={styles.dropdownItem}>알림 전체 삭제</div>
+                        </div>
+                    )}
+                </div>
+            </div>
             <div className={styles.divider}></div>
             <div className={styles.buttonContainer}>
                 {/* 버튼이 눌렸을 때 그 버튼을 활성화 시키고 이미지 변경 */}
@@ -259,7 +281,7 @@ function NotificationModal() { /* 알림 모달찰 */
                     onClick={() => handleButtonClick(1)}>
                         <img
                             src={activeButton === 1 ? n_comments_activation : n_comments_deactivation}
-                            alt="Comments"
+                            alt="댓글"
                         />
                     </div>
                 </Tooltip>
@@ -268,7 +290,7 @@ function NotificationModal() { /* 알림 모달찰 */
                     onClick={() => handleButtonClick(2)}>
                         <img
                             src={activeButton === 2 ? n_heart_activation : n_heart_deactivation}
-                            alt="Heart"
+                            alt="좋아요"
                         />
                     </div>
                 </Tooltip>
@@ -277,7 +299,7 @@ function NotificationModal() { /* 알림 모달찰 */
                     onClick={() => handleButtonClick(3)}>
                         <img
                             src={activeButton === 3 ? n_service_activation : n_service_deactivation}
-                            alt="Service"
+                            alt="신고"
                         />
                     </div>
                 </Tooltip>

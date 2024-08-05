@@ -5,61 +5,122 @@ import btnLeft from '../icon/btn/btn-left.png'
 import btnRight from '../icon/btn/btn-right.png'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-function Search() {
- 
-const [searchChannelList,setSearchChannelList] = useState([]);
+import axios from "axios";
+import PublicBoard from '../main/PublicBoard.js'
+import {formatUnit} from '../recycleCode/FormatUnit.js';
+
+function Search({ search }) {
+
+    let navigate = useNavigate();
 
 
-let navigate = useNavigate();
-//임시 변수
-let postTrue = true; 
+    const [channelInfo, setChannelInfo] = useState([]);
 
-useEffect(()=>{
-    //ajax 로 서버에서 글 리스트 요청
+    const [postList, setPostList] = useState([]);
 
-    //글 리스트 요청 받은뒤 
+    const [page, setPage] = useState(1);
 
-    //글 리스트 사이즈 확인하면 됨
-})
+    // 채널이 생성되어 있는지 확인
 
+
+    //get 요청을 할때 params 로 데이터를 실어서 보낼수 있다.
+    const searchChannel = async (search, page) => {
+        try {
+
+            const { data } = await axios.get(`/search/channel`, {
+                params: {
+                    search: search,
+                    page: page
+                }
+            });
+
+            return data;
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            throw new Error('Failed to fetch channel data');
+        }
+
+    };
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            const data = await searchChannel(search, page);
+            setChannelInfo(data)
+        };
+
+        fetchData();
+        
+    }, [search,page])
+
+    const pageUp = () => {
+        
+        setPage(prevState => channelInfo.paging.pageUp ? (prevState + 1) : prevState)
+
+    }
+
+    const pageDown = () =>{
+        setPage(prevState => (prevState - 1) >= 1 ? prevState - 1 : prevState = 1)
+    }
     return (
         <div className={style.searchMain}>
-            <div className={style.searchBody}>
-                <div className={style.searchBodyTop}>
-                    {/*상단 제목*/}
-                    <div className={style.searchTitle}>토픽 게시판</div>
-                    <div className={style.creactChannel}>
-                        <img className={style.creactChannelIcon} src={OpenChannel} />
-                        <div className={style.creactChannelText}>토픽 게시판 만들기</div>
+            <div>
+                <div className={style.searchBody}>
+                    <div className={style.searchBodyTop}>
+                        {/*상단 제목*/}
+                        <div className={style.searchTitle}>토픽 게시판</div>
+                        <div className={style.creactChannel}>
+                            <img className={style.creactChannelIcon} src={OpenChannel} />
+                            <div className={style.creactChannelText} onClick={() => navigate(`/channelManagement`)}>토픽 게시판 만들기</div>
+                        </div>
                     </div>
-                </div>
-                {postTrue ? 
-                <div className={style.searchChannelList}>                    {/*검색된 게시판 포문 돌려야함 1번 돌아가는대 8번*/}
-                    <div className={style.searchChannel}>
-                        <div className={style.sratchChannelIconInfo}>
-                            <div className={style.searchChannelIcon}>{/*게시판 아이콘 */}</div>
-                            <div className={style.searchChannelInfo}>
-                                <div className={style.searchChannelTitle} onClick={()=>navigate('/channel/123')}>{/*게시판 제목*/}제목</div>
-                                <div className={style.searchChannelmark}>{/*게시판 팔로워,즐찾수*/}
-                                    <div className={style.searchChannelmarkText}>팔로워</div>
-                                    <div className={style.searchChannelmarkCount}>9만9천</div>
-                                    <div className={style.searchChannelmarkText}>즐겨찾기</div>
-                                    <div className={style.searchChannelmarkCount}>9만9천</div>
+                    {channelInfo.searchSuccess ?
+                        <div className={style.searchChannelList}>                    {/*검색된 게시판 포문 돌려야함 1번 돌아가는대 8번*/}
+                            {channelInfo.search.map((channelInfo, index) =>
+                                <div key={index}>
+                                    <div className={style.searchChannel}>
+                                        <div className={style.sratchChannelIconInfo} onClick={() => navigate(`/channel/${channelInfo.id}`)}>
+                                            <div className={style.searchChannelIcon}>
+                                                <img src={channelInfo.imageUrl}/>
+                                            </div>
+                                            <div className={style.searchChannelInfo}>
+                                                <div className={style.searchChannelTitle}>{/*게시판 제목*/}{channelInfo.name}</div>
+                                                <div className={style.searchChannelmark}>{/*게시판 팔로워,즐찾수*/}
+                                                    <div className={style.searchChannelmarkText}>팔로워</div>
+                                                    <div className={style.searchChannelmarkCount}>
+                                                    {formatUnit(channelInfo.followerCount)}
+                                                    </div>
+                                                    <div className={style.searchChannelmarkText}>즐겨찾기</div>
+                                                    <div className={style.searchChannelmarkCount}>
+                                                    {formatUnit(channelInfo.favoriteCount)}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className={style.bookmark}>
+                                            <BookmarkButton />
+                                        </div>
+                                    </div>
+                                    <div className={style.dashed} />{/* 회색줄 */}
+                                </div>
+                            )}
+
+                        </div>
+                        : <div className={style.nonPostText}>만들어진 토픽 게시판이 없어요</div>}
+                        {(channelInfo.searchSuccess && channelInfo.paging.pagingBut) &&
+                            <div className={style.pageing}>
+                                <div className={style.pageBtn}>
+                                    <img src={btnLeft} style={style.btnLeft} onClick={pageDown}/> {page}/{channelInfo.paging.pageCount} <img src={btnRight} style={style.btnRight} onClick={pageUp}/>
                                 </div>
                             </div>
-                        </div>
-                        <div className={style.bookmark}>
-                            <BookmarkButton />
-                        </div>
-                    </div>
-                    <div className={style.dashed} />{/* 회색줄 */}
+                        }     
                 </div>
-                : <div className={style.nonPostText}>만들어진 토픽 게시판이 없어요</div>}
-                <div className={style.pageing}>
-                    <div className={style.pageBtn}>
-                        <img src={btnLeft} style={style.btnLeft}></img> 1/5 <img src={btnRight} style={style.btnRight}></img>
+                <div className={style.searchBodybottom}>
+                    <div className={style.searchBodybottomText}>
+                        검색어와 관련된 토픽
                     </div>
                 </div>
+                <PublicBoard />
             </div>
         </div>
 

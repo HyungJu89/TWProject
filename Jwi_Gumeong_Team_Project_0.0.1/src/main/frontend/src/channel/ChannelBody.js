@@ -7,6 +7,7 @@ import announcement from '../icon/20px/announcement.png';
 import { useChannel } from '../recycleCode/ApiQuery.js';
 import { useQuery } from 'react-query';
 import { useState } from 'react';
+import {formatUnit} from '../recycleCode/FormatUnit.js';
 
 function ChannelBody() {
 
@@ -20,7 +21,7 @@ function ChannelBody() {
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
 
     if (isLoadingChannel) {
-        return <div>로딩중</div>;
+        return <div>채널바디 로딩중</div>;
     }
 
     if (isErrorChannel) {
@@ -28,21 +29,7 @@ function ChannelBody() {
     }
 
 
-    const formatUnit = (number) => {
-        let unit = ['만', '천']
-        let num = [10000, 1000]
 
-
-        if (number/num[0] >= 1) {
-            let int = Math.floor(number / num[1]);
-
-            return Math.floor(int / 10) + unit[0] + Math.floor(int % 10) + unit[1]
-        }
-        if (number/num[1]  >= 1) {
-            return Math.floor(number / num[1]) + unit[1];
-        }
-        return number
-    }
 
 
 
@@ -51,7 +38,7 @@ function ChannelBody() {
             <div className={style.channelInfo}>
                 <div className={style.iconBack}>
                     <div className={style.channelIcon}>
-                        <img className={style.icon} src={channelApi.channelImageUrl} alt="Channel Icon" />
+                        <img className={style.icon} src={channelApi?.channelImageUrl} alt="Channel Icon" />
                     </div>
                 </div>
                 <div className={style.iconRight}>

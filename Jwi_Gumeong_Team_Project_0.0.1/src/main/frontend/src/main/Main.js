@@ -3,10 +3,12 @@
 
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
+import _ from 'lodash';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styles from './style/Main.module.css';
 import '../App.css';
+import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
@@ -17,87 +19,57 @@ function Main() {
     let navigate = useNavigate();
     let [topic, settopic] = useState(true);
     let [loginOn, setLoginOn] = useState(false);
+    const [partnersLive, setPartnersLive] = useState([]);
+  useEffect(() => {
+    const addPartners = async () => {
+      try {
+        const response = await axios.get(`/partnersLiveApi/`);
+        const newPartners = response.data.content.streamerPartners;
+        setPartnersLive(newPartners);
+      } catch (error) {
+        console.error('Channel API Error:', error);
+      }
+    };
+    addPartners();
+  }, []);
 
-    const [channel, setChannel] = useState('');
-    const [partnersLive, setPartnersLive] = useState('');
-
-    useEffect(()=>{ /*특정 URL 방송--대체예정*/
-        axios.get(`/channelAPI/search/0b33823ac81de48d5b78a38cdbc0ab94`)
-        .then((response) => {
-            setChannel(response.data.content);
-        })
-        .catch(error => {
-            console.error('Channel API Error:', error);
-            throw error;
-        })
-    },[]);
-
-    useEffect(()=>{ /*파트너스 Live*/
-        axios.get(`/partnersLiveApi/`)
-        .then((response) => {
-            console.log(response.data.content.streamerPartners);
-            setPartnersLive(response.data.content.streamerPartners)
-        })
-        .catch(error => {
-            console.error('Channel API Error:', error);
-            throw error;
-        })
-    },[]);
-
+    //컴포넌트 전송 최적화 구문
+    const partnerChannelIndex = (i) =>{
+        return partnersLive[i]?.channelId || '오류';
+    };
 
     return (
         <div>
             <div className={styles.bannerPosition}>
-                <MainBanner channelId={partnersLive[0]?.channelId ? partnersLive[0].channelId : '오류'} />
-                <div className={styles.liveDiv}>
-                    <img style={{ marginRight: '30px' }} src={chevron_left_w} />
-                    <div className={styles.liveImg}>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                        <div className={styles.box}>
-                            <img src='https://img.newspim.com/news/2023/08/10/2308101653205770.jpg' />
-                            <div className={styles.liveRed}><div className={styles.pointer}></div>LIVE</div>
-                        </div>
-                    </div>
-                    <img style={{ marginLeft: '30px' }} src={chevron_right_w} />
-                </div>
+                <MainBanner channelId={partnerChannelIndex(0)}
+                            channelIdSub1={partnerChannelIndex(1)}
+                            channelIdSub2={partnerChannelIndex(2)}
+                            channelIdSub3={partnerChannelIndex(3)}
+                
+                />
             </div>
             <div className={styles.basic}> {/*전체 DIV*/}
                 <div className={styles.leftDiv}>{/*게시판 영역*/}
                     <div className={styles.hotBoard}>{/*인기 게시판*/}
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
                         <div className={styles.channelDiv}>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
-                            <div className={styles.channel}><img src={channel.channelImageUrl} />{channel.channelName}</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
                         </div>
                     </div>
                     <TopicBtn topic={topic} settopic={settopic} />
                     {topic == true ? <div className={styles.fadein}><PublicBoard /></div> : null}
                     <div onClick={() => { navigate('/allTopic'); window.scrollTo(0, 0) }} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}
                 </div>
-                <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
+                <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn}/>
             </div>
         </div>
     );

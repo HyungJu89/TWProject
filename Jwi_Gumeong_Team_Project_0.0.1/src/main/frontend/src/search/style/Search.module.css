@@ -1,4 +1,5 @@
 .searchMain {
+    width: 786px;
     margin-top: 30px;
     display: flex;
     margin-left: auto;
@@ -18,6 +19,7 @@
 }
 
 .searchTitle {
+    user-select: none;
     width: 97px;
     height: 25px;
     font-size: 20px;
@@ -53,7 +55,8 @@
     text-align: left;
     margin-top: 3px;
     margin-bottom: 3px;
-    color: #999999
+    color: #999999;
+    cursor: pointer;
 }
 
 .searchChannelList {
@@ -71,6 +74,7 @@
 
 .sratchChannelIconInfo {
     display: flex;
+    cursor: pointer;
 }
 
 /*검색된 채널아이콘*/
@@ -81,6 +85,17 @@
     background-color: greenyellow;
     margin-right: 10px;
 
+}
+
+.searchChannelIcon img {
+    height: 50px;
+    width: 50px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 50%;
 }
 
 /*검색된 채널 이름*/
@@ -149,6 +164,7 @@
 }
 
 .pageBtn {
+    user-select: none;
     /*페이징 부분*/
     display: flex;
     justify-content: space-between;
@@ -160,4 +176,22 @@
     line-height: 20.03px;
     text-align: center;
 
+}
+
+
+/* 검색어와 관련된 토픽~~~~*/
+
+.searchBodybottom{
+    margin-top: 30px;
+    margin-bottom: 10px;
+    background-color: #FFFFFF;
+    height: 60px;
+}
+
+.searchBodybottomText{
+    padding: 19px 0px 0px 30px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 25.04px;
+    color: #999999;
 }

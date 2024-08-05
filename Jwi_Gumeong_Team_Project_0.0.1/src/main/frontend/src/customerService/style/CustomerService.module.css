@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    margin: auto;
 }
 
 .serviceBanner {
@@ -24,7 +24,11 @@
 }
 
 .logoPosition {
-    margin-top: 5px;
+    margin-top: 5.9px;
+}
+
+.serviceLogo {
+    width: 270.95px;
 }
 
 .logoTitle {
@@ -100,7 +104,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 10px;
+    /* margin-top: 11px; */
 }
 
 .faqItem {
@@ -174,7 +178,7 @@
 .inqContainer {
     background-color: #FFFFFF;
     border-radius: 20px;
-    margin-top: 11px;
+    /* margin-top: 11px; */
     padding: 20px;
 }
 
@@ -319,7 +323,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 10px;
+    /* margin-top: 11px; */
 }
 
 .inquiryItem {
@@ -405,7 +409,7 @@
 .sanctionContainer {
     background-color: #FFFFFF;
     border-radius: 20px;
-    margin-top: 11px;
+    /* margin-top: 11px; */
     /* padding: 20px; */
 }
 

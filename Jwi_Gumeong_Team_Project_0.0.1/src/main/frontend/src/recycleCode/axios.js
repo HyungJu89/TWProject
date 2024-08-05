@@ -1,11 +1,10 @@
 import axios from "axios";
-
+// 채널이 생성되어 있는지 확인
 export const checkChannel = async (channelId) => {
     try {
-        const { data } = await axios.post(`/channel/check`, channelId, {
-            headers: {
-                'Content-Type': 'text/plain'
-            }
+        //get 요청을 할때 params 로 데이터를 실어서 보낼수 있다.
+        const { data } = await axios.get(`/channel/check`,{
+            params: { channelId : channelId }
         });
         return data;
     } catch (error) {
@@ -15,14 +14,3 @@ export const checkChannel = async (channelId) => {
 
 };
 
-export const createChannel = async (channelCreate) => {
-    
-    try {
-        const { data } = await axios.post(`/channel/create`, channelCreate);
-        return data;
-    } catch (error) {
-        console.error('Channel API Error:', error);
-        throw new Error('Failed to fetch channel data');
-    }
-
-};
