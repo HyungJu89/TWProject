@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.user.dto.User;
+import com.jwi.work.user.dto.UserConnection;
 import com.jwi.work.user.signIn.service.SignInService;
 
 @RestController
@@ -32,12 +33,19 @@ public class SignInController {
 	}
 	//sessionId 발급
 	@GetMapping("/getSessionId")
-	public String getSessionId(@RequestParam("email") String email) {
+	public UserConnection getSessionId(@RequestParam("email") String email) {
 		return signInService.getSessionId(email);
 	}
 	//sessioinId 확인 후 유저정보 넘기기
 	@GetMapping("/checkSessionId")
-	public User checkSessionId(@RequestParam("sessionId") String sessionId) {
-		return signInService.getUserInfo(sessionId);
+	public User checkSessionId(@RequestParam("userKey") int userKey) {
+		System.out.println(userKey);
+		return signInService.getUserInfo(userKey);
+	}
+	//비밀번호 틀린횟수 리턴하는 컨트롤러
+	@GetMapping("/wrongCount")
+	public int wrongCount(@RequestParam("email") String email,@RequestParam("loginCheck") boolean loginCheck) {
+		System.out.println(signInService.wrongCount(email, loginCheck));
+		return signInService.wrongCount(email, loginCheck);
 	}
 }

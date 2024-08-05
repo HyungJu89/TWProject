@@ -11,7 +11,7 @@ function SignIn() {
     var jsonSessionInfo = localStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);  
     // 세션화성공
-    // const { birthday, pw, sessionId, state, nickName } = useSelector((state) => state.userState);
+    const userState = useSelector((state) => state.userState);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     //모든 정보가 입력되면 버튼 활성화
@@ -25,6 +25,7 @@ function SignIn() {
     //로그인 틀릴 시 경고문 저장
     const [loginWarn, setLoginWarn] = useState('');
     //로그인 비번 카운트
+    const [count, setCount] = useState(0);
     const dispatch = useDispatch();
     let navigate = useNavigate();
     // 눈 아이콘 클릭시 바꾸게 설정하기
@@ -39,19 +40,20 @@ function SignIn() {
     };
           // 로그인 버튼 클릭 핸들러
     const handleLogin = () => {
-        if (loginCheck && !banCheck && sessionInfo.count < 5) {
+        if (loginCheck && !banCheck && count < 5) {
             dispatch(fetchSessionId(email));
             // 세션화성공용
-            // dispatch(getUserInfo(sessionInfo.sessionId));
+            dispatch(getUserInfo(sessionInfo.userKey));
+            console.log(count);
         } else if (email === '') {
             alert('이메일을 입력해주세요!');
         } else if (password === '') {
             alert('비밀번호를 입력해주세요!');
-        } else if(sessionInfo.count >= 5){
+        } else if(count >= 5){
             alert('비밀번호를 5회이상 틀리셨습니다. 10분 후에 다시 로그인 해주세요.');
-        } else if(!loginCheck && !sessionInfo.email == '') {
-            sessionInfo.count = sessionInfo.count + 1;
+        } else if(!loginCheck && !sessionInfo.userKey == '') {
             localStorage.setItem('sessionId',JSON.stringify(sessionInfo));
+            console.log(count);
             setLoginWarn('아이디 또는 비밀번호를 잘못 입력했습니다. 입력하신 내용을 다시 확인해주세요.')
         };
     };
@@ -75,19 +77,37 @@ function SignIn() {
             setIsButtonActive(false);
         }
     };
-
+    // 비밀번호 5회 실패 로직
+    const pwWrong = async () => {
+            try {
+                const [response] = await Promise.all([
+                    axios.get('/signIn/wrongCount', { params: { email: email, loginCheck: loginCheck } }),
+                ]);
+                setCount(response.data);
+            } catch (error) {
+                console.error('Channel API Error:', error);
+            }
+    };
+    const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
     // 비밀번호 5회 실패 로직
     useEffect(() => {
         let timer;
-        if (sessionInfo.count >= 5) {
+        if (count >= 5) {
             timer = setTimeout(() => {
-                sessionInfo.count = 0;
+                count = 0;
                 localStorage.setItem('sessionId',JSON.stringify(sessionInfo));
             }, 10 * 60 * 1000);
         }
         return () => clearTimeout(timer);
-    }, [sessionInfo.count, dispatch]);
-    
+    }, [count, dispatch]);
+    //비밀번호 실패확인 로직
+    useEffect(() => {
+        if (emailRegEx.test(email)) {
+            pwWrong();
+        }
+    }, [email]);
+
+    //유저정보 체크 로직
     useEffect(() => {
         checkUser();
     }, [email, password]);
@@ -104,13 +124,13 @@ function SignIn() {
         
         <div className={styles.section}>
         {/* 세션화보여주기 */}
-        {/* <div>
-            <p>Birthday: {birthday}</p>
-            <p>Password: {pw}</p>
-            <p>Session ID: {sessionId}</p>
-            <p>State: {state}</p>
-            <p>NickName: {nickName}</p>
-        </div> */}
+         <div>
+            <p>Birthday: {userState.birthday}</p>
+            <p>Password: {userState.pw}</p>
+            <p>Session ID: {userState.sessionId}</p>
+            <p>State: {userState.state}</p>
+            <p>NickName: {userState.nickName}</p>
+        </div> 
             <div className={styles.loginContainer}>
                 <div className={styles.topFont}>로그인</div>
                 {/* 아이디 input */}
