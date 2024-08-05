@@ -10,7 +10,7 @@ import MainBanner from './MainBanner.js';
 import PublicBoard from '../main/PublicBoard.js'
 import ChannelBody from './ChannelBody.js';
 import PublicMenu from '../main/PublicMenu.js'
-import { checkChannel } from '../recycleCode/axios.js';
+import { checkChannel } from '../recycleCode/Axios.js';
 
 function ChannelHome() {
     let { channelId } = useParams();
@@ -35,6 +35,7 @@ function ChannelHome() {
     //들어오자마자 작동
     useEffect(()=>{
     // 비동기 함수 호출
+    
     handleCheckChannel(channelId);
     },[])
 

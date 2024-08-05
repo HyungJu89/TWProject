@@ -28,9 +28,10 @@ import n_service_deactivation from '../icon/32px/n-service-deactivation.png';
 import more from '../icon/24px/more.png';
 import '../App.css';
 
-function Header() {
+function Header({onClickSearch}) {
     let [loginOn, setLoginOn] = useState(true); //로그인 확인 변수
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
+    const [searchInput,setSearchInput] = useState('');
     let navigate = useNavigate();
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
@@ -40,13 +41,17 @@ function Header() {
             , [])
     })
 
+    const onClickPointer = () => {
+        onClickSearch(searchInput)
+    }
+
     return (
         <>
             <div className={styles.basicNav}>
                 <div className={styles.divWidth}><Link to="/"><img src={Logo} /></Link></div>
                 <div className={styles.inputDiv}>
-                    <input onClick={() => { setJustSearchOn(true) }}onBlur={()=>{setJustSearchOn(false)}}placeholder='검색어를 입력하세요' />
-                    <img style={{cursor: 'pointer'}} src={search}/>
+                    <input onClick={() => { setJustSearchOn(true) }} onBlur={()=>{setJustSearchOn(false)}}placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} />
+                    <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
                 <div className={styles.icon}>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwi.work.channel.mapper.SearchMapper">
+
+	<!-- 채널 검색시 -->
+
+	<select id="searchChannelCount" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM channel WHERE name LIKE
+		CONCAT('%',#{search},'%')
+	</select>
+
+	<select id="searchChannel" parameterType="map" resultType="com.jwi.work.channel.dto.ChannelDto">
+		SELECT
+			channel.*,
+			COALESCE(COUNT(favorites.channelKey), 0) AS favoriteCount 
+		FROM
+			channel
+		LEFT JOIN
+			favorites ON channel.channelKey = favorites.channelKey
+		WHERE 
+			name LIKE CONCAT('%',#{search},'%')
+		GROUP BY
+        	channel.channelKey
+		LIMIT
+			#{offset},#{limit}
+	</select>
+
+	<!-- 개시글 검색시 -->
+	<select id="searchPostCount" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM channel WHERE post LIKE
+		CONCAT('%',#{search},'%')
+	</select>
+
+	<select id="searchPost" parameterType="map" resultType="com.jwi.work.channel.dto.PostDto">
+		SELECT * FROM channel WHERE post LIKE
+		CONCAT('%',#{search},'%')
+		LIMIT	#{offset},#{limit}
+	</select>
+
+</mapper>

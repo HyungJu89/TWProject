@@ -5,7 +5,7 @@ import { fetchChannel } from '../recycleCode/Api.js'
 import styleManagement from './style/Management.module.css';
 import '../App.css'
 import axios from 'axios';
-import { checkChannel } from '../recycleCode/axios.js';
+import { checkChannel } from '../recycleCode/Axios.js';
 
 function CreateChannel() {
 
@@ -20,6 +20,8 @@ function CreateChannel() {
     // 채널아이디 길이
     const channelLength = 32;
 
+
+    
     const onChangeInput = async (e) => {
         const specialCharacters = /[^a-zA-Z0-9 ]/g;
         let value = e.target.value
@@ -88,7 +90,7 @@ function CreateChannel() {
                 <div className={style.warningText} style={{ color: `${signColor}` }}>{signText}</div>/*URL 검토하고 가능유무 안내Text*/
             )}
             {notice && (
-                <CreateChannelNext notice = {notice} channelInfo={channelInfo}/>
+                <CreateChannelNext notice = {notice} channelInfo={channelInfo} channelUrl={channelUrl}/>
             )}
         </div>
 

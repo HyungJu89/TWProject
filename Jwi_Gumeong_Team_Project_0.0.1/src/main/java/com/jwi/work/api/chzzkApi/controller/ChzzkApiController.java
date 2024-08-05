@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jwi.work.api.chzzkApi.service.ChzzkApiService;
 
 import lombok.AllArgsConstructor;
+
 @RestController
 @RequestMapping("/channelAPI/*")
 @AllArgsConstructor
@@ -26,12 +27,9 @@ public class ChzzkApiController {
 				System.out.println("채널 API 통과");
 			}
 
-			return ChzzkApiService.chzzkChannelInfo(channelId);
-		}
+		return ChzzkApiService.chzzkChannelInfo(channelId);
+	}
 
-
-		
-		
 		@GetMapping("/live/{channelId}")
 		public Object searchChanner(@PathVariable("channelId") String channelId) {
 			
@@ -43,6 +41,4 @@ public class ChzzkApiController {
 			
 			return ChzzkApiService.chzzkLiveInfo(channelId);
 		}
-		
-	
 }

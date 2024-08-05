@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwi.work.channel.mapper.PostMapper">
+
+	
+	<select id="selectHash" parameterType="String" resultType="String">
+		SELECT IFNULL(imageUrl,'0') FROM Image WHERE imageHash = #{imageHash}
+	</select>
+	
+	<insert id="postCreate" parameterType="com.jwi.work.channel.dto.PostCreateDto">
+		INSERT INTO post(userKey,channelKey,content,image) value (#{userKey},#{channelKey},#{content},#{image})
+	</insert>
+
+	<insert id="insertImg" parameterType="com.jwi.work.channel.dto.ImageDto">
+		INSERT INTO Image(imageUrl,imageHash) value (#{imageUrl},#{imageHash})
+	</insert>
+
+</mapper>
