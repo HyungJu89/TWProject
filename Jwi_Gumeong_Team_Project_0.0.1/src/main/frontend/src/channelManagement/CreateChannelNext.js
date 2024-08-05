@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import help from '../icon/20px/help.png'
 import rule_add from '../icon/20px/rule-add.png'
 import deletion from '../icon/14px/deletion.png'
+import check_deactivation from '../icon/24px/check-deactivation.png'
+import check_activation from '../icon/24px/check-activation.png'
 
 function CreateChannelNext({ notice, channelInfo, channelUrl }) {
     let navigate = useNavigate();
 
     const [buttonColor, setButtonColor] = useState('#BBBBBB');
-    const [iconColor, setIconColor] = useState('#BBBBBB');
+    const [iconColor, setIconColor] = useState(check_deactivation);
     const [checkBoxIcon, setCheckBoxIcon] = useState(false);
 
     const createChannel = async (channelCreate) => {
@@ -28,14 +30,33 @@ function CreateChannelNext({ notice, channelInfo, channelUrl }) {
 
     const onClickCheckBoxIcon = () => {
         if (checkBoxIcon) {
-            setIconColor('#BBBBBB')
+            setIconColor(check_deactivation)
             setCheckBoxIcon(false)
         } else {
-            setIconColor('#FF8901')
+            setIconColor(check_activation)
             setCheckBoxIcon(true)
         }
         notice && !checkBoxIcon ? setButtonColor('#FF8901') : setButtonColor('#BBBBBB')
     }
+
+    let [notUseNoticeValue, setNotUseNoticeValue] = useState('공지사항이 없습니다.');
+    let [notUseNoticeColor, setNotUseNoticeColor] = useState('#fffff');
+    let [notUseNoticeON, setNotUseNoticeON] = useState(false);
+    const notUseNotice = () => {
+        if (notUseNoticeValue){
+            setNotUseNoticeValue('');
+            setNotUseNoticeColor('#fffff');
+            setNotUseNoticeON(false);
+        }else{
+            setNotUseNoticeValue('공지사항이 없습니다.');
+            setNotUseNoticeColor('#F3F3F3');
+            setNotUseNoticeON(true);
+        }
+    }
+        // 입력 값이 변경될 때 상태를 업데이트하는 함수
+        const handleChange = (event) => {
+            setNotUseNoticeValue('');
+        };
 
     const onClickButton = async () => {
         // 체크박스 예외처리
@@ -123,9 +144,10 @@ function CreateChannelNext({ notice, channelInfo, channelUrl }) {
             </div>{/*개설 할 채널 확인*/}
             <div className={style.announcementTitle}>
                 <div>채널 내 공지사항 제목</div>
-                <div> <img style={{ marginRight: '4px' }} src={help} />공지사항 사용 안함</div>
+                <div onClick={notUseNotice}> <img style={{ marginRight: '4px' }} src={help} />공지사항 사용 안함</div>
             </div> {/*채널 내 공지사항 제목 */}
-            <input className={style.noticeInputBox} placeholder='공지사항의 제목을 입력해주세요.' />
+            <input className={style.noticeInputBox} style={{backgroundColor: {notUseNoticeColor}}} value={notUseNoticeValue} onChange={handleChange}
+             placeholder='공지사항의 제목을 입력해주세요.' />
 
             <div className={style.announcementTitle}>채널 규칙</div> {/*채널 공지사항 부분 Text */}
             <div className={style.noticeRulesBox} ref={rulesRef}>
@@ -135,6 +157,10 @@ function CreateChannelNext({ notice, channelInfo, channelUrl }) {
             {rulesAdd}
             </div>
             <div onClick={rulesAddArray} className={style.noticeRulesAdd}><img src={rule_add} />규칙 추가하기</div>
+
+            <div className={style.announcementTitle}>공지사항 하고 싶은 말</div> {/*채널 공지사항 부분 Text */}
+            <textarea className={style.moreText} placeholder='추가적으로 하고 싶은 말을 입력해주세요. (선택)'/>
+
             <div className={style.announcementText}>채널을 개설하기 전 주의 및 동의 사항!</div>{/* 채널 개설 설명 제목*/}
             <div className={style.precautions}>{/*채널 개설하기전 주의사항 문구*/}
                 <ul className={style.precautionsText}>
@@ -146,7 +172,7 @@ function CreateChannelNext({ notice, channelInfo, channelUrl }) {
             </div>
             <div className={style.bottom}>{/*하단 동의하기 체크*/}
                 <div className={style.bottomText}>위 내용을 동의 하십니까?</div>{/* 동의하기부분 text*/}
-                <div className={style.bottomCheckBox}><img className={style.checkBoxIcon} onClick={onClickCheckBoxIcon} style={{ backgroundColor: iconColor }} />위 주의사항을 숙지했으며 동의합니다.</div> {/*동의하기 체크박스*/}
+                <div  onClick={onClickCheckBoxIcon} className={style.bottomCheckBox}><img className={style.checkBoxIcon} src={iconColor} />위 주의사항을 숙지했으며 동의합니다.</div> {/*동의하기 체크박스*/}
             </div>
             <div className={style.createButton} style={{ backgroundColor: buttonColor }} onClick={onClickButton}> {/*개설하기 버튼*/}
                 개설하기
