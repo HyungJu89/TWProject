@@ -56,6 +56,7 @@ function SignIn() {
                     dispatch(fetchSessionId(email));
                     dispatch(getUserInfo(userResponse.data.userKey));
                     console.log(userResponse.data);
+                    navigate('/');
                 }else{
                     setCount(userResponse.data.wrongCount);
                     console.log(userResponse.data);
