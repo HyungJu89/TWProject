@@ -124,7 +124,7 @@ function SignIn() {
         
         <div className={styles.section}>
         {/* 세션화보여주기 */}
-         <div>
+        <div>
             <p>Birthday: {userState.birthday}</p>
             <p>Password: {userState.pw}</p>
             <p>Session ID: {userState.sessionId}</p>
