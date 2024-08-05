@@ -56,6 +56,7 @@ function SignIn() {
                     dispatch(fetchSessionId(email));
                     dispatch(getUserInfo(userResponse.data.userKey));
                     console.log(userResponse.data);
+                    navigate('/');
                 }else{
                     setCount(userResponse.data.wrongCount);
                     console.log(userResponse.data);
@@ -106,17 +107,6 @@ function SignIn() {
     return (
         
         <div className={styles.section}>
-<<<<<<< HEAD
-        {/* 세션화보여주기 */}
-        <div>
-            <p>Birthday: {userState.birthday}</p>
-            <p>Password: {userState.pw}</p>
-            <p>Session ID: {userState.sessionId}</p>
-            <p>State: {userState.state}</p>
-            <p>NickName: {userState.nickName}</p>
-        </div> 
-=======
->>>>>>> fe574b3efa3609541ea87d4c281057dac7a6eba8
             <div className={styles.loginContainer}>
                 <div className={styles.topFont}>로그인</div>
                 {/* 아이디 input */}
