@@ -29,7 +29,6 @@ public class PostService {
 	public AnswerDto postCreate(int channelKey, int userKey, String content, List<MultipartFile> files) {
 
 		AnswerDto answer = new AnswerDto();
-
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		String imageJson = null;
@@ -74,7 +73,7 @@ public class PostService {
 				}
 				imageJson = objectMapper.writeValueAsString(imgUrlList);
 			} else {
-				imageJson = "null";
+				imageJson = null;
 			}
 
 			

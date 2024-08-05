@@ -7,7 +7,7 @@ import announcement from '../icon/20px/announcement.png';
 import { useChannel } from '../recycleCode/ApiQuery.js';
 import { useQuery } from 'react-query';
 import { useState } from 'react';
-import {formatUnit} from '../recycleCode/Util.js';
+import {formatUnit} from '../recycleCode/FormatUnit.js';
 
 function ChannelBody() {
 

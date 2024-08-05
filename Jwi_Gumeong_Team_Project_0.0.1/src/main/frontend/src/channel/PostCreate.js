@@ -1,16 +1,16 @@
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import style from './style/PostCreate.module.css';
 import emotIcon from '../icon/24px/emoticon-activation.png';
 import imageIcon from '../icon/24px/photo.png'
 import closeIcon from '../icon/btn/btn-image-Close.png'
 import '../App.css'
-import { useParams } from 'react-router-dom';
-import {formatUnit} from '../recycleCode/Util.js';
+import { useNavigate, useParams } from 'react-router-dom';
+import {formatUnit} from '../recycleCode/FormatUnit.js';
 import axios from 'axios';
 function PostCreact() {
 
-
+    const navigate = useNavigate();
     let { channelId } = useParams();
     //게시글 길이 제한
     const contentLimit = 300;
@@ -62,48 +62,43 @@ function PostCreact() {
         // 리셋
             fileInputRef.current.value = null
         });
-
-
-
     }
     //선택된 파일 삭제
     const imageDelete = (indexToDelete) => {
         setSelectedImage(prevFiles => prevFiles.filter((_, index) => index !== indexToDelete));
     }
-
-
     //서버로 게시글 정보를 넘김
     const postCreact = async() => {
+        if(content.length < 10){
+            alert("내용이 너무 짧아요")
+            return
+        }
         // JSP 에서 FORM 과 비슷함
         const formData = new FormData();
-
         formData.append('content',content);
         // 로그인 기능 완성되면 유저 키값이 들어가도록 변경
         formData.append('userKey',1);
-
         formData.append('channelKey',4);
-
         selectedImage.forEach(({file}) => {
             formData.append('files',file);
         });
-
         try{
             //서버로 데이터 전달
-            const data = await axios.post(`/post/create`,formData,{
+            const {data} = await axios.post(`/post/create`,formData,{
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
             console.log('서버 응답:', data);
             // 성공적으로 업로드된 경우 추가적인 처리
+            window.location.reload();
         } catch (error) {
             console.error('업로드 실패:', error);
+            alert("서버에 이상이생겨 업로드를 실패하였습니다 다시한번 시도해주세요")
         }
-
     }
 
-
-
+    
     return (
         <div className={style.postCreact}>{/*게시글 작성 box*/}
             {!hasContent && <span className={style.placeholderContentTop}>내용을 입력하세요.<br /><p className={style.placeholderContentBottom}>비매너 행위는 하지마세요.</p><br /><p className={style.placeholderContentBottom}>* 욕설, 광고(도배), 악의적인 글, 친목, 성희롱(음란물) 등</p></span>
