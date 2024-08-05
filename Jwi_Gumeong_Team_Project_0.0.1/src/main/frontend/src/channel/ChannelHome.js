@@ -110,14 +110,7 @@ useEffect(() => { /*파트너스 추천*/
                     <div className={style.listRight}>
                 
                         <div className={style.sideBar}>
-                            <PublicMenu loginOn={1} setLoginOn={1} channel={1} 
-                                        channelId={ChannelIndex(0)}
-                                        channelIdSub1={ChannelIndex(1)}
-                                        channelIdSub2={ChannelIndex(2)}
-                                        channelIdSub3={ChannelIndex(3)}
-                                        channelIdSub4={ChannelIndex(4)}
-                                        channelIdSub5={ChannelIndex(5)}
-                                        channelIdSub6={ChannelIndex(6)}/>
+                            <PublicMenu loginOn={1} setLoginOn={1}/>
                         </div>
                     </div>
                 </div>
