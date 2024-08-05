@@ -5,10 +5,10 @@ export const fetchSessionId = createAsyncThunk(
     'user/fetchSessionId',
     async (email, { rejectWithValue }) => {
     try {
-        var jsonSessionInfo = localStorage.getItem('sessionId');
+        var jsonSessionInfo = sessionStorage.getItem('sessionId');
         const response = await axios.get(`/signIn/getSessionId`, { params: { email: email } });
         console.log(response.data);
-        localStorage.setItem('sessionId', JSON.stringify({userKey:response.data.userKey , sessionId:response.data.sessionId , count:0}));
+        sessionStorage.setItem('sessionId', JSON.stringify({sessionId:response.data.sessionId}));
         return response.data;
     } catch (error) {
         return rejectWithValue(error.response.data);

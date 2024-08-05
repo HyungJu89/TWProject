@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jwi.work.user.dto.CheckDto;
 import com.jwi.work.user.dto.LoginLog;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.dto.UserConnection;
@@ -20,34 +21,11 @@ public class SignInService {
 	public boolean loginTest(User user) {
 		if(userMapper.loginCheck(user) == 1) {
 			return true;
-		}else if(userMapper.emailCheck(user.getEmail()) == 1 && userMapper.loginCheck(user) == 0) {
-			return false;
 		}
 		else {
 			return false;
 		}		
 	}
-	//비밀번호 틀리면 로그 남기는 로직
-	public int wrongCount(String email,boolean loginCheck) {
-		
-		if(emailCheck(email)) {
-			if(loginCheck) {
-				LoginLog userConnect = new LoginLog();
-				userConnect.setUserKey(userMapper.getUserKey(email));
-				userConnect.setLoginSuccess(0);
-				userMapper.saveLog(userConnect);
-			} else if(!loginCheck) {
-				LoginLog userConnect = new LoginLog();
-				userConnect.setUserKey(userMapper.getUserKey(email));
-				userConnect.setLoginSuccess(1);
-				userMapper.saveLog(userConnect);
-			}
-			return userMapper.wrongCount(userMapper.getUserKey(email));
-		}
-			
-		return 0;
-	}
-	//이메일이 db에 있는지 없는지 체크
 	public boolean emailCheck(String email) {
 		if(userMapper.emailCheck(email) == 1) {
 			return true;
@@ -55,10 +33,60 @@ public class SignInService {
 			return false;
 		}
 	}
+	
 	//밴 유저정보 확인
     public boolean isEmailBanned(String email) {
         return userMapper.banEmailList().contains(email);
     }
+    
+    
+    // 로그인 전부 처리해보기
+    public CheckDto helpLogin(String email,String pw) {
+    	//로그인 체크를 위한 객체생성
+    	User userInfo = new User();
+    	userInfo.setEmail(email);
+    	userInfo.setPw(pw);
+    	
+    	//반환하기위한 객체 생성
+    	CheckDto userCheck = new CheckDto();
+
+    	//이메일 체크처리
+    	if(emailCheck(email)) {
+    		//로그인 체크처리
+    		if(loginTest(userInfo)) {
+	    			if(isEmailBanned(email)) {	
+	    				userCheck.setCheck(false);
+	    				userCheck.setWarningMessage("해당 계정은 악의적인 글 작성과 과도한 친목주도로 인해 사용 정지 된 계정이에요.");
+	    			}else {
+	    				LoginLog userConnect = new LoginLog();
+	    				userConnect.setUserKey(userMapper.getUserKey(email));
+	    				userConnect.setLoginSuccess(0);
+	    				userMapper.saveLog(userConnect);
+	    				userCheck.setCheck(true);
+	    				userCheck.setWarningMessage("");
+		    	    	userCheck.setWrongCount(userMapper.wrongCount(userMapper.getUserKey(email)));
+		    	    	userCheck.setUserKey(userMapper.getUserKey(email));
+	    			}
+	    	//로그인 체크처리 예외
+	    	}else {
+	    			LoginLog userConnect = new LoginLog();
+	    			userConnect.setUserKey(userMapper.getUserKey(email));
+	    			userConnect.setLoginSuccess(1);
+	    			userMapper.saveLog(userConnect);
+	    			userCheck.setCheck(false);
+	    			userCheck.setWarningMessage("비밀번호가 일치하지 않습니다.");
+	    	    	userCheck.setWrongCount(userMapper.wrongCount(userMapper.getUserKey(email)));
+	        	  }
+    	//이메일 체크처리 예외
+    	}else{
+        	userCheck.setCheck(false);
+        	userCheck.setWarningMessage("이 이메일은 없는 이메일입니다.");
+    	}
+		return userCheck;
+    }
+    
+    //--------------------------------------------------------- 여기서부터 세션화 할거임---------------------------------------------------------------------
+    
     //유저 세션아이디 발급
     public UserConnection getSessionId(String email) {
     	
@@ -87,6 +115,5 @@ public class SignInService {
     public User getUserInfo(int userKey) {
     	return userMapper.userInfo(userKey);
     }
-
 	
 }

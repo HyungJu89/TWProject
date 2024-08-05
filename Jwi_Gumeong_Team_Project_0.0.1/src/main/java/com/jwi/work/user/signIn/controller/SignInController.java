@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jwi.work.user.dto.CheckDto;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.dto.UserConnection;
 import com.jwi.work.user.signIn.service.SignInService;
@@ -16,21 +17,8 @@ public class SignInController {
 	
 	@Autowired
 	private SignInService signInService;
-	//유저정보 확인 로직
-	@GetMapping("/userCheck")
-	public boolean userCheck(@RequestParam("email") String email,@RequestParam("pw") String pw) {
-		User userData = new User();
-		userData.setEmail(email);
-		userData.setPw(pw);
-		return signInService.loginTest(userData);
-		
-	}
-	//밴 정보 확인 로직
-	@GetMapping("/banCheck")
-	public boolean banCheck(@RequestParam("email") String email) {
-		return signInService.isEmailBanned(email);
-		
-	}
+	
+	
 	//sessionId 발급
 	@GetMapping("/getSessionId")
 	public UserConnection getSessionId(@RequestParam("email") String email) {
@@ -42,10 +30,10 @@ public class SignInController {
 		System.out.println(userKey);
 		return signInService.getUserInfo(userKey);
 	}
-	//비밀번호 틀린횟수 리턴하는 컨트롤러
-	@GetMapping("/wrongCount")
-	public int wrongCount(@RequestParam("email") String email,@RequestParam("loginCheck") boolean loginCheck) {
-		System.out.println(signInService.wrongCount(email, loginCheck));
-		return signInService.wrongCount(email, loginCheck);
+	
+	//로그인체크
+	@GetMapping("/loginCheck")
+	public CheckDto loginCheck(@RequestParam("email") String email,@RequestParam("pw") String pw) {
+		return signInService.helpLogin(email, pw);
 	}
 }

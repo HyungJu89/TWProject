@@ -60,6 +60,7 @@
 	<select id="sessionUserCheck" resultType="int" parameterType="int">
 		select count(*) from userConnection where userKey = #{userKey}
 	</select>
+	<!-- 비밀번호 틀린 카운트 -->
 	<select id="wrongCount" resultType="int" parameterType="int">
 		select count(*) from loginLog where userKey = #{userKey} and loginSuccess = 1
 	</select>
