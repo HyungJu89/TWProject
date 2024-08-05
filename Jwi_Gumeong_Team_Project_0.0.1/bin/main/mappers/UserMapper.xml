@@ -6,7 +6,7 @@
 	<!-- 회원가입 부분 -->
 	<insert id="register" parameterType="com.jwi.work.user.dto.User">
 		INSERT INTO user
-		(email,pw,nickName,gender)value(#{email},#{pw},#{nickName},#{gender})
+		(email,pw,nickName,gender)value(#{email},HEX(AES_ENCRYPT(#{pw}, SHA2('abcabc', 256))),#{nickName},#{gender})
 	</insert>
 
 	<select id="emailTest" resultType="int" parameterType="String">
@@ -20,10 +20,22 @@
 	<!-- 로그인 부분 -->
 	<!-- 유저 정보체크 -->
 	<select id="loginCheck" resultType="int" parameterType="com.jwi.work.user.dto.User">
-		select count(*) from user where email=#{email} and pw=#{pw}
+		select count(*) from user where email=#{email} and pw=HEX(AES_ENCRYPT(#{pw}, SHA2('abcabc', 256)))
 	</select>
 	<!-- 벤 아이디 리스트 -->
 	<select id="banEmailList" resultType="String">
 		select email from user where state = 'deactivate'
+	</select>
+	<!-- email체크 -->
+	<select id="emailCheck" resultType="int" parameterType="String">
+		select count(*) from user where email=#{email}
+	</select>
+	<!-- 유저SessionId업데이트 -->
+	<update id="updateSessionId" parameterType="com.jwi.work.user.dto.User">
+    UPDATE `user` SET `sessionId` = #{sessionId} WHERE `email` = #{email}
+    </update>
+    <!-- 유저 sessionId체크 후 유저정보 빼기 -->
+    <select id="userInfo" resultType="com.jwi.work.user.dto.User" parameterType="String">
+		select * from user where sessionId = #{sessionId}
 	</select>
 </mapper>	

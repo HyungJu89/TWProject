@@ -1,6 +1,7 @@
 package com.jwi.work.user.signUp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.user.dto.User;

@@ -24,4 +24,20 @@ public class SignInController {
 		return signInService.loginTest(userData);
 		
 	}
+	//밴 정보 확인 로직
+	@GetMapping("/banCheck")
+	public boolean banCheck(@RequestParam("email") String email) {
+		return signInService.isEmailBanned(email);
+		
+	}
+	//sessionId 발급
+	@GetMapping("/getSessionId")
+	public String getSessionId(@RequestParam("email") String email) {
+		return signInService.getSessionId(email);
+	}
+	//sessioinId 확인 후 유저정보 넘기기
+	@GetMapping("/checkSessionId")
+	public User checkSessionId(@RequestParam("sessionId") String sessionId) {
+		return signInService.getUserInfo(sessionId);
+	}
 }

@@ -26,7 +26,6 @@ public class SignUpController {
     //이메일 중복검사 로직
     @GetMapping("/emailTest")
     public boolean emailTest(@RequestParam("email") String email) {
-    	System.out.println("컨트롤러 들어옴");
     	return signUpService.emailTest(email);
     }
     //닉네임 중복검사 로직
