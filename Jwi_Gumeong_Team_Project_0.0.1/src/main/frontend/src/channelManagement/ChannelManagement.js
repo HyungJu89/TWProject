@@ -23,8 +23,8 @@ function ChannelManagement() {
     return (
         <div className={style.createMain}>
             <div className={style.createBody}>
-                <div className={style.container} onClick={() => tapClick(1)} >{/* 채널 생성 상단 */}
-                    <div className={style.createChannelTitle} >{/* 채널 개설하기 제목 */}
+                <div className={style.container} >{/* 채널 생성 상단 */}
+                    <div className={style.createChannelTitle} onClick={() => tapClick(1)}>{/* 채널 개설하기 제목 */}
                         <img src={open_channel_32} />
                         <div className={style.createChannelTitleText}>채널 개설하기</div>
                     </div>
@@ -35,8 +35,8 @@ function ChannelManagement() {
                         </>
                     }
                 </div>
-                <div className={style.container}  onClick={() => tapClick(2)}>{/* 관리자 신청 */}
-                    <div className={style.createChannelTitle}>
+                <div className={style.container}>{/* 관리자 신청 */}
+                    <div className={style.createChannelTitle} onClick={() => tapClick(2)}>
                         <img src={enroll} />
                         <div className={style.createChannelTitleText}>채널 관리자 신청하기</div>
                     </div>
@@ -48,8 +48,8 @@ function ChannelManagement() {
                     }
                 </div>
 
-                <div className={style.container}  onClick={() => tapClick(3)}>{/* 관리자 포기 */}
-                    <div className={style.createChannelTitle}> 
+                <div className={style.container}>{/* 관리자 포기 */}
+                    <div className={style.createChannelTitle} onClick={() => tapClick(3)}> 
                         <img src={give_up} />
                         <div className={style.createChannelTitleText}>채널 관리자 포기하기</div>
                         </div>

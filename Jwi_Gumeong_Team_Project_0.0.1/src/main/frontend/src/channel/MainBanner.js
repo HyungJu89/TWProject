@@ -10,7 +10,7 @@ import { useQuery } from 'react-query';
 import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import LiveLink from './LiveLink.js'
 function MainBanner({ channelId, route,
-     channelIdSub1, channelIdSub2, channelIdSub3}) {
+    channelIdSub1, channelIdSub2, channelIdSub3 }) {
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
@@ -35,34 +35,43 @@ function MainBanner({ channelId, route,
         setPartnersLiveInfo(channelApi);
     }, [channelApi, channelId, channelIdSub1, channelIdSub2, channelIdSub3]);
 
-    if (isLoadingLiveInfo || isLoadingChannel || 
+    if (isLoadingLiveInfo || isLoadingChannel ||
         isLoadingLiveInfo1 || isLoadingChannel1 ||
         isLoadingLiveInfo2 || isLoadingChannel2 ||
-        isLoadingLiveInfo3 || isLoadingChannel3 ) {
+        isLoadingLiveInfo3 || isLoadingChannel3) {
         return <div className={style.channelInfoBack}> {/*상단 이미지 배너 */}
             <div className={style.gradinetMainBanner} style={{ background: '#000000' }}></div>
         </div>;
     }
-    
-    if (isErrorLiveInfo || isErrorChannel || 
+
+    if (isErrorLiveInfo || isErrorChannel ||
         isErrorLiveInfo1 || isErrorChannel1 ||
         isErrorLiveInfo2 || isErrorChannel2 ||
-        isErrorLiveInfo3 || isErrorChannel3 ) {
+        isErrorLiveInfo3 || isErrorChannel3) {
         return <>에러</>;
     }
     console.log(route);
     return (
 
         <div className={style.channelInfoBack}> {/*상단 이미지 배너 */}
-            {channelApi1.openLive ? (
+            {channelApi.openLive ? (
                 <div className={style.gradinetMainBanner}>
                     <div className={style.MainBanner}>
                         {/* 라이브 이미지 */}
-                        {route === 'channel' ?
-                            <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                            :
-                            <img src={partnersLive?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
-                        }
+                        {route === 'channel' ? (
+                            liveInfoApi?.adult ? (
+                                <div className={style.adult}>시청연령 제한</div>
+                            ) : (
+                                <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                            )
+                        ) : (
+                            partnersLive?.adult ? (
+                                <div className={style.adult}>시청연령 제한</div>
+                            ) : (
+                                <img src={partnersLive?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                            )
+                        )}
+
                         {/* 라이브 방송 정보 */}
                         <div className={style.liveInfo}>
                             <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
@@ -82,32 +91,18 @@ function MainBanner({ channelId, route,
                             }
                         </div>
                     </div>
-                    
+
                     {/*메인 선택 배너*/}
-                    {route === 'channel' ? null :
+                    {route === 'channel' ? (null) : (
                         <div className={style.liveDiv}>
-                            <img style={{ marginRight: '30px' }} src={chevron_left_w} />
                             <div className={style.liveImg}>
-                     {/*박스-*/}<div onClick={() => { setPartnersLive(liveInfoApi); setPartnersLiveInfo(channelApi) }} className={style.box}>
-                                    <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />
-                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
-                                </div>
-                     {/*박스-*/}<div onClick={() => { setPartnersLive(liveInfoApi1); setPartnersLiveInfo(channelApi1)  }} className={style.box}>
-                                    <img src={liveInfoApi1?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />
-                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
-                                </div>
-                     {/*박스-*/}<div onClick={() => { setPartnersLive(liveInfoApi2); setPartnersLiveInfo(channelApi2)  }} className={style.box}>
-                                    <img src={liveInfoApi2?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />
-                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
-                                </div>
-                     {/*박스-*/}<div onClick={() => { setPartnersLive(liveInfoApi3); setPartnersLiveInfo(channelApi3)  }} className={style.box}>
-                                    <img src={liveInfoApi3?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />
-                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
-                                </div>
+                                <LiveImgAdultCheck liveImginfo={liveInfoApi} channelinfo={channelApi} setPartnersLive={setPartnersLive} setPartnersLiveInfo={setPartnersLiveInfo}/>
+                                <LiveImgAdultCheck liveImginfo={liveInfoApi1} channelinfo={channelApi1} setPartnersLive={setPartnersLive} setPartnersLiveInfo={setPartnersLiveInfo}/>
+                                <LiveImgAdultCheck liveImginfo={liveInfoApi2} channelinfo={channelApi2} setPartnersLive={setPartnersLive} setPartnersLiveInfo={setPartnersLiveInfo}/>
+                                <LiveImgAdultCheck liveImginfo={liveInfoApi3} channelinfo={channelApi3} setPartnersLive={setPartnersLive} setPartnersLiveInfo={setPartnersLiveInfo}/>
                             </div>
-                            <img style={{ marginLeft: '30px' }} src={chevron_right_w} />
                         </div>
-                    }
+                    )}
                 </div>
             )
                 : (
@@ -116,6 +111,20 @@ function MainBanner({ channelId, route,
         </div>
 
 
+
+    )
+}
+
+function LiveImgAdultCheck({ liveImginfo, channelinfo, setPartnersLive, setPartnersLiveInfo}) {
+    return (
+        < div onClick={() => { setPartnersLive(liveImginfo); setPartnersLiveInfo(channelinfo) }} className={style.box} >
+            {liveImginfo?.adult ?
+                (<div className={style.adult}>19금</div>)
+                :
+                (<img src={liveImginfo?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />)
+            }                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+
+        </div >
 
     )
 }
