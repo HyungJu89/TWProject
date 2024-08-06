@@ -1,44 +1,82 @@
 import style from './style/ApplyManager.module.css'
 
 import styleManagement from './style/Management.module.css';
+import ApplyManagerNext from'./ApplyManagerNext.js';
 import '../App.css'
+import { useEffect, useRef, useState } from 'react';
 
 function ApplyManager() {
 
+    let [searchPopOpen, setSearchPopOpen] = useState(false);
+    let popModalRef = useRef(null);
+    let popinputRef = useRef(null);
 
+    useEffect(()=>{//모달창 :: 다른 곳누르면 닫히는 코드
+        const popRefSearchEvent = (e) =>{
+            if(searchPopOpen && 
+                !popModalRef.current.contains(e.target) && !popinputRef.current.contains(e.target))
+                /*
+                1. searchPopOpen이 참이다 = 모달이 켜져있다.
+                2. 현재 누른 곳이 pop...ModalRef 하위가 아니다.
+                3. 현재 누른 곳이 pop...inputRef 하위가 아니다.
+                */
+                {setSearchPopOpen(false);}
+        };
+            document.addEventListener('mousedown',popRefSearchEvent);
+            //HTML 전체에서. 이벤트를 등록('마우스 클릭 시', 앞서 설정한 내용);
+            return()=>{ //클린업
+            document.removeEventListener('mousedown',popRefSearchEvent);
+            //HTML 전체에서. 이벤트를 삭제('마우스 클릭 시', 앞서 설정한 내용);
+        };
+    },[searchPopOpen])
 
+    const formatUnit = (number) => {
+        let unit = ['만', '천']
+        let num = [10000, 1000]
+        if (number / num[0] >= 1) {
+            let int = Math.floor(number / num[1]);
+            return Math.floor(int / 10) + unit[0] + Math.floor(int % 10) + unit[1]
+        }
+        if (number / num[1] >= 1) {
+            return Math.floor(number / num[1]) + unit[1];
+        }
+        return number
+    }
 
+    let [applyNext, setApplyNext] = useState(false); //스트리머 선택 여부
+    let [selectCreatorInfo, setSelectCreatorInfo] = useState('')//선택 스트리머 정보
     return (
         <div className={style.applyManagerMain}>
             <div>채널명</div>
-            <input className={styleManagement.channelInputBox} placeholder='스트리머 채널명 입력...' />
-            <div>관리자 신청 원하는 채널</div>
-            <div>
-                <div>채널 아이콘</div>
-                <div>
-                    <div>채널 이름</div>
-                    <div>팔로워수 즐찾수</div>
-                </div>
-                <div>관리자 신청 전 주의사항</div>
-                <div>
-                    <ul>
-                        <li>채널 관리자를 포기하면 신청한 사람에 한 해 관리자가 위임됩니다.</li>
-                        <li>신고 혹은 제재를 받을 시 관리자 권한이 강제 박탈될 수 있습니다.</li>
-                        <li>클린 한 쥐구멍 생활을 위해 채널 관리자의 운영 활동 기록이 일정 기간 동안 보관됩니다.</li>
-                    </ul>
-                </div>
-                <div> 
-                    <div>위 내용을 동의하십니까?</div>
-                    <div>
-                        <img></img>
-                        <div>위 주의사항을 숙지했으며 동의합니다.</div>
-                    </div>
-                </div>
-                <div>
-                    채널 관리자 신청하기 버튼
+            <input ref={popinputRef}  onChange={()=>{setSearchPopOpen(true)}} className={styleManagement.channelInputBox} placeholder='스트리머 채널명 입력...' />
+            {searchPopOpen &&
+            <div ref={popModalRef} className={style.searchPopUp}>
+                <div className={style.scroll}>
+                    <SearchPop setSearchPopOpen={setSearchPopOpen} formatUnit={formatUnit} setApplyNext={setApplyNext} setSelectCreatorInfo={setSelectCreatorInfo}/>
                 </div>
             </div>
+            }
+            {applyNext && <ApplyManagerNext selectCreatorInfo={selectCreatorInfo}/>}
         </div>
+    )
+}
+
+function SearchPop({formatUnit,setApplyNext,setSelectCreatorInfo,setSearchPopOpen}) {
+        return(
+        <div onClick={()=>{setApplyNext(true); setSearchPopOpen(false); setSelectCreatorInfo('DB에서꺼내올거');}} className={style.result}>
+            <div className={style.formGroup}>
+                <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNBZACXy5wU8XOrMUB87u_xKqwtUTNSj9LMQ&s' />
+                <div className={style.streammerInfo}>
+                    <div className={style.channelName}>이름</div>
+                    <div className={style.follower}>
+                        <div className={style.markText}>팔로워</div>
+                        <div className={style.markCount}> {formatUnit(123123)}</div>
+                        <div className={style.markText}>즐겨찾기</div>
+                        <div className={style.markCount}> 10000만</div>
+                    </div>
+                </div>
+            </div>
+    </div>
     )
 }
 

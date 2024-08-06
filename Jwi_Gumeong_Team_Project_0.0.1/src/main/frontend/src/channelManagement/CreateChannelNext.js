@@ -8,10 +8,11 @@ import rule_add from '../icon/20px/rule-add.png'
 import deletion from '../icon/14px/deletion.png'
 import check_deactivation from '../icon/24px/check-deactivation.png'
 import check_activation from '../icon/24px/check-activation.png'
+import { useChannel } from '../recycleCode/ApiQuery.js';
+
 
 function CreateChannelNext({ notice, channelInfo, channelUrl }) {
     let navigate = useNavigate();
-
     const [buttonColor, setButtonColor] = useState('#BBBBBB');
     const [iconColor, setIconColor] = useState(check_deactivation);
     const [checkBoxIcon, setCheckBoxIcon] = useState(false);
@@ -125,17 +126,25 @@ function CreateChannelNext({ notice, channelInfo, channelUrl }) {
         }
     },[rulesAdd])
 
+    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelUrl);
+    if (isLoadingChannel) {
+        return <></>;
+    }
+    if (isErrorChannel) {
+        return <></>;
+    }
+
     return (
         <div className="fadein">{/*채널내 공지사항 작성부분*/}
             <div className={style.announcementTitle}>개설 할 채널 확인</div> {/*채널 공지사항 부분 Text */}
             <div className={style.announcementArea}>
                 <div className={style.formGroup}>
-                    <img src='https://nng-phinf.pstatic.net/MjAyMzEyMjBfNDkg/MDAxNzAzMDU1NjA1MTY2.bCUbi8bRvnKsF6Gmw_EIPrll1fPYTkJzTDo243vchEEg.JIYN6Ve8RVWFNqjdiwrEImVAAK4s-bNrJRRGA0ikM8sg.JPEG/%EA%B7%B8%EC%9C%BD.jpg?type=f120_120_na' />
+                    <img src={channelApi.channelImageUrl} />
                     <div className={style.streammerInfo}>
-                        <div className={style.channelName}>채널명 DB에서떼오기</div>
+                        <div className={style.channelName}>{channelApi.channelName}</div>
                         <div className={style.follower}>
                             <div className={style.markText}>팔로워</div>
-                            <div className={style.markCount}> {formatUnit(142400)}</div>
+                            <div className={style.markCount}> {formatUnit(channelApi.followerCount)}</div>
                             <div className={style.markText}>즐겨찾기</div>
                             <div className={style.markCount}> 10000만</div>
                         </div>
