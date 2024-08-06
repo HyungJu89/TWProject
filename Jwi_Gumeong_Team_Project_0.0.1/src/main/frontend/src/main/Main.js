@@ -20,12 +20,16 @@ function Main() {
     let [topic, settopic] = useState(true);
     let [loginOn, setLoginOn] = useState(false);
     const [partnersLive, setPartnersLive] = useState([]);
-  useEffect(() => {
+useEffect(() => {
     const addPartners = async () => {
       try {
-        const response = await axios.get(`/partnersLiveApi/`);
-        const newPartners = response.data.content.streamerPartners;
+        const response = await axios.get(/partnersLiveApi/);
+        //파트너스 api
+        // const newPartners = response.data.content.streamerPartners; 
+        //라이브 무작위 api
+        const newPartners = response.data.content.recommendationChannels;
         setPartnersLive(newPartners);
+        console.log(response.data.content.recommendationChannels);
       } catch (error) {
         console.error('Channel API Error:', error);
       }
@@ -33,20 +37,16 @@ function Main() {
     addPartners();
   }, []);
 
-    //컴포넌트 전송 최적화 구문
-    const partnerChannelIndex = (i) =>{
-        return partnersLive[i]?.channelId || '오류';
-    };
-
     return (
         <div>
             <div className={styles.bannerPosition}>
-                <MainBanner channelId={partnerChannelIndex(0)}
-                            channelIdSub1={partnerChannelIndex(1)}
-                            channelIdSub2={partnerChannelIndex(2)}
-                            channelIdSub3={partnerChannelIndex(3)}
-                
-                />
+            {partnersLive && partnersLive.length > 0 &&(
+                <MainBanner channelId={partnersLive[0]?.channelId}
+                            channelIdSub1={partnersLive[1]?.channelId}
+                            channelIdSub2={partnersLive[2]?.channelId}
+                            channelIdSub3={partnersLive[3]?.channelId}
+
+                />)}
             </div>
             <div className={styles.basic}> {/*전체 DIV*/}
                 <div className={styles.leftDiv}>{/*게시판 영역*/}

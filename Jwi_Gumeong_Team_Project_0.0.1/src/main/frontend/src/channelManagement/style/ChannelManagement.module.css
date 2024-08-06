@@ -15,6 +15,7 @@
     padding: 30px;
     width: 726px;
     background-color: #FFFFFF;
+    cursor: pointer;
 }
 
 .createChannelTitle {
