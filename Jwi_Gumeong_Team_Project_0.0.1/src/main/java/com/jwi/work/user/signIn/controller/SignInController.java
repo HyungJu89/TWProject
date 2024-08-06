@@ -18,7 +18,6 @@ public class SignInController {
 	@Autowired
 	private SignInService signInService;
 	
-	
 	//sessionId 발급
 	@GetMapping("/getSessionId")
 	public UserConnection getSessionId(@RequestParam("email") String email) {
@@ -26,9 +25,9 @@ public class SignInController {
 	}
 	//sessioinId 확인 후 유저정보 넘기기
 	@GetMapping("/checkSessionId")
-	public User checkSessionId(@RequestParam("userKey") int userKey) {
-		System.out.println(userKey);
-		return signInService.getUserInfo(userKey);
+	public User checkSessionId(@RequestParam("sessionId") String sessionId) {
+		System.out.println(sessionId);
+		return signInService.getUserInfo(sessionId);
 	}
 	
 	//로그인체크

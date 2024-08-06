@@ -18,9 +18,9 @@ export const fetchSessionId = createAsyncThunk(
   //유저정보 sessionId로 가져오는 로직
 export const getUserInfo = createAsyncThunk(
     'user/getUserInfo',
-    async (userKey,{ rejectWithValue }) => {
+    async (sessionId,{ rejectWithValue }) => {
     try {
-        const response = await axios.get(`/signIn/checkSessionId`, { params: { userKey: userKey } });
+        const response = await axios.get(`/signIn/checkSessionId`, { params: { sessionId: sessionId } });
         return response.data;
     } catch (error) {
         return rejectWithValue(error.response.data);

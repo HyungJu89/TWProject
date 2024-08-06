@@ -27,17 +27,25 @@ import n_service_activation from '../icon/32px/n-service-activation.png';
 import n_service_deactivation from '../icon/32px/n-service-deactivation.png';
 import more from '../icon/24px/more.png';
 import '../App.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 
 function Header({onClickSearch}) {
     let [loginOn, setLoginOn] = useState(true); //로그인 확인 변수
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
+    const userState = useSelector((state) => state.userState);
     let navigate = useNavigate();
+    //세션화에서 세션아이디 json문자열 빼기.
+    // var jsonSessionInfo = sessionStorage.getItem('sessionId');
+    // var sessionInfo = JSON.parse(jsonSessionInfo);
+    // var sessionId = sessionInfo.sessionId;
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
         let justSearchLocal = localStorage.getItem('search')
         justSearchLocal = JSON.parse(justSearchLocal)
         justSearchLocal != null ? null : localStorage.setItem('search', JSON.stringify([])
+
             , [])
     })
 
