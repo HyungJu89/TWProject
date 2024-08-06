@@ -64,4 +64,8 @@
 	<select id="wrongCount" resultType="int" parameterType="int">
 		select count(*) from loginLog where userKey = #{userKey} and loginSuccess = 1
 	</select>
+	<!-- 비밀번호 틀린 카운트2 -->
+	<select id="wrongList" resultType="int" parameterType="int">
+        SELECT loginSuccess FROM loginLog WHERE userKey = #{userKey} ORDER BY createdAt DESC LIMIT 5;
+	</select>
 </mapper>	

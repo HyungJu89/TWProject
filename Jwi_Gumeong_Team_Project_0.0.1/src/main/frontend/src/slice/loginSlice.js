@@ -21,7 +21,6 @@ export const getUserInfo = createAsyncThunk(
     async (userKey,{ rejectWithValue }) => {
     try {
         const response = await axios.get(`/signIn/checkSessionId`, { params: { userKey: userKey } });
-        console.log(response.data);
         return response.data;
     } catch (error) {
         return rejectWithValue(error.response.data);
