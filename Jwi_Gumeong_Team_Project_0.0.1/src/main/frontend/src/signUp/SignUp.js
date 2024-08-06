@@ -255,7 +255,6 @@ function Join() {
     const contrastCertification = () => {
         if (certification == userCertification) {
             SetCheckCerti(true);
-            console.log("잘됫음");
         } else {
             SetCheckCerti(false);
         }
