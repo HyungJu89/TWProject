@@ -23,7 +23,6 @@ function CustomerServiceCenter() {
         {
             content:"aa",
             title:"aa"
-
         }
     ]
 
@@ -188,20 +187,20 @@ function CustomerServiceCenter() {
                                 {currentSanctions.length === 0 ? (
                                     <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
                                 ) : (
-                                currentSanctions.map((sanction, index) => (
-                                    <div key={index} className={styles.sanctionItem}>
-                                        <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
-                                        <div className={styles.sanctionDetails}>
-                                            <div className={styles.sanctionTitle}>{sanction.title}</div>
-                                            <div className={styles.sanctionContent}>
-                                                <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
-                                                <div className={styles.sanctionDate}>~ {sanction.date} 까지</div>
+                                    currentSanctions.map((sanction, index) => (
+                                        <div key={index} className={styles.sanctionItem}>
+                                            <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
+                                            <div className={styles.sanctionDetails}>
+                                                <div className={styles.sanctionTitle}>{sanction.title}</div>
+                                                <div className={styles.sanctionContent}>
+                                                    <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
+                                                    <div className={styles.sanctionDate}>~ {sanction.date} 까지</div>
+                                                </div>
                                             </div>
+                                            {index < currentSanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
                                         </div>
-                                        {index < currentSanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
-                                    </div>
-                                ))
-                            )}
+                                    ))
+                                )}
                             </div>
                             {Math.ceil(sanctions.length / sectionsPerPage) > 1 && (
                                 <div className={styles.pagination}>

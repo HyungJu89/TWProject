@@ -1,9 +1,13 @@
 package com.jwi.work.user.dto;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
 public class User {
+	
+	private int userKey;
 
     private String email;
 
@@ -18,5 +22,9 @@ public class User {
     private String state;
     
     private String sessionId;
+    
+    private Date createdAt;
+    
+    private Date updatedAt;
 
 }
