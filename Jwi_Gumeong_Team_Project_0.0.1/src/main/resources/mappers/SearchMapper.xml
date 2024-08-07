@@ -22,8 +22,6 @@
 			name LIKE CONCAT('%',#{search},'%')
 		GROUP BY
         	channel.channelKey
-        ORDER BY
-        	post.createdAt DESC
 		LIMIT
 			#{offset},#{limit}
 	</select>
