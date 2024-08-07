@@ -81,11 +81,7 @@ function CreateChannelNext({ notice, channelInfo, channelUrl }) {
             };
             try {
                 let data = await createChannel(channelCreate);
-<<<<<<< HEAD
                 if(!data.success){
-=======
-                if (data.createSuccess) {
->>>>>>> bb180a56cf31df246bca9b83e69efd37d123fc04
                     alert("이미 생성된 채널입니다. 해당 채널로 이동합니다.")
                 }
 
