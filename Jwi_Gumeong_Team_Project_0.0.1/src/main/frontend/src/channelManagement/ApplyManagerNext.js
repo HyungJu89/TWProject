@@ -7,7 +7,7 @@ import check_activation from '../icon/24px/check-activation.png'
 import checklist from '../icon/24px/checklist.png'
 import '../App.css'
 
-function ApplyManagerNext({ selectCreatorInfo }) {
+function ApplyManagerNext({ selectCreatorInfo, route }) {
     let navigate = useNavigate();
     const [buttonColor, setButtonColor] = useState('#BBBBBB');
     const [iconColor, setIconColor] = useState(check_deactivation);
@@ -46,7 +46,13 @@ function ApplyManagerNext({ selectCreatorInfo }) {
         alert("정상적으로 관리자 신청이 완료되었습니다.")
         navigate('/')
     }
-
+    
+    let [routeText, setRouteText] = useState([]);
+    useEffect(()=>{
+        if(route === 'giveUp'){
+            
+        }
+    },[])
     return (
         <div>
             <div className={style.announcementTitle}>관리자 신청을 원하는 채널</div> {/*선택한 스트리머 정보 */}

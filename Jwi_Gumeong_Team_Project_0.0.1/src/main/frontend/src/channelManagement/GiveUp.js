@@ -1,5 +1,6 @@
 import style from './style/ApplyManager.module.css'
 import styleManagement from './style/Management.module.css';
+import ApplyManagerNext from'./ApplyManagerNext.js';
 import { useEffect, useRef, useState } from 'react';
 import '../App.css'
 
@@ -41,7 +42,7 @@ function GiveUp() {
     return (
         <div className={style.applyManagerMain}>
             <div>채널명</div>
-            <input ref={popinputRef}  onClick={()=>{setSearchPopOpen(true)}} className={styleManagement.channelInputBox} placeholder='스트리머 채널명 입력...' />
+            <div ref={popinputRef}  onClick={()=>{setSearchPopOpen(true)}} className={styleManagement.channelInputBox} placeholder='스트리머 채널명 입력...' />
             {searchPopOpen &&
             <div ref={popModalRef} className={style.searchPopUp}>
                 <div className={style.scroll}>
@@ -49,6 +50,7 @@ function GiveUp() {
                 </div>
             </div>
             }
+            {applyNext && <ApplyManagerNext route={'giveUp'}/>}
         </div>
     )
 }
