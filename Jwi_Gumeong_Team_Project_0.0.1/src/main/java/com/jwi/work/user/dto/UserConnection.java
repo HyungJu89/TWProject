@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class UserConnection {
 	
-	private int userKey;
+	private String userKey;
 	
 	private String sessionId;
 	
