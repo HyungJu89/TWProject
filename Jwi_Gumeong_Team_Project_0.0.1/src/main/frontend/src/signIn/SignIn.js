@@ -50,9 +50,14 @@ function SignIn() {
         console.log(count);
         if (email !== '' && password !== '') {
             try {
-                const [userResponse] = await Promise.all([
-                    axios.get('/signIn/loginCheck', { params: { email: email, pw: password } }),
-                ]);
+
+                const userData = {
+                    email: email,
+                    pw: password
+                };
+
+                const userResponse = await axios.post('/signIn/loginCheck', userData);
+                console.log("userResponse:", userResponse.data);
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
                     dispatch(getUserInfo(userResponse.data.userKey));
