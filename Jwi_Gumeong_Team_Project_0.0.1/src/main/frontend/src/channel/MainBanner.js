@@ -1,6 +1,6 @@
-// mainBanner 사이트 이동하고 다시 돌아오면 실시간 방송 사진 바뀔수 있게 처리
 import { useParams, useNavigate } from 'react-router-dom';
 import style from './style/MainBanner.module.css';
+import '../App.css'
 import offBanner from '../icon/img/illustration02.png';
 import chevron_left_w from '../icon/40px/chevron-left-w.png'
 import chevron_right_w from '../icon/40px/chevron-right-w.png'
@@ -10,7 +10,7 @@ import { useQuery } from 'react-query';
 import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import LiveLink from './LiveLink.js'
 function MainBanner({ channelId, route,
-    channelIdSub1, channelIdSub2, channelIdSub3 }) {
+    channelIdSub1, channelIdSub2, channelIdSub3, postList }) {
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
 
@@ -35,7 +35,8 @@ function MainBanner({ channelId, route,
         setPartnersLiveInfo(channelApi);
     }, [liveInfoApi,channelApi, channelId, channelIdSub1, channelIdSub2, channelIdSub3]);
 
-
+    console.log(channelId);
+    console.log('gd');
 
     if (isLoadingLiveInfo || isLoadingChannel ||
         isLoadingLiveInfo1 || isLoadingChannel1 ||
@@ -74,7 +75,7 @@ function MainBanner({ channelId, route,
                         )}
 
                         {/* 라이브 방송 정보 */}
-                        <div className={style.liveInfo}>
+                        <div onClick={()=>{navigate(`/channel/${partnersLiveInfo.channelId}`)}} className={style.liveInfo}>
                             <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
                             {route === 'channel' ?/* 라이브 제목 */
                                 <div className={style.liveTitle}>{liveInfoApi?.liveTitle}</div>
