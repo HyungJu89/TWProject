@@ -258,9 +258,6 @@ function Join() {
         } else {
             SetCheckCerti(false);
         }
-        if(certification == '') {
-            SetCheckCerti(false);
-        }
     }
 
     const handleGenderChange = (event) => {

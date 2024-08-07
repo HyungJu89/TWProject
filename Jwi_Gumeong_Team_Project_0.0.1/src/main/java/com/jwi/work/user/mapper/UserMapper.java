@@ -2,6 +2,8 @@ package com.jwi.work.user.mapper;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jwi.work.user.dto.LoginLog;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.dto.UserConnection;
@@ -39,5 +41,8 @@ public interface UserMapper{
 		public int wrongCount(int userKey);
 		//비밀번호 틀린횟수 받아오기2
 		public ArrayList<Integer> wrongList(int userKey);
+		
+		// 로그인 후 키값 찾아오기
+		public int getUserKeyBySessionId(@Param("sessionId") String sessionId);
 }
 

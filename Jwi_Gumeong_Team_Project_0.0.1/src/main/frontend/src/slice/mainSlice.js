@@ -5,14 +5,13 @@ let imgUiModal = createSlice({
     initialState : {popUp: false, on : 0},
     reducers: {
         openImgUiModal(state){
-               state.popUp = true
+                state.popUp = true
         },
         openImgUiModalFalse(state){
-              state.popUp = false
+                state.popUp = false
         }
 
     }
 })
 export let {openImgUiModal, openImgUiModalFalse} = imgUiModal.actions
-
 export default imgUiModal;
