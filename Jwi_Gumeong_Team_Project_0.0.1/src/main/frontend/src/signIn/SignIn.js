@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 
 function SignIn() {
-    var jsonSessionInfo = localStorage.getItem('sessionId');
+    var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);    
     // 세션화성공
     const userState = useSelector((state) => state.userState);
@@ -60,7 +60,7 @@ function SignIn() {
                 console.log("userResponse:", userResponse.data);
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
-                    dispatch(getUserInfo(userResponse.data.userKey));
+                    dispatch(getUserInfo(sessionInfo.sessionId));
                     console.log(userResponse.data);
                     navigate('/');
                 }else{
@@ -91,6 +91,7 @@ function SignIn() {
 
     // 유저정보 체크 로직
     useEffect(() => {
+        console.log(sessionInfo.sessionId);
         if (email !== '' && password !== ''){
             setIsButtonActive(true);
         }else if(email == ''){

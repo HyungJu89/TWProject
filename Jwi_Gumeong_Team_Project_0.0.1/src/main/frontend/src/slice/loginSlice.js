@@ -7,7 +7,7 @@ export const fetchSessionId = createAsyncThunk(
     try {
         var jsonSessionInfo = sessionStorage.getItem('sessionId');
         const response = await axios.get(`/signIn/getSessionId`, { params: { email: email } });
-        console.log(response.data);
+        // console.log(response.data);
         sessionStorage.setItem('sessionId', JSON.stringify({sessionId:response.data.sessionId}));
         return response.data;
     } catch (error) {
