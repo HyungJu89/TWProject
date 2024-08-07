@@ -120,11 +120,10 @@ function LiveImgAdultCheck({ liveImginfo, channelinfo, setPartnersLive, setPartn
     return (
         < div onClick={() => { setPartnersLive(liveImginfo); setPartnersLiveInfo(channelinfo) }} className={style.box} >
             {liveImginfo?.adult ?
-                (<div className={style.adult}>19금</div>)
+                (<div className={style.adultMini}>19금</div>)
                 :
                 (<img src={liveImginfo?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />)
             }                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
-
         </div >
 
     )

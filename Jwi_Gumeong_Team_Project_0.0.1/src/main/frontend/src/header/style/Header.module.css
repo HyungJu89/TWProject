@@ -50,10 +50,10 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    cursor: pointer;
     max-width: 750px;
     min-width: 200px;
 }
+.basicNav .icon img{cursor: pointer;}
 .icon_notification{
     width: 34px;
     height: 34px;

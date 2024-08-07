@@ -60,16 +60,17 @@ function Header({onClickSearch, onLogout}) {
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
-                <div className={styles.icon}>
+               
                     {isLoggedIn ? (
-                        <>
+                         <div className={styles.icon}>
                             <Icon navigate={navigate} userKey={userKey} />
                             <div onClick={onLogout} className={styles.signInBtn}>로그아웃</div>
-                        </>
+                        </div>
                     ) : (
+                        <div className={styles.icon} style={{justifyContent:'end'}}>
                         <div onClick={() => { navigate('/signIn') }} className={styles.signInBtn}>로그인</div>
+                        </div>
                     )}
-                </div>
             </div>
         </>
     );
