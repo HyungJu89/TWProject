@@ -34,9 +34,6 @@
 		CONCAT('%',#{search},'%')
 	</select>
 	
-	
-	
-
 	<select id="searchPost" parameterType="map" resultType="map">
 		SELECT 
 			post.*,
@@ -83,6 +80,5 @@
 		LIMIT
 			#{offset},#{limit}
 	</select>
-	
 
 </mapper>
