@@ -56,7 +56,6 @@ public class ChzzkAPIInfo {
 		}
 
 		Object channelInfo = restTemplate.getForObject(uri, Object.class);
-
 		return channelInfo;
 	}
 

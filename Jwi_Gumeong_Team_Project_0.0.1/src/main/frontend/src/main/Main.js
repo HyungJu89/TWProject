@@ -14,39 +14,54 @@ import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
 import chevron_left_w from '../icon/40px/chevron-left-w.png'
 import chevron_right_w from '../icon/40px/chevron-right-w.png'
+import { searchPost } from '../recycleCode/postAxios.js'
 
 function Main() {
     let navigate = useNavigate();
     let [topic, settopic] = useState(true);
     let [loginOn, setLoginOn] = useState(false);
     const [partnersLive, setPartnersLive] = useState([]);
-  useEffect(() => {
-    const addPartners = async () => {
-      try {
-        const response = await axios.get(`/partnersLiveApi/`);
-        const newPartners = response.data.content.streamerPartners;
-        setPartnersLive(newPartners);
-      } catch (error) {
-        console.error('Channel API Error:', error);
-      }
-    };
-    addPartners();
-  }, []);
+    const [postList, setPostList] = useState([]);
 
-    //컴포넌트 전송 최적화 구문
-    const partnerChannelIndex = (i) =>{
-        return partnersLive[i]?.channelId || '오류';
-    };
+
+    useEffect(() => {
+        const addPartners = async () => {
+            try {
+                const response = await axios.get(`/partnersLiveApi/`);
+                const newPartners = response.data.content.streamerPartners;
+                setPartnersLive(newPartners);
+            } catch (error) {
+                console.error('Channel API Error:', error);
+            }
+        };
+        addPartners();
+    }, []);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const postListData = await searchPost('main', "", 1);
+            setPostList(postListData)
+            console.log(postListData)
+        };
+
+        fetchData();
+
+    }, [])
+
 
     return (
         <div>
             <div className={styles.bannerPosition}>
-                <MainBanner channelId={partnerChannelIndex(0)}
-                            channelIdSub1={partnerChannelIndex(1)}
-                            channelIdSub2={partnerChannelIndex(2)}
-                            channelIdSub3={partnerChannelIndex(3)}
-                
-                />
+                {/*partnersLive 에 값이 들어간 후에 로드 되도록 처리*/}
+                {partnersLive.length > 0 && (
+                    <MainBanner channelId={partnersLive[0]?.channelId}
+                        channelIdSub1={partnersLive[1]?.channelId}
+                        channelIdSub2={partnersLive[2]?.channelId}
+                        channelIdSub3={partnersLive[3]?.channelId}
+
+                    />
+                )}
             </div>
             <div className={styles.basic}> {/*전체 DIV*/}
                 <div className={styles.leftDiv}>{/*게시판 영역*/}
@@ -66,10 +81,20 @@ function Main() {
                         </div>
                     </div>
                     <TopicBtn topic={topic} settopic={settopic} />
-                    {topic == true ? <div className={styles.fadein}><PublicBoard /></div> : null}
+                    {topic == true ?
+                        <div className={styles.fadein}>
+                            {postList.success &&
+                                <>
+                                    {postList.search.map((postInfo, index) =>
+                                        <PublicBoard key={index} postInfo={postInfo} />
+                                    )}
+                                </>
+                            }
+                        </div>
+                        : null}
                     <div onClick={() => { navigate('/allTopic'); window.scrollTo(0, 0) }} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}
                 </div>
-                <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn}/>
+                <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} />
             </div>
         </div>
     );

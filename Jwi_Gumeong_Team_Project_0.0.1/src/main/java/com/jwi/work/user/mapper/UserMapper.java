@@ -2,6 +2,8 @@ package com.jwi.work.user.mapper;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jwi.work.user.dto.User;
 
 public interface UserMapper{
@@ -23,5 +25,7 @@ public interface UserMapper{
 		public void updateSessionId(User user);
 		//sessonId로 유저확인
 		public User userInfo(String sessionId);
+		// 유저 닉네임 확인
+		public String getName(@Param("userKey") int userKey);
 }
 

@@ -13,6 +13,7 @@ function MainBanner({ channelId, route,
      channelIdSub1, channelIdSub2, channelIdSub3}) {
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
+
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
     const { data: channelApi1, isLoading: isLoadingChannel1, isError: isErrorChannel1 } = useChannel(channelIdSub1);
     const { data: channelApi2, isLoading: isLoadingChannel2, isError: isErrorChannel2 } = useChannel(channelIdSub2);
@@ -25,15 +26,16 @@ function MainBanner({ channelId, route,
 
     // 라이브 정보 변경 시 partnersLive 업데이트
     let [partnersLive, setPartnersLive] = useState(liveInfoApi);
-    useEffect(() => {
-        setPartnersLive(liveInfoApi);
-    }, [liveInfoApi, channelId, channelIdSub1, channelIdSub2, channelIdSub3]);
-
+    
     // 라이브 정보 변경 시 partnersLiveInfo 업데이트
     let [partnersLiveInfo, setPartnersLiveInfo] = useState(channelApi);
+
     useEffect(() => {
+        setPartnersLive(liveInfoApi);
         setPartnersLiveInfo(channelApi);
-    }, [channelApi, channelId, channelIdSub1, channelIdSub2, channelIdSub3]);
+    }, [liveInfoApi,channelApi, channelId, channelIdSub1, channelIdSub2, channelIdSub3]);
+
+
 
     if (isLoadingLiveInfo || isLoadingChannel || 
         isLoadingLiveInfo1 || isLoadingChannel1 ||

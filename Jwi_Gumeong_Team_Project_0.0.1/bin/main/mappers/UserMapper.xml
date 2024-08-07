@@ -38,4 +38,6 @@
     <select id="userInfo" resultType="com.jwi.work.user.dto.User" parameterType="String">
 		select * from user where sessionId = #{sessionId}
 	</select>
+
+	
 </mapper>	

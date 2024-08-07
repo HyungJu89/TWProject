@@ -15,13 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.servlet.ServletContext;
+import com.jwi.work.config.WebMVCConfig;
 
 @Component
 public class FileManagerUtil {
 
 	@Autowired
-	private ServletContext servletContext;
+	private WebMVCConfig webMVCConfig;
 
 	private static Logger logger = LoggerFactory.getLogger(FileManagerUtil.class);
 
@@ -74,9 +74,10 @@ public class FileManagerUtil {
 		String savedFileName = UUID.randomUUID() + extension; 
 		
 		
-		String realPath = servletContext.getRealPath("/");
+		String fileRoot = webMVCConfig.getUploadDir();
+
 		
-		String fileRoot = realPath + "resources/fileupload/";
+		System.out.println(fileRoot);
 		
 		File directory = new File(fileRoot);
         // 디렉토리 존재 여부 체크
@@ -111,13 +112,11 @@ public class FileManagerUtil {
 		return savedFileName;
 	}
 
-
+	
 	// 파일 삭제 메소드
 	public boolean removeFile(String filePath) { // /images/2_38239823/test.png
 
-		String realPath = servletContext.getRealPath("/");
-		
-		String fileRoot = realPath + "resources/fileupload/";
+		String fileRoot = webMVCConfig.getUploadDir();
 		
 		String realFilePath = fileRoot + filePath;
 		Path path = Paths.get(realFilePath);
