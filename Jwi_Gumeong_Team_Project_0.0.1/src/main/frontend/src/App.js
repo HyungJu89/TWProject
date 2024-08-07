@@ -14,13 +14,42 @@ import Search from './search/Search.js';
 import CustomerService from './customerService/CustomerServiceCenter.js';
 import ChannelManagement from './channelManagement/ChannelManagement.js';
 import ImgUi from './imgModal/imgModal.js';
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { setSessionId, setUserKey, clearSession } from './slice/sessionSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
     let state = useSelector((state)=>{ return state })
     //---------------------------------- 검색 부분
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        const storeSessionId = window.sessionStorage.getItem("sessionId");
+        if (storeSessionId) {
+            dispatch(setSessionId(storeSessionId));
+            userKey(storeSessionId);
+        }
+    }, [dispatch]);
+
+    const userKey = async (sessionId) => {
+        try {
+            const response = await axios.post('/user/key', null, {
+                params: { sessionId }
+            });
+            if (response.data.result === 'success') {
+                dispatch(setUserKey(response.data.userKey));
+            }
+        } catch (error) {
+            console.error('userKey Axios 에러임:', error);
+        }
+    };
+
+    const onLogout = () => { // 로그아웃 기능 (세션 아이디 지움)
+        sessionStorage.removeItem('sessionId');
+        dispatch(clearSession());
+    };
 
     let [searchText,setSearchText] = useState('');
 
@@ -32,7 +61,7 @@ function App() {
     //----------------------------------
     return (
         <div>
-        <Header onClickSearch={onClickSearch}/> {/* 상단 공통 부분 디자인 */}
+        <Header onClickSearch={onClickSearch} onLogout={onLogout}/> {/* 상단 공통 부분 디자인 */}
         {state.imgUiModal.popUp && <ImgUi/>}{/*이미지 팝업*/}
         <Routes>
             <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}

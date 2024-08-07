@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import imgUiModal from './slice/mainSlice'
 import userState from './slice/loginSlice'
+import session from './slice/sessionSlice';
 /**
  * -리덕스 쓰는이유 
  * -컴포넌트간 state 공유 편해짐
@@ -22,6 +23,7 @@ import userState from './slice/loginSlice'
 export default configureStore({
   reducer: { 
     imgUiModal : imgUiModal.reducer,
-    userState : userState.reducer
+    userState : userState.reducer,
+    session: session,
   }
 }) 

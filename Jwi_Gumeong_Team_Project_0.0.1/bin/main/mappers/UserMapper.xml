@@ -68,6 +68,8 @@
 	<select id="wrongList" resultType="int" parameterType="int">
         SELECT loginSuccess FROM loginLog WHERE userKey = #{userKey} ORDER BY createdAt DESC LIMIT 5;
 	</select>
-
-	
+	<!-- 세션ID로 유저 키값 찾기 -->
+	<select id="getUserKeyBySessionId" resultType="int" parameterType="String">
+			SELECT `userKey` FROM `userConnection` WHERE `sessionId` = #{sessionId}
+	</select>
 </mapper>	

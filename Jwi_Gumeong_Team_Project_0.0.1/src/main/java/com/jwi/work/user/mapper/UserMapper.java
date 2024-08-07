@@ -2,6 +2,8 @@ package com.jwi.work.user.mapper;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jwi.work.user.dto.LoginLog;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.dto.UserConnection;
@@ -43,5 +45,7 @@ public interface UserMapper{
 		public void updateSessionId(User user);
 		//sessonId로 유저확인
 		public User userInfo(String sessionId);
+		// 로그인 후 키값 찾아오기
+		public int getUserKeyBySessionId(@Param("sessionId") String sessionId);
 }
 

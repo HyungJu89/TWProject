@@ -44,7 +44,6 @@ useEffect(() => {
     const fetchData = async () => {
         const postListData = await searchPost('main', "", 1);
         setPostList(postListData)
-        console.log(postListData)
     };
 
     fetchData();
