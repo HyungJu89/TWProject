@@ -112,10 +112,10 @@ function AdminLogin() {
         
         <div className={styles.section}>
             <div className={styles.loginContainer}>
-                <div className={styles.topFont}>로그인</div>
+                <div className={styles.topFont}>관리자 로그인</div>
                 {/* 아이디 input */}
                 <div className={styles.formGroup}>
-                    <p>이메일</p>
+                    <p>ID</p>
                     <div className={styles.inputWrapper}>
                         <input
                             style={{marginBottom : '30px'}}
@@ -129,7 +129,7 @@ function AdminLogin() {
                 </div>
                 {/* 비밀번호 input */}
                 <div className={styles.formGroup}>
-                    <p>비밀번호</p>
+                    <p>PW</p>
                     <div className={styles.inputWrapper}>
                         <input
                             type={showPassword ? "text" : "password"}
@@ -152,7 +152,6 @@ function AdminLogin() {
                 className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>
                 로그인
                 </button>
-                <div className={styles.help}><h6 onClick={() => { navigate('/signUp') } }>회원가입</h6><h6>|</h6><h6 onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</h6></div>
             </div>
         </div>
     );

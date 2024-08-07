@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styles from './style/AdminMain.module.css';
 import serviceLogo from '../icon/img/service-Illustration.png';
@@ -12,6 +13,9 @@ import addIcon from '../icon/40px/add.png';
 
 function AdminMain() {
     let [tab, setTab] = useState(0);
+    let location = useLocation();
+    let [login] = useState(false);
+
     // 제재내역
     const sanctions = [
         // 일부러
@@ -47,7 +51,9 @@ function AdminMain() {
     let [selectedOption, setSelectedOption] = useState("선택하세요");
     let [faqContent, setFaqContent] = useState(null);
     let [inquiryContent, setInquiryContent] = useState(null);
+    
     /* 임시 페이징(백엔드로 바꿀 예정) */
+
     const sectionsPerPage = 10;
     const indexOfLastSanction = currentPage * sectionsPerPage;
     const indexOfFirstSanction = indexOfLastSanction - sectionsPerPage;

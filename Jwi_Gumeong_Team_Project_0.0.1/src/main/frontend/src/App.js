@@ -14,7 +14,9 @@ import Search from './search/Search.js';
 import CustomerService from './customerService/CustomerServiceCenter.js';
 import ChannelManagement from './channelManagement/ChannelManagement.js';
 import ImgUi from './imgModal/imgModal.js';
-import Admin from './admin/AdminMain.js'
+import Admin from './admin/Admin.js';
+import AdminMain from './admin/AdminMain.js';
+import AdminLogin from './admin/AdminLogin.js';
 import { setSessionId, setUserKey, clearSession } from './slice/sessionSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
@@ -79,7 +81,7 @@ function App() {
                     <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
                     <Route path="*" element={<div>404 넣으면 됩니다!</div>}></Route>
                     <Route path='/admin' element={<Admin/>}>
-                        <Route path='login' element={<>ㅅㅂ</>}></Route>{/*관리자*/}
+                        <Route path='login' element={<AdminLogin/>}></Route>{/*관리자*/}
                     </Route>
                 </Routes>
                 <Bottom/> {/* 하단 공통 부분 디자인 */}
