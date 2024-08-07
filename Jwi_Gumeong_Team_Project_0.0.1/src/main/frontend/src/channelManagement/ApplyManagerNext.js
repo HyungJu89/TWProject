@@ -50,12 +50,18 @@ function ApplyManagerNext({ selectCreatorInfo, route }) {
     let [routeText, setRouteText] = useState([]);
     useEffect(()=>{
         if(route === 'giveUp'){
-            
+            setRouteText([
+                '관리자 포기를 원하는 채널', 
+                '채널을 포기하기 전 주의 및 동의 사항!',
+                '채널 관리자 포기 신청 시 철회는 불과합니다.',
+                '채널 관리자를 포기 시 관리자를 신청한 사람이 생길 때 까지 유지됩니다. (만약, 포기 이후 신청한 관리자가 없다면 공지사항에 자동으로 모집이 올라갑니다. 다음 관리자가 생기지 않으면 포기 신청 기준 n일까지 관리자해야합니다. 어쩌구 저쩌구?)',
+                '채널 관리자 포기하기'
+            ]);
         }
     },[])
     return (
         <div>
-            <div className={style.announcementTitle}>관리자 신청을 원하는 채널</div> {/*선택한 스트리머 정보 */}
+            <div className={style.announcementTitle}>{routeText[0]}</div> {/*선택한 스트리머 정보 */}
             <div className={style.announcementArea}>
                 <div className={style.formGroup}>
                     <img src='https://health.chosun.com/site/data/img_dir/2024/02/20/2024022002560_0.jpg' />
@@ -70,12 +76,11 @@ function ApplyManagerNext({ selectCreatorInfo, route }) {
                     </div>
                 </div>
             </div>{/*개설 할 채널 확인*/}
-            <div className={style.announcementTitle}><img src={checklist}/>채널을 개설하기 전 주의 및 동의 사항!</div>{/* 채널 개설 설명 제목*/}
+            <div className={style.announcementTitle}><img src={checklist}/>{routeText[1]}</div>{/* 채널 개설 설명 제목*/}
             <div className={style.precautions}>{/*채널 개설하기전 주의사항 문구*/}
                 <ul className={style.precautionsText}>
-                    <li className={style.precautionsLi}>채널 관리자를 포기하면 신청한 사람에 한 해 관리자가 위임됩니다.</li>
-                    <li className={style.precautionsLi}>신고 혹은 제재를 받을 시 관리자 권한이 강제 박탈될 수 있습니다.</li>
-                    <li className={style.precautionsLi}>클린 한 쥐구멍 생활을 위해 채널 관리자의 운영 활동 기록이 일정 기간 동안 보관됩니다.</li>
+                    <li className={style.precautionsLi}>{routeText[2]}</li>
+                    <li className={style.precautionsLi}>{routeText[3]}</li>
                 </ul>
             </div>
             <div className={style.bottom}>{/*하단 동의하기 체크*/}
@@ -83,7 +88,7 @@ function ApplyManagerNext({ selectCreatorInfo, route }) {
                 <div onClick={onClickCheckBoxIcon} className={style.bottomCheckBox}><img className={style.checkBoxIcon} src={iconColor} />위 주의사항을 숙지했으며 동의합니다.</div> {/*동의하기 체크박스*/}
             </div>
             <div className={style.createButton} style={{ backgroundColor: buttonColor }} onClick={onClickButton}> {/*개설하기 버튼*/}
-            채널 관리자 신청하기
+            {routeText[4]}
             </div>
         </div>
     )

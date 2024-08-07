@@ -41,7 +41,7 @@ function GiveUp() {
     let [selectCreatorInfo, setSelectCreatorInfo] = useState('')//선택 스트리머 정보
     return (
         <div className={style.applyManagerMain}>
-            <div>채널명</div>
+            <div>관리자를 포기할 채널명</div>
             <div ref={popinputRef}  onClick={()=>{setSearchPopOpen(true)}} className={styleManagement.channelInputBox} placeholder='스트리머 채널명 입력...' />
             {searchPopOpen &&
             <div ref={popModalRef} className={style.searchPopUp}>
