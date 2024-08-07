@@ -118,8 +118,8 @@ public class SignInService {
     	
     }
     //userKey로 유저정보 가져오기
-    public User getUserInfo(int userKey) {
-    	return userMapper.userInfo(userKey);
+    public User getUserInfo(String sessionId) {
+    	return userMapper.userInfo(userMapper.getSessionUser(sessionId));
     }
 	
 }

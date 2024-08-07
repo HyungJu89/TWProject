@@ -50,7 +50,6 @@ function MainBanner({ channelId, route,
         isErrorLiveInfo3 || isErrorChannel3) {
         return <>에러</>;
     }
-    console.log(route);
     return (
 
         <div className={style.channelInfoBack}> {/*상단 이미지 배너 */}
