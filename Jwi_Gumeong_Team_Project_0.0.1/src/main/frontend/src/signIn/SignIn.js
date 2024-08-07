@@ -9,7 +9,7 @@ import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 import { setLoggedIn } from '../slice/sessionSlice.js';
 
 function SignIn() {
-    var jsonSessionInfo = localStorage.getItem('sessionId');
+    var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);    
     // 세션화성공
     const userState = useSelector((state) => state.session);
@@ -49,6 +49,10 @@ function SignIn() {
     };
     
     const checkUser = async () => {
+<<<<<<< HEAD
+=======
+        // console.log(count);
+>>>>>>> origin/kimhyeongju
         if (email !== '' && password !== '') {
             try {
 
@@ -58,6 +62,7 @@ function SignIn() {
                 };
 
                 const userResponse = await axios.post('/signIn/loginCheck', userData);
+<<<<<<< HEAD
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
                     dispatch(getUserInfo(userResponse.data.userKey));
@@ -65,6 +70,18 @@ function SignIn() {
                     navigate('/');
                 }else{
                     setCount(userResponse.data.wrongCount);
+=======
+                // console.log("userResponse:", userResponse.data);
+                if(userResponse.data.check && count < 5){
+                    dispatch(fetchSessionId(email));
+                    dispatch(getUserInfo(sessionInfo.sessionId));
+                    // console.log(userResponse.data);
+                    navigate('/');
+                }else{
+                    setCount(userResponse.data.wrongCount);
+                    // console.log(userResponse.data);
+                    // console.log(userResponse.data.wrongCount);
+>>>>>>> origin/kimhyeongju
                 } 
                 setLoginWarn(userResponse.data.warningMessage);
                 
@@ -89,6 +106,7 @@ function SignIn() {
 
     // 유저정보 체크 로직
     useEffect(() => {
+        // console.log(sessionInfo.sessionId);
         if (email !== '' && password !== ''){
             setIsButtonActive(true);
         }else if(email == ''){
@@ -101,11 +119,13 @@ function SignIn() {
     }, [email, password]);
 
     const handleEmailChange = (e) => {
-        setEmail(e.target.value);
+        const value = e.target.value.replace(/\s/g, '');
+        setEmail(value);
     };
 
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
+        const value = e.target.value.replace(/\s/g, '');
+        setPassword(value);
     };
 
     return (

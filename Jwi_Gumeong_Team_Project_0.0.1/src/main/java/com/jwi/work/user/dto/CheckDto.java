@@ -11,5 +11,5 @@ public class CheckDto {
 	
 	private int wrongCount;
 	
-	private int userKey;
+	private String userKey;
 }

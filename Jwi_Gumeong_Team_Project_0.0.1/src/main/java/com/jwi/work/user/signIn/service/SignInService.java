@@ -99,7 +99,7 @@ public class SignInService {
     	String sessionId = UUID.randomUUID().toString().substring(0,20);
     	UserConnection userSession = new UserConnection();
     	//처음 발급 받을때
-    	if(emailCheck(email)&& userMapper.sessionUserCheck(userMapper.getUserKey(email)) == 0) {
+    	if(emailCheck(email) && userMapper.sessionUserCheck(userMapper.getUserKey(email)) == 0) {
     		userSession.setUserKey(userMapper.getUserKey(email));
     		userSession.setSessionId(sessionId);
     		userMapper.saveSession(userSession);
