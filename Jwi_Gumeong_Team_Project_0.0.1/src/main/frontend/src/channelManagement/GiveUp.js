@@ -1,10 +1,9 @@
 import style from './style/ApplyManager.module.css'
 import styleManagement from './style/Management.module.css';
-import ApplyManagerNext from'./ApplyManagerNext.js';
-import '../App.css'
 import { useEffect, useRef, useState } from 'react';
+import '../App.css'
 
-function ApplyManager() {
+function GiveUp() {
 
     let [searchPopOpen, setSearchPopOpen] = useState(false);
     let popModalRef = useRef(null);
@@ -14,11 +13,6 @@ function ApplyManager() {
         const popRefSearchEvent = (e) =>{
             if(searchPopOpen && 
                 !popModalRef.current.contains(e.target) && !popinputRef.current.contains(e.target))
-                /*
-                1. searchPopOpen이 참이다 = 모달이 켜져있다.
-                2. 현재 누른 곳이 pop...ModalRef 하위가 아니다.
-                3. 현재 누른 곳이 pop...inputRef 하위가 아니다.
-                */
                 {setSearchPopOpen(false);}
         };
             document.addEventListener('mousedown',popRefSearchEvent);
@@ -47,7 +41,7 @@ function ApplyManager() {
     return (
         <div className={style.applyManagerMain}>
             <div>채널명</div>
-            <input ref={popinputRef}  onChange={()=>{setSearchPopOpen(true)}} className={styleManagement.channelInputBox} placeholder='스트리머 채널명 입력...' />
+            <input ref={popinputRef}  onClick={()=>{setSearchPopOpen(true)}} className={styleManagement.channelInputBox} placeholder='스트리머 채널명 입력...' />
             {searchPopOpen &&
             <div ref={popModalRef} className={style.searchPopUp}>
                 <div className={style.scroll}>
@@ -55,7 +49,6 @@ function ApplyManager() {
                 </div>
             </div>
             }
-            {applyNext && <ApplyManagerNext selectCreatorInfo={selectCreatorInfo}/>}
         </div>
     )
 }
@@ -79,4 +72,5 @@ function SearchPop({formatUnit,setApplyNext,setSelectCreatorInfo,setSearchPopOpe
     )
 }
 
-export default ApplyManager;
+
+export default GiveUp;
