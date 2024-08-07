@@ -11,6 +11,7 @@ import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import MyPage from './myPage/MyPage.js';
 import Search from './search/Search.js';
+import BlinkPage from './blinkPage/BlinkPage.js';
 import CustomerService from './customerService/CustomerServiceCenter.js';
 import ChannelManagement from './channelManagement/ChannelManagement.js';
 import ImgUi from './imgModal/imgModal.js';
@@ -76,6 +77,7 @@ function App() {
                     <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
                     <Route path='/channelManagement' element={<ChannelManagement/>}/>
                     <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
+                    <Route path="/blinkPage" element={<BlinkPage/>}></Route>
                     <Route path='/admin' element={<>ㅋㅋ</>}/>{/*관리자*/}
                     <Route path="*" element={<div>404 넣으면 됩니다!</div>}></Route>
                 </Routes>
