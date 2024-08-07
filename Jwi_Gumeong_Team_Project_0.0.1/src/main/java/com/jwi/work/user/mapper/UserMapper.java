@@ -22,11 +22,11 @@ public interface UserMapper{
 		//이메일 체크
 		public int emailCheck(String email);
 		//userKey로 유저확인
-		public User userInfo(int userKey);
+		public User userInfo(String sessionId);
 		//userKey 받아오기
-		public int getUserKey(String email);
+		public String getUserKey(String email);
 		//sessionId테이블에서 userKey 받아오기
-		public int getSessionUser(String sessionId);
+		public String getSessionUser(String sessionId);
 		//loginLog 테이블에 저장
 		public void saveLog(LoginLog loginLog);
 		//session ticket 발급테이블에 저장
@@ -34,10 +34,10 @@ public interface UserMapper{
 		//새로 로그인했을 때 새로 sessionId 발급 및 저장
 		public void updateSessionId(UserConnection userConnection);
 		//session 아이디 체크
-		public int sessionUserCheck(int userKey);
+		public int sessionUserCheck(String userKey);
 		//비밀번호 틀린횟수 받아오기
-		public int wrongCount(int userKey);
+		public int wrongCount(String userKey);
 		//비밀번호 틀린횟수 받아오기2
-		public ArrayList<Integer> wrongList(int userKey);
+		public ArrayList<Integer> wrongList(String userKey);
 }
 

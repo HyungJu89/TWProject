@@ -47,7 +47,7 @@ function SignIn() {
         }
     };
     const checkUser = async () => {
-        console.log(count);
+        // console.log(count);
         if (email !== '' && password !== '') {
             try {
 
@@ -57,16 +57,16 @@ function SignIn() {
                 };
 
                 const userResponse = await axios.post('/signIn/loginCheck', userData);
-                console.log("userResponse:", userResponse.data);
+                // console.log("userResponse:", userResponse.data);
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
                     dispatch(getUserInfo(sessionInfo.sessionId));
-                    console.log(userResponse.data);
+                    // console.log(userResponse.data);
                     navigate('/');
                 }else{
                     setCount(userResponse.data.wrongCount);
-                    console.log(userResponse.data);
-                    console.log(userResponse.data.wrongCount);
+                    // console.log(userResponse.data);
+                    // console.log(userResponse.data.wrongCount);
                 } 
                 setLoginWarn(userResponse.data.warningMessage);
                 
@@ -91,7 +91,7 @@ function SignIn() {
 
     // 유저정보 체크 로직
     useEffect(() => {
-        console.log(sessionInfo.sessionId);
+        // console.log(sessionInfo.sessionId);
         if (email !== '' && password !== ''){
             setIsButtonActive(true);
         }else if(email == ''){
@@ -104,11 +104,13 @@ function SignIn() {
     }, [email, password]);
 
     const handleEmailChange = (e) => {
-        setEmail(e.target.value);
+        const value = e.target.value.replace(/\s/g, '');
+        setEmail(value);
     };
 
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
+        const value = e.target.value.replace(/\s/g, '');
+        setPassword(value);
     };
 
     return (

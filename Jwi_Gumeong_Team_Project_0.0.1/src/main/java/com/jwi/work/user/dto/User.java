@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class User {
 	
-	private int userKey;
+	private String userKey;
 
     private String email;
 
