@@ -8,15 +8,12 @@
 		INSERT INTO user
 		(email,pw,nickName,gender)value(#{email},HEX(AES_ENCRYPT(#{pw}, SHA2('abcabc', 256))),#{nickName},#{gender})
 	</insert>
-
 	<select id="emailTest" resultType="int" parameterType="String">
 		select count(*) from user where email=#{email}
 	</select>
-
 	<select id="nickNameTest" resultType="int" parameterType="String">
 		select count(*) from user where nickName=#{nickName}
 	</select>
-	
 	<!-- 로그인 부분 -->
 	<!-- 유저 정보체크 -->
 	<select id="loginCheck" resultType="int" parameterType="com.jwi.work.user.dto.User">
@@ -30,14 +27,46 @@
 	<select id="emailCheck" resultType="int" parameterType="String">
 		select count(*) from user where email=#{email}
 	</select>
-	<!-- 유저SessionId업데이트 -->
-	<update id="updateSessionId" parameterType="com.jwi.work.user.dto.User">
-    UPDATE `user` SET `sessionId` = #{sessionId} WHERE `email` = #{email}
-    </update>
-    <!-- 유저 sessionId체크 후 유저정보 빼기 -->
-    <select id="userInfo" resultType="com.jwi.work.user.dto.User" parameterType="String">
-		select * from user where sessionId = #{sessionId}
+    <!-- 유저 userKey체크 후 유저정보 빼기 -->
+    <select id="userInfo" resultType="com.jwi.work.user.dto.User" parameterType="int">
+		select * from user where userKey = #{userKey}
 	</select>
-
-	
-</mapper>	
+	<!-- 유저 key값 받아오기 -->
+	<select id="getUserKey" resultType="int" parameterType="String">
+		select userKey from user where email = #{email}
+	</select>
+	<!-- 로그인 로그찍기  -->
+	<insert id="saveLog" parameterType="com.jwi.work.user.dto.LoginLog">
+		INSERT INTO loginLog
+		(userKey,loginSuccess)value(#{userKey},#{loginSuccess})
+	</insert>
+	<!-- sessionId로 유저 key값 받아오기 -->
+	<select id="getSessionUser" resultType="int" parameterType="String">
+		select userKey from userConnection where sessionId = #{sessionId}
+	</select>
+	<!-- session 아이디 발급하기-->
+	<insert id="saveSession" parameterType="com.jwi.work.user.dto.UserConnection">
+		INSERT INTO userConnection
+		(userKey,sessionId)value(#{userKey},#{sessionId})
+	</insert>
+	<!-- 유저SessionId업데이트 -->
+	<update id="updateSessionId" parameterType="com.jwi.work.user.dto.UserConnection">
+    	UPDATE userConnection SET `sessionId` = #{sessionId} WHERE `userKey` = #{userKey}
+    </update>
+    <!-- 유저 session 발급아이디 체크하기 -->
+	<select id="sessionUserCheck" resultType="int" parameterType="int">
+		select count(*) from userConnection where userKey = #{userKey}
+	</select>
+	<!-- 비밀번호 틀린 카운트 -->
+	<select id="wrongCount" resultType="int" parameterType="int">
+		select count(*) from loginLog where userKey = #{userKey} and loginSuccess = 1
+	</select>
+	<!-- 비밀번호 틀린 카운트2 -->
+	<select id="wrongList" resultType="int" parameterType="int">
+        SELECT loginSuccess FROM loginLog WHERE userKey = #{userKey} ORDER BY createdAt DESC LIMIT 5;
+	</select>
+	<!-- 세션ID로 유저 키값 찾기 -->
+	<select id="getUserKeyBySessionId" resultType="int" parameterType="String">
+			SELECT `userKey` FROM `userConnection` WHERE `sessionId` = #{sessionId}
+	</select>
+</mapper>

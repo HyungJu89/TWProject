@@ -255,7 +255,6 @@ function Join() {
     const contrastCertification = () => {
         if (certification == userCertification) {
             SetCheckCerti(true);
-            console.log("잘됫음");
         } else {
             SetCheckCerti(false);
         }
@@ -355,14 +354,16 @@ function Join() {
                     setEmailWarning('이미 사용한 이메일 입니다.');
                     setEmailCheck(response.data);
                 }
-                if(!emailChecks(email)){
+                else if(!emailChecks(email)){
                     setEmailWarning('이메일 형식이 맞지 않습니다.')
                     return;
                 }
-                else {
+                else if(response.data){
                     setEmailWarning('유효한 이메일입니다! 인증번호를 전송했습니다. 메일함에서 확인해주세요.');
                     handleEmailCheck();
                     setEmailCheck(response.data);
+                }else{
+                    alert('올바르지 않은 접근방식 입니다.');
                 }
             })
                 .catch(error => {
@@ -469,7 +470,7 @@ function Join() {
                 </div>
             </div>
             {
-                showCerti ? checkCerti ? <div className={styles.certifiOk} style={{ marginBottom: '30px' }}>인증되었습니다.</div> : <div className={styles.emailWarn} style={{ marginBottom: '30px' }}>인증번호가 알맞지 않습니다.</div> : <div style={{ marginBottom: '50px' }}></div>
+                showCerti ? checkCerti && userCertification !='' ? <div className={styles.certifiOk} style={{ marginBottom: '30px' }}>인증되었습니다.</div> : <div className={styles.emailWarn} style={{ marginBottom: '30px' }}>인증번호가 알맞지 않습니다.</div> : <div style={{ marginBottom: '50px' }}></div>
             }
             <div className={styles.formGroup}>
                 <p>비밀번호</p>

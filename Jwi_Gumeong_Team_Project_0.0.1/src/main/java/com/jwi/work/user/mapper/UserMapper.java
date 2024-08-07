@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.jwi.work.user.dto.LoginLog;
 import com.jwi.work.user.dto.User;
+import com.jwi.work.user.dto.UserConnection;
 
 public interface UserMapper{
 	//여기부터 회원가입
@@ -21,11 +23,29 @@ public interface UserMapper{
 		public ArrayList<String> banEmailList();
 		//이메일 체크
 		public int emailCheck(String email);
+		//userKey로 유저확인
+		public User userInfo(int userKey);
+		//userKey 받아오기
+		public int getUserKey(String email);
+		//sessionId테이블에서 userKey 받아오기
+		public int getSessionUser(String sessionId);
+		//loginLog 테이블에 저장
+		public void saveLog(LoginLog loginLog);
+		//session ticket 발급테이블에 저장
+		public void saveSession(UserConnection userConnection);
+		//새로 로그인했을 때 새로 sessionId 발급 및 저장
+		public void updateSessionId(UserConnection userConnection);
+		//session 아이디 체크
+		public int sessionUserCheck(int userKey);
+		//비밀번호 틀린횟수 받아오기
+		public int wrongCount(int userKey);
+		//비밀번호 틀린횟수 받아오기2
+		public ArrayList<Integer> wrongList(int userKey);
 		//sessionId 발급 및 저장
 		public void updateSessionId(User user);
 		//sessonId로 유저확인
 		public User userInfo(String sessionId);
-		// 유저 닉네임 확인
-		public String getName(@Param("userKey") int userKey);
+		// 로그인 후 키값 찾아오기
+		public int getUserKeyBySessionId(@Param("sessionId") String sessionId);
 }
 

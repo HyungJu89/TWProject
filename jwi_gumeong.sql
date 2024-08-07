@@ -1,4 +1,6 @@
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
+-- 2024-08-07 01.5 업데이트
+--  01.5 최지은
 
 use jwi;
 drop DATABASE jwi;
@@ -8,9 +10,10 @@ select * from post;
 delete from post;
 drop table post;
 drop table Image;
+drop table channel;
 
 
-
+select * from user;
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '유저키',
 	`email`	VARCHAR(50) UNIQUE	NOT NULL	COMMENT '이메일',
@@ -42,7 +45,8 @@ CREATE TABLE `channel` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-
+select * from `post`;
+INSERT INTO post(userKey,channelKey,content,image) value (1,4,"123123123",null);
 CREATE TABLE `post` (
 	`postKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -203,4 +207,16 @@ CREATE TABLE `Image` (
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-
+CREATE TABLE loginLog(
+loginKey INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+userKey INT NOT NULL,
+loginSuccess TINYINT NOT NULL DEFAULT 0,
+createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+CREATE TABLE userConnection (
+userKey   INT  NOT NULL,
+sessionId VARCHAR(30) UNIQUE NULL,
+createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

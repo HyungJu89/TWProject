@@ -20,48 +20,46 @@ function Main() {
     let navigate = useNavigate();
     let [topic, settopic] = useState(true);
     let [loginOn, setLoginOn] = useState(false);
-    const [partnersLive, setPartnersLive] = useState([]);
     const [postList, setPostList] = useState([]);
+    const [partnersLive, setPartnersLive] = useState([]);
+useEffect(() => {
+    const addPartners = async () => {
+      try {
+        const response = await axios.get(/partnersLiveApi/);
+        //파트너스 api
+        // const newPartners = response.data.content.streamerPartners; 
+        //라이브 무작위 api
+        const newPartners = response.data.content.recommendationChannels;
+        setPartnersLive(newPartners);
+        console.log(response.data.content.recommendationChannels);
+      } catch (error) {
+        console.error('Channel API Error:', error);
+      }
+    };
+    addPartners();
+  }, []);
 
+  
+  useEffect(() => {
+    const fetchData = async () => {
+        const postListData = await searchPost('main', "", 1);
+        setPostList(postListData)
+    };
 
-    useEffect(() => {
-        const addPartners = async () => {
-            try {
-                const response = await axios.get(`/partnersLiveApi/`);
-                const newPartners = response.data.content.streamerPartners;
-                setPartnersLive(newPartners);
-            } catch (error) {
-                console.error('Channel API Error:', error);
-            }
-        };
-        addPartners();
-    }, []);
+    fetchData();
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const postListData = await searchPost('main', "", 1);
-            setPostList(postListData)
-            console.log(postListData)
-        };
-
-        fetchData();
-
-    }, [])
-
+}, [])
 
     return (
         <div>
             <div className={styles.bannerPosition}>
-                {/*partnersLive 에 값이 들어간 후에 로드 되도록 처리*/}
-                {partnersLive.length > 0 && (
-                    <MainBanner channelId={partnersLive[0]?.channelId}
-                        channelIdSub1={partnersLive[1]?.channelId}
-                        channelIdSub2={partnersLive[2]?.channelId}
-                        channelIdSub3={partnersLive[3]?.channelId}
+            {partnersLive && partnersLive.length > 0 &&(
+                <MainBanner channelId={partnersLive[0]?.channelId}
+                            channelIdSub1={partnersLive[1]?.channelId}
+                            channelIdSub2={partnersLive[2]?.channelId}
+                            channelIdSub3={partnersLive[3]?.channelId}
 
-                    />
-                )}
+                />)}
             </div>
             <div className={styles.basic}> {/*전체 DIV*/}
                 <div className={styles.leftDiv}>{/*게시판 영역*/}
