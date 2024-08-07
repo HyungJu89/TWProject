@@ -54,7 +54,6 @@ function ChannelHome() {
 //------------------------------------------------------------------------------
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
-
     // 추후에 에러 페이지 만들기
     if (isLoadingChannel) {
         return <div>채널 홈 로딩중</div>;
@@ -68,10 +67,7 @@ function ChannelHome() {
     return (
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
-            
             <MainBanner channelId={channelId} route={'channel'}/>
-
-
             <ChannelBody />
             </div>
             <div className={style.channelInfoBack}>

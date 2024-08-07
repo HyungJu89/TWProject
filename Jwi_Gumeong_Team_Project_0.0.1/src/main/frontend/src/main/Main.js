@@ -58,6 +58,7 @@ useEffect(() => {
                             channelIdSub1={partnersLive[1]?.channelId}
                             channelIdSub2={partnersLive[2]?.channelId}
                             channelIdSub3={partnersLive[3]?.channelId}
+                            postList={postList}
 
                 />)}
             </div>
