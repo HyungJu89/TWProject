@@ -1,7 +1,8 @@
 
 import style from './style/ChannelManagement.module.css';
-import CreateChannel from './CreateChannel.js'
-import ApplyManager from './ApplyManager.js'
+import CreateChannel from './CreateChannel.js';
+import ApplyManager from './ApplyManager.js';
+import GiveUpManager from './GiveUp.js';
 import styleManagement from './style/Management.module.css';
 import open_channel_32 from '../icon/32px/open-channel-32.png'
 import enroll from '../icon/32px/enroll.png'
@@ -56,7 +57,7 @@ function ChannelManagement() {
                     {openTap == 3 &&
                         <>
                             <div className={styleManagement.dashed} />{/* 회색줄 */}
-                            <ApplyManager />
+                            <GiveUpManager />
                         </>
                     }
                 </div>
