@@ -40,19 +40,20 @@ function SignIn() {
             alert('이메일을 입력해주세요!');
         } else if (password === '') {
             alert('비밀번호를 입력해주세요!');
-        } else if(count >= 5){
-            alert('비밀번호를 5회이상 틀리셨습니다. 10분 후에 다시 로그인 해주세요.');
+        } else if (count >= 5) {
+            alert('비밀번호를 5회이상 틀리셨습니다!');
         }else {
             checkUser();
         }
     };
     const checkUser = async () => {
+        console.log(count);
         if (email !== '' && password !== '') {
             try {
                 const [userResponse] = await Promise.all([
                     axios.get('/signIn/loginCheck', { params: { email: email, pw: password } }),
                 ]);
-                if(userResponse.data.check){
+                if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
                     dispatch(getUserInfo(userResponse.data.userKey));
                     console.log(userResponse.data);

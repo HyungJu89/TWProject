@@ -1,5 +1,6 @@
 package com.jwi.work.user.signIn.service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,11 @@ public class SignInService {
     	//반환하기위한 객체 생성
     	CheckDto userCheck = new CheckDto();
 
+    	//비밀번호 틀린 횟수 구하는 변수 만들기
+    	ArrayList<Integer> wrongList =  userMapper.wrongList(userMapper.getUserKey(email));
+    	int count = (int) wrongList.stream().filter(num -> num == 1).count();
+    	System.out.println(count);
+    	
     	//이메일 체크처리
     	if(emailCheck(email)) {
     		//로그인 체크처리
@@ -64,7 +70,7 @@ public class SignInService {
 	    				userMapper.saveLog(userConnect);
 	    				userCheck.setCheck(true);
 	    				userCheck.setWarningMessage("");
-		    	    	userCheck.setWrongCount(userMapper.wrongCount(userMapper.getUserKey(email)));
+		    	    	userCheck.setWrongCount(count);
 		    	    	userCheck.setUserKey(userMapper.getUserKey(email));
 	    			}
 	    	//로그인 체크처리 예외
@@ -75,7 +81,7 @@ public class SignInService {
 	    			userMapper.saveLog(userConnect);
 	    			userCheck.setCheck(false);
 	    			userCheck.setWarningMessage("비밀번호가 일치하지 않습니다.");
-	    	    	userCheck.setWrongCount(userMapper.wrongCount(userMapper.getUserKey(email)));
+	    	    	userCheck.setWrongCount(count + 1);
 	        	  }
     	//이메일 체크처리 예외
     	}else{
@@ -112,8 +118,8 @@ public class SignInService {
     	
     }
     //userKey로 유저정보 가져오기
-    public User getUserInfo(int userKey) {
-    	return userMapper.userInfo(userKey);
+    public User getUserInfo(String sessionId) {
+    	return userMapper.userInfo(userMapper.getSessionUser(sessionId));
     }
 	
 }
