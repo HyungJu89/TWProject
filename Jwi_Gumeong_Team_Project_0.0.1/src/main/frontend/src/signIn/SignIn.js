@@ -46,6 +46,7 @@ function SignIn() {
             checkUser();
         }
     };
+    
     const checkUser = async () => {
         console.log(count);
         if (email !== '' && password !== '') {

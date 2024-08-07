@@ -5,7 +5,7 @@ import { fetchChannel } from '../recycleCode/Api.js'
 import styleManagement from './style/Management.module.css';
 import '../App.css'
 import axios from 'axios';
-import { checkChannel } from '../recycleCode/Axios.js';
+import { checkChannel } from '../recycleCode/ChannelAxios.js';
 
 function CreateChannel() {
 

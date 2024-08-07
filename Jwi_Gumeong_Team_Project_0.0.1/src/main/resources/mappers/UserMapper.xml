@@ -68,4 +68,6 @@
 	<select id="wrongList" resultType="int" parameterType="int">
         SELECT loginSuccess FROM loginLog WHERE userKey = #{userKey} ORDER BY createdAt DESC LIMIT 5;
 	</select>
+
+	
 </mapper>	

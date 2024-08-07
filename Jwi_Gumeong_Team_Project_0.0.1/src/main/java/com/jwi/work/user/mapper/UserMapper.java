@@ -39,5 +39,9 @@ public interface UserMapper{
 		public int wrongCount(int userKey);
 		//비밀번호 틀린횟수 받아오기2
 		public ArrayList<Integer> wrongList(int userKey);
+		//sessionId 발급 및 저장
+		public void updateSessionId(User user);
+		//sessonId로 유저확인
+		public User userInfo(String sessionId);
 }
 

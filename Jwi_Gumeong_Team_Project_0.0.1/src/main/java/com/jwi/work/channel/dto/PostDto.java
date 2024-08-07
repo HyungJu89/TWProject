@@ -14,5 +14,10 @@ public class PostDto {
 	private String state;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
+	private String NickName;
+	private String channelId;
+	private String name;
+	private String imageUrl;
+	
 	
 }

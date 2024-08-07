@@ -55,7 +55,8 @@ CREATE TABLE `channel` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-
+select * from `post`;
+INSERT INTO post(userKey,channelKey,content,image) value (1,4,"123123123",null);
 CREATE TABLE `post` (
 	`postKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
