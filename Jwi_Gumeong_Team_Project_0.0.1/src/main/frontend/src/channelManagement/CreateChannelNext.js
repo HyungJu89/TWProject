@@ -63,7 +63,7 @@ const createChannel = async (channelCreate) => {
             };
             try{
                 let data = await createChannel(channelCreate);
-                if(!data.createSuccess){
+                if(!data.success){
                     alert("이미 생성된 채널입니다. 해당 채널로 이동합니다.")
                 }
 

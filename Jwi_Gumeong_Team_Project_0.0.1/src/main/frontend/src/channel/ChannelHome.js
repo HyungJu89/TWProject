@@ -16,7 +16,7 @@ import {searchPost} from '../recycleCode/postAxios.js'
 function ChannelHome() {
     let { channelId } = useParams();
     const navigate = useNavigate();
-    const [channelInfo,serChannelInfo] = useState([]);
+    const [channelInfo,serChannelInfo] = useState();
     const [postList,setPostList] = useState([]);
     const [page,setPage] = useState(1);
     const fetchData = async (channelKey,page) => {
@@ -48,7 +48,7 @@ function ChannelHome() {
     },[channelId])
 
     useEffect(()=>{
-        fetchData(channelInfo.channelKey)
+        fetchData(channelInfo?.channelKey)
     },[channelInfo,page])
 
 //------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ useEffect(() => { /*파트너스 추천*/
             <div className={style.channelInfoBack}>
                 <div className={style.mainList}>
                     <div className={style.listLeft}>
-                        <PostCreate channelId={channelId} />
+                        <PostCreate channelKey={channelInfo.channelKey} />
                         <div className={style.postList}>
                             {postList.success && 
                                 <>
