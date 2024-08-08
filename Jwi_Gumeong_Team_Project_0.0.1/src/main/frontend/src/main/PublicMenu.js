@@ -11,13 +11,13 @@ import add from '../icon/40px/add.png';
 import btn_left from '../icon/btn/btn-left.png';
 import btn_right from '../icon/btn/btn-right.png';
 
-function PublicMenu({ loginOn, setLoginOn}) {
+function PublicMenu({ loginOn, isLoggedIn}) {
 
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     return (
         <div className={styles.rightDiv}>{/*유저 영역 */}
-            {loginOn ? <UserAfter setLoginOn={setLoginOn}/> : <UserBefore setLoginOn={setLoginOn} />}
+            {loginOn ? <UserAfter isLoggedIn={isLoggedIn}/> : <UserBefore isLoggedIn={isLoggedIn} />}
             <div className={styles.recommendation}>{/* 추천 */}
                 <p style={{ margin: '0px', marginLeft: '21px' }}>추천</p>
                 <div className={styles.list}>
@@ -32,7 +32,7 @@ function PublicMenu({ loginOn, setLoginOn}) {
     )
 }
 
-function UserAfter({ channel, setLoginOn }) {
+function UserAfter({ channel, isLoggedIn }) {
     let navigate = useNavigate();
     return (
         <div className={styles.fadein}>
@@ -42,7 +42,7 @@ function UserAfter({ channel, setLoginOn }) {
                         김박최조임권강이
                         <p>aaaaaa1234@naver.Com</p>
                     </div>
-                    <button onClick={() => { setLoginOn(false) }} >로그아웃</button>
+                    <button onClick={() => { isLoggedIn(false) }} >로그아웃</button>
                 </div>
                 <button onClick={() => { navigate('/myPage') }} className={styles.myPage}>마이페이지</button>
             </div>
@@ -64,7 +64,7 @@ function UserAfter({ channel, setLoginOn }) {
     )
 }
 
-function UserBefore({ setLoginOn }) {
+function UserBefore({ isLoggedIn }) {
     let navigate = useNavigate();
     return (
         <div>

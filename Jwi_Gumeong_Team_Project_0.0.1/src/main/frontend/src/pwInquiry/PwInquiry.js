@@ -29,7 +29,7 @@ function PwInquiry({onLogout}) {
         }
     }, [emailCerti]);
     return(
-        <div className={styles.PwInquiryContainer}>
+        <div className={styles.pwInquiryContainer}>
             <div className={styles.topFont}>비밀번호 찾기</div>
             {
                 emailCerti ? <PwIssue certiNum = {certiNum} onLogout = {onLogout}/> : <EmailAvailable setEmailCerti = {setEmailCerti} email = {email} setEmail = {setEmail}/>
