@@ -11,7 +11,6 @@
     width: 1194px;
     height: 132px;
     position: relative;
-
     top: -132px;
     display: flex;
     margin: auto;
@@ -34,7 +33,6 @@
 }
 
 .channelIcon img {
-
     height: 110px;
     width: 110px;
     background-color: white;
@@ -43,7 +41,6 @@
 
 .iconRight {
     height: 132px;
-
 }
 
 .iconRightTop {
@@ -54,15 +51,11 @@
 .imageBackground {
     display: flex;
     padding: 10px 14px;
-
-
 }
-
 
 .channelTop {
     height: 52px;
 }
-
 
 .channelName {
     font-size: 22px;
@@ -85,14 +78,12 @@
     line-height: 20.03px;
     letter-spacing: 0.0075em;
     text-align: left;
-
 }
 
 .announcement img {
     height: 20px;
     width: 20px;
     margin-right: 6px;
-
 }
 
 .bookmark{
@@ -102,16 +93,10 @@
     margin-bottom: 72px;
 }
 
-
-
-
-
-
 .whiteBackground {
     display: flex;
     height: 60px;
     align-items: center;
-
 }
 
 .mark {
@@ -136,10 +121,8 @@
     line-height: 22.54px;
     letter-spacing: 0.0075em;
     text-align: left;
-
     color: #101010;
     margin-right: 48px;
-
 }
 
 .channelInfoBackgroundColor {
@@ -152,5 +135,4 @@
     background-color: white;
     border-radius: 0px;
     margin: 0px;
-
 }

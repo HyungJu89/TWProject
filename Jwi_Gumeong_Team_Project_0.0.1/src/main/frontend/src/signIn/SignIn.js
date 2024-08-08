@@ -51,18 +51,14 @@ function SignIn() {
     const checkUser = async () => {
         if (email !== '' && password !== '') {
             try {
-
                 const userData = {
                     email: email,
                     pw: password
                 };
-
                 const userResponse = await axios.post('/signIn/loginCheck', userData);
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
-                    dispatch(getUserInfo(userResponse.data.userKey));
                     dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
-                    sessionStorage.setItem('isLoggedIn', true); // 세션 스토리지에 저장
                     navigate('/');
                 }else{
                     setCount(userResponse.data.wrongCount);

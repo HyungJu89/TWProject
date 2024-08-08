@@ -220,7 +220,6 @@
 .moreUi {
     z-index: 100;
     position: absolute;
-
     background-color: white;
     width: 106px;
     display: flex;

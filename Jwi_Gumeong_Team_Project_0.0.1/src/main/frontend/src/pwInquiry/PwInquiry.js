@@ -19,7 +19,7 @@ function PwInquiry() {
     };
 
     return(
-        <div className={styles.PwInquiryContainer}>
+        <div className={styles.pwInquiryContainer}>
                 <div className={styles.topFont}>비밀번호 찾기</div>
                 <div className={styles.formGroup}>
                     <p>이메일</p>

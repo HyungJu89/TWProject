@@ -93,7 +93,6 @@ body { */
     margin-bottom: 12px;
 }
 
-
 .topAgreeFont {
     width: 626px;
     font-size: 20px;
@@ -101,7 +100,6 @@ body { */
     display: flex;
     align-items: flex-start;
 }
-
 
 .customRadio {
     appearance: none;
@@ -201,6 +199,7 @@ body { */
 .emailWarn {
     color: #EC000E;
 }
+
 .emailWarn.active {
     color: #FF8901;
 }

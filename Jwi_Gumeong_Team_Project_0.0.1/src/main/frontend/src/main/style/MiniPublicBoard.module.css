@@ -94,10 +94,12 @@
     height: 177px;
     border-radius: 0px;
 }
+
 .contentArea .imgClick img {
     width: 177px;
     height: 177px;
 }
+
 .contentArea .imgClick .imgArea {
     position: absolute;
     top: 0px;
@@ -111,10 +113,10 @@
     font-size: 20px;
     cursor: pointer;
 }
+
 .imgArea:hover {
     background-color: rgb(0, 0, 0,0.7);
 }
-
 
 /* 댓글창 컴포넌트 */
 .commentDiv {
@@ -217,7 +219,6 @@
 .moreUi {
     z-index: 100;
     position: absolute;
-
     background-color: white;
     width: 106px;
     display: flex;
@@ -229,6 +230,7 @@
     border: 1px solid #F3F3F3;
     box-shadow: 0px 2px 3.9px 0px #00000080;
 }
+
 .moreUi .text {
     color: #101010;
     display: flex;
