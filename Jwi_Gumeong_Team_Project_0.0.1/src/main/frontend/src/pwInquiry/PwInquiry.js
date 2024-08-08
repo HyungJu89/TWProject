@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 function PwInquiry() {
     //이메일 인증 유효성 검사 완료체크
     const [emailCerti, setEmailCerti] = useState(false); 
-        
     return(
         <div className={styles.PwInquiryContainer}>
             <div className={styles.topFont}>비밀번호 찾기</div>
