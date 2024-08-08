@@ -83,7 +83,7 @@ function App() {
                     <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
                     <Route path='/channelManagement' element={<ChannelManagement/>}/>
                     <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
-                    <Route path="/pageCheck" element={<BlinkPage/>}></Route>{/*채널 존재 여부 확인 게시판*/}
+                    <Route path="/pageCheck" element={<PageCheck/>}></Route>{/*채널 존재 여부 확인 게시판*/}
                     <Route path="*" element={<NotFound/>}></Route>
                     <Route path='/admin' element={<Admin/>}>
                         <Route path='login' element={<AdminLogin/>}></Route>{/*관리자*/}
