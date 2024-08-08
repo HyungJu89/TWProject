@@ -1,26 +1,45 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import styles from './style/PwInquiry.module.css';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 //비밀번호 찾기 페이지
-function PwInquiry() {
+function PwInquiry({onLogout}) {
     //이메일 인증 유효성 검사 완료체크
-    const [emailCerti, setEmailCerti] = useState(false); 
-        
+    const [emailCerti, setEmailCerti] = useState(false);
+    const [certiNum,setCertiNum] = useState(''); 
+    const [email, setEmail] = useState('');
+    
+    const pwIssued = async () => {
+        const userData = {
+            email: email,
+        };
+            try {
+                const response = await axios.post('/issuedPw', userData);
+                console.log(response.data);
+                setCertiNum(response.data);
+                
+            } catch (error) {
+                console.error('Channel API Error:', error);
+            }  
+    };
+    useEffect(() => {
+        if(emailCerti){
+            pwIssued();
+        }
+    }, [emailCerti]);
     return(
         <div className={styles.PwInquiryContainer}>
             <div className={styles.topFont}>비밀번호 찾기</div>
             {
-                emailCerti ? '' : <PwIssue/>
+                emailCerti ? <PwIssue certiNum = {certiNum} onLogout = {onLogout}/> : <EmailAvailable setEmailCerti = {setEmailCerti} email = {email} setEmail = {setEmail}/>
             }
         </div>
     );
 }
 
-function EmailAvailable({ setEmailCerti }) {
+function EmailAvailable({ setEmailCerti,setEmail,email }) {
             //email 관련 state
-            const [email, setEmail] = useState('');
             const [emailWarning, setEmailWarning] = useState('');
             const [emailCheck, setEmailCheck] = useState(false); 
             //랜덤으로 발송한 인증번호
@@ -72,9 +91,6 @@ function EmailAvailable({ setEmailCerti }) {
                 SetCheckCerti(false);
                 }
             }
-    
-        
-    
             //이메일 중복검사 로직
             const emailTest = async (userEmail) => {
                 if (!email == '') {
@@ -151,12 +167,13 @@ function EmailAvailable({ setEmailCerti }) {
         );
 }
 
-function PwIssue() {
+function PwIssue({certiNum,onLogout}) {
+    const navigate = useNavigate();
     return(
         <div>
             <div className={styles.pwIssueInform}>임시 발행 비밀번호 입니다. 로그인 후 꼭 비밀번호를 변경해주세요.</div>
-            <div className={styles.pwIssue}>a123123124</div>
-            <button className={`${styles.loginButton} ${styles.active}`} onClick={()=>{}}>로그인하러가기</button>
+            <div className={styles.pwIssue}>{certiNum}</div>
+            <button className={`${styles.loginButton} ${styles.active}`} onClick={()=>{onLogout(); navigate('/signIn');}}>로그인하러가기</button>
         </div>
     );
 }

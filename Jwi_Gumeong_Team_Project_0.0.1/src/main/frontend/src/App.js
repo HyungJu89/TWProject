@@ -79,7 +79,7 @@ function App() {
                     <Route path='/signIn' element={<SignIn/>}/>
                     <Route path='/signUp' element={<SignUp/>}/>
                     <Route path='/myPage' element={<MyPage/>}/>
-                    <Route path='/pwInquiry' element={<PwInquiry/>}/>
+                    <Route path='/pwInquiry' element={<PwInquiry onLogout = {onLogout}/>}/>
                     <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
                     <Route path='/channelManagement' element={<ChannelManagement/>}/>
                     <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}

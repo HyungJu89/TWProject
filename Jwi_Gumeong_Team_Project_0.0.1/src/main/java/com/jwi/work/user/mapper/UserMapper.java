@@ -45,5 +45,7 @@ public interface UserMapper{
 		public User userInfo(String sessionId);
 		// 로그인 후 키값 찾아오기
 		public int getUserKeyBySessionId(@Param("sessionId") String sessionId);
+	//여기부터 비번찾기
+		public void updatePw(User user);
 }
 

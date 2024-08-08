@@ -121,5 +121,6 @@ public class SignInService {
     public User getUserInfo(String sessionId) {
     	return userMapper.userInfo(userMapper.getSessionUser(sessionId));
     }
+    
 	
 }
