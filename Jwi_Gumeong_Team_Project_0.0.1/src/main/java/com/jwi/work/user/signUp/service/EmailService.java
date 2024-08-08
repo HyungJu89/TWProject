@@ -51,4 +51,14 @@ public class EmailService {
     				sendEmail(email,subject,text);
     				;
     }
+    public void EmailCheck2(String email,String CheckNum) {
+    	String subject = "쥐구멍 비밀번호 찾기 인증번호";
+    	String text = "<html>"
+    				+ "<body>"
+    				+ "<h3>인증번호 : " + CheckNum + "<h3>"
+    				+ "</body"
+    				+ "</html>";
+    				sendEmail(email,subject,text);
+    				;
+    }
 }

@@ -36,7 +36,6 @@
     text-align: center;
     border-radius: 0px;
     cursor: pointer;
-
     width: 82px;
     height: 18px;
 }
@@ -58,7 +57,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
         font-size: 20px;
         font-weight: 500;
     }
@@ -112,13 +110,13 @@
             align-items: center;
             width: 318px;
             height: 48px;
-            }
+        }
+
 .rightDiv .recommendation{
     width: 360px;
     background-color: white;
     margin-top: 30px;
     padding: 30px 9px;
-
     font-size: 20px;
     font-weight: 600;
 }

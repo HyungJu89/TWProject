@@ -8,7 +8,6 @@
     align-items: center;
 }
 
-
 .container {
     /*각 영역 컨테이너*/
     margin-bottom: 10px;
@@ -40,5 +39,4 @@
     letter-spacing: 0.0075em;
     text-align: left;
     color: #101010;
-
 }

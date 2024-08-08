@@ -9,7 +9,6 @@
 }
 
 .searchBody {
-
     padding: 30px;
     background-color: #FFFFFF;
 }
@@ -35,16 +34,13 @@
     width: 145px;
     height: 24px;
     margin-right: 14px;
-
 }
 
 .creactChannel img {
     width: 24px;
     height: 24px;
     margin-left: 10px;
-
 }
-
 
 .creactChannelText {
     height: 14px;
@@ -65,7 +61,6 @@
 
 /*검색된 채널*/
 .searchChannel {
-
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
@@ -84,7 +79,6 @@
     border-radius: 50%;
     background-color: greenyellow;
     margin-right: 10px;
-
 }
 
 .searchChannelIcon img {
@@ -108,7 +102,6 @@
     margin-top: 1px;
     text-align: left;
     color: #101010;
-
 }
 
 
@@ -157,7 +150,6 @@
     color: #999999;
 }
 
-
 .pageing{
     display: flex;
     justify-content:center;
@@ -175,12 +167,9 @@
     font-weight: 400;
     line-height: 20.03px;
     text-align: center;
-
 }
 
-
 /* 검색어와 관련된 토픽~~~~*/
-
 .searchBodybottom{
     margin-top: 30px;
     margin-bottom: 10px;

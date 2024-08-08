@@ -5,9 +5,6 @@ import MyPosts from './MyPosts.js';
 import FavoritesManagement from './FavoritesManagement.js';
 import { useNavigate } from 'react-router-dom';
 
-
-
-
 //마이페이지(로그인 검증)
 function MyPage() {
     let [topic, settopic] = useState('정보 수정');
@@ -21,7 +18,6 @@ function MyPage() {
         </div>
     );
 }
-
 
 function TopicBtn({ topic, settopic }) {
     return (

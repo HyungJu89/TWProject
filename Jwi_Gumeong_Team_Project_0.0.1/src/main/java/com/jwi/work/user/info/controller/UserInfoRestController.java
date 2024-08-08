@@ -19,15 +19,17 @@ public class UserInfoRestController {
 	private UserService userService;
 	
 	@PostMapping("/key")
-	public Map<String, String> getUserKey(@RequestParam("sessionId") String sessionId) {
+	public Map<String, Object> getUserKey(@RequestParam("sessionId") String sessionId) {
+
 		int num = userService.selectUserKey(sessionId);
 		
-		Map<String, String> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		
 		if(num == 0) {
 			result.put("result", "fail");
 		} else {
 			result.put("result", "success");
+			result.put("userKey", num);
 		}
 		
 		return result;

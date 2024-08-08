@@ -4,16 +4,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
     min-width: 1194px;
     margin: auto;
 }
 
-
-
-
 .backgroundImage {
-
     background-color: #002761;
     height: 162px;
     width: 100%;
@@ -21,23 +16,20 @@
 }
 
 .backgroundImage img {
-
+    height: 103px;
     margin-left: 50%;
 }
 
 .gradinetMainBanner {
     width: 100%;
     height: 550px;
-
     background: linear-gradient(to right, rgba(16, 16, 16, 1) calc(50% - 400px), rgba(7, 7, 7, 0) 50%, rgba(16, 16, 16, 1) calc(50% + 400px)),
         linear-gradient(180deg, rgba(16, 16, 16, 0) 27.5%, rgba(16, 16, 16, 0.9) 85.5%);
-
     display: flex;
     justify-content: center;
     border-radius: 0px;
     overflow: hidden;
     /* 추가: 넘치는 내용 숨김 */
-
 }
 
 .MainBanner {
@@ -75,12 +67,14 @@
     display: flex;
     align-items: center;
 }
+
 .liveInfo .mainbannerDiv img{
     width: 50px;
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
 }
+
 .liveInfo .mainbannerDiv .textArea{
     display: flex;
     justify-content: space-between;
@@ -88,6 +82,7 @@
     font-size: 20px;
     font-weight: 500;
 }
+
 .liveInfo .mainbannerDiv .textArea .category{
     font-size: 16px;
     font-weight: 500;
@@ -96,12 +91,12 @@
     align-items: center;
     margin-top: 4px;
 }
+
 .liveInfo .mainbannerDiv .textArea .category img{
     width: 20px;
     height: 20px;
     margin-right: 6px;
 }
-
 
 .liveIcon {
     /* 라이브 아이콘 */
@@ -121,7 +116,6 @@
     letter-spacing: 0.0075em;
     text-align: center;
     user-select: none;
-
 }
 
 .point {
@@ -145,7 +139,6 @@
     text-align: left;
     color: #E5E5E5;
     margin-bottom: 20px;
-
     overflow: hidden; /* 넘치는 부분을 숨김 */
     display: -webkit-box; /* Flexbox와 유사한 레이아웃 모드 설정 */
     -webkit-box-orient: vertical; /* 수직 레이아웃 설정 */
@@ -155,7 +148,7 @@
 }
 
 
- .liveDiv{
+.liveDiv{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -167,7 +160,8 @@
     transform: translate(-50%, -0%);
     border-radius: 10px;
 }
- .liveDiv .liveImg{
+
+.liveDiv .liveImg{
     display: flex;
     /* justify-content: space-between; */
     gap: 0px 30px;
@@ -175,7 +169,8 @@
     overflow: hidden;
     border-radius: 0px;
 }
- .liveDiv .liveImg .box{
+
+.liveDiv .liveImg .box{
     position: relative;
     width: 174px;
     height: 98px;
@@ -183,16 +178,19 @@
     border-radius: 10px;
     border: 2px solid rgba(16, 16, 16, 0);
 }
+
 .liveDiv .liveImg .box:hover{
     border: 2px solid #FF8901;
 }
- .liveDiv .liveImg .box img{
+
+.liveDiv .liveImg .box img{
     position: absolute;
     width: 174px;
     height: 98px;
     border-radius: 10px;
 }
- .liveDiv .liveImg .box .liveRed{
+
+.liveDiv .liveImg .box .liveRed{
     position: absolute;
     background-color: red;
     margin: 4px 0px 0px 4px;
@@ -204,7 +202,8 @@
     width: 41px;
     height: 15px;
 }
- .liveDiv .liveImg .box .liveRed .pointer{
+
+.liveDiv .liveImg .box .liveRed .pointer{
     background-color: white;
     margin: 6px 5px 6px 6px;
     width: 3px;
@@ -223,6 +222,7 @@
     z-index: -10000;
     border-radius: 10px;
 }
+
 .adult{
     z-index: -10000;
     background-color: black;

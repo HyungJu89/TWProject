@@ -18,8 +18,8 @@ function Paging() {
     return(
         <div className={styles.mainDiv}>
             <img 
-             onMouseEnter={() => setChevron_left(chevron_left_b)}
-             onMouseLeave={() => setChevron_left(chevron_left_g)}
+            onMouseEnter={() => setChevron_left(chevron_left_b)}
+            onMouseLeave={() => setChevron_left(chevron_left_g)}
             style={{marginRight:'20px',cursor:'pointer'}} src={chevron_left}/>
             <div className={styles.numText}>1</div>
             <div className={styles.numText}>2</div>

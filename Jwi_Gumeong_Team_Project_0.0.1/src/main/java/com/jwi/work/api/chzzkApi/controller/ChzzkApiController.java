@@ -20,25 +20,11 @@ public class ChzzkApiController {
 		
 		@GetMapping("/search/{channelId}")
 		public Object channelCreateRest(@PathVariable("channelId") String channelId) {
-			
-			if (ChzzkApiService.chzzkChannelInfo(channelId) == null) {
-				System.out.println("데이터 오류");
-			}else {
-				System.out.println("채널 API 통과");
-			}
-
 		return ChzzkApiService.chzzkChannelInfo(channelId);
 	}
 
 		@GetMapping("/live/{channelId}")
 		public Object searchChanner(@PathVariable("channelId") String channelId) {
-			
-			if (ChzzkApiService.chzzkChannelInfo(channelId) == null) {
-				System.out.println("데이터 오류" + channelId);
-			}else {
-				System.out.println("라이브 API 통과" + channelId);
-			}
-			
 			return ChzzkApiService.chzzkLiveInfo(channelId);
 		}
 }

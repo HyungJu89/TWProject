@@ -29,8 +29,7 @@ public class SearchController {
 			@RequestParam("type") String type,
 			@RequestParam(value = "search", defaultValue = "") String search,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
-		System.out.println("게시글");
-		System.out.println(searchService.searchPost(type,search, page));
+
 		return searchService.searchPost(type,search, page);
 		
 	}

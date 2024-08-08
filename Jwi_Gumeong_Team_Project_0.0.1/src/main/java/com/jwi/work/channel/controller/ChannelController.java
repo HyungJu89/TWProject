@@ -37,7 +37,6 @@ public class ChannelController {
 	@GetMapping("/get")
 	public AnswerDto<ChannelDto> channelGet(@RequestParam("channelId") String channelId){
 		
-		System.out.println(channelService.channelGet(channelId));
 		return channelService.channelGet(channelId);
 	}
 	

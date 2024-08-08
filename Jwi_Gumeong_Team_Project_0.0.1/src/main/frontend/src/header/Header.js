@@ -30,12 +30,10 @@ import '../App.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 
-function Header({onClickSearch, onLogout}) {
-    let [loginOn, setLoginOn] = useState(true); //로그인 확인 변수
+function Header({onClickSearch, onLogout, isLoggedIn}) {
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
-    const isLoggedIn = useSelector((state) => state.session.isLoggedIn); // 로그인 상태
     let [adminLogin] = useState(false);
     let navigate = useNavigate();
     let location = useLocation();
@@ -63,9 +61,8 @@ function Header({onClickSearch, onLogout}) {
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
-               
                     {isLoggedIn ? (
-                         <div className={styles.icon}>
+                        <div className={styles.icon}>
                             <Icon navigate={navigate} userKey={userKey} />
                             <div onClick={onLogout} className={styles.signInBtn}>로그아웃</div>
                         </div>

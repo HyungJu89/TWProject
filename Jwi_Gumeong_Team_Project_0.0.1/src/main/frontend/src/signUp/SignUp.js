@@ -199,6 +199,8 @@ function Join() {
     const numberRegEx = /[0-9]/;
     const specialCharRegEx = /[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]/;
     const letterRegEx = /[A-Za-z]/;
+    const bigLetterRegEx = /[A-Z]/;
+    
     //이메일 유효성 검사로직
     const emailChecks = (email) => {
         if (emailRegEx.test(email)) {
@@ -212,7 +214,7 @@ function Join() {
     const PasswordCheck = (password) => {
         setpasswordWarning2('');
         if (!passwordRegEx.test(password)) {
-            setpasswordWarning2('비밀번호는 8자 이상 20자 이하이어야 합니다.');
+            setpasswordWarning2('비밀번호의 형식이 맞지 않습니다.(8자~20자)');
         }
         if (!numberRegEx.test(password)) {
             setpasswordWarning2('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.');
@@ -222,6 +224,9 @@ function Join() {
         }
         if (!letterRegEx.test(password)) {
             setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
+        }
+        if (!bigLetterRegEx.test(password)) {
+            setpasswordWarning2('비밀번호에는 대문자가 하나 이상 포함되어야 합니다.');
         }
     };
     //닉네임 유효성 검사로직
@@ -263,8 +268,9 @@ function Join() {
     const handleGenderChange = (event) => {
         setGender(event.target.value);
     };
-    const handleUserCertification = (event) => {
-        setUserCertification(event.target.value);
+    const handleUserCertification = (e) => {
+        const value = e.target.value.replace(/\s/g, '');
+        setUserCertification(value);
     };
 
     const toggleShowPassword = () => {
@@ -319,30 +325,35 @@ function Join() {
 
     //이메일 state input에 넣는값으로 state바꿔주는 함수
     const handleEmailChange = (e) => {
-        setEmail(e.target.value);
+        const value = e.target.value.replace(/\s/g, '');
+        setEmail(value);
     };
 
     //비밀번호 state input에 넣는값으로 state바꿔주는 함수
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
+        const value = e.target.value.replace(/\s/g, '');
+        setPassword(value);
     };
 
 
     //비밀번호 재확인 state input에 넣은값으로 바꿔주는 함수
     const handlepasswordCheckChange = (e) => {
-        setpasswordCheck(e.target.value);
+        const value = e.target.value.replace(/\s/g, '');
+        setpasswordCheck(value);
     };
 
 
     //input에 넣는값으로 state바꿔주는 함수
     const handleNickname = (e) => {
         if (e.target.value.length == 0 || e.target.value.length <= 8) {
-            setNickname(e.target.value);
-            setUserInput(e.target.value.length);
+            const value = e.target.value.replace(/\s/g, '');
+            setNickname(value);
+            // console.log(userInput);
+            setUserInput(value.length);
         }
-        if (e.target.value.length >= 9) {
-            AlarmModal(
-                '닉네임은 8자 이하만 사용가능 합니다!');
+        else if (e.target.value.length >= 9) {
+            setNickNameCheck(false);
+            setNickNameWarning('닉네임은 8자 이하만 사용가능 합니다!');
         }
     };
 
@@ -449,7 +460,7 @@ function Join() {
                         onChange={handleEmailChange}
                         className={styles.email}
                     />
-                    <button className={`${styles.emailButton} ${email !== '' ? styles.active : ''}`} onClick={() => { emailTest(email) }}>중복체크</button>
+                    <button className={`${styles.emailButton} ${email !== '' ? styles.active : ''}`} onClick={() => { emailTest(email) }}>이메일 인증</button>
                 </div>
             </div>
             {
