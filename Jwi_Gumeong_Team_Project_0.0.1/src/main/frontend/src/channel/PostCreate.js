@@ -21,7 +21,7 @@ function PostCreact({channelKey}) {
     //div에 입력되어있는 값 임시저장
     const contentRef = useRef(null);
     //size 계산 상태 색깔
-    const [contentColor, setContentColor] = useState('black');
+    const [contentColor, setContentColor] = useState('#BBBBBB');
     // 이미지와 input 태그 연결
     const fileInputRef = useRef(null);
     // 이미지 어레이
