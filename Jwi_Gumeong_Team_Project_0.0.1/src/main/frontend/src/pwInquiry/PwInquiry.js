@@ -4,9 +4,6 @@ import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { useNavigate } from 'react-router-dom';
 
-
-
-
 //비밀번호 찾기 페이지
 function PwInquiry() {
     const [email, setEmail] = useState('');
@@ -59,6 +56,5 @@ function PwInquiry() {
         </div>
     );
 }
-
 
 export default PwInquiry;

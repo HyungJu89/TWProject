@@ -62,6 +62,7 @@ function SignIn() {
                     dispatch(fetchSessionId(email));
                     dispatch(getUserInfo(userResponse.data.userKey));
                     dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
+                    sessionStorage.setItem('isLoggedIn', true); // 세션 스토리지에 저장
                     navigate('/');
                 }else{
                     setCount(userResponse.data.wrongCount);
