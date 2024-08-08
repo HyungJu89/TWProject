@@ -13,11 +13,9 @@ function LoginChecks(props) {
         setEmail(e.target.value);
     };
 
-
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
-
 
     useEffect(() => {
         if (email !== '' && password !== '') {

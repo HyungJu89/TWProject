@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import styles from './style/SignIn.module.css';
+import styles from './style/AdminLogin.module.css';
 import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { useNavigate } from 'react-router-dom';
@@ -8,9 +8,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 import { setLoggedIn } from '../slice/sessionSlice.js';
 
-function SignIn() {
-    var jsonSessionInfo = sessionStorage.getItem('sessionId');
-    var sessionInfo = JSON.parse(jsonSessionInfo);    
+function AdminLogin() {
+    var jsonSessionInfo = localStorage.getItem('sessionId');
+    var sessionInfo = JSON.parse(jsonSessionInfo);
     // 세션화성공
     const userState = useSelector((state) => state.session);
     const [email, setEmail] = useState('');
@@ -49,7 +49,6 @@ function SignIn() {
     };
     
     const checkUser = async () => {
-        // console.log(count);
         if (email !== '' && password !== '') {
             try {
 
@@ -59,15 +58,13 @@ function SignIn() {
                 };
 
                 const userResponse = await axios.post('/signIn/loginCheck', userData);
-                // console.log("userResponse:", userResponse.data);
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
-                    dispatch(setLoggedIn(true));
+                    dispatch(getUserInfo(userResponse.data.userKey));
+                    dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
                     navigate('/');
                 }else{
                     setCount(userResponse.data.wrongCount);
-                    // console.log(userResponse.data);
-                    // console.log(userResponse.data.wrongCount);
                 } 
                 setLoginWarn(userResponse.data.warningMessage);
                 
@@ -92,7 +89,6 @@ function SignIn() {
 
     // 유저정보 체크 로직
     useEffect(() => {
-        // console.log(sessionInfo.sessionId);
         if (email !== '' && password !== ''){
             setIsButtonActive(true);
         }else if(email == ''){
@@ -105,23 +101,21 @@ function SignIn() {
     }, [email, password]);
 
     const handleEmailChange = (e) => {
-        const value = e.target.value.replace(/\s/g, '');
-        setEmail(value);
+        setEmail(e.target.value);
     };
 
     const handlePasswordChange = (e) => {
-        const value = e.target.value.replace(/\s/g, '');
-        setPassword(value);
+        setPassword(e.target.value);
     };
 
     return (
         
         <div className={styles.section}>
             <div className={styles.loginContainer}>
-                <div className={styles.topFont}>로그인</div>
+                <div className={styles.topFont}>관리자 로그인</div>
                 {/* 아이디 input */}
                 <div className={styles.formGroup}>
-                    <p>이메일</p>
+                    <p>ID</p>
                     <div className={styles.inputWrapper}>
                         <input
                             style={{marginBottom : '30px'}}
@@ -135,7 +129,7 @@ function SignIn() {
                 </div>
                 {/* 비밀번호 input */}
                 <div className={styles.formGroup}>
-                    <p>비밀번호</p>
+                    <p>PW</p>
                     <div className={styles.inputWrapper}>
                         <input
                             type={showPassword ? "text" : "password"}
@@ -158,10 +152,9 @@ function SignIn() {
                 className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>
                 로그인
                 </button>
-                <div className={styles.help}><h6 onClick={() => { navigate('/signUp') } }>회원가입</h6><h6>|</h6><h6 onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</h6></div>
             </div>
         </div>
     );
 }
 
-export default SignIn;
+export default AdminLogin;

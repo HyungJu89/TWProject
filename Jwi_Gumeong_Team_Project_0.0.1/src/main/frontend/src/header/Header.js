@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from './style/Header.module.css';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useNavigate, useLocation} from 'react-router-dom';
 //이미지 import
 import Logo from '../icon/logo/logo.png'; //로고 이미지
 import searching from '../icon/24px/searching.png';
@@ -35,8 +35,12 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
+    let [adminLogin] = useState(false);
     let navigate = useNavigate();
-
+    let location = useLocation();
+    if(location.pathname.indexOf('/admin') === 0 ){
+        adminLogin = true;
+    }
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
         let justSearchLocal = localStorage.getItem('search')
@@ -58,16 +62,16 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
-                <div className={styles.icon}>
                     {isLoggedIn ? (
-                        <>
+                        <div className={styles.icon}>
                             <Icon navigate={navigate} userKey={userKey} />
                             <div onClick={onLogout} className={styles.signInBtn}>로그아웃</div>
-                        </>
+                        </div>
                     ) : (
-                        <div onClick={() => { navigate('/signIn') }} className={styles.signInBtn}>로그인</div>
+                        <div className={styles.icon} style={{justifyContent:'end'}}>
+                        <div onClick={() => { { adminLogin !== true ? navigate('/signIn') : navigate('/admin/login') } }} className={styles.signInBtn}>로그인</div>
+                        </div>
                     )}
-                </div>
             </div>
         </>
     );

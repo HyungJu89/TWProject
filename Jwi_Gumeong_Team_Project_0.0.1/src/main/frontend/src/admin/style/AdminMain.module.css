@@ -65,7 +65,7 @@
 }
 
 .navItems {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 20px;
     color: #999999;
     position: relative;
@@ -73,18 +73,6 @@
 
 .navItems.active {
     color: #101010;
-}
-
-.navItems.active::after {
-    content: "";
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 24px;
-    height: 2px;
-    background-color: #FF8901;
-    border-radius: 18px;
 }
 
 .navItems:hover::after {

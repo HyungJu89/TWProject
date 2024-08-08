@@ -50,7 +50,7 @@ function ImgUi(){
                     <Content content={content} setContent={setContent}/>
                     </div>
                 </div>}
-               { content && <div className={styles.fadeIn}><Content content={content} setContent={setContent}/></div>}
+                { content && <div className={styles.fadeIn}><Content content={content} setContent={setContent}/></div>}
             </div>
             </div>
         </div>

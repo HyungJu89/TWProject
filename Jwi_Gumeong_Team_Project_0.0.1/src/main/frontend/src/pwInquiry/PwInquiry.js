@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react';
 import styles from './style/PwInquiry.module.css';
 import { useNavigate } from 'react-router-dom';
 
-
-
-
 //비밀번호 찾기 페이지
 function PwInquiry() {
     //이메일 인증 유효성 검사 완료체크
@@ -163,6 +160,5 @@ function PwIssue() {
         </div>
     );
 }
-
 
 export default PwInquiry;

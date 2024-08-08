@@ -156,7 +156,7 @@ function CreateChannelNext({ notice, channelInfo, channelUrl }) {
                 <div onClick={notUseNotice}> <img style={{ marginRight: '4px' }} src={help} />공지사항 사용 안함</div>
             </div> {/*채널 내 공지사항 제목 */}
             <input className={style.noticeInputBox} style={{backgroundColor: {notUseNoticeColor}}} value={notUseNoticeValue} onChange={handleChange}
-             placeholder='공지사항의 제목을 입력해주세요.' />
+            placeholder='공지사항의 제목을 입력해주세요.' />
 
             <div className={style.announcementTitle}>채널 규칙</div> {/*채널 공지사항 부분 Text */}
             <div className={style.noticeRulesBox} ref={rulesRef}>
