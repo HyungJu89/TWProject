@@ -22,6 +22,7 @@ function CreateChannel({ManagementChannelId}) {
     const onChangeInput = async (e) => {
         const specialCharacters = /[^a-zA-Z0-9 ]/g;
         let value = e.target.value
+        setChannelId(e.target.value);
         setSign(true)
         if (value.length != channelLength) {
             setSignText('올바르지 않은 채널 ID 입니다.')
@@ -77,8 +78,18 @@ function CreateChannel({ManagementChannelId}) {
         setNotice(false);
     }
 
-    useEffect(()=>{
-        
+    //ManagementChannelId :: 미개설된 채널을 추천 받아서 채널 개설로 들어올 경우 자동완성 활성화
+    const [channelId, setChannelId] = useState(false);
+    useEffect(async ()=>{
+        let channelInfo = await fetchChannel(ManagementChannelId); 
+        if (ManagementChannelId) {
+            setChannelId(ManagementChannelId);
+            setSignText('해당 스트리머의 게시판 개설이 가능합니다.');
+            setChannelUrl(ManagementChannelId)
+            setSignColor('#FF8901');
+            setNotice(true);
+            setChannelInfo(channelInfo);
+        }
     },[ManagementChannelId])
 
 
@@ -86,7 +97,7 @@ function CreateChannel({ManagementChannelId}) {
 
         <div className={style.createChannel}> {/*개설 할 스트리머 URL 입력부분 */}
             <div className={style.createChannelText}>개설 할 스트리머 URL입력</div>
-            <input className={styleManagement.channelInputBox} placeholder='개설하고 싶은 스트리머의 URL을 넣어주세요.' onChange={onChangeInput} />
+            <input value={channelId} className={styleManagement.channelInputBox} placeholder='개설하고 싶은 스트리머의 URL을 넣어주세요.' onChange={onChangeInput} />
             {sign && (
                 <div className={style.warningText} style={{ color: `${signColor}` }}>{signText}</div>/*URL 검토하고 가능유무 안내Text*/
             )}
