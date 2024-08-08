@@ -80,7 +80,7 @@ function App() {
                     <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
                     <Route path='/channelManagement' element={<ChannelManagement/>}/>
                     <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
-                    <Route path="/blinkPage" element={<BlinkPage/>}></Route>
+                    <Route path="/pageCheck" element={<BlinkPage/>}></Route>{/*채널 존재 여부 확인 게시판*/}
                     <Route path="*" element={<div>404 넣으면 됩니다!</div>}></Route>
                     <Route path='/admin' element={<Admin/>}>
                         <Route path='login' element={<AdminLogin/>}></Route>{/*관리자*/}
