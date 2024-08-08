@@ -7,8 +7,6 @@
     z-index: 1;
 }
 
-
-
 .postCreact .placeholderContentTop {
     /*글작성시 주의사항 상단*/
     position: absolute;
@@ -20,8 +18,7 @@
     text-align: left;
     user-select: none;
     color : #BBBBBB;
-    
-  }
+}
 
 .postCreact .placeholderContentBottom{
     /*글작성시 주의사항 하단*/
@@ -53,7 +50,6 @@
     padding: 0px;
     overflow: auto;
     border-radius: 0px;
-    
 }
 
 .imageContainer{
@@ -61,7 +57,6 @@
     margin-top: 20px;
     position: relative;
     margin-right: 9px;
-
 }
 
 .imagePreview{
@@ -82,7 +77,7 @@
 .imageContainer:hover .deleteButton {
     /*이미지 호버할때*/
     display: block;
-  }
+}
 
 .dashed {
     /*회색줄*/
@@ -123,7 +118,6 @@
 
 /* 이미지 아이콘 img*/
 .imageIcon img {
-
     height: 24px;
     width: 24px;
     cursor: pointer;

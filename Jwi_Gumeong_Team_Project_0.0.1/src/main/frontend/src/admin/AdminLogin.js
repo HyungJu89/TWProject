@@ -9,6 +9,7 @@ import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 import { setLoggedIn } from '../slice/sessionSlice.js';
 
 function AdminLogin() {
+
     var jsonSessionInfo = localStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);
     // 세션화성공
@@ -22,7 +23,6 @@ function AdminLogin() {
     //로그인 틀릴 시 경고문 저장
     const [loginWarn, setLoginWarn] = useState('');
     //로그인 비번 카운트
-    let [count, setCount] = useState(0);
     const dispatch = useDispatch();
     let navigate = useNavigate();
     // 눈 아이콘 클릭시 바꾸게 설정하기
@@ -32,42 +32,32 @@ function AdminLogin() {
     //엔터 키 다운 이벤트
     const handleEnter = (e) => {
         if (e.key === "Enter") {
-        checkUser();    
+            checkAdmin();    
         }
     };
-          // 로그인 버튼 클릭 핸들러
+    // 로그인 버튼 클릭 핸들러
     const handleLogin = () => {
         if (email === '') {
-            alert('이메일을 입력해주세요!');
+            alert('ID를 입력해주세요!');
         } else if (password === '') {
             alert('비밀번호를 입력해주세요!');
-        } else if (count >= 5) {
-            alert('비밀번호를 5회이상 틀리셨습니다!');
-        }else {
-            checkUser();
+        } else {
+            checkAdmin();
         }
     };
     
-    const checkUser = async () => {
+    const checkAdmin = async () => {
         if (email !== '' && password !== '') {
             try {
-
-                const userData = {
-                    email: email,
-                    pw: password
+                const adminData = {
+                    username: email,
+                    password: password
                 };
-
-                const userResponse = await axios.post('/signIn/loginCheck', userData);
-                if(userResponse.data.check && count < 5){
-                    dispatch(fetchSessionId(email));
-                    dispatch(getUserInfo(userResponse.data.userKey));
-                    dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
-                    navigate('/');
-                }else{
-                    setCount(userResponse.data.wrongCount);
-                } 
+                const userResponse = await axios.post('/admin/login', adminData);
+                if(userResponse.data.check){
+                    navigate('/admin');
+                }
                 setLoginWarn(userResponse.data.warningMessage);
-                
             } catch (error) {
                 console.error('Channel API Error:', error);
             }
@@ -75,27 +65,16 @@ function AdminLogin() {
             setLoginWarn("이메일과 비밀번호를 제대로 입력해주세요.")
         }
     };
-    // 비밀번호 5회 실패 로직
-    useEffect(() => {
-        let timer;
-        if (count >= 5) {
-            timer = setTimeout(() => {
-                count = 0;
-                localStorage.setItem('sessionId',JSON.stringify(sessionInfo));
-            }, 10 * 60 * 1000);
-        }
-        return () => clearTimeout(timer);
-    }, [count, dispatch]);
 
     // 유저정보 체크 로직
     useEffect(() => {
         if (email !== '' && password !== ''){
             setIsButtonActive(true);
-        }else if(email == ''){
+        } else if (email == ''){
             setIsButtonActive(false);
-        }else if(password == ''){
+        } else if (password == ''){
             setIsButtonActive(false);
-        }else if(email == '' && password == ''){
+        } else if (email == '' && password == ''){
             setIsButtonActive(false);
         }
     }, [email, password]);
@@ -109,7 +88,6 @@ function AdminLogin() {
     };
 
     return (
-        
         <div className={styles.section}>
             <div className={styles.loginContainer}>
                 <div className={styles.topFont}>관리자 로그인</div>
@@ -144,14 +122,7 @@ function AdminLogin() {
                 {
                     loginWarn !== '' ? <div className={styles.warning} style={{marginTop : '40px' , marginBottom : '40px'}}>{loginWarn}</div> : <div style={{ marginBottom : '80px'}}></div> 
                 }
-                <button 
-                onClick={
-                    () => {
-                        handleLogin();
-                    }}  
-                className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>
-                로그인
-                </button>
+                <button onClick={() => { handleLogin(); }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}> 로그인 </button>
             </div>
         </div>
     );

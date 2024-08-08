@@ -3,6 +3,6 @@ package com.jwi.work.admin.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class adminService {
+public class AdminService {
 
 }

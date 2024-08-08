@@ -7,8 +7,7 @@ import '../App.css'
 import axios from 'axios';
 import { checkChannel } from '../recycleCode/ChannelAxios.js';
 
-function CreateChannel() {
-
+function CreateChannel({ManagementChannelId}) {
     const [channelUrl, setChannelUrl] = useState();
     const [channelInfo,setChannelInfo] = useState();
     const [sign, setSign] = useState(false);
@@ -20,8 +19,6 @@ function CreateChannel() {
     // 채널아이디 길이
     const channelLength = 32;
 
-
-    
     const onChangeInput = async (e) => {
         const specialCharacters = /[^a-zA-Z0-9 ]/g;
         let value = e.target.value
@@ -79,6 +76,10 @@ function CreateChannel() {
         setSignColor('#EC000E')
         setNotice(false);
     }
+
+    useEffect(()=>{
+        
+    },[ManagementChannelId])
 
 
     return (

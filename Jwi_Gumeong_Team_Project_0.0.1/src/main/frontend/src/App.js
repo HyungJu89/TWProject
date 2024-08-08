@@ -11,13 +11,14 @@ import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import MyPage from './myPage/MyPage.js';
 import Search from './search/Search.js';
-import BlinkPage from './blinkPage/BlinkPage.js';
+import PageCheck from './pageCheck/PageCheck.js';
 import CustomerService from './customerService/CustomerServiceCenter.js';
 import ChannelManagement from './channelManagement/ChannelManagement.js';
 import ImgUi from './imgModal/imgModal.js';
 import Admin from './admin/Admin.js';
 import AdminMain from './admin/AdminMain.js';
 import AdminLogin from './admin/AdminLogin.js';
+import NotFound from './notFound/NotFound.js';
 import { setSessionId, setUserKey, clearSession, setLoggedIn } from './slice/sessionSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
@@ -32,7 +33,6 @@ function App() {
     useEffect(() => {
         const storeSessionId = sessionStorage.getItem("sessionId");
         var sessionInfo = JSON.parse(storeSessionId);
-        console.log(storeSessionId);
         if (sessionInfo) {
             dispatch(setSessionId(sessionInfo.sessionId));
             userKey(sessionInfo.sessionId);
@@ -83,8 +83,8 @@ function App() {
                     <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
                     <Route path='/channelManagement' element={<ChannelManagement/>}/>
                     <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
-                    <Route path="/pageCheck" element={<BlinkPage/>}></Route>{/*채널 존재 여부 확인 게시판*/}
-                    <Route path="*" element={<div>404 넣으면 됩니다!</div>}></Route>
+                    <Route path="/pageCheck/:channelId" element={<PageCheck/>}></Route>{/*채널 존재 여부 확인 게시판*/}
+                    <Route path="*" element={<NotFound/>}></Route>
                     <Route path='/admin' element={<Admin/>}>
                         <Route path='login' element={<AdminLogin/>}></Route>{/*관리자*/}
                     </Route>

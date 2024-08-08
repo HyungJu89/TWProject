@@ -72,23 +72,26 @@ function MainBanner({ channelId, route,
                         )}
 
                         {/* 라이브 방송 정보 */}
-                        <div onClick={()=>{navigate(`/channel/${partnersLiveInfo.channelId}`)}} className={style.liveInfo}>
-                            <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
+
                             {route === 'channel' ?/* 라이브 제목 */
+                                (<div onClick={()=>{navigate(`/pageCheck/${partnersLiveInfo?.channelId}`)}} className={style.liveInfo}>
+                                <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
                                 <div className={style.liveTitle}>{liveInfoApi?.liveTitle}</div>
+                                <LiveLink channelId={channelId} />
+                                </div>)
                                 :
+                                (<div onClick={()=>{navigate(`/pageCheck/${partnersLiveInfo?.channelId}`)}} className={style.liveInfo}>
+                                <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */} 
                                 <div className={style.liveTitle}>{partnersLive?.liveTitle}</div>
-                            }
-                            {route === 'channel' ? <LiveLink channelId={channelId} /> :
-                                <div className={style.mainbannerDiv}>
-                                    <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
-                                    <div className={style.textArea}>
-                                        {partnersLiveInfo?.channelName}
-                                        <div className={style.category}><img src={game} />{partnersLive?.liveCategoryValue}</div>
+                                    <div className={style.mainbannerDiv}>
+                                        <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
+                                        <div className={style.textArea}>
+                                            {partnersLiveInfo?.channelName}
+                                            <div className={style.category}><img src={game} />{partnersLive?.liveCategoryValue}</div>
+                                        </div>
                                     </div>
-                                </div>
+                                </div>)
                             }
-                        </div>
                     </div>
 
                     {/*메인 선택 배너*/}
