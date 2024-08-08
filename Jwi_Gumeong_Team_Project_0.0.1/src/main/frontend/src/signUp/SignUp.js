@@ -199,6 +199,8 @@ function Join() {
     const numberRegEx = /[0-9]/;
     const specialCharRegEx = /[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]/;
     const letterRegEx = /[A-Za-z]/;
+    const bigLetterRegEx = /[A-Z]/;
+    
     //이메일 유효성 검사로직
     const emailChecks = (email) => {
         if (emailRegEx.test(email)) {
@@ -222,6 +224,9 @@ function Join() {
         }
         if (!letterRegEx.test(password)) {
             setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
+        }
+        if (!bigLetterRegEx.test(password)) {
+            setpasswordWarning2('비밀번호에는 대문자가 하나 이상 포함되어야 합니다.');
         }
     };
     //닉네임 유효성 검사로직

@@ -105,6 +105,7 @@ function SignIn() {
 
     const handleEmailChange = (e) => {
         const value = e.target.value.replace(/\s/g, '');
+        console.log(value);
         setEmail(value);
     };
 
