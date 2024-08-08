@@ -52,6 +52,7 @@ function App() {
             console.error('userKey Axios 에러임:', error);
         }
     };
+    
     const isLoggedIn = useSelector((state) => state.session.isLoggedIn); // 로그인 상태
     const onLogout = () => { // 로그아웃 기능 (세션 아이디 지움)
         sessionStorage.removeItem('sessionId');
