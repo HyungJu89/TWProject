@@ -4,8 +4,8 @@
 <mapper namespace="com.jwi.work.channel.mapper.PostMapper">
 
 	
-	<select id="selectHash" parameterType="String" resultType="String">
-		SELECT IFNULL(imageUrl,'0') FROM Image WHERE imageHash = #{imageHash}
+	<select id="selectHash" parameterType="String" resultType="com.jwi.work.channel.dto.ImageDto">
+		SELECT * FROM Image WHERE imageHash = #{imageHash}
 	</select>
 	
 	<insert id="postCreate" parameterType="com.jwi.work.channel.dto.PostCreateDto">
@@ -13,7 +13,16 @@
 	</insert>
 
 	<insert id="insertImg" parameterType="com.jwi.work.channel.dto.ImageDto">
-		INSERT INTO Image(imageUrl,imageHash) value (#{imageUrl},#{imageHash})
+		INSERT INTO Image(imageUrl,imageHash,referenceCount) value (#{imageUrl},#{imageHash},1)
 	</insert>
+	
+	<update id="referenceUp" parameterType="String">
+		UPDATE Image set referenceCount = referenceCount + 1 WHERE #{imageHash}
+	</update>
+	
+	<update id="referenceDown" parameterType="String">
+		UPDATE Image set referenceCount = referenceCount - 1 WHERE #{imageHash}
+	</update>
+
 
 </mapper>

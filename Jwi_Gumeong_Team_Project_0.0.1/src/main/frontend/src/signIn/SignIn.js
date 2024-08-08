@@ -49,10 +49,7 @@ function SignIn() {
     };
     
     const checkUser = async () => {
-<<<<<<< HEAD
-=======
         // console.log(count);
->>>>>>> origin/kimhyeongju
         if (email !== '' && password !== '') {
             try {
 
@@ -62,15 +59,6 @@ function SignIn() {
                 };
 
                 const userResponse = await axios.post('/signIn/loginCheck', userData);
-<<<<<<< HEAD
-                if(userResponse.data.check && count < 5){
-                    dispatch(fetchSessionId(email));
-                    dispatch(getUserInfo(userResponse.data.userKey));
-                    dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
-                    navigate('/');
-                }else{
-                    setCount(userResponse.data.wrongCount);
-=======
                 // console.log("userResponse:", userResponse.data);
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
@@ -81,7 +69,6 @@ function SignIn() {
                     setCount(userResponse.data.wrongCount);
                     // console.log(userResponse.data);
                     // console.log(userResponse.data.wrongCount);
->>>>>>> origin/kimhyeongju
                 } 
                 setLoginWarn(userResponse.data.warningMessage);
                 

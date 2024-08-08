@@ -7,11 +7,13 @@ import com.jwi.work.channel.dto.PostCreateDto;
 
 public interface PostMapper {
 
-	public String selectHash(@Param("imageHash") String imageHash);
+	public ImageDto selectHash(@Param("imageHash") String imageHash);
 	
 	public void postCreate(PostCreateDto postCreate);
 	
 	public void insertImg(ImageDto imageDto);
 
+	public void referenceUp(@Param("imageKey") int imageKey);
 	
+	public void referenceDown(@Param("imageKey") int imageKey);
 }

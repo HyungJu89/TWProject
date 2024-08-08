@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.ImageDto;
 import com.jwi.work.channel.dto.PostCreateDto;
+import com.jwi.work.channel.dto.PostDeleteDto;
 import com.jwi.work.channel.mapper.PostMapper;
 import com.jwi.work.channel.util.FileManagerUtil;
 
@@ -25,50 +26,51 @@ public class PostService {
 
 	@Autowired
 	private FileManagerUtil fileManagerUtil;
-	
+
 	public AnswerDto<String> postCreate(int channelKey, int userKey, String content, List<MultipartFile> files) {
 
 		AnswerDto<String> answer = new AnswerDto<>();
 		ObjectMapper objectMapper = new ObjectMapper();
-		
+
 		String imageJson = null;
-		
+
 		try {
 
 			PostCreateDto postCteateDto = new PostCreateDto();
 
 			ArrayList<String> imgUrlList = new ArrayList<>();
-			
+
 			if (files == null) {
-			    files = Collections.emptyList();
+				files = Collections.emptyList();
 			}
-			
 
 			if (!files.isEmpty()) {
 
 				for (MultipartFile file : files) {
 
-					ImageDto imageDto = new ImageDto();
-
 					String imageHash = fileManagerUtil.getHash(file);
 
-					String image = postMapper.selectHash(imageHash);
+					ImageDto image = postMapper.selectHash(imageHash);
 
-					imageDto.setImageHash(imageHash);
+					if (image == null || image.getReferenceCount() == 0) {
 
-					if (image == null || image.equals("0")) {
-
+						image = new ImageDto();
+						
 						String imgUrl = fileManagerUtil.saveFile(file);
 
-						imageDto.setImageHash(imageHash);
-						imageDto.setImageUrl(imgUrl);
+						image.setImageHash(imageHash);
+
+						image.setImageUrl(imgUrl);
 
 						imgUrlList.add(imgUrl);
 
+						postMapper.insertImg(image);
+
 					} else {
-
-						imgUrlList.add(image);
-
+						
+						imgUrlList.add(image.getImageUrl());
+						
+						postMapper.referenceUp(image.getImageKey());
 					}
 				}
 				imageJson = objectMapper.writeValueAsString(imgUrlList);
@@ -76,18 +78,11 @@ public class PostService {
 				imageJson = null;
 			}
 
-			
-
 			postCteateDto.setImage(imageJson);
-
 			postCteateDto.setChannelKey(channelKey);
-
 			postCteateDto.setContent(content);
-
 			postCteateDto.setUserKey(userKey);
-
 			postMapper.postCreate(postCteateDto);
-
 			answer.setSuccess(true);
 
 		} catch (IOException | NoSuchAlgorithmException e) {
@@ -96,6 +91,15 @@ public class PostService {
 		}
 
 		return answer;
+	}
+
+	public AnswerDto<String> postDelete(PostDeleteDto postDelete) {
+
+		
+		
+		
+		
+		return null;
 	}
 
 }
