@@ -8,10 +8,12 @@ import open_channel_32 from '../icon/32px/open-channel-32.png'
 import enroll from '../icon/32px/enroll.png'
 import give_up from '../icon/32px/give-up.png'
 import '../App.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function ChannelManagement() {
-
+    const location = useLocation();
+    const { ManagementChannelId } = location.state || {};
     const [openTap, setOpenTap] = useState(0);
 
     const tapClick = (e) => {
@@ -20,6 +22,14 @@ function ChannelManagement() {
         }
         setOpenTap(e)
     }
+
+    useEffect(()=>{//PageCheck.js를 통해서 미개설 게시판 개설 추천하는 로직
+        if (ManagementChannelId) {
+            setOpenTap(1);
+        } else {
+            setOpenTap(0);
+        }
+    },[]);
 
     return (
         <div className={style.createMain}>
@@ -32,7 +42,7 @@ function ChannelManagement() {
                     {openTap == 1 &&
                         <>
                             <div className={styleManagement.dashed} />{/* 회색줄 */}
-                            <CreateChannel />
+                            <CreateChannel ManagementChannelId={ManagementChannelId} />
                         </>
                     }
                 </div>

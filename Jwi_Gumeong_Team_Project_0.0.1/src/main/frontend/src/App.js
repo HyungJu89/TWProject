@@ -11,7 +11,7 @@ import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import MyPage from './myPage/MyPage.js';
 import Search from './search/Search.js';
-import BlinkPage from './blinkPage/BlinkPage.js';
+import PageCheck from './pageCheck/PageCheck.js';
 import CustomerService from './customerService/CustomerServiceCenter.js';
 import ChannelManagement from './channelManagement/ChannelManagement.js';
 import ImgUi from './imgModal/imgModal.js';
