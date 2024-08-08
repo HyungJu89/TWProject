@@ -16,9 +16,10 @@ import chevron_left_w from '../icon/40px/chevron-left-w.png'
 import chevron_right_w from '../icon/40px/chevron-right-w.png'
 import { searchPost } from '../recycleCode/postAxios.js'
 
-function Main({isLoggedIn}) {
+function Main({onLogout,isLoggedIn}) {
     let navigate = useNavigate();
     let [topic, settopic] = useState(true);
+    let [loginOn, setLoginOn] = useState(false);
     const [postList, setPostList] = useState([]);
     const [partnersLive, setPartnersLive] = useState([]);
     useEffect(() => {
@@ -92,7 +93,7 @@ function Main({isLoggedIn}) {
                         : null}
                     <div onClick={() => { navigate('/allTopic'); window.scrollTo(0, 0) }} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}
                 </div>
-                <PublicMenu loginOn={loginOn} isLoggedIn={isLoggedIn} />
+                <PublicMenu isLoggedIn={isLoggedIn} onLogout={onLogout}/>
             </div>
         </div>
     );

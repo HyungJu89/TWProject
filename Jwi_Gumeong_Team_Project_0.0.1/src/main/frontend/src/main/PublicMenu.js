@@ -10,14 +10,24 @@ import edit from '../icon/20px/edit.png';
 import add from '../icon/40px/add.png';
 import btn_left from '../icon/btn/btn-left.png';
 import btn_right from '../icon/btn/btn-right.png';
+import { getUserInfo } from '../slice/loginSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
 
-function PublicMenu({ loginOn, isLoggedIn}) {
-
+function PublicMenu({ isLoggedIn, onLogout}) {
+    var jsonSessionInfo = sessionStorage.getItem('sessionId');
+    var sessionInfo = JSON.parse(jsonSessionInfo);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if(sessionInfo){
+            console.log(1);
+            dispatch(getUserInfo(sessionInfo.sessionId));
+        }
+    }, [dispatch,sessionInfo]); 
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     return (
         <div className={styles.rightDiv}>{/*유저 영역 */}
-            {loginOn ? <UserAfter isLoggedIn={isLoggedIn}/> : <UserBefore isLoggedIn={isLoggedIn} />}
+            {isLoggedIn ? <UserAfter onLogout={onLogout}/> : <UserBefore/>}
             <div className={styles.recommendation}>{/* 추천 */}
                 <p style={{ margin: '0px', marginLeft: '21px' }}>추천</p>
                 <div className={styles.list}>
@@ -32,17 +42,18 @@ function PublicMenu({ loginOn, isLoggedIn}) {
     )
 }
 
-function UserAfter({ channel, isLoggedIn }) {
+function UserAfter({ onLogout }) {
     let navigate = useNavigate();
+    const userState = useSelector((state) => state.userState);  
     return (
         <div className={styles.fadein}>
             <div className={styles.userAfter} style={{ borderRadius: '20px 20px 0px 0px' }}>
                 <div className={styles.userInfo}>
                     <div>
-                        김박최조임권강이
-                        <p>aaaaaa1234@naver.Com</p>
+                        {userState.nickName} 님
+                        <p>{userState.email}</p>
                     </div>
-                    <button onClick={() => { isLoggedIn(false) }} >로그아웃</button>
+                    <button onClick={() => { onLogout() }} >로그아웃</button>
                 </div>
                 <button onClick={() => { navigate('/myPage') }} className={styles.myPage}>마이페이지</button>
             </div>
@@ -64,7 +75,7 @@ function UserAfter({ channel, isLoggedIn }) {
     )
 }
 
-function UserBefore({ isLoggedIn }) {
+function UserBefore() {
     let navigate = useNavigate();
     return (
         <div>
