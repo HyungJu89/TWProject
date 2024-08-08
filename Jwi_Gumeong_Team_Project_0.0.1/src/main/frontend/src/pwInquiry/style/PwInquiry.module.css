@@ -19,7 +19,6 @@
 .inputWrapper {
     display: flex;
 }
-
 .email {
     width: 412px;
     height: 20px;
@@ -71,7 +70,7 @@
     box-sizing: border-box;
     border-radius: 6px;
     border: 2px solid #E5E5E5;
-    font-size: 20px;
+    font-size: 15px;
     padding: 20px;
     padding-right: 50px; /* 아이콘을 위한 여백 추가 */
 }
@@ -105,4 +104,32 @@
 .loginButton.active {
     background-color: #FF8901;
     /* 활성화된 배경색 */
+}
+
+.emailWarn {
+    color: #EC000E;
+}
+.emailWarn.active {
+    color: #FF8901;
+}
+.certifiOk {
+    color: #FF8901;
+}
+
+.pwIssueInform {
+    font-size: 16px;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.pwIssue {
+    font-size: 16px;
+    background-color: #F3F3F3;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 60px;
+    border-radius: 10px;
 }

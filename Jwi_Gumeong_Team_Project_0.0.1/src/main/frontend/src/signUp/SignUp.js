@@ -460,7 +460,7 @@ function Join() {
                         onChange={handleEmailChange}
                         className={styles.email}
                     />
-                    <button className={`${styles.emailButton} ${email !== '' ? styles.active : ''}`} onClick={() => { emailTest(email) }}>중복체크</button>
+                    <button className={`${styles.emailButton} ${email !== '' ? styles.active : ''}`} onClick={() => { emailTest(email) }}>이메일 인증</button>
                 </div>
             </div>
             {

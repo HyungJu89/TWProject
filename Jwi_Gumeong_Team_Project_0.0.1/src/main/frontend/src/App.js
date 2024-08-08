@@ -14,7 +14,7 @@ import Search from './search/Search.js';
 import CustomerService from './customerService/CustomerServiceCenter.js';
 import ChannelManagement from './channelManagement/ChannelManagement.js';
 import ImgUi from './imgModal/imgModal.js';
-import { setSessionId, setUserKey, clearSession } from './slice/sessionSlice.js';
+import { setSessionId, setUserKey, clearSession,setLoggedIn } from './slice/sessionSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -26,10 +26,14 @@ function App() {
     const dispatch = useDispatch();
     
     useEffect(() => {
-        const storeSessionId = window.sessionStorage.getItem("sessionId");
-        if (storeSessionId) {
-            dispatch(setSessionId(storeSessionId));
-            userKey(storeSessionId);
+        const storeSessionId = sessionStorage.getItem("sessionId");
+        var sessionInfo = JSON.parse(storeSessionId);
+        console.log(storeSessionId);
+        console.log(sessionInfo.sessionId);
+        if (sessionInfo.sessionId) {
+            dispatch(setSessionId(sessionInfo.sessionId));
+            userKey(sessionInfo.sessionId);
+            dispatch(setLoggedIn(true));
         }
     }, [dispatch]);
 
@@ -45,7 +49,7 @@ function App() {
             console.error('userKey Axios 에러임:', error);
         }
     };
-
+    const isLoggedIn = useSelector((state) => state.session.isLoggedIn); // 로그인 상태
     const onLogout = () => { // 로그아웃 기능 (세션 아이디 지움)
         sessionStorage.removeItem('sessionId');
         dispatch(clearSession());
@@ -61,7 +65,7 @@ function App() {
     //----------------------------------
     return (
         <div>
-        <Header onClickSearch={onClickSearch} onLogout={onLogout}/> {/* 상단 공통 부분 디자인 */}
+        <Header onClickSearch={onClickSearch} onLogout={onLogout} isLoggedIn={isLoggedIn}/> {/* 상단 공통 부분 디자인 */}
         {state.imgUiModal.popUp && <ImgUi/>}{/*이미지 팝업*/}
         <Routes>
             <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
