@@ -29,7 +29,7 @@ function ChannelManagement() {
         } else {
             setOpenTap(0);
         }
-    },[]);
+    },[ManagementChannelId]);
 
     return (
         <div className={style.createMain}>

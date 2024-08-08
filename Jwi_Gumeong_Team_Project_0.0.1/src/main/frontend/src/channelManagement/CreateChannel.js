@@ -80,17 +80,25 @@ function CreateChannel({ManagementChannelId}) {
 
     //ManagementChannelId :: 미개설된 채널을 추천 받아서 채널 개설로 들어올 경우 자동완성 활성화
     const [channelId, setChannelId] = useState(false);
-    useEffect(async ()=>{
-        let channelInfo = await fetchChannel(ManagementChannelId); 
-        if (ManagementChannelId) {
-            setChannelId(ManagementChannelId);
-            setSignText('해당 스트리머의 게시판 개설이 가능합니다.');
-            setChannelUrl(ManagementChannelId)
-            setSignColor('#FF8901');
-            setNotice(true);
-            setChannelInfo(channelInfo);
+    useEffect(() => {
+        async function fetchData() {
+            if (ManagementChannelId) {
+                try {
+                    let channelInfo = await fetchChannel(ManagementChannelId); 
+                    setChannelId(ManagementChannelId);
+                    setSignText('해당 스트리머의 게시판 개설이 가능합니다.');
+                    setChannelUrl(ManagementChannelId);
+                    setSignColor('#FF8901');
+                    setNotice(true);
+                    setChannelInfo(channelInfo);
+                } catch (error) {
+                    console.error('Error fetching channel:', error);
+                }
+            }
         }
-    },[ManagementChannelId])
+
+        fetchData();
+    }, [ManagementChannelId]);
 
 
     return (
