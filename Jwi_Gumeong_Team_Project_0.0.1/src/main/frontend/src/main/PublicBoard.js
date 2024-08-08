@@ -43,7 +43,7 @@ function PublicBoard({postInfo}) {
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
                 <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
                 <img onClick={() => { moreON == false ? setmoreON(true) : setmoreON(false) }} src={more} />
-                {moreON && <MoreDelete />} {/*신고, 삭제 모달*/}
+                {moreON && <MoreDelete postInfo = {postInfo}/>} {/*신고, 삭제 모달*/}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
@@ -211,7 +211,7 @@ function BigCommentsList() {
                     <div className={styles.listNav}>
                         <div className={styles.listName}>닉네임<div className={styles.time}>4시간</div></div>
                         <div><img onClick={() => { commentMoreON == false ? setCommentmoreON(true) : setCommentmoreON(false) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
-                        {commentMoreON && <div ref={modalRef}><MoreDeleteMini/></div>}</div> {/*신고, 삭제 모달*/}
+                        {commentMoreON && <div ref={modalRef}><MoreDeleteMini /></div>}</div> {/*신고, 삭제 모달*/}
                     </div>
                     <div className={styles.listContent}>어쩌구 저쩌구 이래구 저래구 ^^</div>
                 </div>
@@ -219,7 +219,7 @@ function BigCommentsList() {
         </div>
     )
 }
-function MoreDelete() {
+function MoreDelete({postInfo}) {
     let [deleteWrote, setDeleteWrote] = useState(true) //★내가 쓴 글이면 활성화 코드 추가★
     return (
         <div  className={styles.moreUi} style={{right:'-82px',top:'30px'}}>
