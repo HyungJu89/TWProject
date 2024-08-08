@@ -20,7 +20,7 @@ public class UserInfoRestController {
 	
 	@PostMapping("/key")
 	public Map<String, Object> getUserKey(@RequestParam("sessionId") String sessionId) {
-		System.out.println(sessionId + "------------------------=======");
+
 		int num = userService.selectUserKey(sessionId);
 		
 		Map<String, Object> result = new HashMap<>();

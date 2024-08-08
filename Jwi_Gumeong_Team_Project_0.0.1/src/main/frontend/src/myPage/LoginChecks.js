@@ -31,7 +31,7 @@ function LoginChecks(props) {
 
     return(
         <>
-        <div className={styles.MyPageContainer}>
+            <div className={styles.MyPageContainer}>
                 <div className={styles.topFont}>로그인 검증</div>
                 <div className={styles.topFont2}>정보를 수정 하기 전 본인 인증을 위해 한번 더 로그인을 해주세요.</div>
                 {/* 아이디 input */}
@@ -67,7 +67,7 @@ function LoginChecks(props) {
                         else {props.setLoginCheck(true)}
                         // if(이메일과 비밀번호가 적혀있으면){대충 엑시오스 요청해서 데이터베이스랑 데이터대조 후 로그인진행}
                     }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>다음</button>
-        </div>
+            </div>
         </>
     );
 }

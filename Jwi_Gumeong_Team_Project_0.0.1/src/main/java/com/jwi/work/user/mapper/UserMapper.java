@@ -23,12 +23,10 @@ public interface UserMapper{
 		public ArrayList<String> banEmailList();
 		//이메일 체크
 		public int emailCheck(String email);
-		//userKey로 유저확인
-		public User userInfo(int userKey);
 		//userKey 받아오기
-		public int getUserKey(String email);
+		public String getUserKey(String email);
 		//sessionId테이블에서 userKey 받아오기
-		public int getSessionUser(String sessionId);
+		public String getSessionUser(String sessionId);
 		//loginLog 테이블에 저장
 		public void saveLog(LoginLog loginLog);
 		//session ticket 발급테이블에 저장
@@ -36,16 +34,18 @@ public interface UserMapper{
 		//새로 로그인했을 때 새로 sessionId 발급 및 저장
 		public void updateSessionId(UserConnection userConnection);
 		//session 아이디 체크
-		public int sessionUserCheck(int userKey);
+		public int sessionUserCheck(String userKey);
 		//비밀번호 틀린횟수 받아오기
-		public int wrongCount(int userKey);
+		public int wrongCount(String userKey);
 		//비밀번호 틀린횟수 받아오기2
-		public ArrayList<Integer> wrongList(int userKey);
+		public ArrayList<Integer> wrongList(String userKey);
 		//sessionId 발급 및 저장
 		public void updateSessionId(User user);
 		//sessonId로 유저확인
 		public User userInfo(String sessionId);
 		// 로그인 후 키값 찾아오기
 		public int getUserKeyBySessionId(@Param("sessionId") String sessionId);
+	//여기부터 비번찾기
+		public void updatePw(User user);
 }
 

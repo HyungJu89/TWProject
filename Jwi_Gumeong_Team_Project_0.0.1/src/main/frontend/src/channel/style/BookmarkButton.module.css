@@ -41,7 +41,7 @@
 }
 
 
- .bookMark{
+.bookMark{
     width: 123px;
     height: 38px;
     border-radius: 83px;
@@ -51,13 +51,13 @@
     background-color: #E5E5E5;
     cursor: pointer;
 }
- .bookMark img{
-  width: 20px;
-  height: 20px;
-  margin-right: 2px;
+.bookMark img{
+    width: 20px;
+    height: 20px;
+    margin-right: 2px;
 }
 
- .bookMark .text{
+.bookMark .text{
     font-size: 14px;
     font-weight: 700;
     color: #999999;

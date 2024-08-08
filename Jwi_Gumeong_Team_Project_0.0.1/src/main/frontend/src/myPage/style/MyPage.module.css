@@ -14,19 +14,19 @@
     margin-top: 30px;
 }
 
- .Nav .topicdiv {
+.Nav .topicdiv {
     display: flex;
     align-items: center;
     margin-left: 30px;
 }
 
- .Nav .topicdiv div { 
+.Nav .topicdiv div { 
     margin-right: 30px;
     position: relative;
     cursor: pointer;
 }
 
- .Nav .topicdiv .bar {
+.Nav .topicdiv .bar {
     position: absolute;
     left: 50%;
     top: 41px;

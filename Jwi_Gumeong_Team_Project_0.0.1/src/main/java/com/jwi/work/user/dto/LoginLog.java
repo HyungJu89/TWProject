@@ -9,7 +9,7 @@ public class LoginLog {
 	
 	private int loginKey;
 	
-	private int userKey;
+	private String userKey;
 	
 	private int loginSuccess;
 	
