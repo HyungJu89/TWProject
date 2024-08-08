@@ -10,22 +10,31 @@ import MainBanner from './MainBanner.js';
 import PublicBoard from '../main/PublicBoard.js'
 import ChannelBody from './ChannelBody.js';
 import PublicMenu from '../main/PublicMenu.js'
-import { checkChannel } from '../recycleCode/Axios.js';
+import { channelGet } from '../recycleCode/ChannelAxios.js';
+import {searchPost} from '../recycleCode/postAxios.js'
 
 function ChannelHome() {
     let { channelId } = useParams();
     const navigate = useNavigate();
-    
+    const [channelInfo,serChannelInfo] = useState();
+    const [postList,setPostList] = useState([]);
+    const [page,setPage] = useState(1);
+    const fetchData = async (channelKey,page) => {
+        const postListData = await searchPost('channel',channelKey,page);
+        setPostList(postListData)
+    };
 
     const handleCheckChannel = async (channelId) => {
         try {
-            const isChannelValid = await checkChannel(channelId); // 비동기 호출
-            console.log(isChannelValid)
-            if (isChannelValid) {
+            const channel = await channelGet(channelId); // 비동기 호출
+            if (!channel.success) {
                 alert("생성되지 않은 게시판입니다.");
                 return navigate('/');
             }
-        
+
+            serChannelInfo(channel.info)
+            fetchData(channel.info.channelKey,page)
+
         } catch (error) {
             console.error('채널 확인 중 오류 발생:', error);
             navigate('/');
@@ -35,9 +44,12 @@ function ChannelHome() {
     //들어오자마자 작동
     useEffect(()=>{
     // 비동기 함수 호출
-    
     handleCheckChannel(channelId);
-    },[])
+    },[channelId])
+
+    useEffect(()=>{
+        fetchData(channelInfo?.channelKey)
+    },[channelInfo,page])
 
 //------------------------------------------------------------------------------
 const [channel, setChannel] = useState('');
@@ -101,9 +113,15 @@ useEffect(() => { /*파트너스 추천*/
             <div className={style.channelInfoBack}>
                 <div className={style.mainList}>
                     <div className={style.listLeft}>
-                        <PostCreate channelId={channelId} />
+                        <PostCreate channelKey={channelInfo.channelKey} />
                         <div className={style.postList}>
-                            <PublicBoard />
+                            {postList.success && 
+                                <>
+                                    {postList.search.map((postInfo,index)=>
+                                        <PublicBoard key={index} postInfo = {postInfo}/>
+                                    )}
+                                </>
+                            }
                         </div>
                         <div className={style.bottomPaging}>페이징</div>
                     </div>

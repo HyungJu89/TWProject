@@ -26,9 +26,9 @@ public class PostService {
 	@Autowired
 	private FileManagerUtil fileManagerUtil;
 	
-	public AnswerDto postCreate(int channelKey, int userKey, String content, List<MultipartFile> files) {
+	public AnswerDto<String> postCreate(int channelKey, int userKey, String content, List<MultipartFile> files) {
 
-		AnswerDto answer = new AnswerDto();
+		AnswerDto<String> answer = new AnswerDto<>();
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		String imageJson = null;
@@ -88,11 +88,11 @@ public class PostService {
 
 			postMapper.postCreate(postCteateDto);
 
-			answer.setCreateSuccess(true);
+			answer.setSuccess(true);
 
 		} catch (IOException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
-			answer.setCreateSuccess(false);
+			answer.setSuccess(false);
 		}
 
 		return answer;

@@ -11,11 +11,14 @@ public interface SearchMapper {
 
 public int searchChannelCount(@Param("search") String search);
 
-public List<ChannelDto> searchChannel(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
+public List<Object> searchChannel(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
 
 public int searchPostCount(@Param("search") String search);
 
-public List<PostDto> searchPost(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
 
+public List<Object> searchPost(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
 
+public int channelPostCount(@Param("search") String search);
+
+public List<Object> channelPost(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
 }

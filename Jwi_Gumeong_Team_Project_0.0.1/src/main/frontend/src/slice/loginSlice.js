@@ -50,7 +50,4 @@ let userState = createSlice({
     }
 })
 
-
-
-
 export default userState;

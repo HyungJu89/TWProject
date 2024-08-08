@@ -1,5 +1,6 @@
 server:
   port : 9090
+  
 spring:
 
   datasource:
@@ -18,7 +19,7 @@ spring:
           auth: true
           starttls:
             enable: true    
-        
+         
   jpa:
     hibernate:
       ddl-auto: none
@@ -33,5 +34,8 @@ spring:
 logging:
   level:
     '[org.hibernate.SQL]': debug
+    
 
+file:
+  upload-dir: uploads/resources/fileupload/
   

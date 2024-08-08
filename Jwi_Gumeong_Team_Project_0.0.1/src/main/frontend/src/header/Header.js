@@ -3,7 +3,7 @@
 */
 
 /* eslint-disable */
-// ^워링 업애주는 친구
+// ^워링 업애주는 친구 (< 아하 좋은 친구네요~)
 
 import React, { useEffect, useState } from 'react';
 import styles from './style/Header.module.css';
@@ -30,16 +30,14 @@ import '../App.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 
-function Header({onClickSearch}) {
+function Header({onClickSearch, onLogout}) {
     let [loginOn, setLoginOn] = useState(true); //로그인 확인 변수
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
-    const userState = useSelector((state) => state.userState);
+    const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
+    const isLoggedIn = useSelector((state) => state.session.isLoggedIn); // 로그인 상태
     let navigate = useNavigate();
-    //세션화에서 세션아이디 json문자열 빼기.
-    // var jsonSessionInfo = sessionStorage.getItem('sessionId');
-    // var sessionInfo = JSON.parse(jsonSessionInfo);
-    // var sessionId = sessionInfo.sessionId;
+
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
         let justSearchLocal = localStorage.getItem('search')
@@ -63,15 +61,21 @@ function Header({onClickSearch}) {
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
                 <div className={styles.icon}>
-                    {loginOn === true && <Icon navigate={navigate}/>} {/* 로그인 체크 */}
-                    <div onClick={() => { navigate('/signIn') }} className={styles.signInBtn}>로그인</div>
+                    {isLoggedIn ? (
+                        <>
+                            <Icon navigate={navigate} userKey={userKey} />
+                            <div onClick={onLogout} className={styles.signInBtn}>로그아웃</div>
+                        </>
+                    ) : (
+                        <div onClick={() => { navigate('/signIn') }} className={styles.signInBtn}>로그인</div>
+                    )}
                 </div>
             </div>
         </>
     );
 }
 
-function Icon({navigate}) { /* 로그인 시 노출되는 알림 아이콘 UI */
+function Icon({navigate, userKey}) { /* 로그인 시 노출되는 알림 아이콘 UI */
     let [img, setImg] = useState(notification_deactivation); /*알림 hover 이팩트 변환용*/
     let [showNotifications, setShowNotifications] = useState(false); /* 알림 모달 표시 여부 */
 
@@ -86,17 +90,33 @@ function Icon({navigate}) { /* 로그인 시 노출되는 알림 아이콘 UI */
                 onClick={() => setShowNotifications(!showNotifications)}>
                 <img src={img} alt="Notification" />
             </div>
-            {showNotifications && <NotificationModal />}
+            {showNotifications && <NotificationModal userKey={userKey} />}
         </div>
     );
 }
 
-function NotificationModal() { /* 알림 모달찰 */
+function NotificationModal({ userKey }) { /* 알림 모달찰 */
     const [activeButton, setActiveButton] = useState(1); /* 현재 활성화된 버튼 상태 */
     const [showDropdown, setShowDropdown] = useState(false); /* more 아이콘 클릭 시 드롭다운 */
+    const [notifications, setNotifications] = useState([]);
 
     const handleMoreClick = () => {
         setShowDropdown(!showDropdown);
+    };
+
+    useEffect(() => {
+        if (userKey) {
+            getNotifications();
+        }
+    }, [userKey, activeButton]);
+
+    const getNotifications = async () => {
+        try {
+            const response = await axios.get(`아직 없는 url`);
+            setNotifications(response.data);
+        } catch (error) {
+            console.error('알림 Axios 에러:', error);
+        }
     };
 
     // 툴팁
@@ -148,7 +168,6 @@ function NotificationModal() { /* 알림 모달찰 */
     const handleButtonClick = (buttonNumber) => {
         setActiveButton(buttonNumber);
     };
-
 
     /* 내용 배열로 변경 */
     const renderContent = () => {

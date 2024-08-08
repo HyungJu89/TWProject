@@ -11,7 +11,10 @@ public class PartnersApiInfo {
 	//파트너스 API 정보 오브젝트로 정제 
 	public Object PartnersLiveInfo() {
 		String API_URL = null;
-		API_URL = "https://api.chzzk.naver.com/service/v1/streamer-partners/recommended";
+		//파트너스 api **수정 시 main.js import도 바꿔야함
+//		API_URL = "https://api.chzzk.naver.com/service/v1/streamer-partners/recommended";
+		//무작위 방송 api **수정 시 main.js import도 바꿔야함
+		API_URL = "https://api.chzzk.naver.com/service/v1/home/recommendation-channels";
 		
 		RestTemplate restTemplate = new RestTemplate();					
 		URI uri = null; 				

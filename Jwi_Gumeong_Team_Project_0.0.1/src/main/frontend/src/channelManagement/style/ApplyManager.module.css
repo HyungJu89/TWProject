@@ -1,4 +1,69 @@
+.body{
+    font-size: 16px;
+    font-weight: 500;
+    }
 .applyManagerMain{
     margin-top: 20px;
     margin-left: 10px;
+    
+    position: relative;
+}
+
+.searchPopUp{
+    position: absolute;
+    left: 50%;
+    top: 100px;
+    transform: translate(-50%, -0%);
+
+    z-index: 1000;
+    padding: 20px 9px;
+    width: 688px;
+    max-height: 400px;
+    background-color: white;
+    border: 1px solid #F3F3F3;
+    box-shadow: 0px 2px 3.9px 0px #00000080;
+}
+.searchPopUp .scroll{
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.searchPopUp .result{
+    padding: 11px;
+    border-radius: 0px;
+    margin: 4.5px 0px ;
+}
+.searchPopUp .result:hover{
+    background: #F3F3F3;
+}
+
+
+.formGroup {
+    display: flex;
+    align-items: center;
+}
+.formGroup img{
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+}
+.formGroup .streammerInfo{
+    width: 479px;
+    margin-right: 30px;
+}
+.formGroup .streammerInfo .channelName{
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+.formGroup .streammerInfo .follower{
+    font-size: 15px;
+    color: #999999;
+    display: flex;
+}
+.formGroup .streammerInfo .follower .markCount{
+  margin-right: 20px;
 }

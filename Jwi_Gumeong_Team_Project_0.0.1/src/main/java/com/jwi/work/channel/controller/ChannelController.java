@@ -10,27 +10,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.ChannelCreateDto;
-import com.jwi.work.channel.service.CreateChannelService;
+import com.jwi.work.channel.dto.ChannelDto;
+import com.jwi.work.channel.service.ChannelService;
 
 @RestController
 @RequestMapping("/channel/*")
-public class ChannelCreateController {
+public class ChannelController {
 
 	@Autowired
-	private CreateChannelService createChannelService;
+	private ChannelService channelService;
 
 	@GetMapping("/check")
 	public boolean channelCheck(@RequestParam("channelId") String channelId) {
 
-		return createChannelService.channelCheck(channelId);
+		return channelService.channelCheck(channelId);
 
 	}
 
 	@PostMapping("/create")
-	public AnswerDto channelCreate(@RequestBody ChannelCreateDto channelCreate) {
+	public AnswerDto<String> channelCreate(@RequestBody ChannelCreateDto channelCreate) {
 
-		return createChannelService.channelCreate(channelCreate);
+		return channelService.channelCreate(channelCreate);
 
 	}
+	
+	@GetMapping("/get")
+	public AnswerDto<ChannelDto> channelGet(@RequestParam("channelId") String channelId){
+		
+		System.out.println(channelService.channelGet(channelId));
+		return channelService.channelGet(channelId);
+	}
+	
+	
 
 }

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from './style/FavoritesManagement.module.css';
-import List from '../icon/24px/List.png'; 
-import Star from '../icon/20px/bookmark-deactivation.png'; 
-import Left from '../icon/btn/btn-left.png'; 
-import Right from '../icon/btn/btn-right.png'; 
+import List from '../icon/24px/List.png';
+import Star from '../icon/20px/bookmark-deactivation.png';
+import Left from '../icon/btn/btn-left.png';
+import Right from '../icon/btn/btn-right.png';
 import { useQuery } from 'react-query';
 import PublicBoard from '../main/PublicBoard.js';
 import Paging from '../Paging/Paging.js'
@@ -12,28 +12,6 @@ import BookmarkButton from '../channel/BookmarkButton.js'
 
 //즐겨찾기 관리페이지
 function FavoritesManagement() {
-    const [channel, setChannel] = useState('');
-
-    // 첫 번째 쿼리: 채널 정보를 가져오기.
-    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useQuery('channel', () =>
-        axios.get(`/channelRest/search/123123`)
-            .then((response) => {
-                setChannel(response.data.content)
-                return response.data.content
-            })
-            .catch(error => {
-                console.error('Channel API Error:', error);
-                throw error;
-            }),
-    );
-
-    if (isLoadingChannel) {
-        return <div>로딩중</div>;
-    }
-
-    if (isErrorChannel) {
-        return <div>에러남</div>;
-    }
     const formatUnit = (number) => {
         let unit = ['만', '천']
         let num = [10000, 1000]
@@ -53,36 +31,28 @@ function FavoritesManagement() {
         <div className={styles.MyPageContainer}>
             <div className={styles.formGroup}>
                 <img src={List} />
-                <ChannelTitle channel={channel} />
+                <div className={styles.title}> {/* 클릭시 URL 이동 */}
+                    <img src='https://nng-phinf.pstatic.net/MjAyMzEyMjBfNDkg/MDAxNzAzMDU1NjA1MTY2.bCUbi8bRvnKsF6Gmw_EIPrll1fPYTkJzTDo243vchEEg.JIYN6Ve8RVWFNqjdiwrEImVAAK4s-bNrJRRGA0ikM8sg.JPEG/%EA%B7%B8%EC%9C%BD.jpg?type=f120_120_na' />
+                </div>
                 <div className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
-                    <div className={styles.channelName}>{channel.channelName}</div>
+                    <div className={styles.channelName}>채널명 DB에서떼오기</div>
                     <div className={styles.follower}>
                         <div className={styles.markText}>팔로워</div>
-                        <div className={styles.markCount}> {formatUnit(channelApi.followerCount)}</div>
+                        <div className={styles.markCount}> {formatUnit(142400)}</div>
                         <div className={styles.markText}>즐겨찾기</div>
                         <div className={styles.markCount}> 10000만</div>
                     </div>
                 </div>
                 <div className={styles.bookMark}>
-                <BookmarkButton/>
+                    <BookmarkButton />
                 </div>
             </div>
             <hr className={styles.horizontalLine} />
             <div className={styles.Paging}>
-                <div className={styles.PagingNum} style={{marginTop : '30px'}}><img src={Left}/><div>1/5</div><img src={Right}/></div>
+                <div className={styles.PagingNum} style={{ marginTop: '30px' }}><img src={Left} /><div>1/5</div><img src={Right} /></div>
             </div>
         </div>
     )
 }
 
-function ChannelTitle({ channel }) {
-    return (
-        <div>
-            <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                <img src={channel.channelImageUrl} />
-            </div>
-            <div className={styles.dashed} />{/* 회색줄 */}
-        </div>
-    )
-}
 export default FavoritesManagement;

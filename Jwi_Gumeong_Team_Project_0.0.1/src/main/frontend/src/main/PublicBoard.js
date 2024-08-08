@@ -20,60 +20,46 @@ import { openImgUiModal } from '../slice/mainSlice';
 import Emogi from '../Emogi/Emogi.js';
 
 
-function PublicBoard() {
+function PublicBoard({postInfo}) {
     let [heart, setHeart] = useState(true); //좋아요 누름 확인
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
     //이미지
-    let [imgBeing, setImgBeing] = useState(1);// 이미지가 존재하는지 검사
+
+    let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
 
     let state = useSelector((state)=>{ return state });
     let disPatch = useDispatch();
 
-    const [channel, setChannel] = useState('');
-    // 첫 번째 쿼리: 채널 정보를 가져오기.
-    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useQuery('channel', () =>
-        axios.get(`/channelAPI/search/0b33823ac81de48d5b78a38cdbc0ab94`)
-            .then((response) => {
-                setChannel(response.data.content)
-                return response.data.content
-            })
-            .catch(error => {
-                console.error('Channel API Error:', error);
-                throw error;
-            }),
-    );
-    if (isLoadingChannel) {
-        return <div>로딩중</div>;
+    useEffect(()=>{
+        if(postInfo.image){
+        setImgBeing(JSON.parse(postInfo.image));
     }
-    if (isErrorChannel) {
-        return <div>에러남</div>;
-    }
-
+    },[])
     return (
         <div className={styles.mainDiv}>
-            <ChannelTitle channel={channel} />
+            <ChannelTitle postInfo={postInfo} />
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
-                <div className={styles.name}>작성자 이름 <div className={styles.grayText}>· 1일</div></div>
+                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
                 <img onClick={() => { moreON == false ? setmoreON(true) : setmoreON(false) }} src={more} />
                 {moreON && <MoreDelete />} {/*신고, 삭제 모달*/}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
-                    뉴비라 오늘 조합 검 사 받았는데. 진짜 할거 많더라.<br />
-                    피드백 많이 해주셔서 원신 할거 겁나 많이 생김<br />
-                    우리 백출.. 잘 키워야지<br/>
+                    {postInfo.content}
                 </div>
+                {imgBeing.length > 0 &&
                  <div onClick={()=>disPatch(openImgUiModal())}  className={styles.imgClick}>{/* 이미지 */}
                     <div className={styles.imgArea}>
-                        <img src='https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/product/5367703706/B.jpg?675000000' />
-                        {imgBeing > 0 &&
-                            <div onMouseEnter={() => { setImgCount('+3') }} onMouseLeave={() => { setImgCount('') }} className={styles.imgArea}>
+                        <img src={`http://localhost:9090/images/${imgBeing[0]}`} />
+                        {imgBeing.length > 0 &&
+                            <div onMouseEnter={() => { setImgCount("+"+imgBeing.length) }} onMouseLeave={() => { setImgCount('') }} className={styles.imgArea}>
                                 {imgCount}
                             </div>}
                     </div>
                 </div>
+                }
             </div>
             <div className={styles.widthNav} style={{ marginBottom: '0px' }}>{/* 하단 댓글,좋아요,공유 */}
                 <div className={styles.commentsDiv}>
@@ -90,12 +76,12 @@ function PublicBoard() {
         </div>
     )
 }
-function ChannelTitle({ channel }) {
+function ChannelTitle({ postInfo }) {
     let navigate = useNavigate();
     return (
-        <div onClick={()=>{navigate('/channel/0b33823ac81de48d5b78a38cdbc0ab94')}}>
+        <div onClick={()=>{navigate(`/channel/${postInfo.channelId}`)}}>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.channelName}</div>
+                <img src={postInfo.imageUrl} /><div style={{cursor:'pointer'}}>{postInfo.name}</div>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
         </div>
