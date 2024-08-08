@@ -1,4 +1,4 @@
--- 2024-08-08 11시 39분 [임재열] V 0.1.5 
+-- 2024-08-08 16시 52분 [임재열] V 0.1.5 
 -- 수정내용 : 외래키 사용 및 참조된 외래키가 삭제되면 해당 키를 참조하는 모든 행을 삭제
 -- 외래키란? : 다른테이블의 정보를 참조할때 사용하는 key
 
@@ -6,8 +6,6 @@
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-select * from user;
-select * from channel;
 
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '유저키',
@@ -218,4 +216,19 @@ CREATE TABLE `Image` (
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE `loginLog`(
+`loginKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+`userKey` INT NOT NULL,
+`loginSuccess` TINYINT NOT NULL DEFAULT 0,
+`createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+`updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
+);
+CREATE TABLE `userConnection` (
+`userKey`   INT  NOT NULL,
+`sessionId` VARCHAR(30) UNIQUE NULL,
+`createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+`updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
+);
 
