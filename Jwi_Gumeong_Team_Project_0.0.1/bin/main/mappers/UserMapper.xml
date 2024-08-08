@@ -32,7 +32,7 @@
 		select * from user where userKey = #{userKey}
 	</select>
 	<!-- 유저 key값 받아오기 -->
-	<select id="getUserKey" resultType="int" parameterType="String">
+	<select id="getUserKey" resultType="String" parameterType="String">
 		select userKey from user where email = #{email}
 	</select>
 	<!-- 로그인 로그찍기  -->
@@ -41,7 +41,7 @@
 		(userKey,loginSuccess)value(#{userKey},#{loginSuccess})
 	</insert>
 	<!-- sessionId로 유저 key값 받아오기 -->
-	<select id="getSessionUser" resultType="int" parameterType="String">
+	<select id="getSessionUser" resultType="String" parameterType="String">
 		select userKey from userConnection where sessionId = #{sessionId}
 	</select>
 	<!-- session 아이디 발급하기-->
@@ -54,15 +54,15 @@
     	UPDATE userConnection SET `sessionId` = #{sessionId} WHERE `userKey` = #{userKey}
     </update>
     <!-- 유저 session 발급아이디 체크하기 -->
-	<select id="sessionUserCheck" resultType="int" parameterType="int">
+	<select id="sessionUserCheck" resultType="int" parameterType="String">
 		select count(*) from userConnection where userKey = #{userKey}
 	</select>
 	<!-- 비밀번호 틀린 카운트 -->
-	<select id="wrongCount" resultType="int" parameterType="int">
+	<select id="wrongCount" resultType="int" parameterType="String">
 		select count(*) from loginLog where userKey = #{userKey} and loginSuccess = 1
 	</select>
 	<!-- 비밀번호 틀린 카운트2 -->
-	<select id="wrongList" resultType="int" parameterType="int">
+	<select id="wrongList" resultType="int" parameterType="String">
         SELECT loginSuccess FROM loginLog WHERE userKey = #{userKey} ORDER BY createdAt DESC LIMIT 5;
 	</select>
 	<!-- 세션ID로 유저 키값 찾기 -->
