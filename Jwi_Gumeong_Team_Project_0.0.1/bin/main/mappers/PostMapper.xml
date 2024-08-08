@@ -5,7 +5,7 @@
 
 	
 	<select id="selectHash" parameterType="String" resultType="com.jwi.work.channel.dto.ImageDto">
-		SELECT * FROM Image WHERE imageHash = #{imageHash}
+		SELECT * FROM image WHERE imageHash = #{imageHash}
 	</select>
 	
 	<insert id="postCreate" parameterType="com.jwi.work.channel.dto.PostCreateDto">
@@ -13,16 +13,33 @@
 	</insert>
 
 	<insert id="insertImg" parameterType="com.jwi.work.channel.dto.ImageDto">
-		INSERT INTO Image(imageUrl,imageHash,referenceCount) value (#{imageUrl},#{imageHash},1)
+		INSERT INTO image(imageUrl,imageHash,referenceCount) value (#{imageUrl},#{imageHash},1)
 	</insert>
 	
 	<update id="referenceUp" parameterType="String">
-		UPDATE Image set referenceCount = referenceCount + 1 WHERE #{imageHash}
+		UPDATE image set referenceCount = referenceCount + 1 WHERE #{imageHash}
 	</update>
 	
 	<update id="referenceDown" parameterType="String">
-		UPDATE Image set referenceCount = referenceCount - 1 WHERE #{imageHash}
+		UPDATE image set referenceCount = referenceCount - 1 WHERE #{imageHash}
 	</update>
+
+	<delete id="deleteImg" parameterType="int">
+		DELETE FROM image WHERE imageKey = #{imageKey}
+	</delete>
+
+	<select id="postInfo" resultType="com.jwi.work.channel.dto.PostDto" parameterType="int">
+		SELECT * FROM post WHERE postKey = #{postKey}
+	</select>
+	
+	<select id="selectUrl" parameterType="String">
+		SELECT * FROM image WHERE imageUrl = #{imageUrl}
+	</select>
+	
+	<delete id="deletePost" parameterType="int">
+		DELETE FROM post WHERE postKey = #{postKey}
+	</delete>
+
 
 
 </mapper>
