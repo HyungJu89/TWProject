@@ -1,5 +1,3 @@
-
-
 .createChannel {
     /*채널 검색 부분 컨테이너*/
     margin-top: 20px;
@@ -18,9 +16,6 @@
     margin-left: 3px;
 }
 
-
-
-
 .warningText {
     margin-top: 10px;
     font-size: 16px;
@@ -28,6 +23,5 @@
     line-height: 20.03px;
     letter-spacing: 0.0075em;
     text-align: left;
-
 }
 

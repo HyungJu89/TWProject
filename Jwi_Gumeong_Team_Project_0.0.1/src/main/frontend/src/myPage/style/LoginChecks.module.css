@@ -1,12 +1,9 @@
-
-
 .MyPageContainer {
     background-color: #FFFFFF; 
     width: 626px;
     padding: 80px;
     margin: 0px auto;
     border-radius: 20px;
-    
 }
 
 .topFont {
@@ -43,7 +40,6 @@
 .email::placeholder {
     font-size: 15px;
 }
-
 
 .formGroup {
     width: 626px;
@@ -109,7 +105,7 @@
     background-color: #FF8901; /* 활성화된 배경색 */
 }
 
- .Nav {
+.Nav {
     width: 786px;
     height: 60px;
     background: #FFFFFF;
@@ -122,19 +118,19 @@
     top: 190px;
 }
 
- .Nav .topicdiv {
+.Nav .topicdiv {
     display: flex;
     align-items: center;
     margin-left: 30px;
 }
 
- .Nav .topicdiv div { 
+.Nav .topicdiv div { 
     margin-right: 30px;
     position: relative;
     cursor: pointer;
 }
 
- .Nav .topicdiv .bar {
+.Nav .topicdiv .bar {
     position: absolute;
     left: 50%;
     top: 41px;

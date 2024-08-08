@@ -18,6 +18,7 @@ import ImgUi from './imgModal/imgModal.js';
 import Admin from './admin/Admin.js';
 import AdminMain from './admin/AdminMain.js';
 import AdminLogin from './admin/AdminLogin.js';
+import NotFound from './notFound/NotFound.js';
 import { setSessionId, setUserKey, clearSession, setLoggedIn } from './slice/sessionSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
@@ -32,7 +33,6 @@ function App() {
     useEffect(() => {
         const storeSessionId = sessionStorage.getItem("sessionId");
         var sessionInfo = JSON.parse(storeSessionId);
-        console.log(storeSessionId);
         if (sessionInfo) {
             dispatch(setSessionId(sessionInfo.sessionId));
             userKey(sessionInfo.sessionId);
@@ -84,7 +84,7 @@ function App() {
                     <Route path='/channelManagement' element={<ChannelManagement/>}/>
                     <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
                     <Route path="/pageCheck" element={<BlinkPage/>}></Route>{/*채널 존재 여부 확인 게시판*/}
-                    <Route path="*" element={<div>404 넣으면 됩니다!</div>}></Route>
+                    <Route path="*" element={<NotFound/>}></Route>
                     <Route path='/admin' element={<Admin/>}>
                         <Route path='login' element={<AdminLogin/>}></Route>{/*관리자*/}
                     </Route>
