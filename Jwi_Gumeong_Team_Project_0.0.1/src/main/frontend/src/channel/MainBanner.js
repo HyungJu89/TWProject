@@ -35,9 +35,6 @@ function MainBanner({ channelId, route,
         setPartnersLiveInfo(channelApi);
     }, [liveInfoApi,channelApi, channelId, channelIdSub1, channelIdSub2, channelIdSub3]);
 
-    console.log(channelId);
-    console.log('gd');
-
     if (isLoadingLiveInfo || isLoadingChannel ||
         isLoadingLiveInfo1 || isLoadingChannel1 ||
         isLoadingLiveInfo2 || isLoadingChannel2 ||

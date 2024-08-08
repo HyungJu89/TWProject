@@ -116,7 +116,7 @@ function Comments() {
 function CommentsZero(){
     return(
         <div className={styles.CommentsZero}>
-           댓글이 없어요.
+            댓글이 없어요.
         </div>
     )
 }

@@ -18,7 +18,7 @@ import ImgUi from './imgModal/imgModal.js';
 import Admin from './admin/Admin.js';
 import AdminMain from './admin/AdminMain.js';
 import AdminLogin from './admin/AdminLogin.js';
-import { setSessionId, setUserKey, clearSession } from './slice/sessionSlice.js';
+import { setSessionId, setUserKey, clearSession, setLoggedIn } from './slice/sessionSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
 import axios from 'axios';
@@ -31,9 +31,16 @@ function App() {
     
     useEffect(() => {
         const storeSessionId = window.sessionStorage.getItem("sessionId");
-        if (storeSessionId) {
-            dispatch(setSessionId(storeSessionId));
-            userKey(storeSessionId);
+        var sessionInfo = JSON.parse(storeSessionId);
+        if (sessionInfo) {
+            dispatch(setSessionId(sessionInfo));
+            userKey(sessionInfo);
+        }
+
+        // 스토리지에서 isLoggedIn 상태 복구
+        const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+        if (isLoggedIn) {
+            dispatch(setLoggedIn(true));
         }
     }, [dispatch]);
 
