@@ -8,7 +8,7 @@ import '../App.css'
 import { useNavigate, useParams } from 'react-router-dom';
 import {formatUnit} from '../recycleCode/FormatUnit.js';
 import axios from 'axios';
-function PostCreact() {
+function PostCreact({channelKey}) {
 
     const navigate = useNavigate();
     let { channelId } = useParams();
@@ -78,7 +78,7 @@ function PostCreact() {
         formData.append('content',content);
         // 로그인 기능 완성되면 유저 키값이 들어가도록 변경
         formData.append('userKey',1);
-        formData.append('channelKey',4);
+        formData.append('channelKey',channelKey);
         selectedImage.forEach(({file}) => {
             formData.append('files',file);
         });

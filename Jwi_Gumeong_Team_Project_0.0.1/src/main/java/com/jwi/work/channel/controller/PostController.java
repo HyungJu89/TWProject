@@ -20,18 +20,18 @@ public class PostController {
 	private PostService postService;
 	
 	@PostMapping("/create")
-	public AnswerDto postCreate(
+	public AnswerDto<String> postCreate(
 			@RequestParam("channelKey") int channelKey,
 			@RequestParam("userKey") int userKey,
             @RequestParam("content") String content,
             @RequestParam(value = "files", required = false) List<MultipartFile> files
 			) {
 		
-		
-		
 		return postService.postCreate(channelKey,userKey,content,files);
 		
 	}
+	
+	
 	
 	
 }

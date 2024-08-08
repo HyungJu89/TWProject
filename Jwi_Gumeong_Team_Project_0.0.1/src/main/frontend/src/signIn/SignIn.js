@@ -47,10 +47,17 @@ function SignIn() {
             checkUser();
         }
     };
+    
     const checkUser = async () => {
         if (email !== '' && password !== '') {
             try {
-                const userResponse = await axios.get('/signIn/loginCheck', { params: { email: email, pw: password } });
+
+                const userData = {
+                    email: email,
+                    pw: password
+                };
+
+                const userResponse = await axios.post('/signIn/loginCheck', userData);
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
                     dispatch(getUserInfo(userResponse.data.userKey));

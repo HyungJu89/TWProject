@@ -7,8 +7,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from './style/Header.module.css';
-import {Link, useNavigate} from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import {Link, useNavigate, useLocation} from 'react-router-dom';
 //이미지 import
 import Logo from '../icon/logo/logo.png'; //로고 이미지
 import searching from '../icon/24px/searching.png';
@@ -28,6 +27,8 @@ import n_service_activation from '../icon/32px/n-service-activation.png';
 import n_service_deactivation from '../icon/32px/n-service-deactivation.png';
 import more from '../icon/24px/more.png';
 import '../App.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 
 function Header({onClickSearch, onLogout}) {
     let [loginOn, setLoginOn] = useState(true); //로그인 확인 변수
@@ -35,8 +36,12 @@ function Header({onClickSearch, onLogout}) {
     const [searchInput,setSearchInput] = useState('');
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
     const isLoggedIn = useSelector((state) => state.session.isLoggedIn); // 로그인 상태
+    let [adminLogin] = useState(false);
     let navigate = useNavigate();
-
+    let location = useLocation();
+    if(location.pathname.indexOf('/admin') === 0 ){
+        adminLogin = true;
+    }
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
         let justSearchLocal = localStorage.getItem('search')
@@ -58,16 +63,17 @@ function Header({onClickSearch, onLogout}) {
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
-                <div className={styles.icon}>
+               
                     {isLoggedIn ? (
-                        <>
+                         <div className={styles.icon}>
                             <Icon navigate={navigate} userKey={userKey} />
                             <div onClick={onLogout} className={styles.signInBtn}>로그아웃</div>
-                        </>
+                        </div>
                     ) : (
-                        <div onClick={() => { navigate('/signIn') }} className={styles.signInBtn}>로그인</div>
+                        <div className={styles.icon} style={{justifyContent:'end'}}>
+                        <div onClick={() => { { adminLogin !== true ? navigate('/signIn') : navigate('/admin/login') } }} className={styles.signInBtn}>로그인</div>
+                        </div>
                     )}
-                </div>
             </div>
         </>
     );

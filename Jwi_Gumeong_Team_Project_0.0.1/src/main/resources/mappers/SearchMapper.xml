@@ -10,7 +10,7 @@
 		CONCAT('%',#{search},'%')
 	</select>
 
-	<select id="searchChannel" parameterType="map" resultType="com.jwi.work.channel.dto.ChannelDto">
+	<select id="searchChannel" parameterType="map" resultType="map">
 		SELECT
 			channel.*,
 			COALESCE(COUNT(favorites.channelKey), 0) AS favoriteCount 
@@ -28,14 +28,55 @@
 
 	<!-- 개시글 검색시 -->
 	<select id="searchPostCount" parameterType="map" resultType="int">
-		SELECT COUNT(*) FROM channel WHERE post LIKE
+		SELECT COUNT(*) FROM post WHERE content LIKE
 		CONCAT('%',#{search},'%')
 	</select>
+	
+	<select id="searchPost" parameterType="map" resultType="map">
+		SELECT 
+			post.*,
+			user.NickName AS nickName,
+			channel.Id AS channelId,
+			channel.name AS name,
+			channel.imageUrl AS imageUrl
+		FROM 
+			post 
+		LEFT JOIN
+			user ON post.userKey = user.userKey
+		LEFT JOIN
+			channel ON post.channelKey = channel.channelKey
+		WHERE 
+			post.content LIKE CONCAT('%',#{search},'%')
+		ORDER BY
+        	post.createdAt DESC
+		LIMIT	
+			#{offset},#{limit}
+	</select>
 
-	<select id="searchPost" parameterType="map" resultType="com.jwi.work.channel.dto.PostDto">
-		SELECT * FROM channel WHERE post LIKE
-		CONCAT('%',#{search},'%')
-		LIMIT	#{offset},#{limit}
+	<!-- 채널에서 개시글 -->
+	<select id="channelPostCount" parameterType="map" resultType="int">
+			SELECT COUNT(*) FROM Post WHERE channelKey = #{search}
+	</select>
+	
+	<select id="channelPost" parameterType="map" resultType="map">
+		SELECT 
+			post.*,
+			user.NickName AS nickName,
+			channel.Id AS channelId,
+			channel.name AS name,
+			channel.imageUrl AS imageUrl
+		FROM 
+			post 
+		LEFT JOIN
+			user ON post.userKey = user.userKey
+		LEFT JOIN
+			channel ON post.channelKey = channel.channelKey
+		WHERE 
+			post.channelKey = #{search}
+		ORDER BY
+        	post.createdAt DESC
+		LIMIT
+			#{offset},#{limit}
 	</select>
 
 </mapper>

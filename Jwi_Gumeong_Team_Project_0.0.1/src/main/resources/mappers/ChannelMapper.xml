@@ -16,6 +16,9 @@
 		(#{id},#{name},#{imageUrl},#{followerCount})
 	</insert>
 
+	<select id="channelGet" parameterType="String" resultType="com.jwi.work.channel.dto.ChannelDto">
+		SELECT * FROM channel WHERE id = #{channelId}
+	</select>
 	
 
 

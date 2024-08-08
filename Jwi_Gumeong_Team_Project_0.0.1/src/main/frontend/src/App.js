@@ -11,12 +11,16 @@ import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import MyPage from './myPage/MyPage.js';
 import Search from './search/Search.js';
+import BlinkPage from './blinkPage/BlinkPage.js';
 import CustomerService from './customerService/CustomerServiceCenter.js';
 import ChannelManagement from './channelManagement/ChannelManagement.js';
 import ImgUi from './imgModal/imgModal.js';
+import Admin from './admin/Admin.js';
+import AdminMain from './admin/AdminMain.js';
+import AdminLogin from './admin/AdminLogin.js';
 import { setSessionId, setUserKey, clearSession } from './slice/sessionSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import axios from 'axios';
 
 function App() {
@@ -61,21 +65,29 @@ function App() {
     //----------------------------------
     return (
         <div>
-        <Header onClickSearch={onClickSearch} onLogout={onLogout}/> {/* 상단 공통 부분 디자인 */}
-        {state.imgUiModal.popUp && <ImgUi/>}{/*이미지 팝업*/}
-        <Routes>
-            <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
-            <Route path='/allTopic' element={<AllTopic/>}/> {/* 전체 채널 */}
-            <Route path='/channel/:channelId' element={<ChannelHome/>}/>{/*채널*/}
-            <Route path='/signIn' element={<SignIn/>}/>
-            <Route path='/signUp' element={<SignUp/>}/>
-            <Route path='/myPage' element={<MyPage/>}/>
-            <Route path='/pwInquiry' element={<PwInquiry/>}/>
-            <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
-            <Route path='/channelManagement' element={<ChannelManagement/>}/>
-            <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
-        </Routes>
-        <Bottom/> {/* 하단 공통 부분 디자인 */}
+            {/* Suspense 의 기능은 컴포넌트가 불러오는 도중일때 fallback 에 등록한 Div 및 컴포넌트를 보여줌 */}
+            <Suspense fallback={<div>로딩중임</div>}>
+                <Header onClickSearch={onClickSearch} onLogout={onLogout}/> {/* 상단 공통 부분 디자인 */}
+                {state.imgUiModal.popUp && <ImgUi/>}{/*이미지 팝업*/}
+                <Routes>
+                    <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
+                    <Route path='/allTopic' element={<AllTopic/>}/> {/* 전체 채널 */}
+                    <Route path='/channel/:channelId' element={<ChannelHome/>}/>{/*채널*/}
+                    <Route path='/signIn' element={<SignIn/>}/>
+                    <Route path='/signUp' element={<SignUp/>}/>
+                    <Route path='/myPage' element={<MyPage/>}/>
+                    <Route path='/pwInquiry' element={<PwInquiry/>}/>
+                    <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
+                    <Route path='/channelManagement' element={<ChannelManagement/>}/>
+                    <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
+                    <Route path="/blinkPage" element={<BlinkPage/>}></Route>
+                    <Route path="*" element={<div>404 넣으면 됩니다!</div>}></Route>
+                    <Route path='/admin' element={<Admin/>}>
+                        <Route path='login' element={<AdminLogin/>}></Route>{/*관리자*/}
+                    </Route>
+                </Routes>
+                <Bottom/> {/* 하단 공통 부분 디자인 */}
+            </Suspense>
         </div>
     );
 }

@@ -8,15 +8,12 @@
 		INSERT INTO user
 		(email,pw,nickName,gender)value(#{email},HEX(AES_ENCRYPT(#{pw}, SHA2('abcabc', 256))),#{nickName},#{gender})
 	</insert>
-
 	<select id="emailTest" resultType="int" parameterType="String">
 		select count(*) from user where email=#{email}
 	</select>
-
 	<select id="nickNameTest" resultType="int" parameterType="String">
 		select count(*) from user where nickName=#{nickName}
 	</select>
-	
 	<!-- 로그인 부분 -->
 	<!-- 유저 정보체크 -->
 	<select id="loginCheck" resultType="int" parameterType="com.jwi.work.user.dto.User">
@@ -68,9 +65,8 @@
 	<select id="wrongList" resultType="int" parameterType="int">
         SELECT loginSuccess FROM loginLog WHERE userKey = #{userKey} ORDER BY createdAt DESC LIMIT 5;
 	</select>
-	
 	<!-- 세션ID로 유저 키값 찾기 -->
 	<select id="getUserKeyBySessionId" resultType="int" parameterType="String">
-		SELECT `userKey` FROM `userConnection` WHERE `sessionId` = #{sessionId}
+			SELECT `userKey` FROM `userConnection` WHERE `sessionId` = #{sessionId}
 	</select>
 </mapper>
