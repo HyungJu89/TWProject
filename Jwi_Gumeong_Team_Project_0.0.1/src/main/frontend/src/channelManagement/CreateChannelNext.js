@@ -12,25 +12,11 @@ import { useChannel } from '../recycleCode/ApiQuery.js';
 import AlarmModal from '../modal/AlarmModal.js';
 
 
-function CreateChannelNext({ notice, channelInfo, channelUrl }) {
+function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
     let navigate = useNavigate();
     const [buttonColor, setButtonColor] = useState('#BBBBBB');
     const [iconColor, setIconColor] = useState(check_deactivation);
     const [checkBoxIcon, setCheckBoxIcon] = useState(false);
-    // 모달 오픈 여부
-    const [modalOpen, setModalOpen] = useState(false);
-    // 모달 내용
-    const [modalContent, setModalContent] = useState('');
-
-    useEffect(() => {
-        setModalOpen(true);
-        setModalContent('채널 생성에 앞서 주의사항을 숙지해주세요.');
-    }, []);
-
-    // 모달 닫기
-    const closeModal = () => {
-        setModalOpen(false);
-    };
 
     const createChannel = async (channelCreate) => {
         try {
@@ -76,37 +62,31 @@ function CreateChannelNext({ notice, channelInfo, channelUrl }) {
     const onClickButton = async () => {
         // 체크박스 예외처리
         if (!checkBoxIcon) {
-            setModalContent('주의사항 숙지 후 체크버튼을 눌러주세요');
-            setModalOpen(true);
+            openModal('주의사항 숙지 후 체크버튼을 눌러주세요.');
             return;
         }
-
         // input 의 값과 API 의 값이 다를때 예외처리
         if (channelUrl !== channelInfo.channelId) {
-            setModalContent('입력한 ID와 생성할 채널의 ID가 다릅니다.');
-            setModalOpen(true);
+            openModal('입력한 ID와 생성할 채널의 ID가 다릅니다.');
             return;
         }
 
         if (notice && checkBoxIcon) {
-            let channelCreate = {
+            const channelCreate = {
                 id: channelInfo.channelId,
                 name: channelInfo.channelName,
                 imageUrl: channelInfo.channelImageUrl,
-                followerCount: channelInfo.followerCount
+                followerCount: channelInfo.followerCount,
             };
             try {
-                let data = await createChannel(channelCreate);
+                const data = await createChannel(channelCreate);
                 if (!data.success) {
-                    setModalContent('이미 생성된 채널입니다. 해당 채널로 이동합니다.');
-                    setModalOpen(true);
+                    openModal('이미 생성된 채널입니다. 해당 채널로 이동합니다.', () => navigate(data.navigate));
+                    return;
                 }
-
-                navigate(data.navigate)
             } catch (error) {
                 console.error('Error creating channel:', error);
-                setModalContent('채널 생성 중 오류가 발생했습니다. 다시 시도해 주세요.');
-                setModalOpen(true);
+                openModal('채널 생성 중 오류가 발생했습니다. 다시 시도해 주세요.');
             }
         }
     };
@@ -202,10 +182,6 @@ function CreateChannelNext({ notice, channelInfo, channelUrl }) {
             <div className={style.createButton} style={{ backgroundColor: buttonColor }} onClick={onClickButton}> {/*개설하기 버튼*/}
                 개설하기
             </div>
-
-            {modalOpen && 
-                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
-            }
         </div>
 
     )
@@ -215,7 +191,7 @@ function AddRules({length, rulesAdd, setRulesAdd}) {
     return (
         <div className={style.noticeRules}>{length}.
             <input placeholder='채널 내 규칙을 입력해주세요.' />
-            <img onClick={()=>
+            <img onClick={()=>  
                 {   let copy = [...rulesAdd];
                     copy.slice(length-2, 1);
                     setRulesAdd(copy);                    

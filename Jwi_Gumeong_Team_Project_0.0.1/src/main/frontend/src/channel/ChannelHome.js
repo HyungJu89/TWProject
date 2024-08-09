@@ -22,11 +22,6 @@ function ChannelHome() {
     const [page, setPage] = useState(1);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-
-    useEffect(() => {
-        setModalOpen(true);
-        setModalContent('채널 정보를 불러오는 중입니다.');
-    }, []);
     
     const closeModal = () => {
         setModalOpen(false);

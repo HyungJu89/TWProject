@@ -7,7 +7,7 @@ import '../App.css'
 import axios from 'axios';
 import { checkChannel } from '../recycleCode/ChannelAxios.js';
 
-function CreateChannel({ManagementChannelId}) {
+function CreateChannel({ManagementChannelId, openModal}) {
     const [channelUrl, setChannelUrl] = useState();
     const [channelInfo,setChannelInfo] = useState();
     const [sign, setSign] = useState(false);
@@ -69,8 +69,6 @@ function CreateChannel({ManagementChannelId}) {
             setSignText('서버 통신중 에러가 발생하였습니다 다시한번 시도해주세요.')
             noticeFalse()
         }
-
-
     }
 
     const noticeFalse = () => {
@@ -110,7 +108,7 @@ function CreateChannel({ManagementChannelId}) {
                 <div className={style.warningText} style={{ color: `${signColor}` }}>{signText}</div>/*URL 검토하고 가능유무 안내Text*/
             )}
             {notice && (
-                <CreateChannelNext notice = {notice} channelInfo={channelInfo} channelUrl={channelUrl}/>
+                <CreateChannelNext notice = {notice} channelInfo={channelInfo} channelUrl={channelUrl} openModal={openModal}/>
             )}
         </div>
 
