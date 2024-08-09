@@ -22,7 +22,7 @@ public class AdminController {
 		
 		System.out.println("여기옴?");
 		System.out.println(loginRequest.getId());
-		
+		adminLoginService.loginJWT(loginRequest.getId());
 		return ResponseEntity.ok(adminLoginService.loadUserByUsername(loginRequest.getId()));
 	}
 	

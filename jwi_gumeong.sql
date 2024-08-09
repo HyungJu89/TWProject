@@ -102,6 +102,8 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
+insert into admin(id,pw,state,createdAt,updatedAt) values("asdf","asdf","activate",now(),now())
+
 CREATE TABLE `admin` (
 	`adminKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '어드민 키',
 	`id`	VARCHAR(30) COMMENT '어드민아이디',
