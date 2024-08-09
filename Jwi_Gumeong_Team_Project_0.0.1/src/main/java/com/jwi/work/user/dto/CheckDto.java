@@ -12,4 +12,6 @@ public class CheckDto {
 	private int wrongCount;
 	
 	private String userKey;
+	
+	private String reason;
 }

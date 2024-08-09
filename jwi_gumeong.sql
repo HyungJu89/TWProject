@@ -10,6 +10,8 @@ CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
 
+select * from user;
+drop table `user`;
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '유저키',
 	`email`	VARCHAR(50) UNIQUE	NOT NULL	COMMENT '이메일',

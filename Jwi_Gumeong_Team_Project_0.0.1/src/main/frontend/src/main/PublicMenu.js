@@ -19,7 +19,6 @@ function PublicMenu({ isLoggedIn, onLogout }) {
     const dispatch = useDispatch();
     useEffect(() => {
         if(sessionInfo){
-            console.log(1);
             dispatch(getUserInfo(sessionInfo.sessionId));
         }
     }, [dispatch,sessionInfo]); 

@@ -74,7 +74,7 @@ function MainBanner({ channelId, route,
                         {/* 라이브 방송 정보 */}
 
                             {route === 'channel' ?/* 라이브 제목 */
-                                (<div onClick={()=>{navigate(`/pageCheck/${partnersLiveInfo?.channelId}`)}} className={style.liveInfo}>
+                                (<div className={style.liveInfo} style={{cursor:'default'}}>
                                 <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
                                 <div className={style.liveTitle}>{liveInfoApi?.liveTitle}</div>
                                 <LiveLink channelId={channelId} />

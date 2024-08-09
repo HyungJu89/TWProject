@@ -15,21 +15,28 @@
 
 .modalContent {
     background-color: #FFFFFF;
-    width: 400px;
+    width: 360px;
     padding: 20px;
     position: relative;
 }
 
-.body {
+.modalContent > .body {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: #101010;
-    width: 388px;
     height: 130px;
     font-size: 15px;
     font-weight: 500;
+}
+
+.closeBtn {
+    background-color: #FF8901;
+    color: #ffffff;
+    width: 388px;;
+    height: 60px;
+    border-radius: 10px;
 }
 
 .footer {
@@ -38,10 +45,3 @@
     align-items: center;
 }
 
-.closeBtn {
-    background-color: #FF8901;
-    color: #ffffff;
-    width: 190px;
-    height: 60px;
-    border-radius: 10px;
-}
