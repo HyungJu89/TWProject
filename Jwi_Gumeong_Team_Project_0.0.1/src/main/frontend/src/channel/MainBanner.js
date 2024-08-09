@@ -2,10 +2,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import style from './style/MainBanner.module.css';
 import '../App.css'
 import offBanner from '../icon/img/illustration02.png';
-import chevron_left_w from '../icon/40px/chevron-left-w.png'
-import chevron_right_w from '../icon/40px/chevron-right-w.png'
 import adult_img from '../icon/img/adult_img.png'
 import game from '../icon/20px/game.png';
+import talk from '../icon/20px/talk.png';
+import art from '../icon/20px/art.png';
+import music from '../icon/20px/music.png';
+import food from '../icon/20px/food.png';
+import skill from '../icon/20px/skill.png';
+import economy from '../icon/20px/economy.png';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
@@ -59,13 +63,13 @@ function MainBanner({ channelId, route,
                     <div className={style.MainBanner}>
                         {/* 라이브 이미지 */}
                         {route === 'channel' ? (
-                            liveInfoApi?.adult ? (
+                            liveInfoApi?.adult ? ( //19세 체크
                                 <div className={style.adult}><img src={adult_img}/></div>
                             ) : (
                                 <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
                             )
                         ) : (
-                            partnersLive?.adult ? (
+                            partnersLive?.adult ? ( //19세 체크
                                 <div className={style.adult}><img src={adult_img}/></div>
                             ) : (
                                 <img src={partnersLive?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
@@ -73,7 +77,6 @@ function MainBanner({ channelId, route,
                         )}
 
                         {/* 라이브 방송 정보 */}
-
                             {route === 'channel' ?/* 라이브 제목 */
                                 (<div className={style.liveInfo} style={{cursor:'default'}}>
                                 <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
@@ -88,7 +91,27 @@ function MainBanner({ channelId, route,
                                         <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
                                         <div className={style.textArea}>
                                             {partnersLiveInfo?.channelName}
-                                            <div className={style.category}><img src={game} />{partnersLive?.liveCategoryValue}</div>
+                                            <div className={style.category}>
+                                                {(() => {
+                                                    switch (partnersLive?.liveCategoryValue) {
+                                                        case 'talk':
+                                                            return <img src={talk} />;
+                                                        case '아트':
+                                                            return <img src={art} />;
+                                                        case '음악/노래':
+                                                            return <img src={music} />;
+                                                        case '먹방':
+                                                            return <img src={food} />;
+                                                        case '과학/기술':
+                                                            return <img src={skill} />;
+                                                        case '시사/경제':
+                                                            return <img src={economy} />;
+                                                        default:
+                                                            return <img src={game} />;
+                                                    }
+                                                })()
+                                                }
+                                            {partnersLive?.liveCategoryValue}</div>
                                         </div>
                                     </div>
                                 </div>)
