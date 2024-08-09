@@ -90,11 +90,16 @@ function ChannelTitle({ postInfo }) {
 
 function Comments() {
     let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off   
+    let commentsArray = [//댓글 리스트 배열 (임시)
+        {reply: false,nickname: "닉네임", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
+        {reply: true,nickname: "gd", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
+        {reply: true,nickname: "2", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
+        {reply: true,nickname: "3", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"}
+    ];
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
-    const textareaRef = useRef(null); //
-
+    const textareaRef = useRef(null); //텍스트 영역 ref 지정
 
     // 이모지 삽입 함수
     const insertEmogiAtCursor = (emoji) => {
@@ -116,14 +121,14 @@ function Comments() {
         textarea.focus();
     };
 
-    const handleInput = (e) => {
+    const handleInput = (e) => {//스크롤 늘어나게
         const textarea = textareaRef.current;
         if (textarea) {
             textarea.style.height = `${textarea.scrollHeight}px`;
         }
     };
 
-    useEffect(() => {
+    useEffect(() => { //이모지 함수 실행
         if (emogiAdd) {
             insertEmogiAtCursor(emogiAdd);
             setEmogiAdd(''); // 이모지 추가 후 초기화
@@ -151,74 +156,55 @@ function Comments() {
                     <div>0/200<button>등록</button></div>
                 </div>
             </div>
-            <CommentsList/>
-            <BigCommentsList/>
+            {commentsArray.map((comment, index) => {
+            return (
+                <CommentsList
+                    key={index} 
+                    reply={comment.reply} //대댓글 여부
+                    nickname={comment.nickname} //작성자
+                    time={comment.time} //작성시기
+                    content={comment.content} //내용
+                />
+            );
+            })}
         </div>
     )
 }
-function CommentsList() {
+function CommentsList({ reply, nickname, time, content }) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
-    const modalRef = useRef();
+    const modalRef = useRef(null);
+    const moreRef = useRef(null);
 
-    const handleClickOutside = (event) => {// 모달 창 외부를 클릭했을 때 모달 창을 닫기 위한 이벤트 핸들러
-         // modalRef.current가 유효하고, 이벤트가 발생한 타겟이 모달 창을 포함하지 않는 경우
-        if (modalRef.current && !modalRef.current.contains(event.target)) {
-            setCommentmoreON(false); // 모달 창을 닫음
-        }
-    };
-    useEffect(() => {// 컴포넌트가 마운트될 때 이벤트 리스너를 추가하고 언마운트될 때 제거하는 useEffect 훅
-        document.addEventListener('mousedown', handleClickOutside); // mousedown 발생>handleClickOutside 함수가 실행됨
-        return () => {// 컴포넌트가 언마운트될 때 이벤트 리스너를 제거
-            document.removeEventListener('mousedown', handleClickOutside);
-        };}, []);
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (commentMoreON &&
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
+                {setCommentmoreON(false);} //신고, 삭제 닫음
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => { //클린업
+        document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [commentMoreON]);
+
     return (
-        <div>
-            {/* 댓글 */}
+        <div className={reply ? styles.bigComments : null}>
+            {reply && <img className={styles.BcImg} src={big_comment} />}
+            {/* 댓글 */}    
             <div className={styles.list}>
                 <div className={styles.listNav}>
-                    <div className={styles.listName}>닉네임<div className={styles.time}>4시간</div></div>
+                    <div className={styles.listName}>{nickname}<div className={styles.time}>{time}</div></div>
                     <div>
-                    <img onClick={() => { commentMoreON == false ? setCommentmoreON(true) : setCommentmoreON(false) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
+                    <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true)}} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                     {commentMoreON && <div ref={modalRef}><MoreDeleteMini/></div>} {/*신고, 삭제 모달*/}
                     </div>
                 </div>
-                <div className={styles.listContent}>진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ</div>
+                <div className={styles.listContent}>{content}</div>
             </div>
         </div>
     )
 }
-function BigCommentsList() {
-    let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off 
-    const modalRef = useRef();
 
-    const handleClickOutside = (event) => {// 모달 창 외부를 클릭했을 때 모달 창을 닫기 위한 이벤트 핸들러
-         // modalRef.current가 유효하고, 이벤트가 발생한 타겟이 모달 창을 포함하지 않는 경우
-        if (modalRef.current && !modalRef.current.contains(event.target)) {
-            setCommentmoreON(false); // 모달 창을 닫음
-        }
-    };
-    useEffect(() => {// 컴포넌트가 마운트될 때 이벤트 리스너를 추가하고 언마운트될 때 제거하는 useEffect 훅
-        document.addEventListener('mousedown', handleClickOutside); // mousedown 발생>handleClickOutside 함수가 실행됨
-        return () => {// 컴포넌트가 언마운트될 때 이벤트 리스너를 제거
-            document.removeEventListener('mousedown', handleClickOutside);
-        };}, []);   
-    return (
-        <div>
-            {/* 대댓글 */}
-            <div className={styles.bigComments}>
-                <img className={styles.BcImg} src={big_comment} />
-                <div className={styles.list}>
-                    <div className={styles.listNav}>
-                        <div className={styles.listName}>닉네임<div className={styles.time}>4시간</div></div>
-                        <div><img onClick={() => { commentMoreON == false ? setCommentmoreON(true) : setCommentmoreON(false) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
-                        {commentMoreON && <div ref={modalRef}><MoreDeleteMini /></div>}</div> {/*신고, 삭제 모달*/}
-                    </div>
-                    <div className={styles.listContent}>어쩌구 저쩌구 이래구 저래구 ^^</div>
-                </div>
-            </div>
-        </div>
-    )
-}
 function MoreDelete({postInfo}) {
     let [deleteWrote, setDeleteWrote] = useState(true) //★내가 쓴 글이면 활성화 코드 추가★
     return (
