@@ -11,9 +11,7 @@ import { setLoggedIn } from '../slice/sessionSlice.js';
 function AdminLogin() {
 
     var jsonSessionInfo = localStorage.getItem('sessionId');
-    var sessionInfo = JSON.parse(jsonSessionInfo);
     // 세션화성공
-    const userState = useSelector((state) => state.session);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     //모든 정보가 입력되면 버튼 활성화
@@ -50,9 +48,10 @@ function AdminLogin() {
         if (email !== '' && password !== '') {
             try {
                 const adminData = {
-                    username: email,
-                    password: password
+                    id: email,
+                    pw: password
                 };
+                console.log(adminData);
                 const userResponse = await axios.post('/admin/login', adminData);
                 if(userResponse.data.check){
                     navigate('/admin');
