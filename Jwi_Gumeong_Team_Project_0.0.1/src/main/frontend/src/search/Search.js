@@ -47,10 +47,12 @@ function Search({ search }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const postListData = await searchPost('search',search,postPage);
+            const postListData = await searchPost(search,postPage);
             setPostList(postListData)
+            console.log(postListData)
         };
         fetchData();
+        
     }, [search,postPage])
 
     const pageUp = () => {

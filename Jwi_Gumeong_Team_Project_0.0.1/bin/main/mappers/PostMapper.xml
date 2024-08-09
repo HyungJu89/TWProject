@@ -28,11 +28,11 @@
 		DELETE FROM image WHERE imageKey = #{imageKey}
 	</delete>
 
-	<select id="postInfo" resultType="com.jwi.work.channel.dto.PostDto" parameterType="int">
-		SELECT * FROM post WHERE postKey = #{postKey}
+	<select id="postInfo" resultType="com.jwi.work.channel.dto.sqlDto.PostInfoDto" parameterType="int">
+		SELECT userKey,image FROM post WHERE postKey = #{postKey}
 	</select>
 	
-	<select id="selectUrl" parameterType="String">
+	<select id="selectUrl" parameterType="String" resultType="com.jwi.work.channel.dto.ImageDto">
 		SELECT * FROM image WHERE imageUrl = #{imageUrl}
 	</select>
 	
@@ -40,6 +40,9 @@
 		DELETE FROM post WHERE postKey = #{postKey}
 	</delete>
 
+<!-- 	<update id= "postUpdate" parameterType="map">
+		UPDATE post set content = #{content} , image = #{image} WHERE postKey = #{postKey}
+	</update> -->
 
 
 </mapper>

@@ -38,7 +38,18 @@ public class PostController {
 		return postService.postDelete(deleteDto);
 	}
 	
-	
+	/*
+	 * @PostMapping("/update") public AnswerDto<String> postUpdate(
+	 * 
+	 * @RequestParam("postKey") int postKey,
+	 * 
+	 * @RequestParam("userKey") int userKey,
+	 * 
+	 * @RequestParam("content") String content,
+	 * 
+	 * @RequestParam(value = "files", required = false) List<MultipartFile> files ){
+	 * return postService.postUpdate(postKey,userKey,content,files); }
+	 */
 	
 	
 }

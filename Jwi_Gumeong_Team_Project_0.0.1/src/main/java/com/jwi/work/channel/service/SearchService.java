@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.channel.dto.SearchDto;
+import com.jwi.work.channel.dto.postDto.PostChannelDto;
+import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.mapper.SearchMapper;
 import com.jwi.work.channel.util.PagingUtil;
 
@@ -48,55 +50,32 @@ public class SearchService {
 
 	}
 
-	public SearchDto<Object> searchPost(String type, String search, int page) {
+	public SearchDto<PostDto> searchPost(String search, int page) {
 
 		final int LIMIT_PAGE = 10;
 
-		SearchDto<Object> searchPost = new SearchDto<>();
+		SearchDto<PostDto> searchPost = new SearchDto<>();
 
 		// 검색된 개시글 갯수
 		int postCount = 0;
 
-		if (type.equals("main")) {
-			postCount = searchMapper.searchPostCount(search);
-		}
 
-		if (type.equals("search")) {
 			postCount = searchMapper.searchPostCount(search);
-		}
-
-		if (type.equals("channel")) {
-			postCount = searchMapper.channelPostCount(search);
-		}
 
 		if (postCount == 0) {
 			searchPost.setSuccess(false);
 
 			return searchPost;
 		}
+		
 		searchPost.setSuccess(true);
 
 		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
 		
-		if (type.equals("main")) {
-			List<Object> posts = searchMapper.searchPost(search, searchPost.getPaging().getOffset(),
-					searchPost.getPaging().getLimit());
 
-			searchPost.setSearch(posts);
-		}
-		if (type.equals("search")) {
-			List<Object> posts = searchMapper.searchPost(search, searchPost.getPaging().getOffset(),
-					searchPost.getPaging().getLimit());
+			List<PostDto> posts = searchMapper.searchPost(search, searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
 			
 			searchPost.setSearch(posts);
-		}
-		
-		if (type.equals("channel")) {
-			List<Object> posts = searchMapper.channelPost(search, searchPost.getPaging().getOffset(),
-					searchPost.getPaging().getLimit());
-			
-			searchPost.setSearch(posts);
-		}
 
 		return searchPost;
 

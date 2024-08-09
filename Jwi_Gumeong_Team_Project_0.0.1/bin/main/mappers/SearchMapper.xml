@@ -3,6 +3,47 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.channel.mapper.SearchMapper">
 
+<resultMap type="com.jwi.work.channel.dto.postDto.PostDto" id="postResultMap">
+	<id property="postKey" column="postKey"/>
+	<result property="nickName" column="P_nickName" />
+	<result property="content" column="P_content" />
+	<result property="image" column="P_image" />
+	<result property="state" column="P_state" />
+	<result property="likeCount" column="P_likeCount" />
+	<result property="commentCount" column="P_commentCount" />
+	<result property="createdAt" column="P_createdAt" />
+	<result property="updatedAt" column="P_updatedAt" />
+	<association  property="postChannel" javaType="com.jwi.work.channel.dto.postDto.PostChannelDto" resultMap="postChannelResultMap"/>
+	<collection property="comments" ofType="com.jwi.work.channel.dto.postDto.CommentDto" resultMap="commentResultMap"/>
+</resultMap>
+
+<resultMap type="com.jwi.work.channel.dto.postDto.PostChannelDto" id="postChannelResultMap">
+		<id property="channelKey" column="channelKey"/>
+		<result property="id" column="PC_id"/>
+		<result property="imageUrl" column="PC_imageUrl"/>
+		<result property="channelName" column="PC_channelName"/>
+</resultMap>
+
+<resultMap type="com.jwi.work.channel.dto.postDto.CommentDto" id="commentResultMap">
+	<id property="commentKey" column="commentKey"/>
+	<result property="nickName" column="C_nickName"/>
+	<result property="comment" column="C_comment"/>
+	<result property="state" column="C_state"/>
+	<result property="replyCount" column="C_replyCount"/>
+	<result property="createdAt" column="C_createdAt"/>
+	<result property="updatedAt" column="C_updatedAt"/>
+	<collection property="replys" ofType="com.jwi.work.channel.dto.postDto.ReplyDto" resultMap="replyResultMap"/>
+</resultMap>
+
+<resultMap type="com.jwi.work.channel.dto.postDto.ReplyDto" id="replyResultMap">
+	<id property="replyKey" column="replyKey"/>
+	<result property="nickName" column="R_nickName"/>
+	<result property="replyNickName" column="R_replyNickName"/>
+	<result property="reply" column="R_reply"/>
+	<result property="createdAt" column="R_createdAt"/>
+	<result property="updatedAt" column="R_updatedAt"/>
+</resultMap>
+
 	<!-- 채널 검색시 -->
 
 	<select id="searchChannelCount" parameterType="map" resultType="int">
@@ -29,24 +70,73 @@
 	<!-- 개시글 검색시 -->
 	<select id="searchPostCount" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM post WHERE content LIKE
-		CONCAT('%',#{search},'%')
+		CONCAT('%',#{search},'%')  AND state = 'common';
 	</select>
 	
-	<select id="searchPost" parameterType="map" resultType="map">
+	<select id="searchPost" parameterType="map" resultMap="postResultMap">
 		SELECT 
-			post.*,
-			user.NickName AS nickName,
-			channel.Id AS channelId,
-			channel.name AS name,
-			channel.imageUrl AS imageUrl
+			post.postKey AS postKey,
+			post.content AS P_content,
+			post.image AS P_image,
+			post.state AS P_state,
+			post.createdAt AS P_createdAt,
+			post.updatedAt AS P_updatedAt,
+			
+			COUNT(DISTINCT comment.commentKey) AS  P_commentCount,
+			COUNT(DISTINCT `like`.likeKey) AS P_likeCount,
+			p.nickName AS P_nickName,
+			
+			
+			channel.channelKey AS channelKey,
+			channel.id AS PC_id,
+			channel.imageUrl AS PC_imageUrl,
+			channel.name AS PC_channelName,
+
+
+			comment.commentKey AS commentKey,
+			comment.comment AS C_comment,
+			comment.state AS C_state,
+			comment.createdAt AS C_createdAt,
+			comment.updatedAt AS C_updatedAt,
+
+			c.nickName AS C_nickName,
+			COUNT(DISTINCT reply.replyKey) AS C_replyCount,
+			
+			
+			reply.replyKey AS replyKey,
+			reply.reply AS R_reply,
+			reply.createdAt AS R_createdAt,
+			reply.updatedAt AS R_updatedAt,
+			
+			r.nickName AS R_nickName,
+			rr.nickName AS R_replyNickName
+
 		FROM 
 			post 
 		LEFT JOIN
-			user ON post.userKey = user.userKey
-		LEFT JOIN
 			channel ON post.channelKey = channel.channelKey
+		LEFT JOIN
+			comment ON post.postKey = comment.postKey
+		LEFT JOIN
+			reply ON comment.commentKey = reply.commentKey
+		LEFT JOIN
+			reply replyRe ON  reply.replyreplyKey = replyRe.replyKey
+		LEFT JOIN
+			`like` ON post.postKey = `like`.postKey
+		LEFT JOIN
+			user p ON post.userKey = p.userKey
+		LEFT JOIN
+			user c ON comment.userKey = c.userKey
+		LEFT JOIN
+			user r ON reply.userKey = r.userKey
+		LEFT JOIN 
+			user rr ON replyRe.userKey = rr.userKey
 		WHERE 
-			post.content LIKE CONCAT('%',#{search},'%')
+			post.content LIKE CONCAT('%',#{search},'%')  AND post.state = 'common'
+	    GROUP BY
+        	post.postKey,
+    	    comment.commentKey,
+	        reply.replyKey
 		ORDER BY
         	post.createdAt DESC
 		LIMIT	

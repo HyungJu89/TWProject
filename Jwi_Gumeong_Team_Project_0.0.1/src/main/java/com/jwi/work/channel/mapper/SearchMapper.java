@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.jwi.work.channel.dto.ChannelDto;
-import com.jwi.work.channel.dto.PostDto;
+import com.jwi.work.channel.dto.postDto.PostDto;
 
 public interface SearchMapper {
 
@@ -16,7 +15,7 @@ public List<Object> searchChannel(@Param("search") String search,@Param("offset"
 public int searchPostCount(@Param("search") String search);
 
 
-public List<Object> searchPost(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
+public List<PostDto> searchPost(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
 
 public int channelPostCount(@Param("search") String search);
 

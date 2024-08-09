@@ -1,10 +1,9 @@
 import axios from "axios";
 //검색어
-export  const searchPost = async (type,search, postPage) => { 
+export  const searchPost = async (search, postPage) => { 
     try{
         const { data } = await axios.get(`/search/post`, {
             params: {
-                type : type,
                 search: search,
                 page: postPage
             }

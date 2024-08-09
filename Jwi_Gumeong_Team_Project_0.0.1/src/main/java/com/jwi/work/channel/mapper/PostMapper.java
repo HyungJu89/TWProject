@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.jwi.work.channel.dto.ImageDto;
 import com.jwi.work.channel.dto.PostCreateDto;
-import com.jwi.work.channel.dto.PostDto;
+import com.jwi.work.channel.dto.sqlDto.PostInfoDto;
 
 public interface PostMapper {
 
@@ -20,9 +20,11 @@ public interface PostMapper {
 	
 	public void deleteImg(@Param("imageKey") int imageKey);
 	
-	public PostDto postInfo(@Param("postKey")int postKey);
+	public PostInfoDto postInfo(@Param("postKey")int postKey);
 	
 	public ImageDto selectUrl(@Param("imageUrl") String imageUrl);
 	 
 	public void postDelete(@Param("postKey")int postKey); 
+	
+//	public void postUpdate(@Param("postKey")int postKey,@Param("content")String content,@Param("image")String image);
 }

@@ -39,7 +39,9 @@ function PublicBoard({postInfo}) {
     },[])
     return (
         <div className={styles.mainDiv}>
-            <ChannelTitle postInfo={postInfo} />
+            {postInfo.postChannel && (
+            <ChannelTitle postChannel={postInfo.postChannel} />
+            )}
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
                 <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
                 <img onClick={() => { moreON == false ? setmoreON(true) : setmoreON(false) }} src={more} />
@@ -64,7 +66,7 @@ function PublicBoard({postInfo}) {
             <div className={styles.widthNav} style={{ marginBottom: '0px' }}>{/* 하단 댓글,좋아요,공유 */}
                 <div className={styles.commentsDiv}>
                     {/*댓글창*/}    <div onClick={() => { commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
-                        <img src={comments} /><div className={styles.comments}>123</div></div>
+                        <img src={comments} /><div className={styles.comments}>{postInfo.commentCount}</div></div>
                     {/*좋아요*/}    <div onClick={() => { heart == false ? setHeart(true) : setHeart(false) }}>
                         {heart === true ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
                         <div className={styles.comments}>123123</div>
@@ -76,12 +78,12 @@ function PublicBoard({postInfo}) {
         </div>
     )
 }
-function ChannelTitle({ postInfo }) {
+function ChannelTitle({ postChannel }) {
     let navigate = useNavigate();
     return (
-        <div onClick={()=>{navigate(`/channel/${postInfo.channelId}`)}}>
+        <div onClick={()=>{navigate(`/channel/${postChannel.id}`)}}>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                <img src={postInfo.imageUrl} /><div style={{cursor:'pointer'}}>{postInfo.name}</div>
+                <img src={postChannel.imageUrl} /><div style={{cursor:'pointer'}}>{postChannel.channelName}</div>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
         </div>
@@ -247,7 +249,7 @@ function MoreDelete({postInfo}) {
         <div  className={styles.moreUi} style={{right:'-82px',top:'30px'}}>
             {deleteWrote == true ?
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div className={styles.text}>수정하기</div>
+                    <div className={styles.text} >수정하기</div>
                     <div className={styles.text} onClick={ () => deletePost(postInfo.userKey,postInfo.postKey)}>삭제하기</div>
                 </div>
                 :

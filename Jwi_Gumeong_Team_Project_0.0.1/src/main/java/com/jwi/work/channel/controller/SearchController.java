@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.channel.dto.SearchDto;
+import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.service.SearchService;
 
 @RestController
@@ -25,12 +26,11 @@ public class SearchController {
 	}
 
 	@GetMapping("/post")
-	public SearchDto<Object> searchPost(
-			@RequestParam("type") String type,
+	public SearchDto<PostDto> searchPost(
 			@RequestParam(value = "search", defaultValue = "") String search,
 			@RequestParam(value = "page", defaultValue = "1") int page) {
 
-		return searchService.searchPost(type,search, page);
+		return searchService.searchPost(search, page);
 		
 	}
 
