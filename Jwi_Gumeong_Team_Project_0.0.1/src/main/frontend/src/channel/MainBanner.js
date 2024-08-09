@@ -106,6 +106,8 @@ function MainBanner({ channelId, route,
                                                             return <img src={skill} />;
                                                         case '시사/경제':
                                                             return <img src={economy} />;
+                                                        case '':
+                                                            return <img src={talk} />;
                                                         default:
                                                             return <img src={game} />;
                                                     }
