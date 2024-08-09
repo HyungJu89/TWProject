@@ -19,7 +19,7 @@ import com.jwi.work.channel.dto.PostCreateDto;
 import com.jwi.work.channel.dto.PostDeleteDto;
 import com.jwi.work.channel.dto.PostDto;
 import com.jwi.work.channel.mapper.PostMapper;
-import com.jwi.work.channel.util.FileManagerUtil;
+import com.jwi.work.util.FileManagerUtil;
 
 @Service
 public class PostService {

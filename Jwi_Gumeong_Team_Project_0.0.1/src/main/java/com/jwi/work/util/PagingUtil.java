@@ -1,4 +1,4 @@
-package com.jwi.work.channel.util;
+package com.jwi.work.util;
 
 import com.jwi.work.channel.dto.PagingDto;
 
