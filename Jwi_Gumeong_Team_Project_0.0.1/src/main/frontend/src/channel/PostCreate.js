@@ -28,11 +28,6 @@ function PostCreact({channelKey}) {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
 
-    useEffect(() => {
-        setModalOpen(true);
-        setModalContent('게시글을 작성해주세요.');
-    }, []);
-
     const closeModal = () => {
         setModalOpen(false);
     };

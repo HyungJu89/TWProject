@@ -7,22 +7,15 @@ import checklist from '../icon/24px/checklist.png'
 import AlarmModal from '../modal/AlarmModal.js';
 import '../App.css'
 
-function ApplyManagerNext({ selectCreatorInfo, route }) {
+function ApplyManagerNext({ selectCreatorInfo, route, openModal  }) {
     let navigate = useNavigate();
     const [buttonColor, setButtonColor] = useState('#BBBBBB');
     const [iconColor, setIconColor] = useState(check_deactivation);
     const [checkBoxIcon, setCheckBoxIcon] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState('');
 
     useEffect(() => {
-        setModalOpen(true);
-        setModalContent('관리자 신청에 앞서 주의사항을 숙지해주세요.');
-    }, []);
-
-    const closeModal = () => {
-        setModalOpen(false);
-    };
+        openModal('관리자 신청에 앞서 주의사항을 숙지해주세요.');
+    }, [openModal]);
 
     const formatUnit = (number) => {
         let unit = ['만', '천']
@@ -49,16 +42,13 @@ function ApplyManagerNext({ selectCreatorInfo, route }) {
     }
 
     const onClickButton = async () => {
-        // 체크박스 예외처리
         if (!checkBoxIcon) {
-            setModalContent('주의사항 숙지 후 체크버튼을 눌러주세요.');
-            setModalOpen(true);
+            openModal('주의사항 숙지 후 체크버튼을 눌러주세요.');
             return;
         }
-        setModalContent('정상적으로 관리자 신청이 완료되었습니다.');
-        setModalOpen(true);
-        navigate('/')
-    }
+        openModal('정상적으로 관리자 신청이 완료되었습니다.');
+        setTimeout(() => navigate('/'), 1000); // 1초 시간을 두기
+    };
     
     let [routeText, setRouteText] = useState([]);
     useEffect(() => {
@@ -104,10 +94,6 @@ function ApplyManagerNext({ selectCreatorInfo, route }) {
             <div className={style.createButton} style={{ backgroundColor: buttonColor }} onClick={onClickButton}> {/*개설하기 버튼*/}
             {routeText[4]}
             </div>
-
-            {modalOpen && 
-                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
-            }
         </div>
     )
 }
