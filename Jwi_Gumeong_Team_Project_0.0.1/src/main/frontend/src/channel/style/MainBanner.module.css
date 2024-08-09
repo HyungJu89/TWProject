@@ -216,13 +216,16 @@
     height: 98px;
     background-color: black;
     color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     z-index: -10000;
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
+.liveDiv .liveImg .box .adultMini img{
+    width: 74px;
+    height: 62px;
+}
 .adult{
     z-index: -10000;
     background-color: black;
@@ -232,6 +235,11 @@
     text-align: center;
     display: flex;
     justify-content: center;
-    align-items: center;
     width: 100%;
+}
+
+.adult img{
+    width: 303px;
+    height: 251px;
+    margin-top: 95px;
 }

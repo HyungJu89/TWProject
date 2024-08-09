@@ -4,6 +4,7 @@ import '../App.css'
 import offBanner from '../icon/img/illustration02.png';
 import chevron_left_w from '../icon/40px/chevron-left-w.png'
 import chevron_right_w from '../icon/40px/chevron-right-w.png'
+import adult_img from '../icon/img/adult_img.png'
 import game from '../icon/20px/game.png';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -59,13 +60,13 @@ function MainBanner({ channelId, route,
                         {/* 라이브 이미지 */}
                         {route === 'channel' ? (
                             liveInfoApi?.adult ? (
-                                <div className={style.adult}>시청연령 제한</div>
+                                <div className={style.adult}><img src={adult_img}/></div>
                             ) : (
                                 <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
                             )
                         ) : (
                             partnersLive?.adult ? (
-                                <div className={style.adult}>시청연령 제한</div>
+                                <div className={style.adult}><img src={adult_img}/></div>
                             ) : (
                                 <img src={partnersLive?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
                             )
@@ -74,7 +75,7 @@ function MainBanner({ channelId, route,
                         {/* 라이브 방송 정보 */}
 
                             {route === 'channel' ?/* 라이브 제목 */
-                                (<div onClick={()=>{navigate(`/pageCheck/${partnersLiveInfo?.channelId}`)}} className={style.liveInfo}>
+                                (<div className={style.liveInfo} style={{cursor:'default'}}>
                                 <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
                                 <div className={style.liveTitle}>{liveInfoApi?.liveTitle}</div>
                                 <LiveLink channelId={channelId} />
@@ -121,7 +122,7 @@ function LiveImgAdultCheck({ liveImginfo, channelinfo, setPartnersLive, setPartn
     return (
         < div onClick={() => { setPartnersLive(liveImginfo); setPartnersLiveInfo(channelinfo) }} className={style.box} >
             {liveImginfo?.adult ?
-                (<div className={style.adultMini}>19금</div>)
+                (<div className={style.adultMini}><img src={adult_img}/></div>)
                 :
                 (<img src={liveImginfo?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />)
             }                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>

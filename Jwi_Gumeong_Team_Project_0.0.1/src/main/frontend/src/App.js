@@ -38,7 +38,7 @@ function App() {
             userKey(sessionInfo.sessionId);
             dispatch(setLoggedIn(true));
         }
-    }, [dispatch]);
+    }, []);
 
     const userKey = async (sessionId) => {
         try {
@@ -52,6 +52,7 @@ function App() {
             console.error('userKey Axios 에러임:', error);
         }
     };
+    
     const isLoggedIn = useSelector((state) => state.session.isLoggedIn); // 로그인 상태
     const onLogout = () => { // 로그아웃 기능 (세션 아이디 지움)
         sessionStorage.removeItem('sessionId');
@@ -73,7 +74,7 @@ function App() {
                 <Header onClickSearch={onClickSearch} onLogout={onLogout} isLoggedIn = {isLoggedIn}/> {/* 상단 공통 부분 디자인 */}
                 {state.imgUiModal.popUp && <ImgUi/>}{/*이미지 팝업*/}
                 <Routes>
-                    <Route path='/' element={<Main/>}/> {/* 메인(홈) 접속 페이지 */}
+                    <Route path='/' element={<Main onLogout={onLogout} isLoggedIn = {isLoggedIn}/>}/> {/* 메인(홈) 접속 페이지 */}
                     <Route path='/allTopic' element={<AllTopic/>}/> {/* 전체 채널 */}
                     <Route path='/channel/:channelId' element={<ChannelHome/>}/>{/*채널*/}
                     <Route path='/signIn' element={<SignIn/>}/>

@@ -41,6 +41,7 @@ public class EmailService {
 //    	//UUID = 고유한 번호를 만들어내는 코드 randomUUID = 그걸 랜덤으로 만들어냄. toString = 문자열로전환 replaceAll = uuid에서 만들어 낸거는 -가 붙기때문에 replaceALL로 전부 공백으로 전환.그리고 substring은 10자로 끊어줌
 //    	return UUID.randomUUID().toString().replaceAll("-", "").substring(0,8);
 //    };
+    //회원가입 이메일 인증번호
     public void EmailCheck(String email,String CheckNum) {
     	String subject = "쥐구멍 회원가입 이메일 인증번호";
     	String text = "<html>"
@@ -51,8 +52,20 @@ public class EmailService {
     				sendEmail(email,subject,text);
     				;
     }
+  //회원가입 비밀번호 찾기 인증번호
     public void EmailCheck2(String email,String CheckNum) {
     	String subject = "쥐구멍 비밀번호 찾기 인증번호";
+    	String text = "<html>"
+    				+ "<body>"
+    				+ "<h3>인증번호 : " + CheckNum + "<h3>"
+    				+ "</body"
+    				+ "</html>";
+    				sendEmail(email,subject,text);
+    				;
+    }
+   //회원가입 비밀번호 발급
+    public void EmailCheck3(String email,String CheckNum) {
+    	String subject = "쥐구멍 비밀번호 발급";
     	String text = "<html>"
     				+ "<body>"
     				+ "<h3>인증번호 : " + CheckNum + "<h3>"
