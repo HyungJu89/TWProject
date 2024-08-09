@@ -59,7 +59,7 @@ function PublicBoard({postInfo}) {
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
                 <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true)}} src={more} />
-                {moreON && <MoreDelete modalRef={modalRef} postInfo={postInfo}/>} {/*신고, 삭제 모달*/}
+                {moreON && <MoreDelete modalRef={modalRef} postInfo={postInfo} right={'-82px'} top={'30px'}/>} {/*신고, 삭제 모달*/}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
@@ -233,13 +233,13 @@ function CommentsList({ reply, nickname, time, content }) {
     )
 }
 
-function MoreDelete({postInfo,modalRef}) {
+function MoreDelete({postInfo,modalRef, right,top}) {
     let [deleteWrote, setDeleteWrote] = useState(true) //★내가 쓴 글이면 활성화 코드 추가★
     return (
-        <div ref={modalRef} className={styles.moreUi} style={{right:'-82px',top:'30px'}}>
+        <div ref={modalRef} className={styles.moreUi} style={{right:right,top:top}}>
             {deleteWrote == true ?
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div className={styles.text}>수정하기</div>
+                    {/* <div className={styles.text}>수정하기</div> */}
                     <div className={styles.text}>삭제하기</div>
                 </div>
                 :
