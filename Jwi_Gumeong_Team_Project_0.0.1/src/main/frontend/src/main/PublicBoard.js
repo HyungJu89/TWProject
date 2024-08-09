@@ -95,6 +95,13 @@ function Comments() {
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
+    //게시글 길이 제한
+    const commentsLimit = 200;
+    //게시글작성 내용
+    const [comment, setComment] = useState('');
+    //게시글 길이 저장
+    const [commentLength, setCommentLength] = useState(0);
+
     const textareaRef = useRef(null); //
 
 
@@ -120,9 +127,15 @@ function Comments() {
 
     const handleInput = (e) => {
         const textarea = textareaRef.current;
+        
         if (textarea) {
+            // text 가 지워질때 높이를 초기화해주기위해
+            textarea.style.height = 'auto';
             textarea.style.height = `${textarea.scrollHeight}px`;
         }
+        setComment(e.target.value)
+        setCommentLength(e.target.value.length)
+
     };
 
     useEffect(() => {
@@ -150,7 +163,7 @@ function Comments() {
                 <div className={styles.commentNav}>
                     <img onClick={()=>{EmojiOn == true ? setEmojiOn(false): setEmojiOn(true)}} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
                     {EmojiOn && <Emogi setEmogiAdd={setEmogiAdd}/>}
-                    <div>0/200<button>등록</button></div>
+                    <div style={{color: '#BBBBBB'}}>{commentLength}/{commentsLimit}<button>등록</button></div>
                 </div>
             </div>
             <CommentsList/>
@@ -173,6 +186,9 @@ function CommentsList() {
         return () => {// 컴포넌트가 언마운트될 때 이벤트 리스너를 제거
             document.removeEventListener('mousedown', handleClickOutside);
         };}, []);
+
+    
+
     return (
         <div>
             {/* 댓글 */}

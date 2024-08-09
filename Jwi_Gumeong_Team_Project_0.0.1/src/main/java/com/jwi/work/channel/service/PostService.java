@@ -104,7 +104,7 @@ public class PostService {
 		
 		post = postMapper.postInfo(postDelete.getPostKey());
 		
-		if(post.getUserKey() != postDelete.getUserKey()) {
+		if(post.getUserKey() != postDelete.getUserKey() || postDelete.getUserKey() != 0) {
 			anwer.setMessage("글 작성자가 아닙니다.");
 			anwer.setSuccess(false);
 			return anwer;
