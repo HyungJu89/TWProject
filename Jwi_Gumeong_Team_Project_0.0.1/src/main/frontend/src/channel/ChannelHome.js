@@ -12,6 +12,8 @@ import ChannelBody from './ChannelBody.js';
 import PublicMenu from '../main/PublicMenu.js'
 import { channelGet } from '../recycleCode/ChannelAxios.js';
 import {searchPost} from '../recycleCode/postAxios.js'
+import { useDispatch, useSelector } from 'react-redux';
+import { setSessionId, setUserKey, logout, setLoggedIn, fetchUserKey } from '../slice/sessionSlice.js';
 
 function ChannelHome() {
     let { channelId } = useParams();
@@ -19,6 +21,24 @@ function ChannelHome() {
     const [channelInfo,serChannelInfo] = useState();
     const [postList,setPostList] = useState([]);
     const [page,setPage] = useState(1);
+    
+    //세션화용 코드,state
+    var jsonSessionInfo = sessionStorage.getItem('sessionId');
+    var sessionInfo = JSON.parse(jsonSessionInfo);
+    const isLoggedIn = useSelector((state) => state.session.isLoggedIn);  
+    const dispatch = useDispatch();
+    //로그아웃 함수 
+    //dispatch함수를 컴포넌트에 props로 전달하려면 이렇게 함수로 따로 묶어서 설정해준 다음, 보내야됨
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+    //세션화 함수
+    useEffect(() => {
+        if (sessionInfo) {
+            dispatch(fetchUserKey(sessionInfo.sessionId));
+        }
+    }, [sessionInfo]);
+
     const fetchData = async (channelKey,page) => {
         const postListData = await searchPost('channel',channelKey,page);
         setPostList(postListData)
@@ -40,6 +60,7 @@ function ChannelHome() {
             navigate('/');
         }
     };
+    //여기까지 세션화
 
     //들어오자마자 작동
     useEffect(()=>{
@@ -88,7 +109,8 @@ function ChannelHome() {
                     <div className={style.listRight}>
                 
                         <div className={style.sideBar}>
-                            <PublicMenu loginOn={1} setLoginOn={1}/>
+                             {/* 이부분 */}
+                            <PublicMenu isLoggedIn = {isLoggedIn} onLogout={handleLogout}/>
                         </div>
                     </div>
                 </div>

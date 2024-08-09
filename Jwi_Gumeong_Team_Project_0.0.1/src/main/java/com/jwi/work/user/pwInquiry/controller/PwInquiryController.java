@@ -15,7 +15,6 @@ public class PwInquiryController {
 	private PwInquiryService pwInquiryService;
 	@PostMapping("/issuedPw")
 	public String issuedPw(@RequestBody User userData) {
-		System.out.println("들어오니?");
 		return pwInquiryService.pwIssued(userData.getEmail());
 	}
 }

@@ -54,7 +54,6 @@ public class SignInService {
     	//비밀번호 틀린 횟수 구하는 변수 만들기
     	ArrayList<Integer> wrongList =  userMapper.wrongList(userMapper.getUserKey(email));
     	int count = (int) wrongList.stream().filter(num -> num == 1).count();
-    	System.out.println(count);
     	
     	//이메일 체크처리
     	if(emailCheck(email)) {
