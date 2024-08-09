@@ -16,12 +16,12 @@
 		INSERT INTO image(imageUrl,imageHash,referenceCount) value (#{imageUrl},#{imageHash},1)
 	</insert>
 	
-	<update id="referenceUp" parameterType="String">
-		UPDATE image set referenceCount = referenceCount + 1 WHERE #{imageHash}
+	<update id="referenceUp" parameterType="int">
+		UPDATE image set referenceCount = referenceCount + 1 WHERE imageKey = #{imageKey}
 	</update>
 	
-	<update id="referenceDown" parameterType="String">
-		UPDATE image set referenceCount = referenceCount - 1 WHERE #{imageHash}
+	<update id="referenceDown" parameterType="int">
+		UPDATE image set referenceCount = referenceCount - 1 WHERE imageKey = #{imageKey} 
 	</update>
 
 	<delete id="deleteImg" parameterType="int">
@@ -36,7 +36,7 @@
 		SELECT * FROM image WHERE imageUrl = #{imageUrl}
 	</select>
 	
-	<delete id="deletePost" parameterType="int">
+	<delete id="postDelete" parameterType="int">
 		DELETE FROM post WHERE postKey = #{postKey}
 	</delete>
 

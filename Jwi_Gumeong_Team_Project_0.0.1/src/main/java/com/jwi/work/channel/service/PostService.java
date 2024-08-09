@@ -54,7 +54,7 @@ public class PostService {
 					String imageHash = fileManagerUtil.getHash(file);
 
 					ImageDto image = postMapper.selectHash(imageHash);
-
+					
 					if (image == null || image.getReferenceCount() == 0) {
 
 						image = new ImageDto();
@@ -109,7 +109,7 @@ public class PostService {
 		}
 		
 		
-		if (!post.getImage().equals(null)) {
+		if (post.getImage() != (null)) {
 			ObjectMapper objectMapper = new ObjectMapper();
 			List<String> imgUrlList;
 			try {
@@ -146,10 +146,14 @@ public class PostService {
 		}
 		
 		
-		postMapper.deletePost(postDelete.getPostKey());
+		postMapper.postDelete(postDelete.getPostKey());
 		// 0이면 delete되게
 
-		return null;
+		return anwer;
 	}
-
+	
+//	public AnswerDto<String> postUpdate(PostUpdateDto postDelete) {
+//
+	// 업데이트 로직은 기존에 post에 이미지가 있다면 우선적으로 전부 삭제하고 이미지를 select 를 해주면된다.
+//	}
 }

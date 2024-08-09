@@ -220,13 +220,35 @@ function BigCommentsList() {
     )
 }
 function MoreDelete({postInfo}) {
+
+    const deletePost = async(userKey,postKey) => {
+        
+        const postCreate = {
+            userKey:userKey,
+            postKey:postKey
+        }
+        try{
+            //서버로 데이터 전달
+            const {data} = await axios.post(`/post/delete`,postCreate);
+            console.log('서버 응답:', data);
+            // 성공적으로 업로드된 경우 추가적인 처리
+            window.location.reload();
+        } catch (error) {
+            console.error('업로드 실패:', error);
+            alert("서버에 이상이생겨 업로드를 실패하였습니다 다시한번 시도해주세요")
+        }
+    }
+ 
+
+
+
     let [deleteWrote, setDeleteWrote] = useState(true) //★내가 쓴 글이면 활성화 코드 추가★
     return (
         <div  className={styles.moreUi} style={{right:'-82px',top:'30px'}}>
             {deleteWrote == true ?
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <div className={styles.text}>수정하기</div>
-                    <div className={styles.text}>삭제하기</div>
+                    <div className={styles.text} onClick={ () => deletePost(postInfo.userKey,postInfo.postKey)}>삭제하기</div>
                 </div>
                 :
                 <div className={styles.text}>신고하기</div>}

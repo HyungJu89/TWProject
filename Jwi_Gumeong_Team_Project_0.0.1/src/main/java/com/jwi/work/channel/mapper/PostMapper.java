@@ -24,5 +24,5 @@ public interface PostMapper {
 	
 	public ImageDto selectUrl(@Param("imageUrl") String imageUrl);
 	 
-	public void deletePost(@Param("postKey")int postKey); 
+	public void postDelete(@Param("postKey")int postKey); 
 }
