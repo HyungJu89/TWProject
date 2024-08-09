@@ -52,7 +52,7 @@ public class EmailService {
     				sendEmail(email,subject,text);
     				;
     }
-  //회원가입 비밀번호 찾기 인증번호
+  //비밀번호 찾기 인증번호
     public void EmailCheck2(String email,String CheckNum) {
     	String subject = "쥐구멍 비밀번호 찾기 인증번호";
     	String text = "<html>"
@@ -63,12 +63,12 @@ public class EmailService {
     				sendEmail(email,subject,text);
     				;
     }
-   //회원가입 비밀번호 발급
+   //비밀번호 찾기 비밀번호 발급
     public void EmailCheck3(String email,String CheckNum) {
-    	String subject = "쥐구멍 비밀번호 발급";
+    	String subject = "쥐구멍 임시비밀번호 발급";
     	String text = "<html>"
     				+ "<body>"
-    				+ "<h3>인증번호 : " + CheckNum + "<h3>"
+    				+ "<h3>임시 비밀번호 : " + CheckNum + "<h3>"
     				+ "</body"
     				+ "</html>";
     				sendEmail(email,subject,text);

@@ -13,7 +13,7 @@ import btn_right from '../icon/btn/btn-right.png';
 import { getUserInfo } from '../slice/loginSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 
-function PublicMenu({ isLoggedIn, onLogout}) {
+function PublicMenu({ isLoggedIn, onLogout }) {
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);
     const dispatch = useDispatch();

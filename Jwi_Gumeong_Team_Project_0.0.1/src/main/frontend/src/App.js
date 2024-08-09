@@ -19,7 +19,7 @@ import Admin from './admin/Admin.js';
 import AdminMain from './admin/AdminMain.js';
 import AdminLogin from './admin/AdminLogin.js';
 import NotFound from './notFound/NotFound.js';
-import { setSessionId, setUserKey, clearSession, setLoggedIn } from './slice/sessionSlice.js';
+import { setSessionId,setUserKey,setLoggedIn,logout } from './slice/sessionSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
 import axios from 'axios';
@@ -29,16 +29,16 @@ function App() {
     //---------------------------------- 검색 부분
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    
+    const storeSessionId = sessionStorage.getItem("sessionId");
+    var sessionInfo = JSON.parse(storeSessionId);
+    //세션화
     useEffect(() => {
-        const storeSessionId = sessionStorage.getItem("sessionId");
-        var sessionInfo = JSON.parse(storeSessionId);
         if (sessionInfo) {
             dispatch(setSessionId(sessionInfo.sessionId));
             userKey(sessionInfo.sessionId);
             dispatch(setLoggedIn(true));
         }
-    }, []);
+    }, [sessionInfo]);
 
     const userKey = async (sessionId) => {
         try {
@@ -55,8 +55,7 @@ function App() {
     
     const isLoggedIn = useSelector((state) => state.session.isLoggedIn); // 로그인 상태
     const onLogout = () => { // 로그아웃 기능 (세션 아이디 지움)
-        sessionStorage.removeItem('sessionId');
-        dispatch(clearSession());
+        dispatch(logout());
     };
 
     let [searchText,setSearchText] = useState('');
