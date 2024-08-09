@@ -3,7 +3,6 @@ import React from 'react';
 import style from './style/NotFound.module.css';
 import { useNavigate } from 'react-router-dom';
 import notFoundImage from '../icon/img/404-img-x.png';
-import open_channel_w from '../icon/24px/open-channel-w.png';
 
 function NotFound(){ // 404 페이지
     let navigate = useNavigate();
