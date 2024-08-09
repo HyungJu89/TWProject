@@ -117,3 +117,7 @@ html, body {
 .warning {
     color: #EC000E;
 }
+
+.alarmModal {
+    white-space: pre-line;
+}

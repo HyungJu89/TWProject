@@ -80,7 +80,7 @@ function SignIn() {
                     // console.log(userResponse.data);
                     // console.log(userResponse.data.wrongCount);
                 } 
-                setModalContent(`${userResponse.data.reason}로 정지된 계정이에요.`);
+                setModalContent(`[${userResponse.data.reason}]\n 사유로 정지된 계정이에요.`);
                 setModalOpen(true);
                 
             } catch (error) {
@@ -172,7 +172,7 @@ function SignIn() {
                 <div className={styles.help}><h6 onClick={() => { navigate('/signUp') } }>회원가입</h6><h6>|</h6><h6 onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</h6></div>
             </div>
             {modalOpen && 
-                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+                <AlarmModal content={<div className={styles.alarmModal}>{modalContent}</div>} onClose={closeModal} />
             }
         </div>
     );
