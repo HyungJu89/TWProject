@@ -25,6 +25,7 @@ function Agree({ setAgreeCheck }) {
     const [selectedOption, setSelectedOption] = useState(false);
     const [selectedOption2, setSelectedOption2] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
     
 
     const handleOptionChange = (event) => {
@@ -42,19 +43,29 @@ function Agree({ setAgreeCheck }) {
         }
     }, [selectedOption, selectedOption2]);
 
-    useEffect(() => {
-        setModalOpen(true);
-    }, []);
-
     const closeModal = () => {
         setModalOpen(false);
     };
+
+    const handleNext = () => {
+        if (selectedOption && selectedOption2) {
+            setAgreeCheck(true);
+        } else {
+            setModalContent('동의사항에 동의하지 않으면 회원가입 할 수 없습니다.');
+            setModalOpen(true);
+        }
+    };
+
+    useEffect(() => {
+        setModalContent('이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!');
+        setModalOpen(true);
+    }, []);
 
     return (
         <div className={styles.joinContainer}>
             {modalOpen && (
                 <AlarmModal 
-                    content={<div>이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!</div>} 
+                    content={<div>{modalContent}</div>} 
                     onClose={closeModal} 
                 />
             )}
@@ -126,10 +137,10 @@ function Agree({ setAgreeCheck }) {
             <button onClick={() => {
                 if (selectedOption && selectedOption2) {
                     setAgreeCheck(true);
+                } else {
+                    handleNext();
                 }
-                else { alert('동의사항에 동의하지 않으면 회원가입 할 수 없습니다.') }
-            }}
-                className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} >
+            }}className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} >
                 다음
             </button>
             
@@ -374,7 +385,9 @@ function Join() {
                     handleEmailCheck();
                     setEmailCheck(response.data);
                 }else{
-                    alert('올바르지 않은 접근방식 입니다.');
+                    {modalOpen && 
+                        <AlarmModal content={<div>올바르지 않은 접근방식 입니다.</div>} onClose={closeModal} />
+                    }
                 }
             })
                 .catch(error => {
@@ -436,12 +449,12 @@ function Join() {
 
             // 응답 처리
             if (response.status === 200) {
-                alert('가입이 완료되었습니다.');
+                {modalOpen && <AlarmModal content={<div>가입이 완료되었습니다.</div>} onClose={closeModal} />}
                 navigate('/');
             }
         } catch (error) {
             console.error('가입 중 오류 발생:', error);
-            alert('가입 중 오류가 발생했습니다.');
+            {modalOpen && <AlarmModal content={<div>가입 중 오류가 발생했습니다.</div>} onClose={closeModal} />}
         }
     };
 

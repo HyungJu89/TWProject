@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 import { setLoggedIn } from '../slice/sessionSlice.js';
+import AlarmModal from '../modal/AlarmModal.js';
 
 function SignIn() {
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
@@ -23,8 +24,17 @@ function SignIn() {
     const [loginWarn, setLoginWarn] = useState('');
     //로그인 비번 카운트
     let [count, setCount] = useState(0);
+    // 알림 모달
+    const [modalOpen, setModalOpen] = useState(false);
+    // 모달 내용
+    const [modalContent, setModalContent] = useState('');
     const dispatch = useDispatch();
     let navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     // 눈 아이콘 클릭시 바꾸게 설정하기
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -35,14 +45,17 @@ function SignIn() {
         checkUser();    
         }
     };
-          // 로그인 버튼 클릭 핸들러
+    // 로그인 버튼 클릭 핸들러
     const handleLogin = () => {
         if (email === '') {
-            alert('이메일을 입력해주세요!');
+            setModalContent('이메일을 입력해주세요!');
+            setModalOpen(true);
         } else if (password === '') {
-            alert('비밀번호를 입력해주세요!');
+            setModalContent('비밀번호를 입력해주세요!');
+            setModalOpen(true);
         } else if (count >= 5) {
-            alert('비밀번호를 5회이상 틀리셨습니다!');
+            setModalContent('비밀번호를 5회 이상 틀리셨습니다!');
+            setModalOpen(true);
         }else {
             checkUser();
         }
@@ -57,7 +70,7 @@ function SignIn() {
                     pw: password
                 };
                 const userResponse = await axios.post('/signIn/loginCheck', userData);
-                // console.log("userResponse:", userResponse.data);
+                
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
                     dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
@@ -67,7 +80,8 @@ function SignIn() {
                     // console.log(userResponse.data);
                     // console.log(userResponse.data.wrongCount);
                 } 
-                setLoginWarn(userResponse.data.warningMessage);
+                setModalContent(`${userResponse.data.reason}로 정지된 계정이에요.`);
+                setModalOpen(true);
                 
             } catch (error) {
                 console.error('Channel API Error:', error);
@@ -113,7 +127,6 @@ function SignIn() {
     };
 
     return (
-        
         <div className={styles.section}>
             <div className={styles.loginContainer}>
                 <div className={styles.topFont}>로그인</div>
@@ -158,6 +171,9 @@ function SignIn() {
                 </button>
                 <div className={styles.help}><h6 onClick={() => { navigate('/signUp') } }>회원가입</h6><h6>|</h6><h6 onClick={() => { navigate('/pwInquiry') } }>비밀번호 찾기</h6></div>
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     );
 }
