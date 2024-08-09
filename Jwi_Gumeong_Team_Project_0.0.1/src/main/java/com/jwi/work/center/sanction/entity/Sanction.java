@@ -1,6 +1,8 @@
-package com.jwi.work.center.entity;
+package com.jwi.work.center.sanction.entity;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,24 +16,27 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="faq")
-public class Faq {
-	
+@Table(name="banned")
+public class Sanction {
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	public int key;
+	public int bannedKey;
 	
-	@Column(name = "title", nullable = false, length = 32)
-	public String title;
+	@Column(name = "userKey", nullable = false)
+	public int userKey;
 	
-	@Column(name = "content", nullable = false)
-	public String content;
+	@Column(name = "reason", nullable = false)
+	public String reason;
 	
-	@Column(name = "category", nullable = false, length = 32)
-	public String category;
+	@Column(name = "reasonDate", nullable = false)
+	public Date reasonDate;
 	
-	@Column(name = "imagePath", nullable = true, length = 256)
-	public String imagePath;
+	@Column(name = "date", nullable = false)
+	public int date;
+	
+	@Column(name = "state", nullable = false)
+	public String state;
 	
 	@Column(name = "createdAt", nullable = false)
     private LocalDateTime createdAt;
@@ -49,5 +54,12 @@ public class Faq {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+    
+    public Date getEndDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(reasonDate);
+        calendar.add(Calendar.DATE, date); // date만큼 일수를 더함
+        return calendar.getTime();
     }
 }

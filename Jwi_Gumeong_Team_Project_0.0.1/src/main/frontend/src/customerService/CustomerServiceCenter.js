@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import styles from './style/CustomerService.module.css';
 import serviceLogo from '../icon/img/service-Illustration.png';
@@ -12,10 +13,27 @@ import addIcon from '../icon/40px/add.png';
 
 function CustomerServiceCenter() {
     let [tab, setTab] = useState(0);
-    // 제재내역
-    const sanctions = [
-        // 일부러
-    ];
+    const userKey = useSelector((state) => state.session.userKey); // Redux에서 userKey 가져오기
+    const [sanctions, setSanctions] = useState([]); // 제재 내역 상태
+    const userState = useSelector((state) => state.userState);  // 로그인한 유저 정보??
+
+    useEffect(() => {
+        if (userKey) {
+            // userKey가 있을 때만 API 호출
+            axios.post('/sanction/list', null, {
+                params: { userKey }
+            })
+            .then(response => {
+                if (response.data.result === "success") {
+                    console.log(response.data.sanctionList);
+                    setSanctions(response.data.sanctionList);
+                }
+            })
+            .catch(error => {
+                console.log("API 호출 오류: " + error.message);
+            });
+        }
+    }, [userKey]); // userKey가 변경될 때마다 호출
 
     // 문의 내역
     const inquiryList = [
@@ -191,10 +209,10 @@ function CustomerServiceCenter() {
                                         <div key={index} className={styles.sanctionItem}>
                                             <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
                                             <div className={styles.sanctionDetails}>
-                                                <div className={styles.sanctionTitle}>{sanction.title}</div>
+                                                <div className={styles.sanctionTitle}>{userState.nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
                                                 <div className={styles.sanctionContent}>
                                                     <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
-                                                    <div className={styles.sanctionDate}>~ {sanction.date} 까지</div>
+                                                    <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>
                                                 </div>
                                             </div>
                                             {index < currentSanctions.length - 1 && <div className={styles.sanctionDivider}></div>}

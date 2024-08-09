@@ -1,12 +1,12 @@
-package com.jwi.work.center.service;
+package com.jwi.work.center.faq.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jwi.work.center.entity.Faq;
-import com.jwi.work.center.repository.FaqRepository;
+import com.jwi.work.center.faq.entity.Faq;
+import com.jwi.work.center.faq.repository.FaqRepository;
 
 @Service
 public class FaqService {

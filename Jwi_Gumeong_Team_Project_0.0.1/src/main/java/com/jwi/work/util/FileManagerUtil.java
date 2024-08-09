@@ -67,16 +67,12 @@ public class FileManagerUtil {
 		
 		// 선택한 파일의 이름을 저장
 		String originalFileName = file.getOriginalFilename();
-
 		// 위에있는 originalFileName 의 파일 이름에서 파일 확장자만 가져온다
 		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
 		// 저장될 파일 명
-		String savedFileName = UUID.randomUUID() + extension; 
-		
-		
+		String savedFileName = UUID.randomUUID() + extension; 			
 		String fileRoot = webMVCConfig.getUploadDir();
 
-		
 		System.out.println(fileRoot);
 		
 		File directory = new File(fileRoot);
@@ -88,11 +84,9 @@ public class FileManagerUtil {
                 return null;
             }
         }
-		
-		
 //		String originalFileName = file.getOriginalFilename();	//오리지날 파일명 <- 요친구 날리고
 //    	String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자 만 가져와서 
-//     UUID.randomUUID() 랜덤으로다 돌리면 맥에서도 괜찮지않을까요?
+//     	UUID.randomUUID() 랜덤으로다 돌리면 맥에서도 괜찮지않을까요?
 
 		// 파일 저장
 		String filePath = null;
@@ -102,22 +96,18 @@ public class FileManagerUtil {
 			filePath = fileRoot + savedFileName;
 			Path path = Paths.get(filePath);
 			Files.write(path, bytes);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 			logger.error("savefile : 파일 생성 실패 - " + filePath);
 			return null;
 		}
-
 		return savedFileName;
 	}
-
 	
 	// 파일 삭제 메소드
 	public boolean removeFile(String filePath) { // /images/2_38239823/test.png
 
 		String fileRoot = webMVCConfig.getUploadDir();
-		
 		String realFilePath = fileRoot + filePath;
 		Path path = Paths.get(realFilePath);
 
@@ -130,9 +120,6 @@ public class FileManagerUtil {
 				return false;
 			}
 		}
-
-
 		return true;
 	}
-
 }

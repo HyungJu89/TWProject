@@ -1,4 +1,4 @@
-package com.jwi.work.center.controller;
+package com.jwi.work.center.faq.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jwi.work.center.entity.Faq;
-import com.jwi.work.center.service.FaqService;
+import com.jwi.work.center.faq.entity.Faq;
+import com.jwi.work.center.faq.service.FaqService;
 
 @RequestMapping("/faq")
 @RestController
