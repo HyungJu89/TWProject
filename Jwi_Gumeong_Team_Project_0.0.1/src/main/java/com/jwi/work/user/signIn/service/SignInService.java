@@ -107,7 +107,6 @@ public class SignInService {
                 userCheck.setState("탈퇴한 계정");
                 return userCheck;
     		}
-    		
     		//로그인 체크처리
     		if(loginTest(userInfo)) {
 				LoginLog userConnect = new LoginLog();
@@ -124,6 +123,8 @@ public class SignInService {
     			userConnect.setUserKey(userMapper.getUserKey(email));
     			userConnect.setLoginSuccess(1);
     			userMapper.saveLog(userConnect);
+    			//유저 틀린 비밀번호 횟수 + 1해서 테이블에 업데이트하기
+    			//유저 틀린 비밀번호 횟수 가져와서 userCheck에 저장하기
     			userCheck.setCheck(false);
     			userCheck.setWarningMessage("비밀번호가 일치하지 않습니다.");
     	    	userCheck.setWrongCount(count + 1);

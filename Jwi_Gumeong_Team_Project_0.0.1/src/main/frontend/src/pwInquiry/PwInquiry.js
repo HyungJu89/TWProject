@@ -201,9 +201,9 @@ function PwIssue({ certiNum, onLogout }) {
     const navigate = useNavigate();
     return (
         <div>
-            <div className={styles.pwIssueInform}>임시 발행 비밀번호 입니다. 로그인 후 꼭 비밀번호를 변경해주세요.</div>
-            <div className={styles.pwIssue}>{certiNum}</div>
-            <button className={`${styles.loginButton} ${styles.active}`} onClick={() => { onLogout(); navigate('/signIn'); }}>로그인하러가기</button>
+            <div style={{ fontSize:'16px', padding:'56px'}}><div style={{ display:'flex', justifyContent:'center'}} className={styles.pwIssueInform}><div>앞서 인증하신 </div><div style={{ color:"#FF8901", fontWeight:"600" }}>이메일로 임시 비밀번호를 발행</div><div>해 드렸습니다.</div></div>
+            <div className={styles.pwIssueInform}><div>로그인 후 꼭 비밀번호를 변경해주세요</div></div></div>
+            <button style={{ marginTop: '60px' }} className={`${styles.loginButton} ${styles.active}`} onClick={()=>{onLogout(); navigate('/signIn');}}>로그인하러가기</button>
         </div>
     );
 }
