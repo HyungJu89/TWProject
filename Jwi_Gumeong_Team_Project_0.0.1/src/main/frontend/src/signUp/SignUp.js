@@ -56,11 +56,6 @@ function Agree({ setAgreeCheck }) {
         }
     };
 
-    useEffect(() => {
-        setModalContent('이메일 수신 동의는 회원가입 시 이메일 인증을 위하여 반드시 하여야 회원가입 할 수 있습니다!!!');
-        setModalOpen(true);
-    }, []);
-
     return (
         <div className={styles.joinContainer}>
             {modalOpen && (
@@ -140,7 +135,7 @@ function Agree({ setAgreeCheck }) {
                 } else {
                     handleNext();
                 }
-            }}className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} >
+            }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} >
                 다음
             </button>
             

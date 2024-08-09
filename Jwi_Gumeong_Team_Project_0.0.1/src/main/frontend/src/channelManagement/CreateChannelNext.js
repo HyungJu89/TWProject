@@ -83,6 +83,8 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
                 if (!data.success) {
                     openModal('이미 생성된 채널입니다. 해당 채널로 이동합니다.', () => navigate(data.navigate));
                     return;
+                } else {
+                    navigate(data.navigate);
                 }
             } catch (error) {
                 console.error('Error creating channel:', error);
