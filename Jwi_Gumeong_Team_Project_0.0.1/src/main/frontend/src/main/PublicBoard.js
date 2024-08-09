@@ -92,9 +92,9 @@ function Comments() {
     let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off   
     let commentsArray = [//댓글 리스트 배열 (임시)
         {reply: false,nickname: "닉네임", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
-        {reply: true,nickname: "gd", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
-        {reply: true,nickname: "2", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
-        {reply: true,nickname: "3", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"}
+        {reply: false,nickname: "gd", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
+        {reply: false,nickname: "2", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
+        {reply: false,nickname: "3", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"}
     ];
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
@@ -188,6 +188,7 @@ function CommentsList({ reply, nickname, time, content }) {
     }, [commentMoreON]);
 
     return (
+        <>
         <div className={reply ? styles.bigComments : null}>
             {reply && <img className={styles.BcImg} src={big_comment} />}
             {/* 댓글 */}    
@@ -202,6 +203,8 @@ function CommentsList({ reply, nickname, time, content }) {
                 <div className={styles.listContent}>{content}</div>
             </div>
         </div>
+            이곳에서 대댓글 컴포넌트가 작동되어야 해요
+        </>
     )
 }
 
