@@ -147,18 +147,12 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
         };
     
         return (
-            <div
-                className={styles.tooltip}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
+            <div className={styles.tooltip} onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}>
                 {children}
                 {visible && (
-                    <div
-                        className={`${styles.tooltipMsg} ${
-                            animationStarted ? styles.tooltipAnimation : ''
-                        }`}
-                    >
+                    <div className={`${styles.tooltipMsg} ${
+                            animationStarted ? styles.tooltipAnimation : ''}`}>
                         {message}
                     </div>
                 )}

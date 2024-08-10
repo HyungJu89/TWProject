@@ -10,7 +10,9 @@ import com.jwi.work.center.sanction.entity.Sanction;
 
 @Repository
 public interface SanctionRepository extends JpaRepository<Sanction, Integer>{
-	
+	// 유저 키로 밴 목록 불러오기
 	public List<Sanction> findByUserKey(@Param("userKey") int userKey);
+	// 밴 종료인지 확인
+	List<Sanction> findByState(String state);
 	
 }

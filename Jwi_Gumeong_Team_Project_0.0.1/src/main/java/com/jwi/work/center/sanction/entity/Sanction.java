@@ -44,6 +44,7 @@ public class Sanction {
     @Column(name = "updatedAt", nullable = false)
     private LocalDateTime updatedAt;
     
+    
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -59,7 +60,7 @@ public class Sanction {
     public Date getEndDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(reasonDate);
-        calendar.add(Calendar.DATE, date); // date만큼 일수를 더함
+        calendar.add(Calendar.DATE, date); // 시작일로부터 date만큼 일수를 더함
         return calendar.getTime();
     }
 }

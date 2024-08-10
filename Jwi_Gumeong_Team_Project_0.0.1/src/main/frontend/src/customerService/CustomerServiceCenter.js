@@ -95,7 +95,7 @@ function CustomerServiceCenter() {
                         {faqs.map((faq, idx) => (
                             <div key={idx} onClick={() => openedFaq(idx)} className={styles.faqItem}>
                                 <div className={styles.faqHeader}>
-                                    <img src={asking} className={styles.faqIcon} alt="답변 아이콘"/>
+                                    <img src={asking} className={styles.faqIcon} alt="자주묻는 질문 아이콘"/>
                                     <div className={styles.faqDetails}>
                                         <div className={styles.faqTitle}>{faq.title}</div>
                                         <div className={styles.faqSubtitle}>{faq.category}</div>
@@ -176,7 +176,10 @@ function CustomerServiceCenter() {
                                         <div className={styles.inquiryHeader}>
                                             <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
                                             <div className={styles.inquiryDetails}>
-                                                <div className={styles.inquiryTitle}>문의하신 내용을 답변 받았습니다.</div>
+                                                <div className={styles.inquiryTitleContainer}>
+                                                    <div className={styles.inquiryTitle}>문의하신 내용을 답변 받았습니다.</div>
+                                                    <div className={styles.inquiryResponse}>답변완료</div>
+                                                </div>
                                                 <div className={styles.inquirySubtitle}>문의 제목: {inquiry.title}</div>
                                             </div>
                                         </div>
