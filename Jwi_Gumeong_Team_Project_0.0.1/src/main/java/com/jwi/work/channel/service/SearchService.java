@@ -81,7 +81,7 @@ public class SearchService {
 		return searchPost;
 
 	}
-	
+	 
 	public AnswerDto<List<PostDto>> searchRecommended(){
 		AnswerDto<List<PostDto>> answer = new AnswerDto<>();
 		
