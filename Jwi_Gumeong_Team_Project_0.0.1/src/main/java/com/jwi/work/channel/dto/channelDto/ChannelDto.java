@@ -1,6 +1,4 @@
-package com.jwi.work.channel.dto;
-
-import java.time.LocalDateTime;
+package com.jwi.work.channel.dto.channelDto;
 
 import lombok.Data;
 
@@ -11,9 +9,7 @@ public class ChannelDto {
 	private String id;
 	private String name;
 	private String imageUrl;
-	private String followerCount;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
+	private int followerCount;
 	private int favoriteCount;
 	
 }

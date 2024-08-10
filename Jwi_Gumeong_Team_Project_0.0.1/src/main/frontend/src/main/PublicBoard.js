@@ -55,7 +55,9 @@ function PublicBoard({postInfo}) {
 
     return (
         <div className={styles.mainDiv}>
-            <ChannelTitle postInfo={postInfo} />
+            {postInfo.postChannel && (
+            <ChannelTitle postChannel={postInfo.postChannel} />
+            )}
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
                 <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true)}} src={more} />
@@ -80,7 +82,7 @@ function PublicBoard({postInfo}) {
             <div className={styles.widthNav} style={{ marginBottom: '0px' }}>{/* 하단 댓글,좋아요,공유 */}
                 <div className={styles.commentsDiv}>
                     {/*댓글창*/}    <div onClick={() => { commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
-                        <img src={comments} /><div className={styles.comments}>123</div></div>
+                        <img src={comments} /><div className={styles.comments}>{postInfo.commentCount}</div></div>
                     {/*좋아요*/}    <div onClick={() => { heart == false ? setHeart(true) : setHeart(false) }}>
                         {heart === true ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
                         <div className={styles.comments}>123123</div>
@@ -88,23 +90,25 @@ function PublicBoard({postInfo}) {
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
-            {commentsON && <Comments />}
+            {commentsON && <Comments postKey={postInfo.postKey}/>}
         </div>
     )
 }
-function ChannelTitle({ postInfo }) {
+function ChannelTitle({ postChannel }) {
     let navigate = useNavigate();
     return (
-        <div onClick={()=>{navigate(`/channel/${postInfo.channelId}`)}}>
+        <div onClick={()=>{navigate(`/channel/${postChannel.id}`)}}>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                <img src={postInfo.imageUrl} /><div style={{cursor:'pointer'}}>{postInfo.name}</div>
+                <img src={postChannel.imageUrl} /><div style={{cursor:'pointer'}}>{postChannel.name}</div>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
         </div>
     )
 }
 
-function Comments() {
+function Comments({postKey}) {
+
+
     let commentsArray = [//댓글 리스트 배열 (임시)
         {reply: false,nickname: "닉네임", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
         {reply: false,nickname: "gd", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
@@ -114,8 +118,22 @@ function Comments() {
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
-    const textareaRef = useRef(null); //텍스트 영역 ref 지정
+    // 컴포넌트 로드용 함수
+    const [commentLode,setCommentLode] = useState(true);
+    let [comments,setComments] = useState([]);
 
+    const textareaRef = useRef(null); //
+
+    //댓글 길이 제한
+    const commentsLimit = 200;
+    //댓글작성 내용
+    const [comment, setComment] = useState('');
+    //댓글 길이 저장
+    const [commentLength, setCommentLength] = useState(0);
+    //댓글작성 버튼 색상
+    const [commentButtonColor,setCommentButtonColor] = useState('#FF8901');
+    //댓글 길이 text 색상
+    const [commentTextColor,setCommentTextColor] = useState('#BBBBBB');
     // 이모지 삽입 함수
     const insertEmogiAtCursor = (emoji) => {
         const textarea = textareaRef.current;
@@ -139,9 +157,16 @@ function Comments() {
     }, [emogiAdd]);
     const handleInput = (e) => {//스크롤 늘어나게
         const textarea = textareaRef.current;
+        
         if (textarea) {
+            // text 가 지워질때 높이를 초기화해주기위해
+            textarea.style.height = 'auto';
             textarea.style.height = `${textarea.scrollHeight}px`;
         }
+        setComment(e.target.value)
+        setCommentLength(e.target.value.length)
+        setCommentButtonColor(e.target.value.length <= commentsLimit ? '#FF8901' : '#BBBBBB')
+        setCommentTextColor(e.target.value.length <= commentsLimit ? '#BBBBBB' : '#EC000E')
     };
 
     //모달함수
@@ -160,6 +185,58 @@ function Comments() {
         };
     }, [moreON]);
 
+
+    //댓글 작성 
+    const createComment = async() => {
+        if(commentsLimit < commentLength){
+            return alert('너무 김');
+        }
+
+
+
+        // 추가로 로직필요하면 여기에
+        const channelCreate = {
+            userKey: '1',
+            postKey: postKey,
+            comment: comment
+        };
+
+        try {
+            const {data} = await axios.post(`/comment/create`,channelCreate)
+            if (!data.success) {
+                alert("게시글 생성이 안됨 ㅅㄱ")
+            }
+            console.log(data)
+
+        } catch (error) {
+            console.error('Error creating channel:', error);
+        }
+
+        setCommentLode((state) => state?false : true)
+    }
+
+    const fetchData = async () => {
+        try {
+            const { data } = await axios.get(`/comment/select`, {
+                params: {
+                    postKey: postKey,
+                    isAsc : true
+                }
+            });
+            setComments(data);
+            console.log(data)
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            throw new Error('Failed to fetch channel data');
+        }
+    };
+
+    //댓글 불러오기
+    useEffect(()=>{
+        fetchData()
+    },[commentLode])
+
+    
     return (
         <div>
             <div className={styles.dashed} />{/* 회색줄 */}
@@ -178,24 +255,25 @@ function Comments() {
                 <div className={styles.commentNav}>
                     <img onClick={()=>{EmojiOn == true ? setEmojiOn(false): setEmojiOn(true)}} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
                     {EmojiOn && <Emogi setEmogiAdd={setEmogiAdd}/>}
-                    <div>0/200<button>등록</button></div>
+                    <div style={{color : commentTextColor}}>{commentLength}/{commentsLimit}<button style={{backgroundColor : commentButtonColor}} onClick={createComment}>등록</button></div>
                 </div>
             </div>
-            {commentsArray.map((comment, index) => {
+            {comments.success &&
+            <>
+            {comments.info.map((comment, index) => {
             return (
                 <CommentsList
                     key={index} 
-                    reply={comment.reply} //대댓글 여부
-                    nickname={comment.nickname} //작성자
-                    time={comment.time} //작성시기
-                    content={comment.content} //내용
+                    comment={comment}
                 />
             );
             })}
+            </>
+        }
         </div>
     )
 }
-function CommentsList({ reply, nickname, time, content }) {
+function CommentsList({ comment }) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     const modalRef = useRef(null);
     const moreRef = useRef(null);
@@ -214,21 +292,32 @@ function CommentsList({ reply, nickname, time, content }) {
 
     return (
         <>
-        <div className={reply ? styles.bigComments : null}>
-            {reply && <img className={styles.BcImg} src={big_comment} />}
-            {/* 댓글 */}    
+        <div>{/* 댓글 */}    
             <div className={styles.list}>
                 <div className={styles.listNav}>
-                    <div className={styles.listName}>{nickname}<div className={styles.time}>{time}</div></div>
+                    <div className={styles.listName}>{comment.nickName}<div className={styles.time}>{comment.createdAt}</div></div>
                     <div>
                     <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true)}} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                     {commentMoreON && <div ref={modalRef}><MoreDeleteMini/></div>} {/*신고, 삭제 모달*/}
                     </div>
                 </div>
-                <div className={styles.listContent}>{content}</div>
+                <div className={styles.listContent}>{comment.comment}</div>
             </div>
         </div>
-            이곳에서 대댓글 컴포넌트가 작동되어야 해요
+        {comment.replys.map((reply, index) => {
+            return (
+                <div className={styles.bigComments} key={index}>
+                    <img className={styles.BcImg} src={big_comment} />
+                    <div>
+                    닉네임 : {reply.nickName} 
+                    작성일자 : {reply.createdAt} 
+                    수정일자 : {reply.updatedAt}
+                    댓글 {reply.reply}
+                    </div>
+                </div>
+            )
+        })}
+
         </>
     )
 }

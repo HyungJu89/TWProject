@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwi.work.channel.mapper.ReplyMapper">
+
+<insert id="replyCreate" parameterType="com.jwi.work.channel.dto.bodyDto.CommentCreateDto">
+	INSERT INTO reply(commentKey,replyreplyKey,userKey,reply) value (#{commentKey},#{replyreplyKey},#{userKey},#{reply})
+</insert>
+
+</mapper>

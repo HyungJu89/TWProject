@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.channel.dto.AnswerDto;
-import com.jwi.work.channel.dto.ChannelCreateDto;
-import com.jwi.work.channel.dto.ChannelDto;
+import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
+import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.mapper.ChannelMapper;
 
 @Service

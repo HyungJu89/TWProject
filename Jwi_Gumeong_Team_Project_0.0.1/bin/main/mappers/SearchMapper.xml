@@ -3,6 +3,26 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.channel.mapper.SearchMapper">
 
+<resultMap type="com.jwi.work.channel.dto.postDto.PostDto" id="postResultMap">
+	<id property="postKey" column="postKey"/>
+	<result property="nickName" column="P_nickName" />
+	<result property="content" column="P_content" />
+	<result property="image" column="P_image" />
+	<result property="state" column="P_state" />
+	<result property="likeCount" column="P_likeCount" />
+	<result property="commentCount" column="P_commentCount" />
+	<result property="createdAt" column="P_createdAt" />
+	<result property="updatedAt" column="P_updatedAt" />
+	<association property="postChannel" javaType="com.jwi.work.channel.dto.postDto.PostChannelDto" resultMap="postChannelResultMap"/>
+</resultMap>
+
+<resultMap type="com.jwi.work.channel.dto.postDto.PostChannelDto" id="postChannelResultMap">
+		<id property="channelKey" column="channelKey"/>
+		<result property="id" column="PC_id"/>
+		<result property="imageUrl" column="PC_imageUrl"/>
+		<result property="name" column="PC_name"/>
+</resultMap>
+
 	<!-- 채널 검색시 -->
 
 	<select id="searchChannelCount" parameterType="map" resultType="int">
@@ -10,9 +30,13 @@
 		CONCAT('%',#{search},'%')
 	</select>
 
-	<select id="searchChannel" parameterType="map" resultType="map">
+	<select id="searchChannelList" parameterType="map" resultType="com.jwi.work.channel.dto.channelDto.ChannelDto">
 		SELECT
-			channel.*,
+			channel.channelKey,
+			channel.id,
+			channel.name,
+			channel.followerCount,
+			channel.imageUrl,
 			COALESCE(COUNT(favorites.channelKey), 0) AS favoriteCount 
 		FROM
 			channel
@@ -29,54 +53,110 @@
 	<!-- 개시글 검색시 -->
 	<select id="searchPostCount" parameterType="map" resultType="int">
 		SELECT COUNT(*) FROM post WHERE content LIKE
-		CONCAT('%',#{search},'%')
+		CONCAT('%',#{search},'%')  AND state = 'common';
 	</select>
 	
-	<select id="searchPost" parameterType="map" resultType="map">
+	<select id="searchPostList" parameterType="map" resultMap="postResultMap">
 		SELECT 
-			post.*,
-			user.NickName AS nickName,
-			channel.Id AS channelId,
-			channel.name AS name,
-			channel.imageUrl AS imageUrl
+			post.postKey AS postKey,
+			post.content AS P_content,
+			post.image AS P_image,
+			post.state AS P_state,
+			post.createdAt AS P_createdAt,
+			post.updatedAt AS P_updatedAt,
+			
+			IFNULL(commentSummary.commentCount, 0) AS  P_commentCount,
+			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
+			user.nickName AS P_nickName,
+			
+			
+			channel.channelKey AS channelKey,
+			channel.id AS PC_id,
+			channel.imageUrl AS PC_imageUrl,
+			channel.name AS PC_name
+
 		FROM 
 			post 
 		LEFT JOIN
+			channel ON post.channelKey = channel.channelKey
+		LEFT JOIN
+			(SELECT
+				`like`.postKey,
+				COUNT(DISTINCT `like`.postKey) AS likeCount
+			FROM
+				`like`
+			GROUP BY
+				`like`.postKey
+			) AS likeSummary ON post.postKey = likeSummary.postKey
+		LEFT JOIN
 			user ON post.userKey = user.userKey
 		LEFT JOIN
-			channel ON post.channelKey = channel.channelKey
+        	(SELECT 
+            	comment.postKey, 
+            	COUNT(DISTINCT comment.commentKey) AS commentCount 
+         	FROM 
+            	comment
+         	GROUP BY 
+            	comment.postKey
+        ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
-			post.content LIKE CONCAT('%',#{search},'%')
+			post.content LIKE CONCAT('%',#{search},'%')  AND post.state = 'common'
 		ORDER BY
         	post.createdAt DESC
 		LIMIT	
 			#{offset},#{limit}
 	</select>
-
-	<!-- 채널에서 개시글 -->
-	<select id="channelPostCount" parameterType="map" resultType="int">
-			SELECT COUNT(*) FROM Post WHERE channelKey = #{search}
-	</select>
 	
-	<select id="channelPost" parameterType="map" resultType="map">
+		<select id="searchRecommended" resultMap="postResultMap">
 		SELECT 
-			post.*,
-			user.NickName AS nickName,
-			channel.Id AS channelId,
-			channel.name AS name,
-			channel.imageUrl AS imageUrl
+			post.postKey AS postKey,
+			post.content AS P_content,
+			post.image AS P_image,
+			post.state AS P_state,
+			post.createdAt AS P_createdAt,
+			post.updatedAt AS P_updatedAt,
+			
+			IFNULL(commentSummary.commentCount, 0) AS  P_commentCount,
+			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
+			user.nickName AS P_nickName,
+			
+			
+			channel.channelKey AS channelKey,
+			channel.id AS PC_id,
+			channel.imageUrl AS PC_imageUrl,
+			channel.name AS PC_name
+
 		FROM 
 			post 
 		LEFT JOIN
-			user ON post.userKey = user.userKey
-		LEFT JOIN
 			channel ON post.channelKey = channel.channelKey
+		LEFT JOIN
+			(SELECT
+				`like`.postKey,
+				COUNT(`like`.likeKey) AS likeCount
+			FROM
+				`like`
+			GROUP BY
+				`like`.postKey
+			) AS likeSummary ON post.postKey = likeSummary.postKey
+		LEFT JOIN
+			user ON post.userKey = user.userKey 
+		LEFT JOIN
+        	(SELECT 
+            	comment.postKey, 
+            	COUNT(comment.commentKey) AS commentCount 
+         	FROM 
+            	comment
+         	GROUP BY 
+            	comment.postKey
+        ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
-			post.channelKey = #{search}
+			post.state = 'common'
 		ORDER BY
+		 	likeSummary.likeCount DESC,
         	post.createdAt DESC
-		LIMIT
-			#{offset},#{limit}
+		LIMIT	
+			0,10
 	</select>
 
 </mapper>

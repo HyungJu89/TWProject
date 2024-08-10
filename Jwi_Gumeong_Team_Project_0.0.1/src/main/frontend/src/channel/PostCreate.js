@@ -10,7 +10,6 @@ import AlarmModal from '../modal/AlarmModal.js';
 
 function PostCreact({channelKey}) {
     const navigate = useNavigate();
-    let { channelId } = useParams();
     // 게시글 길이 제한
     const contentLimit = 300;
     // 게시글작성 내용
@@ -27,7 +26,7 @@ function PostCreact({channelKey}) {
     const [selectedImage, setSelectedImage] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-
+    const [postCreateButtonColor,setPostCreateButtonColor] = useState('#FF8901');
     const closeModal = () => {
         setModalOpen(false);
     };
@@ -36,6 +35,7 @@ function PostCreact({channelKey}) {
     const handleInput = () => {
         setContent(contentRef.current.innerText);
         setContentColor(contentRef.current.innerText.length <= 300 ? '#BBBBBB' : '#EC000E')
+        setPostCreateButtonColor(contentRef.current.innerText.length <= 300 ? '#FF8901' : '#BBBBBB')
         setHasContent(contentRef.current.innerText.trim().length !== 0)
     }
     // 이미지 선택할때 input='file' 를 실행시켜줌
@@ -74,7 +74,7 @@ function PostCreact({channelKey}) {
     }
     // 서버로 게시글 정보를 넘김
     const postCreact = async() => {
-        if(content.length < 10){
+        if(content.length < 3){
             setModalContent('내용이 너무 짧아요.');
             setModalOpen(true);
             return;
@@ -141,7 +141,7 @@ function PostCreact({channelKey}) {
                     multiple 
                 />{/*이미지 업로드용 아이콘 */}
                 <div className={style.textareaSize} style={{ color: contentColor }}>{content.length}/{contentLimit}</div>{/*작성된 글자수*/}
-                <div className={style.postCreactButton} onClick={postCreact}>등록</div>{/*게시글 작성 버튼*/}
+                <div className={style.postCreactButton} onClick={postCreact} style={{ backgroundColor: postCreateButtonColor }}>등록</div>{/*게시글 작성 버튼*/}
             </div>
 
             {modalOpen && 
