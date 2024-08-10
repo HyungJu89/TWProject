@@ -39,7 +39,6 @@ function ChannelHome() {
         }
     }, [sessionInfo]);
 
-
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     

@@ -14,4 +14,6 @@ public class CheckDto {
 	private String userKey;
 	
 	private String reason;
+	
+	private String state;
 }

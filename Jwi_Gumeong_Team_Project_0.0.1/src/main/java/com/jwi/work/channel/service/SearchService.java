@@ -10,7 +10,7 @@ import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.mapper.SearchMapper;
-import com.jwi.work.channel.util.PagingUtil;
+import com.jwi.work.util.PagingUtil;
 
 @Service
 public class SearchService {

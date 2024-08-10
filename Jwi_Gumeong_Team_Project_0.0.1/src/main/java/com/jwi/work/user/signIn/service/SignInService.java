@@ -83,21 +83,30 @@ public class SignInService {
     	ArrayList<Integer> wrongList =  userMapper.wrongList(userMapper.getUserKey(email));
     	int count = (int) wrongList.stream().filter(num -> num == 1).count();
     	
+    	int userKey = Integer.parseInt(userMapper.getUserKey(email));
+    	User oneUserInfo = userMapper.getUserInfo(userKey);
+    	String state = oneUserInfo.getState();
     	//이메일 체크처리
     	if(emailCheck(email)) {
     		// 밴 체크 -- 안재원
-    		if (isBanned(email)) {
-    			// 유저 키값 구하기
-    	    	int userKey = Integer.parseInt(userMapper.getUserKey(email));
-    			// 밴 목록에 있는지 확인
-    	    	Banned banUser = userMapper.getBannedUser(userKey);
-                userCheck.setCheck(false);
-                userCheck.setWrongCount(count);
-                userCheck.setUserKey(userMapper.getUserKey(email));
-                userCheck.setReason(banUser.getReason());
+    		if(state.equals("deactivate")) {
+    			if (isBanned(email)) {
+        			// 유저 키값 구하기
+        			// 밴 목록에 있는지 확인
+        	    	Banned banUser = userMapper.getBannedUser(userKey);
+                    userCheck.setCheck(false);
+                    userCheck.setReason(banUser.getReason());
+                    return userCheck;
+        		} else {
+        			userCheck.setCheck(false);
+                    userCheck.setState("비활성화된 계정");
+                    return userCheck;
+        		}
+    		} else if(state.equals("secession")) {
+    			userCheck.setCheck(false);
+                userCheck.setState("탈퇴한 계정");
                 return userCheck;
     		}
-    		
     		//로그인 체크처리
     		if(loginTest(userInfo)) {
 				LoginLog userConnect = new LoginLog();
@@ -114,6 +123,8 @@ public class SignInService {
     			userConnect.setUserKey(userMapper.getUserKey(email));
     			userConnect.setLoginSuccess(1);
     			userMapper.saveLog(userConnect);
+    			//유저 틀린 비밀번호 횟수 + 1해서 테이블에 업데이트하기
+    			//유저 틀린 비밀번호 횟수 가져와서 userCheck에 저장하기
     			userCheck.setCheck(false);
     			userCheck.setWarningMessage("비밀번호가 일치하지 않습니다.");
     	    	userCheck.setWrongCount(count + 1);

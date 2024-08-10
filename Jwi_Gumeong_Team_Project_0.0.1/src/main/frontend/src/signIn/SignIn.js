@@ -70,7 +70,16 @@ function SignIn() {
                     pw: password
                 };
                 const userResponse = await axios.post('/signIn/loginCheck', userData);
-                
+                console.log(userResponse);
+                if(userResponse.data.reason !== null) {
+                    setModalContent(`[${userResponse.data.reason}]\n 사유로 정지된 계정이에요.`);
+                    setModalOpen(true);
+                }
+                if(userResponse.data.state !== null) {
+                    setModalContent(`${userResponse.data.state}입니다.`);
+                    setModalOpen(true);
+                }
+
                 if(userResponse.data.check && count < 5){
                     dispatch(fetchSessionId(email));
                     dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
@@ -80,9 +89,7 @@ function SignIn() {
                     // console.log(userResponse.data);
                     // console.log(userResponse.data.wrongCount);
                 } 
-                setModalContent(`[${userResponse.data.reason}]\n 사유로 정지된 계정이에요.`);
-                setModalOpen(true);
-                
+                setLoginWarn(userResponse.data.warningMessage);
             } catch (error) {
                 console.error('Channel API Error:', error);
             }

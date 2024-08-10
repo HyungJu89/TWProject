@@ -87,6 +87,7 @@ body{
     border: 1px solid white;
     transition:0.2s;
 }
+
 /* JustSearch 모달 */
 .JustSearchBase{
     z-index: 20;

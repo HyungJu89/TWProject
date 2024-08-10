@@ -20,8 +20,8 @@ import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.dto.sqlDto.ImageInfoDto;
 import com.jwi.work.channel.dto.sqlDto.PostInfoDto;
 import com.jwi.work.channel.mapper.PostMapper;
-import com.jwi.work.channel.util.FileManagerUtil;
-import com.jwi.work.channel.util.PagingUtil;
+import com.jwi.work.util.FileManagerUtil;
+import com.jwi.work.util.PagingUtil;
 
 @Service
 public class PostService {
