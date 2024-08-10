@@ -14,13 +14,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwi.work.channel.dto.AnswerDto;
-import com.jwi.work.channel.dto.ImageDto;
-import com.jwi.work.channel.dto.PostCreateDto;
-import com.jwi.work.channel.dto.PostDeleteDto;
+import com.jwi.work.channel.dto.SearchDto;
+import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
+import com.jwi.work.channel.dto.sqlDto.ImageInfoDto;
 import com.jwi.work.channel.dto.sqlDto.PostInfoDto;
 import com.jwi.work.channel.mapper.PostMapper;
 import com.jwi.work.channel.util.FileManagerUtil;
+import com.jwi.work.channel.util.PagingUtil;
 
 @Service
 public class PostService {
@@ -30,7 +31,35 @@ public class PostService {
 
 	@Autowired
 	private FileManagerUtil fileManagerUtil;
+	
+	private PagingUtil pagingUtil = new PagingUtil();
+	
+	public SearchDto<List<PostDto>> postSelect(int channelKey,int page){
+		final int LIMIT_PAGE = 10;
 
+		SearchDto<List<PostDto>> postSelect = new SearchDto<>();
+
+		int postCount = postMapper.postCount(channelKey);
+
+		if (postCount == 0) {
+			postSelect.setSuccess(false);
+
+			return postSelect;
+		}
+		
+		postSelect.setSuccess(true);
+
+		postSelect.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
+		
+
+			List<PostDto> posts = postMapper.postList(channelKey,postSelect.getPaging().getOffset(),postSelect.getPaging().getLimit());
+			
+			postSelect.setSearch(posts);
+
+		return postSelect;
+	}
+	
+	
 	public AnswerDto<String> postCreate(int channelKey, int userKey, String content, List<MultipartFile> files) {
 
 		AnswerDto<String> answer = new AnswerDto<>();
@@ -39,8 +68,6 @@ public class PostService {
 		String imageJson = null;
 
 		try {
-
-			PostCreateDto postCteateDto = new PostCreateDto();
 
 			ArrayList<String> imgUrlList = new ArrayList<>();
 
@@ -54,21 +81,18 @@ public class PostService {
 
 					String imageHash = fileManagerUtil.getHash(file);
 
-					ImageDto image = postMapper.selectHash(imageHash);
+					ImageInfoDto image = postMapper.selectHash(imageHash);
 					
 					if (image == null || image.getReferenceCount() == 0) {
 
-						image = new ImageDto();
+						image = new ImageInfoDto();
 
 						String imgUrl = fileManagerUtil.saveFile(file);
 
-						image.setImageHash(imageHash);
-
-						image.setImageUrl(imgUrl);
 
 						imgUrlList.add(imgUrl);
 
-						postMapper.insertImg(image);
+						postMapper.insertImg(imageHash , imgUrl);
 
 					} else {
 
@@ -82,11 +106,7 @@ public class PostService {
 				imageJson = null;
 			}
 
-			postCteateDto.setImage(imageJson);
-			postCteateDto.setChannelKey(channelKey);
-			postCteateDto.setContent(content);
-			postCteateDto.setUserKey(userKey);
-			postMapper.postCreate(postCteateDto);
+			postMapper.postCreate(userKey,channelKey,content,imageJson);
 			answer.setSuccess(true);
 
 		} catch (IOException | NoSuchAlgorithmException e) {
@@ -127,7 +147,7 @@ public class PostService {
 			}
 
 			for (String imgUrl : imgUrlList) {
-				ImageDto image = new ImageDto();
+				ImageInfoDto image = new ImageInfoDto();
 
 				image = postMapper.selectUrl(imgUrl);
 

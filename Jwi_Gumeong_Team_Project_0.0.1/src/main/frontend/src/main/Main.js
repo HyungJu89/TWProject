@@ -12,9 +12,8 @@ import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
-import chevron_left_w from '../icon/40px/chevron-left-w.png'
-import chevron_right_w from '../icon/40px/chevron-right-w.png'
-import { searchPost } from '../recycleCode/postAxios.js'
+import chevron_left_w from '../icon/40px/chevron-left-w.png';
+import chevron_right_w from '../icon/40px/chevron-right-w.png';
 
 function Main({onLogout,isLoggedIn}) {
     let navigate = useNavigate();
@@ -22,6 +21,19 @@ function Main({onLogout,isLoggedIn}) {
     let [loginOn, setLoginOn] = useState(false);
     const [postList, setPostList] = useState([]);
     const [partnersLive, setPartnersLive] = useState([]);
+
+    const searchRecommended = async () => {
+        try {
+            const { data } = await axios.get(`/search/recommended`);
+            return data;
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            throw new Error('Failed to fetch channel data');
+        }
+    };
+
+
+
     useEffect(() => {
         const addPartners = async () => {
             try {
@@ -41,8 +53,9 @@ function Main({onLogout,isLoggedIn}) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const postListData = await searchPost('main', "", 1);
+            const postListData = await searchRecommended();
             setPostList(postListData)
+            console.log(postListData)
         };
 
         fetchData();
@@ -82,9 +95,9 @@ function Main({onLogout,isLoggedIn}) {
                     <TopicBtn topic={topic} settopic={settopic} />
                     {topic == true ?
                         <div className={styles.fadein}>
-                            {postList.success &&
+                            {postList && postList.success &&
                                 <>
-                                    {postList.search.map((postInfo, index) =>
+                                    {postList.info.map((postInfo, index) =>
                                         <PublicBoard key={index} postInfo={postInfo} />
                                     )}
                                 </>

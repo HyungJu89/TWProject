@@ -11,12 +11,12 @@
 		SELECT COUNT(*) FROM channel WHERE id = #{channelId}
 	</select>
 
-	<insert id="channelCreate" parameterType="map">
+	<insert id="channelCreate" parameterType="com.jwi.work.channel.dto.bodyDto.ChannelCreateDto">
 		INSERT INTO channel (id,name,imageUrl,followerCount) value
 		(#{id},#{name},#{imageUrl},#{followerCount})
 	</insert>
 
-	<select id="channelGet" parameterType="String" resultType="com.jwi.work.channel.dto.ChannelDto">
+	<select id="channelGet" parameterType="String" resultType="com.jwi.work.channel.dto.channelDto.ChannelDto">
 		SELECT * FROM channel WHERE id = #{channelId}
 	</select>
 	

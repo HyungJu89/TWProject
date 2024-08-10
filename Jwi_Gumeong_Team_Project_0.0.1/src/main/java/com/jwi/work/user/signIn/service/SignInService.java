@@ -1,11 +1,14 @@
 package com.jwi.work.user.signIn.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jwi.work.user.dto.Banned;
 import com.jwi.work.user.dto.CheckDto;
 import com.jwi.work.user.dto.LoginLog;
 import com.jwi.work.user.dto.User;
@@ -36,8 +39,33 @@ public class SignInService {
 	}
 	
 	//밴 유저정보 확인
-    public boolean isEmailBanned(String email) {
-        return userMapper.banEmailList().contains(email);
+    public boolean isBanned(String email) {
+    	// 유저 키값 구하기
+    	int userKey = Integer.parseInt(userMapper.getUserKey(email));
+    	// 밴 목록에 있는지 확인
+    	Banned banUser = userMapper.getBannedUser(userKey);
+    	
+    	// null 이면
+    	if(banUser == null) {
+    		return false;
+    	} else {
+    		// 날짜 포멧
+    		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+    		// 오늘 날짜
+    		Date today = new Date();
+    		// 밴 시작 날짜
+        	Date bannedDate = banUser.getReasonDate();
+        	// 날짜 String 으로 변경후 int로 다시 변경
+        	int strToday = Integer.parseInt(format.format(today));
+        	int banStartDate = Integer.parseInt(format.format(bannedDate));
+        	// 정지 일수
+        	int plusDay = banUser.getDate();
+        	// 밴 시작일 + 정지일수가 오늘보다 전이면
+        	if(banStartDate + plusDay < strToday) {
+        		return false;
+        	}
+            return true;
+    	}
     }
     
     
@@ -57,31 +85,39 @@ public class SignInService {
     	
     	//이메일 체크처리
     	if(emailCheck(email)) {
+    		// 밴 체크 -- 안재원
+    		if (isBanned(email)) {
+    			// 유저 키값 구하기
+    	    	int userKey = Integer.parseInt(userMapper.getUserKey(email));
+    			// 밴 목록에 있는지 확인
+    	    	Banned banUser = userMapper.getBannedUser(userKey);
+                userCheck.setCheck(false);
+                userCheck.setWrongCount(count);
+                userCheck.setUserKey(userMapper.getUserKey(email));
+                userCheck.setReason(banUser.getReason());
+                return userCheck;
+    		}
+    		
     		//로그인 체크처리
     		if(loginTest(userInfo)) {
-	    			if(isEmailBanned(email)) {	
-	    				userCheck.setCheck(false);
-	    				userCheck.setWarningMessage("해당 계정은 악의적인 글 작성과 과도한 친목주도로 인해 사용 정지 된 계정이에요.");
-	    			}else {
-	    				LoginLog userConnect = new LoginLog();
-	    				userConnect.setUserKey(userMapper.getUserKey(email));
-	    				userConnect.setLoginSuccess(0);
-	    				userMapper.saveLog(userConnect);
-	    				userCheck.setCheck(true);
-	    				userCheck.setWarningMessage("");
-		    	    	userCheck.setWrongCount(count);
-		    	    	userCheck.setUserKey(userMapper.getUserKey(email));
-	    			}
+				LoginLog userConnect = new LoginLog();
+				userConnect.setUserKey(userMapper.getUserKey(email));
+				userConnect.setLoginSuccess(0);
+				userMapper.saveLog(userConnect);
+				userCheck.setCheck(true);
+				userCheck.setWarningMessage("");
+    	    	userCheck.setWrongCount(count);
+    	    	userCheck.setUserKey(userMapper.getUserKey(email));
 	    	//로그인 체크처리 예외
 	    	}else {
-	    			LoginLog userConnect = new LoginLog();
-	    			userConnect.setUserKey(userMapper.getUserKey(email));
-	    			userConnect.setLoginSuccess(1);
-	    			userMapper.saveLog(userConnect);
-	    			userCheck.setCheck(false);
-	    			userCheck.setWarningMessage("비밀번호가 일치하지 않습니다.");
-	    	    	userCheck.setWrongCount(count + 1);
-	        	  }
+    			LoginLog userConnect = new LoginLog();
+    			userConnect.setUserKey(userMapper.getUserKey(email));
+    			userConnect.setLoginSuccess(1);
+    			userMapper.saveLog(userConnect);
+    			userCheck.setCheck(false);
+    			userCheck.setWarningMessage("비밀번호가 일치하지 않습니다.");
+    	    	userCheck.setWrongCount(count + 1);
+        	  }
     	//이메일 체크처리 예외
     	}else{
         	userCheck.setCheck(false);

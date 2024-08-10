@@ -67,10 +67,13 @@
 	</select>
 	<!-- 세션ID로 유저 키값 찾기 -->
 	<select id="getUserKeyBySessionId" resultType="int" parameterType="String">
-			SELECT `userKey` FROM `userConnection` WHERE `sessionId` = #{sessionId}
+		SELECT `userKey` FROM `userConnection` WHERE `sessionId` = #{sessionId}
 	</select>
 	<!-- 유저 pw 업데이트 -->
 	<update id="updatePw" parameterType="com.jwi.work.user.dto.User">
     	UPDATE User SET `pw` = HEX(AES_ENCRYPT(#{pw}, SHA2('abcabc', 256))) WHERE `email` = #{email}
     </update>
+    <select id="getBannedUser" parameterType="com.jwi.work.user.dto.Banned">
+    	SELECT * FROM `banned` WHERE userKey = #{userKey} ORDER BY `bannedKey` DESC LIMIT 1
+    </select>
 </mapper>

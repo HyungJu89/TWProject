@@ -1,18 +1,26 @@
 package com.jwi.work.channel.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
-import com.jwi.work.channel.dto.ImageDto;
-import com.jwi.work.channel.dto.PostCreateDto;
+import com.jwi.work.channel.dto.postDto.PostDto;
+import com.jwi.work.channel.dto.sqlDto.ImageInfoDto;
 import com.jwi.work.channel.dto.sqlDto.PostInfoDto;
 
 public interface PostMapper {
 
-	public ImageDto selectHash(@Param("imageHash") String imageHash);
+	public int postCount (@Param("channelKey")int channelKey);
 	
-	public void postCreate(PostCreateDto postCreate);
+	public List<PostDto> postList(@Param("channelKey")int channelKey,@Param("offset") int offset,@Param("limit") int limit);
 	
-	public void insertImg(ImageDto imageDto);
+	public ImageInfoDto selectHash(@Param("imageHash") String imageHash);
+	
+	public ImageInfoDto selectUrl(@Param("imageUrl") String imageUrl);
+	
+	public void postCreate(@Param("userKey") int userKey,@Param("channelKey") int channelKey,@Param("content") String content,@Param("imageJson") String imageJson);
+	
+	public void insertImg(@Param("imageHash")String imageHash ,@Param("imageUrl") String imageUrl);
 
 	public void referenceUp(@Param("imageKey") int imageKey);
 	
@@ -22,7 +30,7 @@ public interface PostMapper {
 	
 	public PostInfoDto postInfo(@Param("postKey")int postKey);
 	
-	public ImageDto selectUrl(@Param("imageUrl") String imageUrl);
+
 	 
 	public void postDelete(@Param("postKey")int postKey); 
 	

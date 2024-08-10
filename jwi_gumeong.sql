@@ -1,3 +1,7 @@
+-- 2024-08-10 00시 46분 [임재열] V 0.1.7
+-- 수정내용 : like 테이블 오타수정
+
+
 -- 2024-08-08 16시 53분 [임재열] V 0.1.6
 -- 수정내용 : loginLog, userConnection 커밋내용이 누락되어 추가 및 외래키 추가
 
@@ -5,11 +9,10 @@
 -- 수정내용 : 외래키 사용 및 참조된 외래키가 삭제되면 해당 키를 참조하는 모든 행을 삭제
 -- 외래키란? : 다른테이블의 정보를 참조할때 사용하는 key
 
-
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-
+select * from comment;
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '유저키',
 	`email`	VARCHAR(50) UNIQUE	NOT NULL	COMMENT '이메일',
@@ -66,9 +69,8 @@ CREATE TABLE `comment` (
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE,
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
-
 CREATE TABLE `like` (
-	`likeLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`likeKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
 	`postKey`	INT	NOT NULL,
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -8,6 +8,6 @@ public class PostChannelDto{
 	private int channelKey;
 	private String id;
 	private String imageUrl;
-	private String channelName;
+	private String name;
 	
 }
