@@ -11,51 +11,97 @@ import PublicBoard from '../main/PublicBoard.js'
 import ChannelBody from './ChannelBody.js';
 import PublicMenu from '../main/PublicMenu.js'
 import { channelGet } from '../recycleCode/ChannelAxios.js';
-import {searchPost} from '../recycleCode/postAxios.js'
+import { useDispatch, useSelector } from 'react-redux';
+import { setSessionId, setUserKey, logout, setLoggedIn, fetchUserKey } from '../slice/sessionSlice.js';
+import AlarmModal from '../modal/AlarmModal.js';
 
 function ChannelHome() {
     let { channelId } = useParams();
     const navigate = useNavigate();
-    const [channelInfo,serChannelInfo] = useState();
+    const [channelInfo,setChannelInfo] = useState();
     const [postList,setPostList] = useState([]);
     const [page,setPage] = useState(1);
-    const fetchData = async (channelKey,page) => {
-        const postListData = await searchPost('channel',channelKey,page);
-        setPostList(postListData)
+    
+    //세션화용 코드,state
+    var jsonSessionInfo = sessionStorage.getItem('sessionId');
+    var sessionInfo = JSON.parse(jsonSessionInfo);
+    const isLoggedIn = useSelector((state) => state.session.isLoggedIn);  
+    const dispatch = useDispatch();
+    //로그아웃 함수 
+    //dispatch함수를 컴포넌트에 props로 전달하려면 이렇게 함수로 따로 묶어서 설정해준 다음, 보내야됨
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+    //세션화 함수
+    useEffect(() => {
+        if (sessionInfo) {
+            dispatch(fetchUserKey(sessionInfo.sessionId));
+        }
+    }, [sessionInfo]);
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
+    const fetchData = async (channelKey, page) => {
+        try {
+            const { data } = await axios.get(`/post/select`, {
+                params: {
+                    channelKey: channelKey,
+                    page: page
+                }
+            });
+            setPostList(data);
+            console.log(data)
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            throw new Error('Failed to fetch channel data');
+        }
     };
 
     const handleCheckChannel = async (channelId) => {
         try {
             const channel = await channelGet(channelId); // 비동기 호출
+            console.log(channel.info);
             if (!channel.success) {
-                alert("생성되지 않은 게시판입니다.");
+                setModalContent('생성되지 않은 게시판입니다.');
+                setModalOpen(true);
                 return navigate('/');
             }
 
-            serChannelInfo(channel.info)
-            fetchData(channel.info.channelKey,page)
+            setChannelInfo(channel.info);
+            fetchData(channel.info.channelKey, page);
 
         } catch (error) {
             console.error('채널 확인 중 오류 발생:', error);
+            setModalContent('채널 확인 중 오류가 발생했습니다.');
+            setModalOpen(true);
             navigate('/');
         }
     };
+    //여기까지 세션화
 
-    //들어오자마자 작동
-    useEffect(()=>{
-    // 비동기 함수 호출
-    handleCheckChannel(channelId);
-    },[channelId])
+    // 들어오자마자 작동
+    useEffect(() => {
+        // 비동기 함수 호출
+        handleCheckChannel(channelId);
+    }, [channelId]);
 
-    useEffect(()=>{
-        fetchData(channelInfo?.channelKey)
-    },[channelInfo,page])
+    useEffect(() => {
+        if (channelInfo) {
+            fetchData(channelInfo.channelKey, page);
+            
+        }
+    }, [channelInfo, page]);
 
-//------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
     // 추후에 에러 페이지 만들기
-    if (isLoadingChannel) {
+    if (isLoadingChannel || channelInfo == null) {
         return <div>채널 홈 로딩중</div>;
     }
 
@@ -63,12 +109,11 @@ function ChannelHome() {
         return <div>에러남</div>;
     }
 
-
     return (
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
-            <MainBanner channelId={channelId} route={'channel'}/>
-            <ChannelBody />
+                <MainBanner channelId={channelId} route={'channel'} />
+                <ChannelBody />
             </div>
             <div className={style.channelInfoBack}>
                 <div className={style.mainList}>
@@ -77,8 +122,8 @@ function ChannelHome() {
                         <div className={style.postList}>
                             {postList.success && 
                                 <>
-                                    {postList.search.map((postInfo,index)=>
-                                        <PublicBoard key={index} postInfo = {postInfo}/>
+                                    {postList.search.map((postInfo, index) =>
+                                        <PublicBoard key={index} postInfo={postInfo} />
                                     )}
                                 </>
                             }
@@ -86,18 +131,19 @@ function ChannelHome() {
                         <div className={style.bottomPaging}>페이징</div>
                     </div>
                     <div className={style.listRight}>
-                
                         <div className={style.sideBar}>
-                            <PublicMenu loginOn={1} setLoginOn={1}/>
+                             {/* 이부분 */}
+                            <PublicMenu isLoggedIn = {isLoggedIn} onLogout={handleLogout}/>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     );
-
 }
-
-
 
 export default ChannelHome;

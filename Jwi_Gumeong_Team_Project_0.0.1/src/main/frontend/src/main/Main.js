@@ -12,16 +12,28 @@ import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
-import chevron_left_w from '../icon/40px/chevron-left-w.png'
-import chevron_right_w from '../icon/40px/chevron-right-w.png'
-import { searchPost } from '../recycleCode/postAxios.js'
+import chevron_left_w from '../icon/40px/chevron-left-w.png';
+import chevron_right_w from '../icon/40px/chevron-right-w.png';
 
-function Main() {
+function Main({onLogout,isLoggedIn}) {
     let navigate = useNavigate();
     let [topic, settopic] = useState(true);
     let [loginOn, setLoginOn] = useState(false);
     const [postList, setPostList] = useState([]);
     const [partnersLive, setPartnersLive] = useState([]);
+
+    const searchRecommended = async () => {
+        try {
+            const { data } = await axios.get(`/search/recommended`);
+            return data;
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            throw new Error('Failed to fetch channel data');
+        }
+    };
+
+
+
     useEffect(() => {
         const addPartners = async () => {
             try {
@@ -41,8 +53,9 @@ function Main() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const postListData = await searchPost('main', "", 1);
+            const postListData = await searchRecommended();
             setPostList(postListData)
+            console.log(postListData)
         };
 
         fetchData();
@@ -82,9 +95,9 @@ function Main() {
                     <TopicBtn topic={topic} settopic={settopic} />
                     {topic == true ?
                         <div className={styles.fadein}>
-                            {postList.success &&
+                            {postList && postList.success &&
                                 <>
-                                    {postList.search.map((postInfo, index) =>
+                                    {postList.info.map((postInfo, index) =>
                                         <PublicBoard key={index} postInfo={postInfo} />
                                     )}
                                 </>
@@ -93,7 +106,7 @@ function Main() {
                         : null}
                     <div onClick={() => { navigate('/allTopic'); window.scrollTo(0, 0) }} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}
                 </div>
-                <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} />
+                <PublicMenu isLoggedIn={isLoggedIn} onLogout={onLogout}/>
             </div>
         </div>
     );

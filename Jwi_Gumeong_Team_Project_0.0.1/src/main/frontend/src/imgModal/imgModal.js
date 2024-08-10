@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { openImgUiModalFalse } from '../slice/mainSlice';
 
 function ImgUi(){
+    // 여기에 postInfo와 댓글, 좋아요 등을 전부 다 불러와야함? 어캐함? ㄹㅇㅋㅋ
     let disPatch = useDispatch();
     let [btnHover, setBtnHover] = useState(btn_image_Close);
     let [content, setContent] = useState(false);

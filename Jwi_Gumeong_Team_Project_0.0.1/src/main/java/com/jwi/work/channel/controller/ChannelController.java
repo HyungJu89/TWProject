@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.channel.dto.AnswerDto;
-import com.jwi.work.channel.dto.ChannelCreateDto;
-import com.jwi.work.channel.dto.ChannelDto;
+import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
+import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.service.ChannelService;
 
 @RestController

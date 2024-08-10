@@ -2,8 +2,8 @@ package com.jwi.work.channel.mapper;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.jwi.work.channel.dto.ChannelCreateDto;
-import com.jwi.work.channel.dto.ChannelDto;
+import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
+import com.jwi.work.channel.dto.channelDto.ChannelDto;
 
 
 public interface ChannelMapper {

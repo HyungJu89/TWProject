@@ -14,9 +14,6 @@ function ChannelBody() {
 
     let { channelId } = useParams();
 
-
-
-
     // 첫 번째 쿼리: 채널 정보를 가져오기.
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
 
@@ -27,11 +24,6 @@ function ChannelBody() {
     if (isErrorChannel) {
         return <div>에러남</div>;
     }
-
-
-
-
-
 
     return (
         <div className={style.channelBody}>{/* 채널 정보 bar */}
