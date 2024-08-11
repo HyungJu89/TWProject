@@ -1,29 +1,37 @@
 package com.jwi.work.admin.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jwi.work.admin.entity.Admin;
-import com.jwi.work.admin.service.AdminLoginService;
+import com.jwi.work.admin.service.SecurityService;
+import com.jwi.work.admin.service.AdminService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
 	
 	@Autowired
-	AdminLoginService adminLoginService; 
+	SecurityService adminLoginService; 
+	
+	@Autowired
+	AdminService adminService;
 	
 	@PostMapping("/login")
-	public ResponseEntity<?> adminLogin(@RequestBody Admin loginRequest){
-		
-		System.out.println("여기옴?");
-		System.out.println(loginRequest.getId());
-		adminLoginService.loginJWT(loginRequest.getId());
-		return ResponseEntity.ok(adminLoginService.loadUserByUsername(loginRequest.getId()));
+	public String adminLogin(@RequestBody Map<String,String> data , HttpServletResponse response){
+		var cookie = new Cookie("jwt" , adminService.loginJWT(data));
+		cookie.setMaxAge(10);
+		cookie.setHttpOnly(true);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+		return adminService.loginJWT(data);
 	}
 	
 }

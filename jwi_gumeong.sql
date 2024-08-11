@@ -102,12 +102,13 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
-insert into admin(id,pw,state,createdAt,updatedAt) values("asdf","asdf","activate",now(),now())
+
+insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("asdf","$2a$12$qWMhwV31meoA0C6fvoVLX.OBe4NXvyz09HIewoxQ8EPProosm54z6","activate",now(),now());
 
 CREATE TABLE `admin` (
 	`adminKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '어드민 키',
-	`id`	VARCHAR(30) COMMENT '어드민아이디',
-	`pw`	VARCHAR(255)	NOT NULL	COMMENT '비밀번호',
+	`adminName`	VARCHAR(30) COMMENT '어드민아이디',
+	`adminPassWord`	VARCHAR(255)	NOT NULL	COMMENT '비밀번호',
 	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'activate'	COMMENT '어드민 상태 "activate","deactivate","secession"  작업자와 상의',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

@@ -9,5 +9,5 @@ import com.jwi.work.admin.entity.Admin;
 
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Integer>{
-	Optional<Admin> findById(String id);
+	Optional<Admin> findByAdminName(String adminName);
 }

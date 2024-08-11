@@ -62,12 +62,12 @@ function AdminLogin() {
         if (email !== '' && password !== '') {
             try {
                 const adminData = {
-                    id: email,
-                    pw: password
+                    adminName: email,
+                    adminPassWord: password
                 };
-                console.log(adminData);
-                const userResponse = await axios.post('/admin/login', adminData);
-                if(userResponse.data.check){
+                const userResponse = 
+                    await axios.post('/admin/login', adminData);
+                if(userResponse.data){
                     navigate('/admin');
                 }
                 setLoginWarn(userResponse.data.warningMessage);
