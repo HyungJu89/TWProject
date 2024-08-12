@@ -29,7 +29,7 @@ public class SignInService {
     public void resetWrongCountAfterDelay(String userKey) {
         scheduler.schedule(() -> {
             resetWrongCount(userKey);
-        }, 1, TimeUnit.MINUTES);
+        }, 5, TimeUnit.MINUTES);
     }
 
     private void resetWrongCount(String userKey) {
@@ -129,7 +129,7 @@ public class SignInService {
     				userCheck.setUserKey(userMapper.getUserKey(email));
     			}else {
     				userCheck.setCheck(false);
-    				userCheck.setWarningMessage("비밀번호를 5회 이상 틀리셨습니다. 10분후에 다시 로그인 해주세요.");
+    				userCheck.setWarningMessage("비밀번호를 5회 이상 틀리셨습니다. 5분후에 다시 로그인 해주세요.");
     				userCheck.setWrongCount(count);
     				userCheck.setUserKey(userMapper.getUserKey(email));
     				 resetWrongCountAfterDelay(userMapper.getUserKey(email));
@@ -154,7 +154,7 @@ public class SignInService {
 	    			userCheck.setWrongCount(count + 1);
 	    		}else {
     				userCheck.setCheck(false);
-    				userCheck.setWarningMessage("비밀번호를 5회 이상 틀리셨습니다. 10분후에 다시 로그인 해주세요.");
+    				userCheck.setWarningMessage("비밀번호를 5회 이상 틀리셨습니다. 5분후에 다시 로그인 해주세요.");
     				userCheck.setWrongCount(count);
     				userCheck.setUserKey(userMapper.getUserKey(email));
     				 resetWrongCountAfterDelay(userMapper.getUserKey(email));
