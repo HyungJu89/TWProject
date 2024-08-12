@@ -57,7 +57,7 @@ function AdminLogin() {
             checkAdmin();
         }
     };
-    
+
     const checkAdmin = async () => {
         if (email !== '' && password !== '') {
             try {

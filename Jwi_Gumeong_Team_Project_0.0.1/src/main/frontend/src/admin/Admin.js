@@ -5,7 +5,8 @@ import AdminMain from './AdminMain.js';
 function Admin(){
     let location = useLocation();
     let [onOff] = useState(false);
-    if(location.pathname === '/admin' ){
+    // axios 통신 에러 나거나 코드적는 jwt 토큰 비교 후 일치하지 않을경우엔 에러뜨고 로그남기면 될듯?
+    if(location.pathname === '/admin/' || location.pathname === '/admin'){
         onOff = true
     }
     return(

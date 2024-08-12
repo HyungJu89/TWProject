@@ -25,7 +25,6 @@ public class AdminService {
 		var authToken = new UsernamePasswordAuthenticationToken(
 				data.get("adminName"), data.get("adminPassWord")
 			);
-		System.out.println(authToken);
 		var auth = authenticationManagerBuilder.getObject().authenticate(authToken);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		//auth 변수 사용하고싶으면 이렇게 하면됨
