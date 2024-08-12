@@ -13,20 +13,21 @@ import com.jwi.work.admin.util.JwtUtil;
 @Service
 public class AdminService {
 	
-	@Autowired
-	SecurityService adminLoginService; 
-	
 	// Admin쪽으로 POST 요청 들어오면 처리
 	@Autowired
 	private AuthenticationManagerBuilder authenticationManagerBuilder;
 	
 	// 데이터베이스에 직접 insert 하는거보다 여기에서 인코딩 거치고 넣는게 더 나을듯?
 	public String loginJWT(Map<String,String> data) {
+		// authToken 열어서 넣을수 있는 정보를 넣는다.
 		var authToken = new UsernamePasswordAuthenticationToken(
 				data.get("adminName"), data.get("adminPassWord")
 			);
+		
+		// 정보 허가를 위해서 어센틱케이션에 정보를 넣는다.
 		var auth = authenticationManagerBuilder.getObject().authenticate(authToken);
 		SecurityContextHolder.getContext().setAuthentication(auth);
+		
 		//auth 변수 사용하고싶으면 이렇게 하면됨
 		var jwt = JwtUtil.createToken(SecurityContextHolder.getContext().getAuthentication());
 		

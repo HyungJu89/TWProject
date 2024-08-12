@@ -20,7 +20,7 @@ public class SecurityService implements UserDetailsService{
 	@Autowired
 	private AdminRepository adminRepository;
 	
-	// 시큐리티 폼방식 로그인 방법
+	// 시큐리티 폼방식 로그인 방법중 어센틱케이션 내부코드 인젝트해서 임의대로 설정하는 코드
 	// UsernameNotFoundException 스프링시큐리티 내장객체(라이브러리) 오버라이드
 	@Override
 	public UserDetails loadUserByUsername(String adminName) throws UsernameNotFoundException {

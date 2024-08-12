@@ -29,14 +29,20 @@ public class SecurityConfig {
 //		어떤 페이지를 로그인검사할지 설정가능 filterchain: 모든 유저의 요청과 서버의 응답 사이에 자동으로 실행해주고 싶은 코드 담는 곳
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		
 //		csrf 보안기능을 끄는 코드 csrf: 우리가 컨트롤러 api를 만들면 다른사이트에서도 form action태그로 url을 치면 내가
 //		만든사이트 api를 쓸수있기 때문에 그걸 방지하는 코드
+		
 		http.csrf((csrf) -> csrf.disable());
+		
 //		아무 경로에서 로그인 검사 해제 ("/**"): 아무 문자가 붙은 경로라는 뜻 .permitAll(): 모든 경로 로그인검사 하지않고 허용
 		http.authorizeHttpRequests((authorize) ->
 			authorize.requestMatchers("/**").permitAll()
 		);
+		
+//		나중에 추가한 코드라서 지금당장 설명할 필요 없음.
 		http.addFilterBefore(new JwtFilter(), ExceptionTranslationFilter.class);
+		
 		http.sessionManagement((session) -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	    );
@@ -70,7 +76,7 @@ public class SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
-//	Cors 설정 (React 통신용)
+//	Cors 설정 (React 통신용) 당장 중요하지않아서 안알아봄
 	@Bean
 	public CorsFilter corsFilter() {
 		CorsConfiguration config = new CorsConfiguration();
@@ -83,5 +89,4 @@ public class SecurityConfig {
 
 		return new CorsFilter(source);
 	}
-	
 }

@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 // OncePerRequestFilter 1회만 실행됨
 public class JwtFilter extends OncePerRequestFilter {
 
+	// 필터코드 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -39,6 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		}
 		
 		Claims claim;
+		
 	    try {
 	      claim = JwtUtil.extractToken(jwtCookie);
 	    } catch (Exception e) {
