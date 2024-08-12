@@ -2,7 +2,11 @@ server:
   port : 9090
   
 spring:
-
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+        
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/jwi?serverTimezone=UTC&characterEncoding=UTF-8

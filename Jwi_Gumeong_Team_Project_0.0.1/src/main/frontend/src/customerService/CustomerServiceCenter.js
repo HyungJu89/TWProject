@@ -17,6 +17,7 @@ function CustomerServiceCenter() {
     const [sanctions, setSanctions] = useState([]); // 제재 내역 상태
     const userState = useSelector((state) => state.userState);  // 로그인한 유저 정보??
 
+    // 제재 내역
     useEffect(() => {
         if (userKey) {
             // userKey가 있을 때만 API 호출
@@ -25,7 +26,6 @@ function CustomerServiceCenter() {
             })
             .then(response => {
                 if (response.data.result === "success") {
-                    console.log(response.data.sanctionList);
                     setSanctions(response.data.sanctionList);
                 }
             })
@@ -35,17 +35,96 @@ function CustomerServiceCenter() {
         }
     }, [userKey]); // userKey가 변경될 때마다 호출
 
+    // 문의하기
+    // 파일 업로드 상태 및 문의
+    const [files, setFiles] = useState([]);
+    const [form, setForm] = useState({
+        title: '',
+        category: '',
+        details: ''
+    });
+    const [inputComplete, setInputComplete] = useState(false);
+
+    // 입력 창 업데이트
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setForm({ ...form, [name]: value });
+    };
+
+    useEffect(() => {
+        // 전부 입력 했는지 확인
+        if (form.title && form.category && form.details) {
+            setInputComplete(true);
+        } else {
+            setInputComplete(false);
+        }
+    }, [form]);
+
+    // 파일 변경
+    const fileChange = (event) => {
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        const selectedFiles = Array.from(event.target.files);
+
+        for (let file of selectedFiles) {
+            if (file.size > maxSize) {
+                alert("파일 크기는 10MB를 초과할 수 없습니다.");
+                return;
+            }
+        }
+
+        if (files.length + selectedFiles.length > 5) {
+            alert("최대 5개의 파일만 업로드할 수 있습니다.");
+            return;
+        }
+
+        const previewFiles = selectedFiles.map(file => ({
+            file,
+            preview: URL.createObjectURL(file)
+        }));
+        setFiles([...files, ...previewFiles]);
+    };
+
+
+    // 문의 제출
+    const submit = (event) => {
+        event.preventDefault();
+        if (!inputComplete) return; // 내용을 다 입력하지 않으면 버튼 작동 X
+
+        const formData = new FormData();
+        formData.append("userKey", userKey);
+        formData.append("title", form.title);
+        formData.append("category", form.category);
+        formData.append("details", form.details);
+        files.forEach(file => formData.append("files", file.file));
+        
+        axios.post('/inquiry/create', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+        .then(response => {
+            alert("문의가 접수되었습니다.");
+            // 폼 초기화
+            setForm({
+                title: '',
+                category: '',
+                details: ''
+            });
+            setFiles([]);
+            setSelectedOption("선택하세요");
+        })
+        .catch(error => {
+            console.log("문의 등록 실패: " + error.message);
+        });
+    };
+
     // 문의 내역
     const inquiryList = [
         // 비워둔거임!!
-        {
-            content:"aa",
-            title:"aa"
-        }
     ]
 
     const [faqs, setFaqs] = useState([]);
-
+    // 자주 묻는 질문 Axios
     useEffect(() => {
         axios.get('/faq/list')
             .then(response => {
@@ -73,8 +152,9 @@ function CustomerServiceCenter() {
 
     // 문의하기 종류 선택 모달
     const optionSelect = (option) => {
-        setSelectedOption(option);
-        setDropdownOpen(false);
+        setSelectedOption(option); // 드롭다운에서 선택한 옵션을 상태로 설정
+        setForm({ ...form, category: option }); // 선택한 옵션을 category에 설정
+        setDropdownOpen(false); // 드롭다운 닫기
     };
 
     /* FAQ 클릭시 열림 */
@@ -134,31 +214,65 @@ function CustomerServiceCenter() {
                                         {selectedOption}
                                     </div>
                                     {dropdownOpen && (
-                                        <ul className={styles.dropdown}>
-                                            {["시스템 관련", "오류", "이용 제한", "요청", "도용.보안", "권리 보호", "계정 관리"].map((option, index) => (
+                                        <div className={styles.dropdown}>
+                                            {["시스템 관련", "본인인증", "오류/버그", "신고", "제안", "도용", "보안", "기타"].map((option, index) => (
                                                 <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
                                                     {option}
                                                 </div>
                                             ))}
-                                        </ul>
+                                        </div>
                                     )}
                                 </div>
                                 <div className={styles.inqField}>
                                     <label>제목: </label>
-                                    <input type="text" placeholder="문의 제목을 입력하세요." className={styles.inqInput} />
+                                    <input 
+                                        type="text" 
+                                        name="title"
+                                        value={form.title} 
+                                        onChange={handleInputChange} 
+                                        placeholder="문의 제목을 입력하세요." 
+                                        className={styles.inqInput} 
+                                    />
                                 </div>
                                 <div className={styles.inqField}>
-                                    {/* &#13; = 엔터 */}
-                                    <textarea className={styles.inqTextarea} 
-                                    placeholder="문의 내용을 입력하세요.&#13;&#13;내용 중 욕설, 비판, 악의적인 글, 악의적인 신고 등은 역제제 당할 수 있습니다. 올바른 문의 내용을 입력해주시기 바랍니다."></textarea>
+                                    <textarea 
+                                        name="details"
+                                        value={form.details} 
+                                        onChange={handleInputChange}
+                                        className={styles.inqTextarea} 
+                                        placeholder="문의 내용을 입력하세요."
+                                    ></textarea>
                                 </div>
                                 <div className={styles.inqField}>
-                                    <div className={styles.fileUpload}>
-                                        <img src={addIcon} className={styles.uploadIcon} alt="파일 추가 버튼 아이콘" />
+                                    <div className={styles.imageBox}>
+                                        {files.map((fileObj, index) => (
+                                            <div key={index} className={styles.uploadedFile}>
+                                                <img src={fileObj.preview} alt={fileObj.file.name} style={{maxWidth: "100px", maxHeight: "100px"}} />
+                                            </div>
+                                        ))}
+                                        {files.length < 5 && (
+                                            <div className={styles.fileUpload}>
+                                                <label htmlFor="file-upload">
+                                                    <img src={addIcon} className={styles.uploadIcon} alt="파일 추가 버튼 아이콘" />
+                                                </label>
+                                                <input
+                                                    id="file-upload"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={fileChange}
+                                                    multiple
+                                                    style={{ display: 'none' }}/>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className={styles.submitButtonContainer}>
-                                    <button className={styles.submitButton}>문의 넣기</button>
+                                    <button 
+                                        onClick={submit} 
+                                        className={inputComplete ? styles.activeSubmitButton : styles.disabledSubmitButton}
+                                        disabled={!inputComplete}>
+                                        문의 넣기
+                                    </button>
                                 </div>
                             </div>
                         </div>
