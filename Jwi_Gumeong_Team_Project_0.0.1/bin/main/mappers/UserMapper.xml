@@ -57,14 +57,14 @@
 	<select id="sessionUserCheck" resultType="int" parameterType="String">
 		select count(*) from userConnection where userKey = #{userKey}
 	</select>
-	<!-- 비밀번호 틀린 카운트 -->
+	<!-- 비밀번호 틀린 카운트 유저테이블에서 받아오기-->
 	<select id="wrongCount" resultType="int" parameterType="String">
-		select count(*) from loginLog where userKey = #{userKey} and loginSuccess = 1
+		select pwWrong from user where userKey = #{userKey}
 	</select>
-	<!-- 비밀번호 틀린 카운트2 -->
-	<select id="wrongList" resultType="int" parameterType="String">
-        SELECT loginSuccess FROM loginLog WHERE userKey = #{userKey} ORDER BY createdAt DESC LIMIT 5;
-	</select>
+	<!-- 유저 pwWrong 업데이트 -->
+	<update id="updatePwWrong" parameterType="com.jwi.work.user.dto.User">
+    	UPDATE user SET `pwWrong` = #{pwWrong} WHERE `userKey` = #{userKey}
+    </update>
 	<!-- 세션ID로 유저 키값 찾기 -->
 	<select id="getUserKeyBySessionId" resultType="int" parameterType="String">
 		SELECT `userKey` FROM `userConnection` WHERE `sessionId` = #{sessionId}

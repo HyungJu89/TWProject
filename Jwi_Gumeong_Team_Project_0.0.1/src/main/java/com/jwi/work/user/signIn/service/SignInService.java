@@ -1,9 +1,11 @@
 package com.jwi.work.user.signIn.service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,23 @@ public class SignInService {
 	@Autowired
 	UserMapper userMapper;
 	
+	//비밀번호 제한용 변수 및 로직
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    public void resetWrongCountAfterDelay(String userKey) {
+        scheduler.schedule(() -> {
+            resetWrongCount(userKey);
+        }, 1, TimeUnit.MINUTES);
+    }
+
+    private void resetWrongCount(String userKey) {
+        User user = new User();
+        user.setUserKey(userKey);
+        user.setPwWrong(0); // 틀린 비밀번호 횟수를 0으로 초기화
+        userMapper.updatePwWrong(user);
+    }
+    // 여기까지 비밀번호 제한용 변수 및 로직
+    
 	//로그인 유저정보확인
 	public boolean loginTest(User user) {
 		if(userMapper.loginCheck(user) == 1) {
@@ -79,16 +98,16 @@ public class SignInService {
     	//반환하기위한 객체 생성
     	CheckDto userCheck = new CheckDto();
 
+    	// 유저 키값 구하기
+    	int userKey = Integer.parseInt(userMapper.getUserKey(email));
     	//비밀번호 틀린 횟수 구하는 변수 만들기
-    	ArrayList<Integer> wrongList =  userMapper.wrongList(userMapper.getUserKey(email));
-    	int count = (int) wrongList.stream().filter(num -> num == 1).count();
+    	int count = userMapper.wrongCount(userMapper.getUserKey(email));
+    	
     	
     	//이메일 체크처리
     	if(emailCheck(email)) {
     		// 밴 체크 -- 안재원
     		if (isBanned(email)) {
-    			// 유저 키값 구하기
-    	    	int userKey = Integer.parseInt(userMapper.getUserKey(email));
     			// 밴 목록에 있는지 확인
     	    	Banned banUser = userMapper.getBannedUser(userKey);
                 userCheck.setCheck(false);
@@ -99,25 +118,47 @@ public class SignInService {
     		}
     		//로그인 체크처리
     		if(loginTest(userInfo)) {
-				LoginLog userConnect = new LoginLog();
-				userConnect.setUserKey(userMapper.getUserKey(email));
-				userConnect.setLoginSuccess(0);
-				userMapper.saveLog(userConnect);
-				userCheck.setCheck(true);
-				userCheck.setWarningMessage("");
-    	    	userCheck.setWrongCount(count);
-    	    	userCheck.setUserKey(userMapper.getUserKey(email));
+    			if(count<5) {
+    				LoginLog userConnect = new LoginLog();
+    				userConnect.setUserKey(userMapper.getUserKey(email));
+    				userConnect.setLoginSuccess(0);
+    				userMapper.saveLog(userConnect);
+    				userCheck.setCheck(true);
+    				userCheck.setWarningMessage("");
+    				userCheck.setWrongCount(count);
+    				userCheck.setUserKey(userMapper.getUserKey(email));
+    			}else {
+    				userCheck.setCheck(false);
+    				userCheck.setWarningMessage("비밀번호를 5회 이상 틀리셨습니다. 10분후에 다시 로그인 해주세요.");
+    				userCheck.setWrongCount(count);
+    				userCheck.setUserKey(userMapper.getUserKey(email));
+    				 resetWrongCountAfterDelay(userMapper.getUserKey(email));
+    			}
+    				
 	    	//로그인 체크처리 예외
 	    	}else {
-    			LoginLog userConnect = new LoginLog();
-    			userConnect.setUserKey(userMapper.getUserKey(email));
-    			userConnect.setLoginSuccess(1);
-    			userMapper.saveLog(userConnect);
-    			//유저 틀린 비밀번호 횟수 + 1해서 테이블에 업데이트하기
-    			//유저 틀린 비밀번호 횟수 가져와서 userCheck에 저장하기
-    			userCheck.setCheck(false);
-    			userCheck.setWarningMessage("비밀번호가 일치하지 않습니다.");
-    	    	userCheck.setWrongCount(count + 1);
+	    		if(count<5) {
+	    			System.out.println(count);
+	    			User wrongPw = new User();
+	    			wrongPw.setUserKey((userMapper.getUserKey(email)));
+	    			wrongPw.setPwWrong(count+1);
+	    			userMapper.updatePwWrong(wrongPw);
+	    			LoginLog userConnect = new LoginLog();
+	    			userConnect.setUserKey(userMapper.getUserKey(email));
+	    			userConnect.setLoginSuccess(1);
+	    			userMapper.saveLog(userConnect);
+	    			//유저 틀린 비밀번호 횟수 + 1해서 테이블에 업데이트하기
+	    			//유저 틀린 비밀번호 횟수 가져와서 userCheck에 저장하기
+	    			userCheck.setCheck(false);
+	    			userCheck.setWarningMessage("비밀번호가 일치하지 않습니다.");
+	    			userCheck.setWrongCount(count + 1);
+	    		}else {
+    				userCheck.setCheck(false);
+    				userCheck.setWarningMessage("비밀번호를 5회 이상 틀리셨습니다. 10분후에 다시 로그인 해주세요.");
+    				userCheck.setWrongCount(count);
+    				userCheck.setUserKey(userMapper.getUserKey(email));
+    				 resetWrongCountAfterDelay(userMapper.getUserKey(email));
+	    		}
         	  }
     	//이메일 체크처리 예외
     	}else{

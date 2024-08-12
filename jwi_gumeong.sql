@@ -1,10 +1,13 @@
+-- 2024-08-12 15시 13분 [김형주] V 0.1.7 
+-- 수정내용 : 유저테이블에 pwWrong(비밀번호 틀린횟수) 추가
+-- 비밀번호 5회제한 로직을 수월하게 만들기 위해 수정했습니다!
+
 -- 2024-08-08 16시 53분 [임재열] V 0.1.6
 -- 수정내용 : loginLog, userConnection 커밋내용이 누락되어 추가 및 외래키 추가
 
 -- 2024-08-08 11시 39분 [임재열] V 0.1.5 
 -- 수정내용 : 외래키 사용 및 참조된 외래키가 삭제되면 해당 키를 참조하는 모든 행을 삭제
 -- 외래키란? : 다른테이블의 정보를 참조할때 사용하는 key
-
 
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
@@ -13,15 +16,16 @@ drop DATABASE jwi;
 select * from user;
 drop table `user`;
 CREATE TABLE `user` (
-	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '유저키',
-	`email`	VARCHAR(50) UNIQUE	NOT NULL	COMMENT '이메일',
-	`pw`	VARCHAR(255)	NOT NULL	COMMENT '비밀번호',
-	`nickName`	VARCHAR(30) UNIQUE	NOT NULL	COMMENT '닉네임',
-	`gender`	VARCHAR(30)	NOT NULL	DEFAULT 'undisclosed'	COMMENT '성별 "man","girl","undisclosed"',
-	`birthday`	DATETIME	NULL	COMMENT '생년월일',
-	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'activate'	COMMENT '유저 상태 "activate","deactivate","secession"',
-	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`email`	VARCHAR(30) UNIQUE	NOT NULL,
+	`pw`	VARCHAR(255)	NOT NULL,
+	`nickName`	VARCHAR(30) UNIQUE	NOT NULL,
+	`gender`	VARCHAR(30)	NOT NULL	DEFAULT '비밀',
+    `pwWrong` int default 0,
+	`birthday`	DATETIME	NULL,
+	`state`	VARCHAR(30)	NOT NULL	DEFAULT 'activate',
+	`createdAt`	DATETIME	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
 CREATE TABLE `favorites` (
