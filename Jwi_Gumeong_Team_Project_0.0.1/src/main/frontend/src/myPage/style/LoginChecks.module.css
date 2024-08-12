@@ -97,7 +97,7 @@
     border: none;
     cursor: pointer;
     text-align: center;
-    margin-top: 99px;
+    margin-top: 84px;
     font-size: 16px;
     font-weight: 500;
 }
@@ -138,4 +138,8 @@
     width: 24px;
     height: 2px;
     background-color: #FF8901;
+}
+
+.warning{
+    color: #EC000E;
 }

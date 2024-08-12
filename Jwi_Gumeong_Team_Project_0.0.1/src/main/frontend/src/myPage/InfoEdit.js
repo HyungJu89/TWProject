@@ -18,6 +18,14 @@ function InfoEdit() {
     const [showPasswordCheck, setShowPasswordCheck] = useState(false); //비밀번호 보임,안보임 state
     const [LoginCheck, setLoginCheck] = useState(false);
     const navigate = useNavigate();
+    //닉네임 유효성 검사
+    const nickNameRegEx = /^[A-Za-z0-9\uAC00-\uD7A3]{2,8}$/;
+    //비밀번호 유효성 검사
+    const passwordRegEx = /^[A-Za-z0-9!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]{8,20}$/;
+    const numberRegEx = /[0-9]/;
+    const specialCharRegEx = /[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]/;
+    const letterRegEx = /[A-Za-z]/;
+    const bigLetterRegEx = /[A-Z]/;
     const handleNickname = (e) => {
         if (e.target.value.length == 0 || e.target.value.length <= 8) {
             setNickname(e.target.value);
