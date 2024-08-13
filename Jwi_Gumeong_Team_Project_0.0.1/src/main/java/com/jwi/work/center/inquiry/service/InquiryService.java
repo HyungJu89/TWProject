@@ -23,10 +23,13 @@ public class InquiryService {
     public String createInquiry(int userKey, String title, String category, String details, List<MultipartFile> files) {
         try {
             List<String> fileUrls = new ArrayList<>();
-            for (MultipartFile file : files) {
-                String savedFileName = fileManagerUtil.saveFile(file);
-                if (savedFileName != null) {
-                    fileUrls.add(savedFileName);
+            // 이미지가 null이 아니고 비어 있지 않을 때만 처리
+            if (files != null && !files.isEmpty()) {
+                for (MultipartFile file : files) {
+                    String savedFileName = fileManagerUtil.saveFile(file);
+                    if (savedFileName != null) {
+                        fileUrls.add(savedFileName);
+                    }
                 }
             }
 

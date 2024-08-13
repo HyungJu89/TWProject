@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +25,8 @@ public class InquiryController {
                                              @RequestParam("title") String title,
                                              @RequestParam("category") String category,
                                              @RequestParam("details") String details,
-                                             @RequestParam("files") List<MultipartFile> files) {
+                                             // required = false 파라미터 넘길 때 널값 가능 안할 시 Bad Request
+                                             @RequestParam(value = "files" , required = false) List<MultipartFile> files) {
 
         String result = inquiryService.createInquiry(userKey, title, category, details, files);
         

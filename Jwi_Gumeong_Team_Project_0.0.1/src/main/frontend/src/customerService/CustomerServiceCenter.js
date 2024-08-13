@@ -10,12 +10,23 @@ import btnLeft from '../icon/btn/btn-left.png';
 import btnRight from '../icon/btn/btn-right.png';
 import inquireIcon from '../icon/32px/inquire.png';
 import addIcon from '../icon/40px/add.png';
+import AlarmModal from '../modal/AlarmModal.js';
 
 function CustomerServiceCenter() {
     let [tab, setTab] = useState(0);
     const userKey = useSelector((state) => state.session.userKey); // Redux에서 userKey 가져오기
-    const [sanctions, setSanctions] = useState([]); // 제재 내역 상태
+    const [sanctions, setSanctions] = useState([]); // 제재 내역
     const userState = useSelector((state) => state.userState);  // 로그인한 유저 정보??
+    const [inquiries, setInquiries] = useState([]); // 문의 내역
+
+    // 알림 모달
+    const [modalOpen, setModalOpen] = useState(false);
+    // 모달 내용
+    const [modalContent, setModalContent] = useState('');
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
     // 제재 내역
     useEffect(() => {
@@ -31,6 +42,17 @@ function CustomerServiceCenter() {
             })
             .catch(error => {
                 console.log("API 호출 오류: " + error.message);
+            });
+
+            // 문의 내역
+            axios.post('/inquiry/list', { userKey }) 
+            .then(response => {
+                if (response.data.result === "success") {
+                    setInquiries(response.data.inquiryList);
+                }
+            })
+            .catch(error => {
+                console.log("문의 내역 가져오기 실패: " + error.message);
             });
         }
     }, [userKey]); // userKey가 변경될 때마다 호출
@@ -67,13 +89,15 @@ function CustomerServiceCenter() {
 
         for (let file of selectedFiles) {
             if (file.size > maxSize) {
-                alert("파일 크기는 10MB를 초과할 수 없습니다.");
+                setModalContent("파일 크기는 10MB를 초과할 수 없습니다.");
+                setModalOpen(true);
                 return;
             }
         }
 
         if (files.length + selectedFiles.length > 5) {
-            alert("최대 5개의 파일만 업로드할 수 있습니다.");
+            setModalContent("최대 5개의 파일만 업로드할 수 있습니다.");
+            setModalOpen(true);
             return;
         }
 
@@ -83,8 +107,6 @@ function CustomerServiceCenter() {
         }));
         setFiles([...files, ...previewFiles]);
     };
-
-
     // 문의 제출
     const submit = (event) => {
         event.preventDefault();
@@ -103,25 +125,26 @@ function CustomerServiceCenter() {
             }
         })
         .then(response => {
-            alert("문의가 접수되었습니다.");
-            // 폼 초기화
-            setForm({
-                title: '',
-                category: '',
-                details: ''
-            });
-            setFiles([]);
-            setSelectedOption("선택하세요");
+            if(response.data.result == "success") {
+                setModalContent("문의가 성공적으로 접수되었습니다.");
+                setModalOpen(true);
+                // 내용 비우기
+                setForm({
+                    title: '',
+                    category: '',
+                    details: ''
+                });
+                setFiles([]);
+                setSelectedOption("선택하세요");
+            } else {
+                setModalContent("문의 등록에 실패하였습니다.");
+                setModalOpen(true);
+            }
         })
         .catch(error => {
             console.log("문의 등록 실패: " + error.message);
         });
     };
-
-    // 문의 내역
-    const inquiryList = [
-        // 비워둔거임!!
-    ]
 
     const [faqs, setFaqs] = useState([]);
     // 자주 묻는 질문 Axios
@@ -282,29 +305,27 @@ function CustomerServiceCenter() {
                 return (
                     <div>
                         <div className={styles.inquiryContainer}>
-                            {inquiryList.length === 0 ? (
+                            {inquiries.length === 0 ? (
                                 <div className={styles.noHistory}>문의 내역이 없습니다.</div>
                             ) : (
-                            inquiryList.map((inquiry, idx) => (
-                                    <div onClick={() => openedInquiry(idx)} className={styles.inquiryItem}>
+                                inquiries.map((inquiry, idx) => (
+                                    <div onClick={() => openedInquiry(idx)} className={styles.inquiryItem} key={idx}>
                                         <div className={styles.inquiryHeader}>
                                             <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
                                             <div className={styles.inquiryDetails}>
                                                 <div className={styles.inquiryTitleContainer}>
-                                                    <div className={styles.inquiryTitle}>문의하신 내용을 답변 받았습니다.</div>
-                                                    <div className={styles.inquiryResponse}>답변완료</div>
+                                                    <div className={styles.inquiryTitle}>{inquiry.title}</div>
+                                                    <div className={styles.inquiryResponse}>{inquiry.responseStatus}</div>
                                                 </div>
-                                                <div className={styles.inquirySubtitle}>문의 제목: {inquiry.title}</div>
+                                                <div className={styles.inquirySubtitle}>문의 날짜: {inquiry.createdAt}</div>
                                             </div>
                                         </div>
                                         {inquiryContent === idx && (
                                             <div>
-                                                {/* 선 */}
                                                 <div className={styles.faqDivider}></div>
                                                 <div className={styles.faqContent}>
-                                                    {/* 일단 이미지 넣었는데 내용 중간에 넣는건 아직 현재 내용 맨위 */}
-                                                    {inquiry.image && <img src={inquiry.image} className={styles.faqContentImage} alt="FAQ 이미지" />}
-                                                    <div className={styles.faqContentText}>{inquiry.content}</div>
+                                                    <div className={styles.faqContentText}>{inquiry.details}</div>
+                                                    {inquiry.image && <img src={inquiry.image} className={styles.faqContentImage} alt="첨부 이미지" />}
                                                 </div>
                                             </div>
                                         )}
@@ -391,6 +412,9 @@ function CustomerServiceCenter() {
                     {renderTabContent()}
                 </div>
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div className={styles.alarmModal}>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     );
 }
