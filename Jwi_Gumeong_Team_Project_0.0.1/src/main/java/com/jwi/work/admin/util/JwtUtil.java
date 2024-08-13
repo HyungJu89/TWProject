@@ -16,6 +16,8 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
 	
+	
+	// yml로 대체 해볼예정
 	static final SecretKey key = Keys.hmacShaKeyFor(
 			Decoders.BASE64.decode(
 					"chldldlarladkswh0828chldldlarladkswh0828chldldlarladkswh0828"

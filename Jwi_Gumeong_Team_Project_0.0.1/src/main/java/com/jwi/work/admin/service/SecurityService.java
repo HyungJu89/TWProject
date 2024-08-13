@@ -37,5 +37,4 @@ public class SecurityService implements UserDetailsService{
 		authority.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		return new User(user.getAdminName(), user.getAdminPassWord(), authority);
 	}
-	
 }
