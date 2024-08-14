@@ -10,6 +10,7 @@ import '../App.css';
 import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
+import refresh from '../icon/24px/refresh.png';
 
 function Main({onLogout,isLoggedIn}) {
     let navigate = useNavigate();
@@ -126,6 +127,7 @@ function TopicBtn({ topic, settopic }) {
                     <div onClick={() => { topic ? null : settopic(true) }} style={{ color: '#999999' }}>추천 토픽</div>
                     <div>즐겨찾기 토픽<div className={styles.bar} /></div>
                 </div>}
+                <img src={refresh}/>
         </div>
     )
 }
