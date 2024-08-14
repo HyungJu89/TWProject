@@ -5,6 +5,7 @@ import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { setCookie, getCookie, removeCookie } from '../cookies/Cookies.js';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function AdminLogin() {
@@ -68,6 +69,11 @@ function AdminLogin() {
                 const userResponse = 
                     await axios.post('/admin/login', adminData);
                 if(userResponse.data){
+                    setCookie('jwtCookie', userResponse.data,{
+                        path: '/',
+                        secure: true,
+                        maxAge: 100
+                    })
                     navigate('/admin');
                 }
                 setLoginWarn(userResponse.data.warningMessage);

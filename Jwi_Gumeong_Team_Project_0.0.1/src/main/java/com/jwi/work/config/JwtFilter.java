@@ -42,11 +42,11 @@ public class JwtFilter extends OncePerRequestFilter {
 		Claims claim;
 		
 	    try {
-	      claim = JwtUtil.extractToken(jwtCookie);
+	    	claim = JwtUtil.extractToken(jwtCookie);
 	    } catch (Exception e) {
 	    	System.out.println("jwt가 변조되었거나 비정상적입니다!");
-	      filterChain.doFilter(request, response);
-	      return;
+	        filterChain.doFilter(request, response);
+		    return;
 	    }
 	    
 	    var authToken = new UsernamePasswordAuthenticationToken(claim,null);
@@ -54,6 +54,8 @@ public class JwtFilter extends OncePerRequestFilter {
 	    SecurityContextHolder.getContext().setAuthentication(authToken);
 	    
 	    // 이제 여기에서 로그인 후처리 코드 하면될듯?
+	    
+	    System.out.println(claim);
 	    
 		filterChain.doFilter(request, response);
 	}

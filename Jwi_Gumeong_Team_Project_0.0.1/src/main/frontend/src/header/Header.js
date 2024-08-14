@@ -29,18 +29,19 @@ import more from '../icon/24px/more.png';
 import '../App.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
+import { getCookie } from '../cookies/Cookies.js';
 
 function Header({onClickSearch, onLogout, isLoggedIn}) {
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
-    let [adminLogin] = useState(false);
+    let [adminLogin,setAdminLogin] = useState(false);
     let navigate = useNavigate();
     let location = useLocation();
-    if(location.pathname.indexOf('/admin') === 0 ){
-        adminLogin = true;
-    }
     useEffect(() => {
+        if(location.pathname.indexOf('/admin') === 0 ){
+            setAdminLogin(true);
+        }
         {/* 최근검색어 미완성 */ }
         let justSearchLocal = localStorage.getItem('search')
         justSearchLocal = JSON.parse(justSearchLocal)
@@ -61,6 +62,7 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
+                    {/* 여기부분 어드민 쿠키 체킹후 수정하면 될듯? */}
                     {isLoggedIn ? (
                         <div className={styles.icon}>
                             <Icon navigate={navigate} userKey={userKey} />
@@ -68,7 +70,7 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
                         </div>
                     ) : (
                         <div className={styles.icon} style={{justifyContent:'end'}}>
-                        <div onClick={() => { { adminLogin !== true ? navigate('/signIn') : navigate('/admin/login') } }} className={styles.signInBtn}>로그인</div>
+                            <div onClick={() => { { adminLogin !== true ? navigate('/signIn') : navigate('/admin/login') } }} className={styles.signInBtn}>로그인</div>
                         </div>
                     )}
             </div>
