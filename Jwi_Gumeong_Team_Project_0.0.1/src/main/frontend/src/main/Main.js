@@ -4,16 +4,12 @@
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import _ from 'lodash';
-import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styles from './style/Main.module.css';
 import '../App.css';
-import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
-import chevron_left_w from '../icon/40px/chevron-left-w.png';
-import chevron_right_w from '../icon/40px/chevron-right-w.png';
 
 function Main({onLogout,isLoggedIn}) {
     let navigate = useNavigate();
@@ -21,6 +17,7 @@ function Main({onLogout,isLoggedIn}) {
     let [loginOn, setLoginOn] = useState(false);
     const [postList, setPostList] = useState([]);
     const [partnersLive, setPartnersLive] = useState([]);
+    const [hotBoardList, setHotBoardList] = useState([]);
 
     const searchRecommended = async () => {
         try {
@@ -32,9 +29,22 @@ function Main({onLogout,isLoggedIn}) {
         }
     };
 
-
-
+    //인기 게시판 :: SQL 전송문
     useEffect(() => {
+        const hotBoardLoad = async () => {
+            try {
+                const {data} = await axios.get(`/channel/hotTen`);
+                console.log(data);
+                setHotBoardList(data);
+            } catch (error) {
+                console.error('Channel API Error:', error);
+            }
+        };
+        hotBoardLoad();
+    }, []);
+
+
+    useEffect(() => { //메인 무작위 방송 추천
         const addPartners = async () => {
             try {
                 const response = await axios.get(/partnersLiveApi/);
@@ -55,7 +65,6 @@ function Main({onLogout,isLoggedIn}) {
         const fetchData = async () => {
             const postListData = await searchRecommended();
             setPostList(postListData)
-            console.log(postListData)
         };
 
         fetchData();
@@ -80,28 +89,21 @@ function Main({onLogout,isLoggedIn}) {
                     <div className={styles.hotBoard}>{/*인기 게시판*/}
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
                         <div className={styles.channelDiv}>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            {hotBoardList && hotBoardList.success &&
+                            <>{hotBoardList.info.length > 0 ? 
+                                hotBoardList.info.map((item, i)=>
+                                <div className={styles.channel}><img src={item.imageUrl} />
+                                    <div className={styles.text}>{item.name}</div></div>
+                            ):<div className={styles.nulltext}>아직 인기 게시판이 갱신되지 않았어요 :3</div>}</>}
                         </div>
                     </div>
                     <TopicBtn topic={topic} settopic={settopic} />
                     {topic == true ?
                         <div className={styles.fadein}>
                             {postList && postList.success &&
-                                <>
-                                    {postList.info.map((postInfo, index) =>
-                                        <PublicBoard key={index} postInfo={postInfo} />
-                                    )}
-                                </>
-                            }
+                            <>{postList.info.map((postInfo, index) =>
+                                <PublicBoard key={index} postInfo={postInfo} />
+                            )}</>}
                         </div>
                         : null}
                     <div onClick={() => { navigate('/allTopic'); window.scrollTo(0, 0) }} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}

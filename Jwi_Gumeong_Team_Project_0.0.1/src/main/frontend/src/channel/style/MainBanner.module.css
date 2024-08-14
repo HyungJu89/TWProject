@@ -155,17 +155,16 @@
     position: absolute;
     width: 1194px;
     height: 98px;
-    top: 422px;
-    left: 50%;
-    transform: translate(-50%, -0%);
+    top: 420px;
+    left: 0%;
+    transform: translate(0%, -0%);
     border-radius: 10px;
 }
 
 .liveDiv .liveImg{
     display: flex;
-    /* justify-content: space-between; */
     gap: 0px 30px;
-    width: 990px;
+    width: 1194px;
     overflow: hidden;
     border-radius: 0px;
 }
