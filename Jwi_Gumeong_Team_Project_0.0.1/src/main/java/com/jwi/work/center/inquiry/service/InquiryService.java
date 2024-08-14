@@ -58,7 +58,7 @@ public class InquiryService {
 
         if (response != null) {
             String formattedDate = response.getCreatedAt().format(formatter);
-            response.setFormattedCreatedAt(formattedDate);  // formattedCreatedAt 필드를 추가해야 합니다.
+            response.setFormattedCreatedAt(formattedDate);
         }
 
         return response;

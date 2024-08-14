@@ -39,7 +39,7 @@ function CustomerServiceCenter() {
                 .then(response => {
                     if (response.data.result === "success") {
                         setInquiries(response.data.inquiryList);
-    
+                        
                         // 문의 답변
                         response.data.inquiryList.forEach(inquiry => {
                             axios.post('/inquiry/response', null, {
@@ -237,7 +237,6 @@ function CustomerServiceCenter() {
                                         {/* 선 */}
                                         <div className={styles.faqDivider}></div>
                                         <div className={styles.faqContent}>
-                                            {/* 일단 이미지 넣었는데 내용 중간에 넣는건 아직 현재 내용 맨위 */}
                                             {faq.image && <img src={faq.image} className={styles.faqContentImage} alt="FAQ 이미지" />}
                                             <div className={styles.faqContentText}>{faq.content}</div>
                                         </div>

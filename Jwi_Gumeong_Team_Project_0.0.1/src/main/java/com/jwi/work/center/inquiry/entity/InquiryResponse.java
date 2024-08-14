@@ -36,10 +36,10 @@ public class InquiryResponse {
 
     @Column(name = "updatedAt", nullable = false)
     private LocalDateTime updatedAt;
-    
+
     @Transient
     private String formattedCreatedAt;
-
+    
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();

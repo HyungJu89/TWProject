@@ -427,13 +427,15 @@
     display: flex;
     gap: 9px;
     width: 726px;
+    border-radius: 0px;
 }
 
 .inquiryContentImage {
     width: 138px;
     height: 138px;
-    object-fit: cover; /* 이미지 비율 유지하며 잘라서 맞춤 */
-    border-radius: 5px;
+    object-fit: cover; /* 이미지 비율 유지 */
+    border-radius: 0px;
+    /* border: #BBBBBB 1px solid; */
 }
 
 .inquiryResponse {
