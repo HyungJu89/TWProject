@@ -119,8 +119,6 @@ function MainBanner({ channelId, route,
                                     </div>
                                 </div>)
                             }
-                    </div>
-
                     {/*메인 선택 배너*/}
                     {route === 'channel' ? (null) : (
                         <div className={style.liveDiv}>
@@ -132,6 +130,7 @@ function MainBanner({ channelId, route,
                             </div>
                         </div>
                     )}
+                    </div>
                 </div>
             )
                 : (
