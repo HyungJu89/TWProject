@@ -319,22 +319,22 @@
     display: flex;
     justify-content: flex-start; /* 이미지를 왼쪽부터 정렬 */
     width: 100%;
-    gap: 10px; /* 이미지 간격 */
+    gap: 9px;
     margin-top: 10px;
 }
 
 .uploadedFile {
     flex: 1;
     max-width: calc(20% - 10px);
-    height: auto;
+    height: 138px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .uploadedFile img {
-    max-width: 100%; 
-    height: auto;
+    width: 138px; 
+    height: 138px;
     border-radius: 5px;
 }
 
@@ -343,6 +343,10 @@
     display: flex;
     justify-content: center;
     width: 100%;
+}
+
+.uploadIcon {
+    cursor: pointer;
 }
 
 /* 비활성화 버튼 */
@@ -372,7 +376,6 @@
     margin: 40px 0 50px 0;
     border: none;
 }
-
 
 /* 문의 내역 */
 .inquiryContainer {
@@ -420,6 +423,19 @@
     color: #101010;
 }
 
+.inquiryImageBox {
+    display: flex;
+    gap: 9px;
+    width: 726px;
+}
+
+.inquiryContentImage {
+    width: 138px;
+    height: 138px;
+    object-fit: cover; /* 이미지 비율 유지하며 잘라서 맞춤 */
+    border-radius: 5px;
+}
+
 .inquiryResponse {
     /* 배경 */
     width: 50px;
@@ -454,17 +470,32 @@
     background-color: #ffffff;
 }
 
-.inquiryContentImage {
-    width: 100%;
-    max-width: 726px;
-    margin: auto;
-}
-
 .inquiryContentText {
     font-size: 15px;
     font-weight: 500;
     color: #101010;
     line-height: 18.78px;
+}
+
+.responsHeader {
+    padding: 20px 30px 0 30px;
+    font-weight: 700;
+    font-size: 18px;
+    color: #FF8901;
+}
+
+.responseContent {
+    padding: 20px 30px 30px 30px;
+    border-radius: 20px;
+    background-color: #ffffff;
+}
+
+.responseContentText {
+    font-size: 15px;
+    font-weight: 500;
+    color: #101010;
+    white-space: pre-line;
+    padding-bottom: 20px;
 }
 
 .noHistory {
@@ -482,8 +513,6 @@
     align-items: center;
     justify-content: center;
     color: #999999;
-
-
 }
 
 /* 제재 내역 */

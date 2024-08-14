@@ -1,5 +1,6 @@
 package com.jwi.work.center.inquiry.service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jwi.work.center.inquiry.entity.Inquiry;
+import com.jwi.work.center.inquiry.entity.InquiryResponse;
 import com.jwi.work.center.inquiry.ropository.InquiryRepository;
+import com.jwi.work.center.inquiry.ropository.InquiryResponseRepository;
 import com.jwi.work.util.FileManagerUtil;
 
 @Service
@@ -16,10 +19,13 @@ public class InquiryService {
 
     @Autowired
     private FileManagerUtil fileManagerUtil;
-
     @Autowired
     private InquiryRepository inquiryRepository;
+    @Autowired
+    private InquiryResponseRepository responseRepository;
 
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일");
+    
     public String createInquiry(int userKey, String title, String category, String details, List<MultipartFile> files) {
         try {
             List<String> fileUrls = new ArrayList<>();
@@ -41,5 +47,20 @@ public class InquiryService {
         } catch (Exception e) {
             return "fail";
         }
+    }
+    
+    public List<Inquiry> selectInquiry(int userKey) {
+    	return inquiryRepository.findAllByUserKeyOrderByCreatedAtDesc(userKey);
+    }
+    
+    public InquiryResponse selectResponse(int inquiryKey) {
+        InquiryResponse response = responseRepository.findByInquiryKey(inquiryKey);
+
+        if (response != null) {
+            String formattedDate = response.getCreatedAt().format(formatter);
+            response.setFormattedCreatedAt(formattedDate);  // formattedCreatedAt 필드를 추가해야 합니다.
+        }
+
+        return response;
     }
 }

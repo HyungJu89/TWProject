@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jwi.work.center.inquiry.entity.Inquiry;
+import com.jwi.work.center.inquiry.entity.InquiryResponse;
 import com.jwi.work.center.inquiry.service.InquiryService;
 
 @RestController
@@ -33,6 +35,39 @@ public class InquiryController {
         Map<String, Object> response = new HashMap<>();
         response.put("result", result);
         return response;
+    }
+    
+    @PostMapping("/list")
+	public Map<String, Object> selectInquiry(@RequestParam("userKey") int userKey) {
+    	
+    	List<Inquiry> list = inquiryService.selectInquiry(userKey);
+    	
+    	Map<String,Object> result = new HashMap<>();
+    	
+    	if(list != null) {
+    		result.put("result", "success");
+    		result.put("inquiryList", list);
+    	} else {
+    		result.put("result", "fail");
+    	}
+    	
+    	return result;
+	}
+    
+    @PostMapping("/response")
+    public Map<String, Object> selectResponse(@RequestParam("inquiryKey") int inquiryKey) {
+    	InquiryResponse response = inquiryService.selectResponse(inquiryKey);
+    	
+    	Map<String,Object> result = new HashMap<>();
+    	
+    	if(response != null) {
+    		result.put("result", "success");
+    		result.put("response", response);
+    	} else {
+    		result.put("result", "fail");
+    	}
+    	
+    	return result;
     }
 }
 

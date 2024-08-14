@@ -18,6 +18,7 @@ function CustomerServiceCenter() {
     const [sanctions, setSanctions] = useState([]); // 제재 내역
     const userState = useSelector((state) => state.userState);  // 로그인한 유저 정보??
     const [inquiries, setInquiries] = useState([]); // 문의 내역
+    const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
 
     // 알림 모달
     const [modalOpen, setModalOpen] = useState(false);
@@ -28,34 +29,60 @@ function CustomerServiceCenter() {
         setModalOpen(false);
     };
 
-    // 제재 내역
     useEffect(() => {
         if (userKey) {
-            // userKey가 있을 때만 API 호출
-            axios.post('/sanction/list', null, {
-                params: { userKey }
-            })
-            .then(response => {
-                if (response.data.result === "success") {
-                    setSanctions(response.data.sanctionList);
-                }
-            })
-            .catch(error => {
-                console.log("API 호출 오류: " + error.message);
-            });
-
-            // 문의 내역
-            axios.post('/inquiry/list', { userKey }) 
-            .then(response => {
-                if (response.data.result === "success") {
-                    setInquiries(response.data.inquiryList);
-                }
-            })
-            .catch(error => {
-                console.log("문의 내역 가져오기 실패: " + error.message);
-            });
+            if (tab === 2) {
+                // 문의 내역
+                axios.post('/inquiry/list', null, {
+                    params: { userKey }
+                })
+                .then(response => {
+                    if (response.data.result === "success") {
+                        setInquiries(response.data.inquiryList);
+    
+                        // 문의 답변
+                        response.data.inquiryList.forEach(inquiry => {
+                            axios.post('/inquiry/response', null, {
+                                params: { inquiryKey: inquiry.inquiryKey }
+                            })
+                            .then(respon => {
+                                if (respon.data.result === "success") {
+                                    setInquiryResponses(prevResponses => ({
+                                        ...prevResponses,
+                                        [inquiry.inquiryKey]: respon.data.response // 각 문의마다 응답 저장
+                                    }));
+                                }
+                            })
+                            .catch(error => {
+                                console.log("문의 답변 가져오기 실패: " + error.message);
+                            });
+                        });
+                    } else {
+                        setInquiries([]); // 문의 내역이 없을 경우
+                    }
+                })
+                .catch(error => {
+                    console.log("문의 내역 가져오기 실패: " + error.message);
+                });
+            } else if (tab === 3) {
+                // 제재 내역
+                axios.post('/sanction/list', null, {
+                    params: { userKey }
+                })
+                .then(response => {
+                    if (response.data.result === "success") {
+                        setSanctions(response.data.sanctionList);
+                    } else {
+                        setSanctions([]); // 제재 내역이 없을 경우
+                    }
+                })
+                .catch(error => {
+                    console.log("API 호출 오류: " + error.message);
+                });
+            }
         }
-    }, [userKey]); // userKey가 변경될 때마다 호출
+    }, [userKey, tab]); // tab과 유저로그인 상태가 변경될 때 실행
+    
 
     // 문의하기
     // 파일 업로드 상태 및 문의
@@ -223,153 +250,183 @@ function CustomerServiceCenter() {
                 );
             case 1:
                 return (
-                    <div>
-                        <div className={styles.inqContainer}>
-                            <div className={styles.inyHeader}>
-                                <img src={inquireIcon} className={styles.inqIcon} alt="문의하기 아이콘" />
-                                <span>문의하기</span>
-                            </div>
-                            <div className={styles.inqDivider}></div>
-                            <div className={styles.inqForm}>
-                                <div className={styles.inqField}>
-                                    <label>문의 종류</label>
-                                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
-                                        {selectedOption}
+                    <div className={styles.inqContainer}>
+                        <div className={styles.inyHeader}>
+                            <img src={inquireIcon} className={styles.inqIcon} alt="문의하기 아이콘" />
+                            <span>문의하기</span>
+                        </div>
+                        <div className={styles.inqDivider}></div>
+                        <div className={styles.inqForm}>
+                            <div className={styles.inqField}>
+                                <label>문의 종류</label>
+                                <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
+                                    {selectedOption}
+                                </div>
+                                {dropdownOpen && (
+                                    <div className={styles.dropdown}>
+                                        {["시스템 관련", "본인인증", "오류/버그", "신고", "제안", "도용", "보안", "기타"].map((option, index) => (
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
+                                                {option}
+                                            </div>
+                                        ))}
                                     </div>
-                                    {dropdownOpen && (
-                                        <div className={styles.dropdown}>
-                                            {["시스템 관련", "본인인증", "오류/버그", "신고", "제안", "도용", "보안", "기타"].map((option, index) => (
-                                                <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
-                                                    {option}
-                                                </div>
-                                            ))}
+                                )}
+                            </div>
+                            <div className={styles.inqField}>
+                                <label>제목: </label>
+                                <input 
+                                    type="text" 
+                                    name="title"
+                                    value={form.title} 
+                                    onChange={handleInputChange} 
+                                    placeholder="문의 제목을 입력하세요." 
+                                    className={styles.inqInput} 
+                                />
+                            </div>
+                            <div className={styles.inqField}>
+                                <textarea 
+                                    name="details"
+                                    value={form.details} 
+                                    onChange={handleInputChange}
+                                    className={styles.inqTextarea} 
+                                    placeholder="문의 내용을 입력하세요."
+                                ></textarea>
+                            </div>
+                            <div className={styles.inqField}>
+                                <div className={styles.imageBox}>
+                                    {files.map((fileObj, index) => (
+                                        <div key={index} className={styles.uploadedFile}>
+                                            <img src={fileObj.preview} alt={fileObj.file.name} style={{maxWidth: "100px", maxHeight: "100px"}} />
+                                        </div>
+                                    ))}
+                                    {files.length < 5 && (
+                                        <div className={styles.fileUpload} onClick={() => document.getElementById('file-upload').click()}>
+                                            <img src={addIcon} className={styles.uploadIcon} alt="파일 추가 버튼 아이콘" />
+                                            <input id="file-upload" type="file" accept="image/*" onChange={fileChange}
+                                                multiple style={{ display: 'none' }}
+                                            />
                                         </div>
                                     )}
                                 </div>
-                                <div className={styles.inqField}>
-                                    <label>제목: </label>
-                                    <input 
-                                        type="text" 
-                                        name="title"
-                                        value={form.title} 
-                                        onChange={handleInputChange} 
-                                        placeholder="문의 제목을 입력하세요." 
-                                        className={styles.inqInput} 
-                                    />
-                                </div>
-                                <div className={styles.inqField}>
-                                    <textarea 
-                                        name="details"
-                                        value={form.details} 
-                                        onChange={handleInputChange}
-                                        className={styles.inqTextarea} 
-                                        placeholder="문의 내용을 입력하세요."
-                                    ></textarea>
-                                </div>
-                                <div className={styles.inqField}>
-                                    <div className={styles.imageBox}>
-                                        {files.map((fileObj, index) => (
-                                            <div key={index} className={styles.uploadedFile}>
-                                                <img src={fileObj.preview} alt={fileObj.file.name} style={{maxWidth: "100px", maxHeight: "100px"}} />
-                                            </div>
-                                        ))}
-                                        {files.length < 5 && (
-                                            <div className={styles.fileUpload}>
-                                                <label htmlFor="file-upload">
-                                                    <img src={addIcon} className={styles.uploadIcon} alt="파일 추가 버튼 아이콘" />
-                                                </label>
-                                                <input
-                                                    id="file-upload"
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={fileChange}
-                                                    multiple
-                                                    style={{ display: 'none' }}/>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className={styles.submitButtonContainer}>
-                                    <button 
-                                        onClick={submit} 
-                                        className={inputComplete ? styles.activeSubmitButton : styles.disabledSubmitButton}
-                                        disabled={!inputComplete}>
-                                        문의 넣기
-                                    </button>
-                                </div>
+                            </div>
+                            <div className={styles.submitButtonContainer}>
+                                <button 
+                                    onClick={submit} 
+                                    className={inputComplete ? styles.activeSubmitButton : styles.disabledSubmitButton}
+                                    disabled={!inputComplete}>
+                                    문의 넣기
+                                </button>
                             </div>
                         </div>
                     </div>
                 );
             case 2:
                 return (
-                    <div>
-                        <div className={styles.inquiryContainer}>
-                            {inquiries.length === 0 ? (
-                                <div className={styles.noHistory}>문의 내역이 없습니다.</div>
-                            ) : (
-                                inquiries.map((inquiry, idx) => (
+                    <div className={styles.inquiryContainer}>
+                        {inquiries.length === 0 ? (
+                            <div className={styles.noHistory}>문의 내역이 없습니다.</div>
+                        ) : (
+                            inquiries.map((inquiry, idx) => {
+                                const response = inquiryResponses[inquiry.inquiryKey];
+                                const formattedDate = response ? new Intl.DateTimeFormat('ko', { 
+                                    year: 'numeric', 
+                                    month: 'long', 
+                                    day: 'numeric' 
+                                }).format(new Date(response.createdAt)) : '-';
+
+                                return (
                                     <div onClick={() => openedInquiry(idx)} className={styles.inquiryItem} key={idx}>
                                         <div className={styles.inquiryHeader}>
                                             <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
                                             <div className={styles.inquiryDetails}>
                                                 <div className={styles.inquiryTitleContainer}>
                                                     <div className={styles.inquiryTitle}>{inquiry.title}</div>
-                                                    <div className={styles.inquiryResponse}>{inquiry.responseStatus}</div>
+                                                    {response && (
+                                                        <div className={styles.inquiryResponse}>답변완료</div>
+                                                    )}
                                                 </div>
-                                                <div className={styles.inquirySubtitle}>문의 날짜: {inquiry.createdAt}</div>
+                                                <div className={styles.inquirySubtitle}>답변 받은 날짜: {formattedDate}</div>
                                             </div>
                                         </div>
+                                        {/* 내가 문의 한 글 */}
                                         {inquiryContent === idx && (
                                             <div>
                                                 <div className={styles.faqDivider}></div>
                                                 <div className={styles.faqContent}>
                                                     <div className={styles.faqContentText}>{inquiry.details}</div>
-                                                    {inquiry.image && <img src={inquiry.image} className={styles.faqContentImage} alt="첨부 이미지" />}
+                                                    {/* 이미지가 있을 때 이미지 보여줌 */}
+                                                    <div className={styles.inquiryImageBox}>
+                                                        {inquiry.image && inquiry.image.split(',').map((imgUrl, imgIdx) => (
+                                                            <img key={imgIdx} 
+                                                                src={`http://localhost:9090/images/${imgUrl.trim()}`}
+                                                                className={styles.inquiryContentImage}
+                                                            />
+                                                        ))}
+                                                    </div>
                                                 </div>
+                                                {/* 답변 */}
+                                                {response && (
+                                                    <div>
+                                                        <div className={styles.faqDivider}></div>
+                                                        <div className={styles.responsHeader}>답변</div>
+                                                        <div className={styles.responseContent}>
+                                                            <div className={styles.responseContentText}>
+                                                                {response.responseText}
+                                                            </div>
+                                                            {response.image && (
+                                                                <div className={styles.inquiryImageBox}>
+                                                                    {response.image.split(',').map((imgUrl, imgIdx) => (
+                                                                        <img key={imgIdx} 
+                                                                            src={`http://localhost:9090/images/${imgUrl.trim()}`}
+                                                                            className={styles.inquiryContentImage}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
                                     </div>
-                                ))
-                            )}
-                        </div>
+                                );
+                            })
+                        )}
                     </div>
                 );
             case 3:
                 return (
-                    <div>
-                        <div className={styles.sanctionContainer}>
-                            <div className={styles.sanctionList}>
-                                {currentSanctions.length === 0 ? (
-                                    <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
-                                ) : (
-                                    currentSanctions.map((sanction, index) => (
-                                        <div key={index} className={styles.sanctionItem}>
-                                            <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
-                                            <div className={styles.sanctionDetails}>
-                                                <div className={styles.sanctionTitle}>{userState.nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
-                                                <div className={styles.sanctionContent}>
-                                                    <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
-                                                    <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>
-                                                </div>
+                    <div className={styles.sanctionContainer}>
+                        <div className={styles.sanctionList}>
+                            {currentSanctions.length === 0 ? (
+                                <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
+                            ) : (
+                                currentSanctions.map((sanction, index) => (
+                                    <div key={index} className={styles.sanctionItem}>
+                                        <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
+                                        <div className={styles.sanctionDetails}>
+                                            <div className={styles.sanctionTitle}>{userState.nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
+                                            <div className={styles.sanctionContent}>
+                                                <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
+                                                <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>
                                             </div>
-                                            {index < currentSanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
                                         </div>
-                                    ))
-                                )}
-                            </div>
-                            {Math.ceil(sanctions.length / sectionsPerPage) > 1 && (
-                                <div className={styles.pagination}>
-                                    <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
-                                        <img src={btnLeft} alt="Previous Page" />
-                                    </button>
-                                    <span className={styles.pageInfo}>{currentPage} / {Math.ceil(sanctions.length / sectionsPerPage)}</span>
-                                    <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sectionsPerPage)} className={styles.pageNextButton}>
-                                        <img src={btnRight} alt="Next Page" />
-                                    </button>
-                                </div>
+                                        {index < currentSanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
+                                    </div>
+                                ))
                             )}
                         </div>
+                        {Math.ceil(sanctions.length / sectionsPerPage) > 1 && (
+                            <div className={styles.pagination}>
+                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
+                                    <img src={btnLeft} alt="Previous Page" />
+                                </button>
+                                <span className={styles.pageInfo}>{currentPage} / {Math.ceil(sanctions.length / sectionsPerPage)}</span>
+                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sectionsPerPage)} className={styles.pageNextButton}>
+                                    <img src={btnRight} alt="Next Page" />
+                                </button>
+                            </div>
+                        )}
                     </div>
                 );
             default:

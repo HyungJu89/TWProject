@@ -10,41 +10,36 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
-@Table(name = "inquiry")
-public class Inquiry {
+@Table(name = "inquiryResponse")
+public class InquiryResponse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer responseKey;
+
+    @Column(name = "inquiryKey", nullable = false)
     private Integer inquiryKey;
-    @Column(name = "userKey", nullable = false)
-    private Integer userKey;
-    @Column(name = "title", nullable = false)
-    private String title;
-    @Column(name = "category", nullable = false)
-    private String category;
-    @Column(name = "details", nullable = false)
-    private String details;
+
+    @Column(name = "responseText", nullable = false, columnDefinition = "TEXT")
+    private String responseText;
+
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
+
     @Column(name = "createdAt", nullable = false)
     private LocalDateTime createdAt;
+
     @Column(name = "updatedAt", nullable = false)
     private LocalDateTime updatedAt;
     
-    public Inquiry(Integer userKey, String title, String category, String details, String image) {
-        this.userKey = userKey;
-        this.title = title;
-        this.category = category;
-        this.details = details;
-        this.image = image;
-    }
-    
+    @Transient
+    private String formattedCreatedAt;
+
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -56,5 +51,4 @@ public class Inquiry {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 }
