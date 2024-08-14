@@ -29,12 +29,11 @@ function Main({onLogout,isLoggedIn}) {
         }
     };
 
-    //인기 게시판 :: SQL 전송문
+    //인기 게시판 :: 우리 DB에서 하루동안 게시글 많은 채널 10개 가져오기 
     useEffect(() => {
         const hotBoardLoad = async () => {
             try {
                 const {data} = await axios.get(`/channel/hotTen`);
-                console.log(data);
                 setHotBoardList(data);
             } catch (error) {
                 console.error('Channel API Error:', error);
@@ -92,7 +91,7 @@ function Main({onLogout,isLoggedIn}) {
                             {hotBoardList && hotBoardList.success &&
                             <>{hotBoardList.info.length > 0 ? 
                                 hotBoardList.info.map((item, i)=>
-                                <div className={styles.channel}><img src={item.imageUrl} />
+                                <div onClick={() => { navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.channel}><img src={item.imageUrl} />
                                     <div className={styles.text}>{item.name}</div></div>
                             ):<div className={styles.nulltext}>아직 인기 게시판이 갱신되지 않았어요 :3</div>}</>}
                         </div>

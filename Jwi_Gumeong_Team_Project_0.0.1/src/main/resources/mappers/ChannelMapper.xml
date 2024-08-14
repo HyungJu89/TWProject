@@ -25,6 +25,7 @@
 		SELECT 
 		    c.name,
 		    c.imageUrl,
+		    c.id,
 		    COUNT(*) AS post_count
 		FROM post p
 		JOIN channel c ON p.channelKey = c.channelKey
@@ -32,6 +33,14 @@
 		GROUP BY c.channelKey, c.name, c.imageUrl
 		ORDER BY post_count DESC
 		LIMIT 0, 10
+    </select>
+    
+        <!-- 추천 :: 그냥 7개 무작위 -->
+    <select id="RandomBoard" parameterType="map" resultType="com.jwi.work.channel.dto.channelDto.ChannelDto">
+		SELECT * 
+		FROM channel
+		ORDER BY RAND()
+		LIMIT 7;
     </select>
 
 

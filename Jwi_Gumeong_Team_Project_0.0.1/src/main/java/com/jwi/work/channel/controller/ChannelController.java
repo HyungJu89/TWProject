@@ -47,7 +47,7 @@ public class ChannelController {
 	}
 	
 	@GetMapping("/hotTen") //인기 게시판 10개
-	public AnswerDto<List<ChannelDto>> getMethodName() {
+	public AnswerDto<List<ChannelDto>> hotTen() {
 		// 현재 시간 구하기
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         // 오늘 오후 5시 계산
@@ -78,6 +78,9 @@ public class ChannelController {
 		return channelService.HotBoardGet(fStartTime, fEndTime);
 	}
 	
-	
+	@GetMapping("/randomBoard") //무작위 추천 게시판
+	public AnswerDto<List<ChannelDto>> randomBoard() {
+		return channelService.RandomBoard();
+	}
 
 }

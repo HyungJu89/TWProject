@@ -20,4 +20,7 @@ public interface ChannelMapper {
     List<ChannelDto> HotBoardGet(
         @Param("startTime") String startTime,
         @Param("endTime") String endTime);
+    
+    //무작위 10개 가져오기
+    List<ChannelDto> RandomBoard();
 }

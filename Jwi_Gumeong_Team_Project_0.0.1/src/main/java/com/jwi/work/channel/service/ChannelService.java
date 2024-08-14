@@ -70,25 +70,34 @@ public class ChannelService {
 		return answer;
 	}
 	
-	  // 인기 게시판 BO -- 채널명, 채널 아이콘만 필요
+	  // 인기 게시판 BO
     public AnswerDto<List<ChannelDto>> HotBoardGet(String startTime, String endTime) {
         AnswerDto<List<ChannelDto>> answer = new AnswerDto<>();
-        
         try {
-            // DAO를 통해 데이터 가져오기
             List<ChannelDto> channels = channelMapper.HotBoardGet(startTime, endTime);
-            
-            // 결과를 AnswerDto에 설정
             answer.setInfo(channels);
             answer.setMessage("Success");
             answer.setSuccess(true);
         } catch (Exception e) {
-            // 오류 발생 시 처리
             answer.setMessage("에러에요: " + e.getMessage());
             answer.setSuccess(false);
         }
-        
         return answer;
 	}
+    
+	  // 추천 게시판 BO
+    public AnswerDto<List<ChannelDto>> RandomBoard() {
+    	AnswerDto<List<ChannelDto>> answer = new AnswerDto<>();
+        try {
+            List<ChannelDto> channels = channelMapper.RandomBoard();
+            answer.setInfo(channels);
+            answer.setMessage("Success");
+            answer.setSuccess(true);
+        } catch (Exception e) {
+            answer.setMessage("에러에요: " + e.getMessage());
+            answer.setSuccess(false);
+        }
+		return answer;
+    }
 
 }
