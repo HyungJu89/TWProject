@@ -1,5 +1,12 @@
 insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("asdf","$2a$12$qWMhwV31meoA0C6fvoVLX.OBe4NXvyz09HIewoxQ8EPProosm54z6","activate",now(),now());
 
+-- 2024-08-15 [안재원]
+-- 수정내용 : inquiry 테이블 Title 소문자로 변경 및 이미지 Null 가능으로 변경 , inquiryResponse 이미지 Null 가능, faq 이미지 Null 가능
+ALTER TABLE `inquiry` RENAME COLUMN `Title` to `title`;
+ALTER TABLE `inquiry` MODIFY `image` TEXT COMMENT '이미지 URL';
+ALTER TABLE `inquiryResponse` MODIFY `image` TEXT COMMENT '이미지 URL';
+ALTER TABLE `faq` MODIFY `imagePath` TEXT COMMENT '이미지 URL';
+
 -- 2024-08-12 15시 13분 [김형주] V 0.1.8 
 -- 수정내용 : 유저테이블에 pwWrong(비밀번호 틀린횟수) 추가
 -- 비밀번호 5회제한 로직을 수월하게 만들기 위해 수정했습니다!
@@ -144,10 +151,10 @@ CREATE TABLE `alarm` (
 CREATE TABLE `inquiry` (
 	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 키',
 	`userKey`	INT	NOT NULL	COMMENT '유저 키',
-	`Title`	VARCHAR(30)	NOT NULL	COMMENT '문의 제목',
+	`title`	VARCHAR(30)	NOT NULL	COMMENT '문의 제목',
 	`category`	VARCHAR(30)	NOT NULL	COMMENT '문의 주제',
 	`details`	TEXT	NOT NULL	COMMENT '문의 내용',
-	`image`	TEXT	NOT NULL	COMMENT '이미지 URL',
+	`image`	TEXT	COMMENT '이미지 URL',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
@@ -159,7 +166,7 @@ CREATE TABLE `inquiryResponse` (
 	`adminKey`	INT	NOT NULL	COMMENT '어드민 키',
 	`Title`	VARCHAR(30)	NOT NULL	COMMENT '제목',
 	`responseText`	TEXT	NOT NULL	COMMENT '답변 내용',
-	`image`	TEXT	NOT NULL	COMMENT '이미지 URL',
+	`image`	TEXT	COMMENT '이미지 URL',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (`inquiryKey`) REFERENCES `inquiry`(`inquiryKey`) ON DELETE CASCADE
@@ -215,7 +222,7 @@ CREATE TABLE `faq` (
     `title` VARCHAR(32) NOT NULL,
     `content` TEXT NOT NULL,
     `category` VARCHAR(32) NOT NULL,
-    `imagePath` VARCHAR(256),
+    `imagePath` TEXT ,
     `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
