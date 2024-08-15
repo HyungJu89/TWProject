@@ -120,7 +120,6 @@
 			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
 			user.nickName AS P_nickName,
 			
-			
 			channel.channelKey AS channelKey,
 			channel.id AS PC_id,
 			channel.imageUrl AS PC_imageUrl,

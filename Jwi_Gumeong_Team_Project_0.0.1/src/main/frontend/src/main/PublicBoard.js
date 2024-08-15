@@ -24,7 +24,6 @@ function PublicBoard({postInfo}) {
     let [heart, setHeart] = useState(true); //좋아요 누름 확인
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     //이미지
-
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
 

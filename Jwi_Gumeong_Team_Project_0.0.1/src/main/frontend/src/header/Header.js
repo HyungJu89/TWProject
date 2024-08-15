@@ -90,6 +90,7 @@ function Icon({navigate, userKey}) { /* 로그인 시 노출되는 알림 아이
                 onMouseLeave={() => setImg(notification_deactivation)}
                 onClick={() => setShowNotifications(!showNotifications)}>
                 <img src={img} alt="Notification" />
+                <div className={styles.redNotRead}>16</div>
             </div>
             {showNotifications && <NotificationModal userKey={userKey} />}
         </div>
