@@ -55,6 +55,7 @@ body{
 }
 .basicNav .icon img{cursor: pointer;}
 .icon_notification{
+    position: relative;
     width: 34px;
     height: 34px;
     display: flex;
@@ -73,6 +74,20 @@ body{
     width: 24px;
     height: 24px;
 }
+.icon_notification .redNotRead{
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    width: 16px;
+    height: 10px;
+    background-color: red;
+
+    font-size: 7px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-align: center;
+}
+
 .basicNav .signInBtn{ /* 로그인 버튼 디자인 */
     border: 1px solid #FF8901;
     border-radius: 4px;
