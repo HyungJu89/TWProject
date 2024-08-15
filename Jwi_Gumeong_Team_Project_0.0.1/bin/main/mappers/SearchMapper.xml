@@ -13,6 +13,7 @@
 	<result property="commentCount" column="P_commentCount" />
 	<result property="createdAt" column="P_createdAt" />
 	<result property="updatedAt" column="P_updatedAt" />
+	<result property="isLike" column="isLike"/>
 	<association property="postChannel" javaType="com.jwi.work.channel.dto.postDto.PostChannelDto" resultMap="postChannelResultMap"/>
 </resultMap>
 
@@ -37,13 +38,29 @@
 			channel.name,
 			channel.followerCount,
 			channel.imageUrl,
-			COALESCE(COUNT(favorites.channelKey), 0) AS favoriteCount 
+			COALESCE(COUNT(favorites.channelKey), 0) AS favoriteCount ,
+			<!-- 단순하게 case 문으로 생각하면 됨 CASE WHEN EXISTS 안의 값이  특정 조건을 만족하는 데이터가 있는지-->
+			<!--  EXISTS 는 서브쿼리 안에 행이 존재하면 트루가 반환됨. -->
+        	CASE 
+            	WHEN EXISTS(
+        			SELECT  
+            			1 
+        			FROM 
+        		    	favorites f
+		        	JOIN
+            			userConnection uc ON f.userKey = uc.userKey
+        			WHERE 
+	            		f.channelKey = channel.channelKey 
+	            		AND uc.sessionId = #{sessionId}
+    				) THEN TRUE
+    			ELSE FALSE
+        	END AS isFavorite
 		FROM
 			channel
 		LEFT JOIN
 			favorites ON channel.channelKey = favorites.channelKey
 		WHERE 
-			name LIKE CONCAT('%',#{search},'%')
+			channel.name LIKE CONCAT('%',#{search},'%')
 		GROUP BY
         	channel.channelKey
 		LIMIT
@@ -74,7 +91,22 @@
 			channel.channelKey AS channelKey,
 			channel.id AS PC_id,
 			channel.imageUrl AS PC_imageUrl,
-			channel.name AS PC_name
+			channel.name AS PC_name,
+
+        	CASE 
+            	WHEN EXISTS(
+            		SELECT  
+            			1 
+            		FROM 
+            			`like` l
+            		JOIN
+            			userConnection uc ON l.userKey = uc.userKey
+            		WHERE 
+            			l.postKey = post.postKey 
+            			AND uc.sessionId = #{sessionId}
+            	) THEN TRUE
+            	ELSE FALSE
+        	END AS isLike
 
 		FROM 
 			<!-- post 테이블이 메인 -->
@@ -143,8 +175,23 @@
 			channel.channelKey AS channelKey,
 			channel.id AS PC_id,
 			channel.imageUrl AS PC_imageUrl,
-			channel.name AS PC_name
+			channel.name AS PC_name,
 
+        	CASE 
+            	WHEN EXISTS(
+            		SELECT  
+            			1 
+            		FROM 
+            			`like` l
+            		JOIN
+            			userConnection uc ON l.userKey = uc.userKey
+            		WHERE 
+            			l.postKey = post.postKey 
+            			AND uc.sessionId = #{sessionId}
+            	) THEN TRUE
+            	ELSE FALSE
+        	END AS isLike
+        	
 		FROM 
 			post 
 		LEFT JOIN
@@ -197,9 +244,14 @@
 		FROM 
 			post 
 		JOIN
+		<!-- favorites 테이블에 channelKey 값과 일치하는 행만 결과에 포함해준다. -->
 			favorites ON post.channelKey = favorites.channelKey
 		JOIN
-			userConnection ON favorites.userKey = userConnection.userKey
+		<!-- user테이블에 userKey값이 일치하는 행만 결과에 포함해준다. -->
+			user ON favorites.userKey = user.userKey 
+		JOIN
+		<!-- userConnection 테이블에서 sessionId 의 값과 userKey 값이 일치하는 행만 결과에 포함해준다. -->
+			userConnection ON user.userKey = userConnection.userKey AND user.sessionId = #{sessionId}
 		WHERE 
 			post.state = 'common'
 			AND userConnection.sessionId = #{sessionId}
@@ -223,7 +275,22 @@
 			channel.channelKey AS channelKey,
 			channel.id AS PC_id,
 			channel.imageUrl AS PC_imageUrl,
-			channel.name AS PC_name
+			channel.name AS PC_name,
+			
+			        	CASE 
+            	WHEN EXISTS(
+            		SELECT  
+            			1 
+            		FROM 
+            			`like` l
+            		JOIN
+            			userConnection uc ON l.userKey = uc.userKeyz
+            		WHERE 
+            			l.postKey = post.postKey 
+            			AND uc.sessionId = #{sessionId}
+            	) THEN TRUE
+            	ELSE FALSE
+        	END AS isLike
 
 		FROM 
 			post 
@@ -231,11 +298,11 @@
 		<!-- favorites 테이블에 channelKey 값과 일치하는 행만 결과에 포함해준다. -->
 			favorites ON post.channelKey = favorites.channelKey
 		JOIN
-		<!-- userConnection 테이블에서 sessionId 의 값과 일치하는 행만 결과에 포함해준다. -->
-			userConnection ON userConnection.sessionId = #{sessionId}
-		JOIN
 		<!-- user테이블에 userKey값이 일치하는 행만 결과에 포함해준다. -->
-			user ON userConnection.userKey = user.userKey 
+			user ON favorites.userKey = user.userKey 
+		JOIN
+		<!-- userConnection 테이블에서 sessionId 의 값과 userKey 값이 일치하는 행만 결과에 포함해준다. -->
+			userConnection ON user.userKey = userConnection.userKey AND user.sessionId = #{sessionId}
 		LEFT JOIN
 		<!-- channel 테이블에 channelKey 값이 일치하는 행을 결과에 추가해준다 -->
 			channel ON post.channelKey = channel.channelKey
@@ -306,7 +373,22 @@
 			channel.channelKey AS channelKey,
 			channel.id AS PC_id,
 			channel.imageUrl AS PC_imageUrl,
-			channel.name AS PC_name
+			channel.name AS PC_name,
+			
+			CASE 
+            	WHEN EXISTS(
+            		SELECT  
+            			1 
+            		FROM 
+            			`like` l
+            		JOIN
+            			userConnection uc ON l.userKey = uc.userKey
+            		WHERE 
+            			l.postKey = post.postKey 
+            			AND uc.sessionId = #{sessionId}
+            	) THEN TRUE
+            	ELSE FALSE
+        	END AS isLike
 
 		FROM 
 			post 

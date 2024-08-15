@@ -21,10 +21,12 @@ function Main({onLogout,isLoggedIn}) {
     const [hotBoardList, setHotBoardList] = useState([]);
 
     const searchRecommended = async () => {
+        const sessionId = sessionStorage.getItem('sessionId');
         try {
             const { data } = await axios.get(`/search/recommended` , {
                 params: {
-                    page: '1'
+                    page: '1',
+                    sessionId : sessionId
                 }
             });
             return data;

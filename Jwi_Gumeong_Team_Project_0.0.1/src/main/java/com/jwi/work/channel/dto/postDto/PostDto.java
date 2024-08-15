@@ -14,6 +14,7 @@ public class PostDto {
 	private String state;
 	private int likeCount;
 	private int commentCount;
+	private boolean isLike;
 	private PostChannelDto postChannel;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;

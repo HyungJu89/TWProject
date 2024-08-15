@@ -7,4 +7,6 @@
 	INSERT INTO reply(commentKey,replyreplyKey,userKey,reply) value (#{commentKey},#{replyreplyKey},#{userKey},#{reply})
 </insert>
 
+
+
 </mapper>
