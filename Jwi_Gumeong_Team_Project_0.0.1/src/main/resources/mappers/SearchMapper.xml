@@ -58,28 +58,34 @@
 	
 	<select id="searchPostList" parameterType="map" resultMap="postResultMap">
 		SELECT 
+		<!-- select 하나하나 해준이유 = 유저key가 못빠져오게하려고 -->
 			post.postKey AS postKey,
 			post.content AS P_content,
 			post.image AS P_image,
 			post.state AS P_state,
 			post.createdAt AS P_createdAt,
 			post.updatedAt AS P_updatedAt,
-			
+						<!-- if null 은 오류 방지를 위해 null일때 0을 대신출력 -->
 			IFNULL(commentSummary.commentCount, 0) AS  P_commentCount,
 			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
 			user.nickName AS P_nickName,
 			
-			
+					<!-- AS 는 왼쪽에 있는 칼럼의 이름을 오른쪽껄로 바꾸겠다 -->
 			channel.channelKey AS channelKey,
 			channel.id AS PC_id,
 			channel.imageUrl AS PC_imageUrl,
 			channel.name AS PC_name
 
 		FROM 
+			<!-- post 테이블이 메인 -->
 			post 
 		LEFT JOIN
+			<!-- channel 테이블에서 post.channelKey 와 동일한 channelKey 를 가지고있는 결과에 추가해준다. -->
 			channel ON post.channelKey = channel.channelKey
 		LEFT JOIN
+			<!-- 서브쿼리 : 게시글 좋아요 숫자를 뽑기위해 필요-->
+			<!-- like 테이블에서 postKey 를 선택하고 postKey의 갯수를 세는 기능. 결과는 postKey별로 그룹화해서 각 post에 대한 좋아요 갯수를 반환함-->
+			<!-- 서브쿼리로 그룹화 시킨 값중 post.postKey와 동일한 postKey를 가진행을 결과에 추가해준다 -->
 			(SELECT
 				`like`.postKey,
 				COUNT(DISTINCT `like`.postKey) AS likeCount
@@ -89,23 +95,31 @@
 				`like`.postKey
 			) AS likeSummary ON post.postKey = likeSummary.postKey
 		LEFT JOIN
+			<!-- post.userKey와 동일한 user.userKey 를 가진 행을 결과에 추가해준다  -->
 			user ON post.userKey = user.userKey
 		LEFT JOIN
-        	(SELECT 
+			<!-- 서브쿼리 : 댓글 숫자를 뽑기위해 필요 -->
+			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
+			<!-- 서브 쿼리로 그룹화 시킨 값중 post.postKey 와 동일한 postKey를 가진 행을 결과에 추가해준다 -->
+   	     	(SELECT 
             	comment.postKey, 
-            	COUNT(DISTINCT comment.commentKey) AS commentCount 
+            	COUNT(DISTINCT comment.postKey) AS commentCount 
          	FROM 
             	comment
          	GROUP BY 
             	comment.postKey
         ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
+			<!-- 검색한 단어를 조건에 추가 + post가 common 인 상태만 출력 -->
 			post.content LIKE CONCAT('%',#{search},'%')  AND post.state = 'common'
 		ORDER BY
+			<!-- 생성시간의 내림차순으로 검사한다 -->
         	post.createdAt DESC
 		LIMIT	
+			<!-- 페이징처리 -->
 			#{offset},#{limit}
 	</select>
+	 
 	
 	<select id="searchRecommendedCount" parameterType="map"  resultType="int">
 			SELECT COUNT(*) FROM post WHERE state = 'common';
@@ -134,8 +148,12 @@
 		FROM 
 			post 
 		LEFT JOIN
+		<!-- channel 테이블에서 post.channelKey 와 동일한 channelKey 를 가지고있는 결과에 추가해준다. -->
 			channel ON post.channelKey = channel.channelKey
 		LEFT JOIN
+			<!-- 서브쿼리 : 게시글 좋아요 숫자를 뽑기위해 필요-->
+			<!-- like 테이블에서 postKey 를 선택하고 postKey의 갯수를 세는 기능. 결과는 postKey별로 그룹화해서 각 post에 대한 좋아요 갯수를 반환함-->
+			<!-- 서브쿼리로 그룹화 시킨 값중 같은 postKey를 가진 행을 결과에 추가해준다 -->
 			(SELECT
 				`like`.postKey,
 				COUNT(`like`.likeKey) AS likeCount
@@ -147,8 +165,12 @@
 				`like`.postKey
 			) AS likeSummary ON post.postKey = likeSummary.postKey
 		LEFT JOIN
+			<!-- post.userKey와 동일한 user.userKey 를 가진 행을 오른쪽에 이어붙인다  -->
 			user ON post.userKey = user.userKey 
 		LEFT JOIN
+			<!-- 서브쿼리 : 댓글 숫자를 뽑기위해 필요 -->
+			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
+			<!-- 서브 쿼리로 그룹화 시킨 값중  같은 postKey를 가진 행을 결과에 추가해준다 -->
         	(SELECT 
             	comment.postKey, 
             	COUNT(comment.commentKey) AS commentCount 
@@ -158,11 +180,14 @@
             	comment.postKey
         ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
+		<!-- state 가 common 인 게시글만 출력 -->
 			post.state = 'common'
 		ORDER BY
+			<!-- 좋아요 순으로 내림차순하고 좋아요가 똑같을땐 생성시간으로 내림차순 -->
 		 	likeSummary.likeCount DESC,
         	post.createdAt DESC
 		LIMIT	
+			<!-- 페이징처리 -->
 			#{offset},#{limit}
 	</select>
 	
@@ -179,6 +204,7 @@
 			post.state = 'common'
 			AND userConnection.sessionId = #{sessionId}
 	</select>
+
 
 	<select id="searchFavoritesPost" parameterType="map"  resultMap="postResultMap">
 		SELECT 
@@ -202,12 +228,21 @@
 		FROM 
 			post 
 		JOIN
+		<!-- favorites 테이블에 channelKey 값과 일치하는 행만 결과에 포함해준다. -->
 			favorites ON post.channelKey = favorites.channelKey
 		JOIN
-			userConnection ON favorites.userKey = userConnection.userKey
+		<!-- userConnection 테이블에서 sessionId 의 값과 일치하는 행만 결과에 포함해준다. -->
+			userConnection ON userConnection.sessionId = #{sessionId}
+		JOIN
+		<!-- user테이블에 userKey값이 일치하는 행만 결과에 포함해준다. -->
+			user ON userConnection.userKey = user.userKey 
 		LEFT JOIN
+		<!-- channel 테이블에 channelKey 값이 일치하는 행을 결과에 추가해준다 -->
 			channel ON post.channelKey = channel.channelKey
 		LEFT JOIN
+			<!-- 서브쿼리 : 게시글 좋아요 숫자를 뽑기위해 필요-->
+			<!-- like 테이블에서 postKey 를 선택하고 postKey의 갯수를 세는 기능. 결과는 postKey별로 그룹화해서 각 post에 대한 좋아요 갯수를 반환함-->
+			<!-- 서브쿼리로 그룹화 시킨 값중 같은 postKey를 가진 행을 결과에 추가해준다 -->
 			(SELECT
 				`like`.postKey,
 				COUNT(`like`.likeKey) AS likeCount
@@ -219,8 +254,9 @@
 				`like`.postKey
 			) AS likeSummary ON post.postKey = likeSummary.postKey
 		LEFT JOIN
-			user ON post.userKey = user.userKey 
-		LEFT JOIN
+			<!-- 서브쿼리 : 댓글 숫자를 뽑기위해 필요 -->
+			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
+			<!-- 서브 쿼리로 그룹화 시킨 값중 같은 postKey를 가진 행을 결과에 추가해준다  -->
         	(SELECT 
             	comment.postKey, 
             	COUNT(comment.commentKey) AS commentCount 
@@ -231,11 +267,12 @@
         ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
 			post.state = 'common'
-			AND userConnection.sessionId = #{sessionId}
 		ORDER BY
+			<!-- 좋아요 순으로 내림차순하고 좋아요가 똑같을땐 생성시간으로 내림차순 -->
 		 	likeSummary.likeCount DESC,
         	post.createdAt DESC
 		LIMIT	
+			<!-- 페이징처리 -->
 			#{offset},#{limit}
 	</select>
 	
@@ -274,8 +311,12 @@
 		FROM 
 			post 
 		LEFT JOIN
+			<!-- channel 테이블에 channelKey값이 일치하는 행을 결과에 추가해준다  -->
 			channel ON post.channelKey = channel.channelKey
 		LEFT JOIN
+			<!-- 서브쿼리 : 게시글 좋아요 숫자를 뽑기위해 필요-->
+			<!-- like 테이블에서 postKey 를 선택하고 postKey의 갯수를 세는 기능. 결과는 postKey별로 그룹화해서 각 post에 대한 좋아요 갯수를 반환함-->
+			<!-- 서브쿼리로 그룹화 시킨 값중 같은 postKey를 가진 행을 결과에 추가해준다 -->
 			(SELECT
 				`like`.postKey,
 				COUNT(`like`.likeKey) AS likeCount
@@ -285,8 +326,12 @@
 				`like`.postKey
 			) AS likeSummary ON post.postKey = likeSummary.postKey
 		LEFT JOIN
+			<!-- user 테이블에 userKey값이 일치하는 행을 결과에 추가해준다  -->
 			user ON post.userKey = user.userKey 
 		LEFT JOIN
+			<!-- 서브쿼리 : 댓글 숫자를 뽑기위해 필요 -->
+			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
+			<!-- 서브 쿼리로 그룹화 시킨 값중 같은 postKey를 가진 행을 결과에 추가해준다  -->
         	(SELECT 
             	comment.postKey, 
             	COUNT(comment.commentKey) AS commentCount 

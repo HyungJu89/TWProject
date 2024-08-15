@@ -105,15 +105,18 @@ public class SearchService {
 		return searchPost;
 	}
 	
-	public SearchDto<List<PostDto>>searchFavoritesPost(String sessionId,int page){
+	public SearchDto<List<PostDto>> searchFavoritesPost(String sessionId,int page){
 		// 세션 아이디 에서 유저키 추출
-		
+		final int LIMIT_PAGE = 10;
 		// 유저키로 내가 팔로우중인 채널 List추출
-		
+		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
 		// 추출된 채널 리스트를 바탕으로 post 출력
+		
+		// 
+		return null;
 	}
 	
-	public SearchDto<List<PostDto>>  searchAllTopic(int page){
+	public SearchDto<List<PostDto>> searchAllTopic(int page){
 		
 		final int LIMIT_PAGE = 10;
 		
