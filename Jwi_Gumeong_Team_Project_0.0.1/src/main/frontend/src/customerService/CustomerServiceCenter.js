@@ -328,17 +328,19 @@ function CustomerServiceCenter() {
                                 }).format(new Date(response.createdAt)) : '-';
 
                                 return (
-                                    <div onClick={() => openedInquiry(idx)} className={styles.inquiryItem} key={idx}>
-                                        <div className={styles.inquiryHeader}>
-                                            <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
-                                            <div className={styles.inquiryDetails}>
-                                                <div className={styles.inquiryTitleContainer}>
-                                                    <div className={styles.inquiryTitle}>{inquiry.title}</div>
-                                                    {response && (
-                                                        <div className={styles.inquiryResponse}>답변완료</div>
-                                                    )}
+                                    <div className={styles.inquiryItem}>
+                                        <div onClick={() => openedInquiry(idx)}>
+                                            <div className={styles.inquiryHeader}>
+                                                <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
+                                                <div className={styles.inquiryDetails}>
+                                                    <div className={styles.inquiryTitleContainer}>
+                                                        <div className={styles.inquiryTitle}>{inquiry.title}</div>
+                                                        {response && (
+                                                            <div className={styles.inquiryResponse}>답변완료</div>
+                                                        )}
+                                                    </div>
+                                                    <div className={styles.inquirySubtitle}>답변 받은 날짜: {formattedDate}</div>
                                                 </div>
-                                                <div className={styles.inquirySubtitle}>답변 받은 날짜: {formattedDate}</div>
                                             </div>
                                         </div>
                                         {/* 내가 문의 한 글 */}
