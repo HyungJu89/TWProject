@@ -21,5 +21,16 @@ public int searchPostCount(@Param("search") String search);
 
 public List<PostDto> searchPostList(@Param("search") String search,@Param("offset") int offset,@Param("limit") int limit);
 
-public List<PostDto> searchRecommended();
+public int searchRecommendedCount();
+
+public List<PostDto> searchRecommended(@Param("offset") int offset,@Param("limit") int limit);
+
+public int searchFavoritesPostCount();
+
+public List<PostDto> searchFavoritesPost(@Param("sessionId") String sessionId,@Param("offset") int offset,@Param("limit") int limit);
+
+public int searchAllTopicCount();
+
+public List<PostDto> searchAllTopic(@Param("offset") int offset,@Param("limit") int limit);
+
 }

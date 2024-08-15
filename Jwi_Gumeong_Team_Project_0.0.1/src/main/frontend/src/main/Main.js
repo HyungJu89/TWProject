@@ -22,7 +22,11 @@ function Main({onLogout,isLoggedIn}) {
 
     const searchRecommended = async () => {
         try {
-            const { data } = await axios.get(`/search/recommended`);
+            const { data } = await axios.get(`/search/recommended` , {
+                params: {
+                    page: '1'
+                }
+            });
             return data;
         } catch (error) {
             console.error('Channel API Error:', error);
@@ -101,7 +105,7 @@ function Main({onLogout,isLoggedIn}) {
                     {topic == true ?
                         <div className={styles.fadein}>
                             {postList && postList.success &&
-                            <>{postList.info.map((postInfo, index) =>
+                            <>{postList.search.map((postInfo, index) =>
                                 <PublicBoard key={index} postInfo={postInfo} />
                             )}</>}
                         </div>

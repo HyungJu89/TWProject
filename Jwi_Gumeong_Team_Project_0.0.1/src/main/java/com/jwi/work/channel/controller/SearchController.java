@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
@@ -41,8 +40,14 @@ public class SearchController {
 	}
 	
 	@GetMapping("/recommended")
-	public AnswerDto<List<PostDto>> searchRecommended(){
-		return searchService.searchRecommended();
+	public SearchDto<List<PostDto>> searchRecommended(@RequestParam(value = "page", defaultValue = "1") int page){
+		return searchService.searchRecommended(page);
+	}
+	
+	@GetMapping("/allTopic")
+	public SearchDto<List<PostDto>> searchAllTopic(@RequestParam(value = "page", defaultValue = "1") int page){
+		
+		return searchService.searchAllTopic(page);
 	}
 	
 	

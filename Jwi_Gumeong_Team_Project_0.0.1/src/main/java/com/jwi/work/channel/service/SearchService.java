@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
@@ -81,15 +80,66 @@ public class SearchService {
 		return searchPost;
 
 	}
+	 
+	public SearchDto<List<PostDto>> searchRecommended(int page){
+		final int LIMIT_PAGE = 10;
+		
+		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
+		
+		int postCount = searchMapper.searchAllTopicCount();
+		
+		if (postCount == 0) {
+			searchPost.setSuccess(false);
+
+			return searchPost;
+		}
+		
+		searchPost.setSuccess(true);
+
+		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
+		
+		List<PostDto> posts = searchMapper.searchRecommended(searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
+		
+		searchPost.setSearch(posts);
+
+		return searchPost;
+	}
 	
-	public AnswerDto<List<PostDto>> searchRecommended(){
-		AnswerDto<List<PostDto>> answer = new AnswerDto<>();
+	public SearchDto<List<PostDto>> searchFavoritesPost(String sessionId,int page){
+		// 세션 아이디 에서 유저키 추출
+		final int LIMIT_PAGE = 10;
+		// 유저키로 내가 팔로우중인 채널 List추출
+		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
+		// 추출된 채널 리스트를 바탕으로 post 출력
 		
-		List<PostDto> posts = searchMapper.searchRecommended();
+		// 
+		return null;
+	}
+	
+	public SearchDto<List<PostDto>> searchAllTopic(int page){
 		
-		answer.setInfo(posts);
-		answer.setSuccess(true);
-		return answer;
+		final int LIMIT_PAGE = 10;
+		
+		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
+		
+		int postCount = searchMapper.searchAllTopicCount();
+		
+		if (postCount == 0) {
+			searchPost.setSuccess(false);
+
+			return searchPost;
+		}
+		
+		searchPost.setSuccess(true);
+
+		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
+		
+		List<PostDto> posts = searchMapper.searchAllTopic(searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
+		
+		searchPost.setSearch(posts);
+
+		return searchPost;
+
 	}
 
 }
