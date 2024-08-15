@@ -430,6 +430,7 @@
     gap: 9px;
     width: 726px;
     border-radius: 0px;
+    margin-top: 20px;
 }
 
 .inquiryContentImage {
@@ -499,7 +500,6 @@
     font-weight: 500;
     color: #101010;
     white-space: pre-line;
-    padding-bottom: 20px;
 }
 
 .noHistory {
