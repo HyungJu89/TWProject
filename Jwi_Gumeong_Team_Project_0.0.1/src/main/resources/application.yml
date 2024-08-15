@@ -2,10 +2,14 @@ server:
   port : 9090
   
 spring:
-
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+        
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/jwi?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/jwi?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: root
   mail:
@@ -34,8 +38,10 @@ spring:
 logging:
   level:
     '[org.hibernate.SQL]': debug
-    
+    org.springframework.security: DEBUG
 
 file:
   upload-dir: uploads/resources/fileupload/
   
+  jwt:
+    key: chldldlarladkswh0828chldldlarladkswh0828chldldlarladkswh0828

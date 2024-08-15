@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.channel.dto.SearchDto;
+import com.jwi.work.channel.dto.channelDto.ChannelDto;
+import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.mapper.SearchMapper;
-import com.jwi.work.channel.util.PagingUtil;
+import com.jwi.work.util.PagingUtil;
 
 @Service
 public class SearchService {
@@ -17,11 +19,11 @@ public class SearchService {
 
 	private PagingUtil pagingUtil = new PagingUtil();
 
-	public SearchDto<Object> searchChannel(String search, int page) {
+	public SearchDto<List<ChannelDto>> searchChannel(String search, int page) {
 
 		final int LIMIT_PAGE = 8;
 
-		SearchDto<Object> searchChannel = new SearchDto<>();
+		SearchDto<List<ChannelDto>> searchChannel = new SearchDto<>();
 
 		// 검색된 채널의 갯수
 		int channelCount = searchMapper.searchChannelCount(search);
@@ -39,7 +41,7 @@ public class SearchService {
 		searchChannel.setPaging(pagingUtil.paging(page, channelCount, LIMIT_PAGE));
 
 		// 채널의 갯수리턴
-		List<Object> channels = searchMapper.searchChannel(search, searchChannel.getPaging().getOffset(),
+		List<ChannelDto> channels = searchMapper.searchChannelList(search, searchChannel.getPaging().getOffset(),
 				searchChannel.getPaging().getLimit());
 
 		searchChannel.setSearch(channels);
@@ -48,55 +50,93 @@ public class SearchService {
 
 	}
 
-	public SearchDto<Object> searchPost(String type, String search, int page) {
+	public SearchDto<List<PostDto>> searchPost(String search, int page) {
 
 		final int LIMIT_PAGE = 10;
 
-		SearchDto<Object> searchPost = new SearchDto<>();
+		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
 
 		// 검색된 개시글 갯수
-		int postCount = 0;
 
-		if (type.equals("main")) {
-			postCount = searchMapper.searchPostCount(search);
-		}
 
-		if (type.equals("search")) {
-			postCount = searchMapper.searchPostCount(search);
-		}
 
-		if (type.equals("channel")) {
-			postCount = searchMapper.channelPostCount(search);
-		}
+		int postCount = searchMapper.searchPostCount(search);
 
 		if (postCount == 0) {
 			searchPost.setSuccess(false);
 
 			return searchPost;
 		}
+		
 		searchPost.setSuccess(true);
 
 		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
 		
-		if (type.equals("main")) {
-			List<Object> posts = searchMapper.searchPost(search, searchPost.getPaging().getOffset(),
-					searchPost.getPaging().getLimit());
 
-			searchPost.setSearch(posts);
-		}
-		if (type.equals("search")) {
-			List<Object> posts = searchMapper.searchPost(search, searchPost.getPaging().getOffset(),
-					searchPost.getPaging().getLimit());
+			List<PostDto> posts = searchMapper.searchPostList(search, searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
 			
 			searchPost.setSearch(posts);
+
+		return searchPost;
+
+	}
+	 
+	public SearchDto<List<PostDto>> searchRecommended(int page){
+		final int LIMIT_PAGE = 10;
+		
+		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
+		
+		int postCount = searchMapper.searchAllTopicCount();
+		
+		if (postCount == 0) {
+			searchPost.setSuccess(false);
+
+			return searchPost;
 		}
 		
-		if (type.equals("channel")) {
-			List<Object> posts = searchMapper.channelPost(search, searchPost.getPaging().getOffset(),
-					searchPost.getPaging().getLimit());
-			
-			searchPost.setSearch(posts);
+		searchPost.setSuccess(true);
+
+		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
+		
+		List<PostDto> posts = searchMapper.searchRecommended(searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
+		
+		searchPost.setSearch(posts);
+
+		return searchPost;
+	}
+	
+	public SearchDto<List<PostDto>> searchFavoritesPost(String sessionId,int page){
+		// 세션 아이디 에서 유저키 추출
+		final int LIMIT_PAGE = 10;
+		// 유저키로 내가 팔로우중인 채널 List추출
+		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
+		// 추출된 채널 리스트를 바탕으로 post 출력
+		
+		// 
+		return null;
+	}
+	
+	public SearchDto<List<PostDto>> searchAllTopic(int page){
+		
+		final int LIMIT_PAGE = 10;
+		
+		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
+		
+		int postCount = searchMapper.searchAllTopicCount();
+		
+		if (postCount == 0) {
+			searchPost.setSuccess(false);
+
+			return searchPost;
 		}
+		
+		searchPost.setSuccess(true);
+
+		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
+		
+		List<PostDto> posts = searchMapper.searchAllTopic(searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
+		
+		searchPost.setSearch(posts);
 
 		return searchPost;
 

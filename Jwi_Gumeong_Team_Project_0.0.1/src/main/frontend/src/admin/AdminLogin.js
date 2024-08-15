@@ -5,14 +5,13 @@ import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { setCookie, getCookie, removeCookie } from '../cookies/Cookies.js';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function AdminLogin() {
 
     var jsonSessionInfo = localStorage.getItem('sessionId');
-    var sessionInfo = JSON.parse(jsonSessionInfo);
     // 세션화성공
-    const userState = useSelector((state) => state.session);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     //모든 정보가 입력되면 버튼 활성화
@@ -59,16 +58,22 @@ function AdminLogin() {
             checkAdmin();
         }
     };
-    
+
     const checkAdmin = async () => {
         if (email !== '' && password !== '') {
             try {
                 const adminData = {
-                    username: email,
-                    password: password
+                    adminName: email,
+                    adminPassWord: password
                 };
-                const userResponse = await axios.post('/admin/login', adminData);
-                if(userResponse.data.check){
+                const userResponse = 
+                    await axios.post('/admin/login', adminData);
+                if(userResponse.data){
+                    setCookie('jwtCookie', userResponse.data,{
+                        path: '/',
+                        secure: true,
+                        maxAge: 100
+                    })
                     navigate('/admin');
                 }
                 setLoginWarn(userResponse.data.warningMessage);

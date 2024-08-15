@@ -77,7 +77,7 @@ function CreateChannel({ManagementChannelId, openModal}) {
     }
 
     //ManagementChannelId :: 미개설된 채널을 추천 받아서 채널 개설로 들어올 경우 자동완성 활성화
-    const [channelId, setChannelId] = useState(false);
+    const [channelId, setChannelId] = useState('');
     useEffect(() => {
         async function fetchData() {
             if (ManagementChannelId) {

@@ -18,12 +18,12 @@ public class Admin {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int adminKey;
+
+	@Column(name = "adminName", nullable = true, length = 30)
+	private String adminName;
 	
-	@Column(name = "id", nullable = true, length = 30)
-	private String id;
-	
-	@Column(name = "pw", nullable = true, length = 30)
-	private String pw;
+	@Column(name = "adminPassWord", nullable = true, length = 30)
+	private String adminPassWord;
 	
 	@Column(name = "state", nullable = true, length = 30)
 	private String state;
@@ -54,20 +54,20 @@ public class Admin {
 		this.adminKey = adminKey;
 	}
 
-	public String getId() {
-		return id;
+	public String getAdminName() {
+		return adminName;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
 	}
 
-	public String getPw() {
-		return pw;
+	public String getAdminPassWord() {
+		return adminPassWord;
 	}
 
-	public void setPw(String pw) {
-		this.pw = pw;
+	public void setAdminPassWord(String adminPassWord) {
+		this.adminPassWord = adminPassWord;
 	}
 
 	public String getState() {

@@ -155,17 +155,16 @@
     position: absolute;
     width: 1194px;
     height: 98px;
-    top: 422px;
-    left: 50%;
-    transform: translate(-50%, -0%);
+    top: 420px;
+    left: 0%;
+    transform: translate(0%, -0%);
     border-radius: 10px;
 }
 
 .liveDiv .liveImg{
     display: flex;
-    /* justify-content: space-between; */
     gap: 0px 30px;
-    width: 990px;
+    width: 1194px;
     overflow: hidden;
     border-radius: 0px;
 }
@@ -216,13 +215,16 @@
     height: 98px;
     background-color: black;
     color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     z-index: -10000;
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
+.liveDiv .liveImg .box .adultMini img{
+    width: 74px;
+    height: 62px;
+}
 .adult{
     z-index: -10000;
     background-color: black;
@@ -232,6 +234,11 @@
     text-align: center;
     display: flex;
     justify-content: center;
-    align-items: center;
     width: 100%;
+}
+
+.adult img{
+    width: 303px;
+    height: 251px;
+    margin-top: 95px;
 }

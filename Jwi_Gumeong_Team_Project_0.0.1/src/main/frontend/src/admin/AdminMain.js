@@ -242,19 +242,19 @@ function AdminMain() {
                     <div className={styles.navContent}>
                         <div className={`${styles.navItems} ${tab === 0 ? styles.active : ''}`} 
                             onClick={() => setTab(0)}>
-                            자주묻는 질문
+                            회원 관리
                         </div>
                         <div className={`${styles.navItems} ${tab === 1 ? styles.active : ''}`} 
                             onClick={() => setTab(1)}>
-                            문의하기
+                            채널 관리
                         </div>
                         <div className={`${styles.navItems} ${tab === 2 ? styles.active : ''}`} 
                             onClick={() => setTab(2)}>
-                            문의 내역
+                            신고 내역
                         </div>
                         <div className={`${styles.navItems} ${tab === 3 ? styles.active : ''}`} 
                             onClick={() => setTab(3)}>
-                            내 제재 내역
+                            공시 사항
                         </div>
                     </div>
                 </div>

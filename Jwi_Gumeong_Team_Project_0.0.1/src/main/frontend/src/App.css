@@ -22,6 +22,7 @@ body, h1, h2, h3, h4, h5, h6, input { /*기본 폰트 설정*/
   font-family: 'SpoqaHanSansNeo-Regular', sans-serif;
   color: #101010;
   font-size: 16px;
+  text-overflow: ellipsis;
 }
 
 /* 모든 브라우저에서 텍스트 선택을 막음 */

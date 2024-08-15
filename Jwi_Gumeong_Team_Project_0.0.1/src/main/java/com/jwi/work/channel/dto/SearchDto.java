@@ -1,7 +1,5 @@
 package com.jwi.work.channel.dto;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data
@@ -11,7 +9,7 @@ public class SearchDto<T> {
 
 	private boolean success;
 	
-	private List<T> search;
+	private T search;
 
 	private String url;
 	

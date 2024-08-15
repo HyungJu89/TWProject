@@ -63,7 +63,10 @@ public interface UserMapper{
 		// 밴 테이블에서 정보 찾기
 		public Banned getBannedUser(int userKey);
 		
-	//여기부터 비번찾기
+		// 유저 정보 가져오기
+		public User getUserInfo(int userKey);
+		
+		//여기부터 비번찾기
 		public void updatePw(User user);
 }
 

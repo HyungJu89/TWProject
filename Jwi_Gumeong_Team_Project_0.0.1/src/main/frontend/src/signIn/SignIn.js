@@ -70,9 +70,12 @@ function SignIn() {
                     pw: password
                 };
                 const userResponse = await axios.post('/signIn/loginCheck', userData);
-
                 if(userResponse.data.reason !== null) {
                     setModalContent(`[${userResponse.data.reason}]\n 사유로 정지된 계정이에요.`);
+                    setModalOpen(true);
+                }
+                if(userResponse.data.state !== null) {
+                    setModalContent(`${userResponse.data.state}입니다.`);
                     setModalOpen(true);
                 }
 

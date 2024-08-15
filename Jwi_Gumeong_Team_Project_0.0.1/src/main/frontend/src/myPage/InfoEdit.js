@@ -69,6 +69,7 @@ function InfoEdit() {
         }
         if (e.target.value.length >= 9) {
             alert('닉네임은 8자 이하만 사용가능 합니다!');
+            
         }
     };
     const toggleShowPassword = () => {
