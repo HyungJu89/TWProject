@@ -39,15 +39,18 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
     let navigate = useNavigate();
     let location = useLocation();
     useEffect(() => {
-        if(location.pathname.indexOf('/admin') === 0 ){
-            setAdminLogin(true);
-        }
         {/* 최근검색어 미완성 */ }
         let justSearchLocal = localStorage.getItem('search')
         justSearchLocal = JSON.parse(justSearchLocal)
         justSearchLocal != null ? null : localStorage.setItem('search', JSON.stringify([])
             , [])
     })
+
+    if(location.pathname.indexOf('/admin') === 0 ){
+        return(
+            <></>
+        )
+    }
 
     const onClickPointer = () => {
         onClickSearch(searchInput)
@@ -70,7 +73,7 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
                         </div>
                     ) : (
                         <div className={styles.icon} style={{justifyContent:'end'}}>
-                            <div onClick={() => { { adminLogin !== true ? navigate('/signIn') : navigate('/admin/login') } }} className={styles.signInBtn}>로그인</div>
+                            <div onClick={() => { navigate('/signIn') }} className={styles.signInBtn}>로그인</div>
                         </div>
                     )}
             </div>

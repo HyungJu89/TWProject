@@ -11,25 +11,21 @@ function Admin(){
     let location = useLocation();
     let navigate = useNavigate();
     let [onOff, setOnOff] = useState(false);
-    let cookieCheck;
+    const cookieCheck = getCookie('jwtCookie');
 
     useEffect(()=>{
-        cookieCheck = getCookie('jwtCookie');
-        console.log(cookieCheck)
-        if(location.pathname === '/admin/' || location.pathname === '/admin'){
-            if(cookieCheck){
-                setOnOff(true);
-            }
-            if(!cookieCheck){
-                setOnOff(false);
-                alert("관리자 로그인페이지로 이동합니다.");
-                navigate('/admin/login');
-            }
+        if ((location.pathname === '/admin/' || location.pathname === '/admin') && cookieCheck) {
+            setOnOff(true);
+        } else {
+            setOnOff(false);
+            alert("관리자 로그인 페이지로 이동합니다.");
+            navigate('/admin/login');
         }
-    },[])
-        return(
+    },[location.pathname, cookieCheck])
+
+    return(
         <div>
-            { onOff !== true ? <Outlet/> : <AdminMain/>}
+            { onOff !== true ? <Outlet/> : <AdminMain/> }
         </div>
     )
 }

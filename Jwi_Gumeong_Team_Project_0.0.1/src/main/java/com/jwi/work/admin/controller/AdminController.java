@@ -47,6 +47,7 @@ public class AdminController {
 	// 회원관리 관련 만들 예정
 	// 회원정보 JPA로 전부 호출 및 로그인 로그 호출하는거 보여주는쪽 만들어놓으면 좋을듯
 	// 
+	
 	@GetMapping("/")
 	public boolean adminMain(@RequestBody String data) {
 		
