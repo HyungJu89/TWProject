@@ -52,6 +52,7 @@ function LoginChecks(props) {
                 };
                 const userResponse = await axios.post('/myPage/loginRetry', userData); 
                 if(userResponse.data.check){
+                    props.setOriPassword(password);
                     props.setLoginCheck(true);
                 } else if(!userResponse.data.check){
                     setLoginWarn(userResponse.data.warningMessage);

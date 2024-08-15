@@ -28,8 +28,11 @@
 		select count(*) from user where email=#{email}
 	</select>
     <!-- 유저 userKey체크 후 유저정보 빼기 -->
-    <select id="userInfo" resultType="com.jwi.work.user.dto.User" parameterType="String">
-		select * from user where userKey = #{userKey}
+	<select id="userInfo" resultType="com.jwi.work.user.dto.User" parameterType="String">
+    select *,
+           AES_DECRYPT(UNHEX(pw), SHA2('abcabc', 256)) as pw
+    from user
+    where userKey = #{userKey}
 	</select>
 	<!-- 유저 key값 받아오기 -->
 	<select id="getUserKey" resultType="String" parameterType="String">

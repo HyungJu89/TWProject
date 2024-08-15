@@ -42,7 +42,9 @@ public class MyPageService {
     	CheckDto userCheck = new CheckDto();
     	//함수 매개변수 입력용 객체
     	User userInfo = new User();
-    	userInfo.setEmail(user.getEmail());
+    	if(user.getEmail() !=null) {
+    		userInfo.setEmail(user.getEmail());
+    	}
     	userInfo.setPw(user.getPw());
     	userInfo.setSessionId(user.getSessionId());
     	if(emailTest(userInfo)) {
@@ -59,4 +61,21 @@ public class MyPageService {
     	}
     	return userCheck;
 	}
+	
+//	//정보수정 처리 로직
+//	public CheckDto edit(User user) {
+//    	//반환하기위한 객체 생성
+//    	CheckDto userCheck = new CheckDto();
+//    	//함수 매개변수 입력용 객체
+//    	User userInfo = new User();
+//    	if(user.getPw() != null) {    		
+//    		userInfo.setPw(user.getPw());
+//    	}
+//    	if(user.getNickName() != null) {	
+//    		if (userMapper.nickNameTest(user.getNickName()) == 1) {
+//    			userCheck.setCheck(false);
+//    			userCheck.setWarningMessage("이미 존재하는 닉네임 입니다.");
+//    		}
+//    	}
+//	}
 }
