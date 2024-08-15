@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import com.jwi.work.center.sanction.dto.SanctionDTO;
 import com.jwi.work.center.sanction.entity.Sanction;
 import com.jwi.work.center.sanction.repository.SanctionRepository;
+import com.jwi.work.channel.dto.PagingDto;
 import com.jwi.work.user.entity.UserEntity;
 import com.jwi.work.user.repository.UserRepository;
+import com.jwi.work.util.PagingUtil;
 
 import lombok.AllArgsConstructor;
 
@@ -22,28 +24,51 @@ public class SanctionService {
 
     private SanctionRepository sanctionRepository;
     private UserRepository userRepository;
+    private PagingUtil pagingUtil;
     
-    public List<SanctionDTO> getList(int userKey) {
+    public List<SanctionDTO> getPagedList(int userKey, int page, int limitPage, PagingDto pagingDto) {
+        
+    	// 페이지가 0 이하일 경우 1로 설정
+    	// 자꾸 음수가 뜸
+        if (page <= 0) {
+            page = 1;
+        }
+        
+    	List<Sanction> sanctions = sanctionRepository.findByUserKey(userKey);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
 
-        return sanctionRepository.findByUserKey(userKey)
-                 .stream()
-                 .map(sanction -> {
-                     String formattedEndDate = dateFormat.format(sanction.getEndDate()); // 포맷팅
-                     return new SanctionDTO(
-                         sanction.getBannedKey(),
-                         sanction.getUserKey(),
-                         sanction.getReason(),
-                         sanction.getReasonDate(),
-                         sanction.getDate(),
-                         sanction.getState(),
-                         formattedEndDate // 밴 종료날짜
-                     );
-                 })
-                 .collect(Collectors.toList());
+        // 페이징 처리
+        PagingDto paging = pagingUtil.paging(page, sanctions.size(), limitPage);
+        
+        List<SanctionDTO> pagedSanctions = sanctions.stream()
+                .skip(paging.getOffset())
+                .limit(paging.getLimit())
+                .map(sanction -> {
+                    String formattedEndDate = dateFormat.format(sanction.getEndDate());
+                    return new SanctionDTO(
+                        sanction.getBannedKey(),
+                        sanction.getUserKey(),
+                        sanction.getReason(),
+                        sanction.getReasonDate(),
+                        sanction.getDate(),
+                        sanction.getState(),
+                        formattedEndDate
+                    );
+                })
+                .collect(Collectors.toList());
+        
+        // 페이징 설정
+        pagingDto.setPageCount(paging.getPageCount());
+        pagingDto.setOffset(paging.getOffset());
+        pagingDto.setLimit(paging.getLimit());
+        pagingDto.setPageLimit(paging.getPageLimit());
+        pagingDto.setPageUp(paging.isPageUp());
+        pagingDto.setPagingBut(paging.isPagingBut());
+
+        return pagedSanctions;
     }
     
- // 매일 자정에 상태를 체크하고 업데이트
+    // 매일 자정에 상태를 체크하고 업데이트
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateBannedUsers() {
         Date currentDate = new Date();

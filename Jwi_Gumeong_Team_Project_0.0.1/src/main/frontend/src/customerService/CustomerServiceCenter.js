@@ -19,7 +19,8 @@ function CustomerServiceCenter() {
     const userState = useSelector((state) => state.userState);  // 로그인한 유저 정보??
     const [inquiries, setInquiries] = useState([]); // 문의 내역
     const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
-
+    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+    const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
     // 알림 모달
     const [modalOpen, setModalOpen] = useState(false);
     // 모달 내용
@@ -65,15 +66,15 @@ function CustomerServiceCenter() {
                     console.log("문의 내역 가져오기 실패: " + error.message);
                 });
             } else if (tab === 3) {
-                // 제재 내역
                 axios.post('/sanction/list', null, {
-                    params: { userKey }
+                    params: { userKey, page: currentPage, limitPage: 10 }
                 })
                 .then(response => {
                     if (response.data.result === "success") {
                         setSanctions(response.data.sanctionList);
+                        setTotalPages(response.data.paging.pageCount);  // 총 페이지 수 설정
                     } else {
-                        setSanctions([]); // 제재 내역이 없을 경우
+                        setSanctions([]);
                     }
                 })
                 .catch(error => {
@@ -81,7 +82,7 @@ function CustomerServiceCenter() {
                 });
             }
         }
-    }, [userKey, tab]); // tab과 유저로그인 상태가 변경될 때 실행
+    }, [userKey, tab, currentPage]); // tab과 유저로그인 상태가 변경될 때랑 페이지 이동할 때 실행
     
 
     // 문의하기
@@ -188,17 +189,10 @@ function CustomerServiceCenter() {
                 console.log("API 호출 오류: " + error.message);
             });
     }, []);
-
-    let [currentPage, setCurrentPage] = useState(1);
     let [dropdownOpen, setDropdownOpen] = useState(false);
     let [selectedOption, setSelectedOption] = useState("선택하세요");
     let [faqContent, setFaqContent] = useState(null);
     let [inquiryContent, setInquiryContent] = useState(null);
-    /* 임시 페이징(백엔드로 바꿀 예정) */
-    const sectionsPerPage = 10;
-    const indexOfLastSanction = currentPage * sectionsPerPage;
-    const indexOfFirstSanction = indexOfLastSanction - sectionsPerPage;
-    const currentSanctions = sanctions.slice(indexOfFirstSanction, indexOfLastSanction);
 
     // 문의하기 종류 선택 모달
     const optionSelect = (option) => {
@@ -397,10 +391,10 @@ function CustomerServiceCenter() {
                 return (
                     <div className={styles.sanctionContainer}>
                         <div className={styles.sanctionList}>
-                            {currentSanctions.length === 0 ? (
+                            {sanctions.length === 0 ? (
                                 <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
                             ) : (
-                                currentSanctions.map((sanction, index) => (
+                                sanctions.map((sanction, index) => (
                                     <div key={index} className={styles.sanctionItem}>
                                         <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
                                         <div className={styles.sanctionDetails}>
@@ -410,18 +404,18 @@ function CustomerServiceCenter() {
                                                 <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>
                                             </div>
                                         </div>
-                                        {index < currentSanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
+                                        {index < sanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
                                     </div>
                                 ))
                             )}
                         </div>
-                        {Math.ceil(sanctions.length / sectionsPerPage) > 1 && (
+                        {totalPages > 1 && (
                             <div className={styles.pagination}>
                                 <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
                                     <img src={btnLeft} alt="Previous Page" />
                                 </button>
-                                <span className={styles.pageInfo}>{currentPage} / {Math.ceil(sanctions.length / sectionsPerPage)}</span>
-                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === Math.ceil(sanctions.length / sectionsPerPage)} className={styles.pageNextButton}>
+                                <span className={styles.pageInfo}>{currentPage} / {totalPages}</span>
+                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className={styles.pageNextButton}>
                                     <img src={btnRight} alt="Next Page" />
                                 </button>
                             </div>
