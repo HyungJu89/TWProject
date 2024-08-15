@@ -24,7 +24,11 @@ function Main({onLogout,isLoggedIn}) {
 
     const searchRecommended = async () => {
         try {
-            const { data } = await axios.get(`/search/recommended`);
+            const { data } = await axios.get(`/search/recommended` , {
+                params: {
+                    page: '1'
+                }
+            });
             return data;
         } catch (error) {
             console.error('Channel API Error:', error);

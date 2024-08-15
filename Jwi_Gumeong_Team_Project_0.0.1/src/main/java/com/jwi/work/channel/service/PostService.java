@@ -35,25 +35,31 @@ public class PostService {
 	private PagingUtil pagingUtil = new PagingUtil();
 	
 	public SearchDto<List<PostDto>> postSelect(int channelKey,int page){
+		// 한페이지에 나올 개시글 숫자
 		final int LIMIT_PAGE = 10;
 
 		SearchDto<List<PostDto>> postSelect = new SearchDto<>();
 
+		// 게시글 숫자
 		int postCount = postMapper.postCount(channelKey);
 
+		// 게시글이 없을때 바로 리턴시켜줌
 		if (postCount == 0) {
 			postSelect.setSuccess(false);
 
 			return postSelect;
 		}
 		
+		// 게시글이 있기떄문에 true로 변경
 		postSelect.setSuccess(true);
 
+		// 게시글 페이징 처장
 		postSelect.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
 		
-
+		// 게시글 불러오기, 채널키로 해당 채널에 있는 게시글들을 불러오고 LIMIT로 게시글을 몇개 가져올껀지 지정
 			List<PostDto> posts = postMapper.postList(channelKey,postSelect.getPaging().getOffset(),postSelect.getPaging().getLimit());
 			
+			// return 해줘야할 객체에 담아줌
 			postSelect.setSearch(posts);
 
 		return postSelect;
@@ -61,52 +67,61 @@ public class PostService {
 	
 	
 	public AnswerDto<String> postCreate(int channelKey, int userKey, String content, List<MultipartFile> files) {
-
+		// 리턴용 객체
 		AnswerDto<String> answer = new AnswerDto<>();
+		// List<image> 를 JSON 형식으로 사용하기위해 변경
 		ObjectMapper objectMapper = new ObjectMapper();
 
+		// 객체 초기화 시켜줌
 		String imageJson = null;
 
 		try {
-
+			// 리스트로 뽑아야하기에 생성
 			ArrayList<String> imgUrlList = new ArrayList<>();
-
+			// 이미지 파일 첨부가 되어있지않으면 에러가 발생하지않게 비워줌
 			if (files == null) {
 				files = Collections.emptyList();
 			}
-
+			// 파일이 있을때 들어가고 없을땐 else 로 빠짐
 			if (!files.isEmpty()) {
-
+				
+				// 첨부되어있는 파일 갯수만큼 반복
 				for (MultipartFile file : files) {
 
+					// 이미지 파일을 hash 값으로 변환, 
+					// 변환하는 이유는 이미지 파일이 똑같다면 hash 값이 동일하게 출력되는대 그걸이용하여 해당 이미지가 서버에  존재하는지 확인해주기위해서
 					String imageHash = fileManagerUtil.getHash(file);
 
+					// 해시값으로 이미지 파일 검색
 					ImageInfoDto image = postMapper.selectHash(imageHash);
 					
+					// 이미지 파일이 출력되지않았다면 중복되는 이미지가 없기때문에 이미지 저장
 					if (image == null || image.getReferenceCount() == 0) {
-
+						// 이미지를 새로 초기화시켜주고
 						image = new ImageInfoDto();
-
+						// 이미지 저장 및 저장된 위치 출력해줌
 						String imgUrl = fileManagerUtil.saveFile(file);
-
-
+						// List 에 url 넣어줌
 						imgUrlList.add(imgUrl);
-
+						// image 정보를 DB에 저장
 						postMapper.insertImg(imageHash , imgUrl);
 
 					} else {
-
+						// 해시값으로 출력된 이미지가 있을때 List에 출력된 이미지의 url을 넣고
 						imgUrlList.add(image.getImageUrl());
-
+						// DB에 이미지의 사용횟수를 넣어준다
 						postMapper.referenceUp(image.getImageKey());
 					}
 				}
+				// 이미지 URL 이 들어있는 LIST를 Json 으로 변환하여 문자열로만들어줌
 				imageJson = objectMapper.writeValueAsString(imgUrlList);
 			} else {
+				// 이미지 파일이 존재하지않기때문에 null로 만들어줌
 				imageJson = null;
 			}
-
+			// DB에 게시글 정보 저장
 			postMapper.postCreate(userKey,channelKey,content,imageJson);
+			
 			answer.setSuccess(true);
 
 		} catch (IOException | NoSuchAlgorithmException e) {
@@ -121,9 +136,9 @@ public class PostService {
 		PostInfoDto post = new PostInfoDto();
 		
 		AnswerDto<String> anwer = new AnswerDto<>();
-		
+		// postKey로 개시글 조회
 		post = postMapper.postInfo(postDelete.getPostKey());
-		
+		// 현제 유저의키와 게시글에서 가져온 유저의 키 정보가 일치하지않을때 return 처리
 		if(post.getUserKey() != postDelete.getUserKey() || postDelete.getUserKey() != 0) {
 			anwer.setMessage("글 작성자가 아닙니다.");
 			anwer.setSuccess(false);
@@ -131,7 +146,10 @@ public class PostService {
 		}
 		
 		
+		
+		// image에 정보가 들어있는지 안들어있는지 확인
 		if (post.getImage() != (null)) {
+			// 들어있을때 json 문자열인 image 를 List로 변환
 			ObjectMapper objectMapper = new ObjectMapper();
 			List<String> imgUrlList;
 			try {
@@ -139,26 +157,29 @@ public class PostService {
 				imgUrlList = objectMapper.readValue(post.getImage(), new TypeReference<List<String>>() {	});
 			
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
+				
+				// json 변환도중 실패할수도있으니 예외처리
 				e.printStackTrace();
 				anwer.setMessage("이미지 삭제 실패 1");
 				anwer.setSuccess(false);
 				return anwer;
 			}
-
+			///List로 뽑힌 이미지의 정보를 토대로 DB의 image 에 조회
 			for (String imgUrl : imgUrlList) {
+
 				ImageInfoDto image = new ImageInfoDto();
-
+				// 이미지 URL로 이미지 출력
 				image = postMapper.selectUrl(imgUrl);
-
+				// DB에 ReferenceCount 칼럼은 이미지가 몇번 사용되었는지 표현을 한것. post가 삭제될것이니 ReferenceCount를 1낮춰야하는대 1을 낮추고 0이된다면
+				// 이 이미지파일은 더이상 참조하는곳이 없기때문에 image 에서 delete 를 해도된다.
 				if ((image.getReferenceCount() - 1) <= 0) {
-
+					// 파일 삭제
 					fileManagerUtil.removeFile(imgUrl);
-
+					// DB에 저장되어있는 이미지 정보 삭제
 					postMapper.deleteImg(image.getImageKey());
 					
 				} else {
-					
+					// 만약 1이상일때는 ReferenceCount 만 1낮춰준다.
 					postMapper.referenceDown(image.getImageKey());
 					
 				}
@@ -167,9 +188,9 @@ public class PostService {
 
 		}
 		
-		
+		// post 는 delete해준다
 		postMapper.postDelete(postDelete.getPostKey());
-		// 0이면 delete되게
+		anwer.setSuccess(true);
 
 		return anwer;
 	}

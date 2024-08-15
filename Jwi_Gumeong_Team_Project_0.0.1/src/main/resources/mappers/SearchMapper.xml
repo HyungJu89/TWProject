@@ -107,7 +107,152 @@
 			#{offset},#{limit}
 	</select>
 	
-		<select id="searchRecommended" resultMap="postResultMap">
+	<select id="searchRecommendedCount" parameterType="map"  resultType="int">
+			SELECT COUNT(*) FROM post WHERE state = 'common';
+	</select>
+	
+	
+		<select id="searchRecommended" parameterType="map"  resultMap="postResultMap">
+		SELECT 
+			post.postKey AS postKey,
+			post.content AS P_content,
+			post.image AS P_image,
+			post.state AS P_state,
+			post.createdAt AS P_createdAt,
+			post.updatedAt AS P_updatedAt,
+			
+			IFNULL(commentSummary.commentCount, 0) AS  P_commentCount,
+			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
+			user.nickName AS P_nickName,
+			
+			
+			channel.channelKey AS channelKey,
+			channel.id AS PC_id,
+			channel.imageUrl AS PC_imageUrl,
+			channel.name AS PC_name
+
+		FROM 
+			post 
+		LEFT JOIN
+			channel ON post.channelKey = channel.channelKey
+		LEFT JOIN
+			(SELECT
+				`like`.postKey,
+				COUNT(`like`.likeKey) AS likeCount
+			FROM
+				`like`
+			WHERE
+				DATE_FORMAT(`like`.createdAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+			GROUP BY
+				`like`.postKey
+			) AS likeSummary ON post.postKey = likeSummary.postKey
+		LEFT JOIN
+			user ON post.userKey = user.userKey 
+		LEFT JOIN
+        	(SELECT 
+            	comment.postKey, 
+            	COUNT(comment.commentKey) AS commentCount 
+         	FROM 
+            	comment
+         	GROUP BY 
+            	comment.postKey
+        ) AS commentSummary ON post.postKey = commentSummary.postKey
+		WHERE 
+			post.state = 'common'
+		ORDER BY
+		 	likeSummary.likeCount DESC,
+        	post.createdAt DESC
+		LIMIT	
+			#{offset},#{limit}
+	</select>
+	
+	<select id="searchFavoritesPostCount" parameterType="String" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			post 
+		JOIN
+			favorites ON post.channelKey = favorites.channelKey
+		JOIN
+			userConnection ON favorites.userKey = userConnection.userKey
+		WHERE 
+			post.state = 'common'
+			AND userConnection.sessionId = #{sessionId}
+	</select>
+
+	<select id="searchFavoritesPost" parameterType="map"  resultMap="postResultMap">
+		SELECT 
+			post.postKey AS postKey,
+			post.content AS P_content,
+			post.image AS P_image,
+			post.state AS P_state,
+			post.createdAt AS P_createdAt,
+			post.updatedAt AS P_updatedAt,
+			
+			IFNULL(commentSummary.commentCount, 0) AS  P_commentCount,
+			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
+			user.nickName AS P_nickName,
+			
+			
+			channel.channelKey AS channelKey,
+			channel.id AS PC_id,
+			channel.imageUrl AS PC_imageUrl,
+			channel.name AS PC_name
+
+		FROM 
+			post 
+		JOIN
+			favorites ON post.channelKey = favorites.channelKey
+		JOIN
+			userConnection ON favorites.userKey = userConnection.userKey
+		LEFT JOIN
+			channel ON post.channelKey = channel.channelKey
+		LEFT JOIN
+			(SELECT
+				`like`.postKey,
+				COUNT(`like`.likeKey) AS likeCount
+			FROM
+				`like`
+			WHERE
+				DATE_FORMAT(`like`.createdAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+			GROUP BY
+				`like`.postKey
+			) AS likeSummary ON post.postKey = likeSummary.postKey
+		LEFT JOIN
+			user ON post.userKey = user.userKey 
+		LEFT JOIN
+        	(SELECT 
+            	comment.postKey, 
+            	COUNT(comment.commentKey) AS commentCount 
+         	FROM 
+            	comment
+         	GROUP BY 
+            	comment.postKey
+        ) AS commentSummary ON post.postKey = commentSummary.postKey
+		WHERE 
+			post.state = 'common'
+			AND userConnection.sessionId = #{sessionId}
+		ORDER BY
+		 	likeSummary.likeCount DESC,
+        	post.createdAt DESC
+		LIMIT	
+			#{offset},#{limit}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="searchAllTopicCount" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM post WHERE state = 'common';
+	</select>
+	
+	
+	
+			<select id="searchAllTopic" parameterType="map" resultMap="postResultMap">
 		SELECT 
 			post.postKey AS postKey,
 			post.content AS P_content,
@@ -153,10 +298,9 @@
 		WHERE 
 			post.state = 'common'
 		ORDER BY
-		 	likeSummary.likeCount DESC,
-        	post.createdAt DESC
+			post.createdAt DESC
 		LIMIT	
-			0,10
+			#{offset},#{limit}
 	</select>
 
 </mapper>
