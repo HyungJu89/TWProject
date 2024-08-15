@@ -1,10 +1,10 @@
--- 2024-08-15 [조영민]
+-- 2024-08-15 [조영민] V 0.1.10 
 -- 수정내용 : ADMIN TABLE 컬럼명 수정 id => adminName / pw => adminPassWord 헤싱된 insert문 추가
 -- 패스워드 인코더로 insert하는것이 불가능하기 때문에 직접 insert하는걸로 변경했음
 -- id : asdf /  pw : asdf123
 insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("asdf","$2a$12$qWMhwV31meoA0C6fvoVLX.OBe4NXvyz09HIewoxQ8EPProosm54z6","activate",now(),now());
 
--- 2024-08-15 [안재원]
+-- 2024-08-15 [안재원] V 0.1.9 
 -- 수정내용 : inquiry 테이블 Title 소문자로 변경 및 이미지 Null 가능으로 변경 , inquiryResponse 이미지 Null 가능, faq 이미지 Null 가능
 ALTER TABLE `inquiry` RENAME COLUMN `Title` to `title`;
 ALTER TABLE `inquiry` MODIFY `image` TEXT COMMENT '이미지 URL';
