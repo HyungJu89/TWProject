@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import PublicBoard from '../main/PublicBoard.js'
 import {formatUnit} from '../recycleCode/FormatUnit.js';
-import {searchPost} from '../recycleCode/postAxios.js'
 function Search({ search }) {
 
     let navigate = useNavigate();
@@ -18,7 +17,6 @@ function Search({ search }) {
     const [channelPage, setChannePage] = useState(1);
     const [postPage, setPostPage] = useState(1);
 
-    // 채널이 생성되어 있는지 확인
     //get 요청을 할때 params 로 데이터를 실어서 보낼수 있다.
     const searchChannel = async (search, channelPage) => {
         try {
@@ -35,10 +33,26 @@ function Search({ search }) {
         }
     };
 
+    const searchPost = async (search, channelPage) => {
+        try {
+            const { data } = await axios.get(`/search/post`, {
+                params: {
+                    search: search,
+                    page: channelPage
+                }
+            });
+            return data;
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            throw new Error('Failed to fetch channel data');
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             const channelListData = await searchChannel(search, channelPage);
             setChannelList(channelListData)
+            console.log(channelListData)
         };
 
         fetchData();
@@ -47,10 +61,12 @@ function Search({ search }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const postListData = await searchPost('search',search,postPage);
+            const postListData = await searchPost(search,postPage);
             setPostList(postListData)
+            console.log(postListData)
         };
         fetchData();
+        
     }, [search,postPage])
 
     const pageUp = () => {

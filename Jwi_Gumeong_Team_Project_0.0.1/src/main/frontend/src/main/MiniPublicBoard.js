@@ -17,7 +17,6 @@ import big_comment from '../icon/20px/bigcomment.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
 
-
 function MiniPublicBoard() {
     let [heart, setHeart] = useState(true); //좋아요 누름 확인
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
@@ -83,7 +82,7 @@ function ChannelTitle({ channel }) {
     return (
         <div>
             <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.channelName}</div>
+                <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.name}</div>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
         </div>

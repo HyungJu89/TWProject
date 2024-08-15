@@ -149,7 +149,6 @@
     justify-content: space-between;
     font-size: 15px;
     font-weight: 400;
-    color: #BBBBBB;
 }
 
 .commentNav img {
@@ -242,6 +241,7 @@
     width: 106px;
     height: 31px;
     border-radius: 0px;
+    cursor: pointer;
 }
 
 .moreUi .text:hover {

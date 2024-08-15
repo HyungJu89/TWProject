@@ -8,7 +8,7 @@ import open_channel_w from '../icon/24px/open-channel-w.png';
 
 function PageCheck(){ //LIVE중 클릭 후, 개설 여부를 확인하기 위한 페이지
     let navigate = useNavigate();
-    let { channelId } = useParams();
+    let { channelId } = useParams(); //(/pageCheck/:channelId")
     const handleCheckChannel = async (channelId) => {
         try {
             const channel = await channelGet(channelId); // 비동기 호출

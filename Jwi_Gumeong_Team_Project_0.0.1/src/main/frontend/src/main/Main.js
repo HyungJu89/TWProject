@@ -4,17 +4,13 @@
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import _ from 'lodash';
-import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styles from './style/Main.module.css';
 import '../App.css';
-import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
 import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
-import chevron_left_w from '../icon/40px/chevron-left-w.png'
-import chevron_right_w from '../icon/40px/chevron-right-w.png'
-import { searchPost } from '../recycleCode/postAxios.js'
+import refresh from '../icon/24px/refresh.png';
 
 function Main({onLogout,isLoggedIn}) {
     let navigate = useNavigate();
@@ -22,7 +18,37 @@ function Main({onLogout,isLoggedIn}) {
     let [loginOn, setLoginOn] = useState(false);
     const [postList, setPostList] = useState([]);
     const [partnersLive, setPartnersLive] = useState([]);
+    const [hotBoardList, setHotBoardList] = useState([]);
+
+    const searchRecommended = async () => {
+        try {
+            const { data } = await axios.get(`/search/recommended` , {
+                params: {
+                    page: '1'
+                }
+            });
+            return data;
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            throw new Error('Failed to fetch channel data');
+        }
+    };
+
+    //인기 게시판 :: 우리 DB에서 하루동안 게시글 많은 채널 10개 가져오기 
     useEffect(() => {
+        const hotBoardLoad = async () => {
+            try {
+                const {data} = await axios.get(`/channel/hotTen`);
+                setHotBoardList(data);
+            } catch (error) {
+                console.error('Channel API Error:', error);
+            }
+        };
+        hotBoardLoad();
+    }, []);
+
+
+    useEffect(() => { //메인 무작위 방송 추천
         const addPartners = async () => {
             try {
                 const response = await axios.get(/partnersLiveApi/);
@@ -41,7 +67,7 @@ function Main({onLogout,isLoggedIn}) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const postListData = await searchPost('main', "", 1);
+            const postListData = await searchRecommended();
             setPostList(postListData)
         };
 
@@ -67,28 +93,21 @@ function Main({onLogout,isLoggedIn}) {
                     <div className={styles.hotBoard}>{/*인기 게시판*/}
                         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}><h3>인기 게시판</h3><h6>갱신: 오후 5시</h6></div>
                         <div className={styles.channelDiv}>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
-                            <div className={styles.channel}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF1IwK6-SxM83UpFVY6WtUZxXx-phss_gAUfdKbkTfau6VWVkt' />SQL에서 가져왕</div>
+                            {hotBoardList && hotBoardList.success &&
+                            <>{hotBoardList.info.length > 0 ? 
+                                hotBoardList.info.map((item, i)=>
+                                <div onClick={() => { navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.channel}><img src={item.imageUrl} />
+                                    <div className={styles.text}>{item.name}</div></div>
+                            ):<div className={styles.nulltext}>아직 인기 게시판이 갱신되지 않았어요 :3</div>}</>}
                         </div>
                     </div>
                     <TopicBtn topic={topic} settopic={settopic} />
                     {topic == true ?
                         <div className={styles.fadein}>
-                            {postList.success &&
-                                <>
-                                    {postList.search.map((postInfo, index) =>
-                                        <PublicBoard key={index} postInfo={postInfo} />
-                                    )}
-                                </>
-                            }
+                            {postList && postList.success &&
+                            <>{postList.search.map((postInfo, index) =>
+                                <PublicBoard key={index} postInfo={postInfo} />
+                            )}</>}
                         </div>
                         : null}
                     <div onClick={() => { navigate('/allTopic'); window.scrollTo(0, 0) }} className={styles.moreAllTopic}>더보기</div>{/* 오른쪽 로그인, 추천 영역 */}
@@ -112,6 +131,7 @@ function TopicBtn({ topic, settopic }) {
                     <div onClick={() => { topic ? null : settopic(true) }} style={{ color: '#999999' }}>추천 토픽</div>
                     <div>즐겨찾기 토픽<div className={styles.bar} /></div>
                 </div>}
+                <img src={refresh}/>
         </div>
     )
 }

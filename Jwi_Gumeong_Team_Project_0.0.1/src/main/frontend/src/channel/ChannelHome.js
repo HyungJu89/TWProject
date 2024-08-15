@@ -11,7 +11,6 @@ import PublicBoard from '../main/PublicBoard.js'
 import ChannelBody from './ChannelBody.js';
 import PublicMenu from '../main/PublicMenu.js'
 import { channelGet } from '../recycleCode/ChannelAxios.js';
-import {searchPost} from '../recycleCode/postAxios.js'
 import { useDispatch, useSelector } from 'react-redux';
 import { setSessionId, setUserKey, logout, setLoggedIn, fetchUserKey } from '../slice/sessionSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
@@ -40,19 +39,33 @@ function ChannelHome() {
         }
     }, [sessionInfo]);
 
-    const fetchData = async (channelKey,page) => {
-        const postListData = await searchPost('channel',channelKey,page);
-        setPostList(postListData)
-    }
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     
     const closeModal = () => {
         setModalOpen(false);
     };
+
+    const fetchData = async (channelKey, page) => {
+        try {
+            const { data } = await axios.get(`/post/select`, {
+                params: {
+                    channelKey: channelKey,
+                    page: page
+                }
+            });
+            setPostList(data);
+            console.log(data)
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            throw new Error('Failed to fetch channel data');
+        }
+    };
+
     const handleCheckChannel = async (channelId) => {
         try {
             const channel = await channelGet(channelId); // 비동기 호출
+            console.log(channel.info);
             if (!channel.success) {
                 setModalContent('생성되지 않은 게시판입니다.');
                 setModalOpen(true);
@@ -80,6 +93,7 @@ function ChannelHome() {
     useEffect(() => {
         if (channelInfo) {
             fetchData(channelInfo.channelKey, page);
+            
         }
     }, [channelInfo, page]);
 

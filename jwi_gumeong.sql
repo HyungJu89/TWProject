@@ -1,3 +1,24 @@
+-- 2024-08-15 [조영민]
+-- 수정내용 : ADMIN TABLE 컬럼명 수정 id => adminName / pw => adminPassWord 헤싱된 insert문 추가
+-- 패스워드 인코더로 insert하는것이 불가능하기 때문에 직접 insert하는걸로 변경했음
+-- id : asdf /  pw : asdf123
+insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("asdf","$2a$12$qWMhwV31meoA0C6fvoVLX.OBe4NXvyz09HIewoxQ8EPProosm54z6","activate",now(),now());
+
+-- 2024-08-15 [안재원]
+-- 수정내용 : inquiry 테이블 Title 소문자로 변경 및 이미지 Null 가능으로 변경 , inquiryResponse 이미지 Null 가능, faq 이미지 Null 가능
+ALTER TABLE `inquiry` RENAME COLUMN `Title` to `title`;
+ALTER TABLE `inquiry` MODIFY `image` TEXT COMMENT '이미지 URL';
+ALTER TABLE `inquiryResponse` MODIFY `image` TEXT COMMENT '이미지 URL';
+ALTER TABLE `faq` MODIFY `imagePath` TEXT COMMENT '이미지 URL';
+
+-- 2024-08-12 15시 13분 [김형주] V 0.1.8 
+-- 수정내용 : 유저테이블에 pwWrong(비밀번호 틀린횟수) 추가
+-- 비밀번호 5회제한 로직을 수월하게 만들기 위해 수정했습니다!
+alter table `user` add `pwWrong` int default 0;
+
+-- 2024-08-10 00시 46분 [임재열] V 0.1.7
+-- 수정내용 : like 테이블 오타수정
+
 -- 2024-08-08 16시 53분 [임재열] V 0.1.6
 -- 수정내용 : loginLog, userConnection 커밋내용이 누락되어 추가 및 외래키 추가
 
@@ -5,23 +26,21 @@
 -- 수정내용 : 외래키 사용 및 참조된 외래키가 삭제되면 해당 키를 참조하는 모든 행을 삭제
 -- 외래키란? : 다른테이블의 정보를 참조할때 사용하는 key
 
-
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-
-select * from user;
-drop table `user`;
+select * from comment;
 CREATE TABLE `user` (
-	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '유저키',
-	`email`	VARCHAR(50) UNIQUE	NOT NULL	COMMENT '이메일',
-	`pw`	VARCHAR(255)	NOT NULL	COMMENT '비밀번호',
-	`nickName`	VARCHAR(30) UNIQUE	NOT NULL	COMMENT '닉네임',
-	`gender`	VARCHAR(30)	NOT NULL	DEFAULT 'undisclosed'	COMMENT '성별 "man","girl","undisclosed"',
-	`birthday`	DATETIME	NULL	COMMENT '생년월일',
-	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'activate'	COMMENT '유저 상태 "activate","deactivate","secession"',
-	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`email`	VARCHAR(30) UNIQUE	NOT NULL,
+	`pw`	VARCHAR(255)	NOT NULL,
+	`nickName`	VARCHAR(30) UNIQUE	NOT NULL,
+	`gender`	VARCHAR(30)	NOT NULL	DEFAULT '비밀',
+    `pwWrong` int default 0,
+	`birthday`	DATETIME	NULL,
+	`state`	VARCHAR(30)	NOT NULL	DEFAULT 'activate',
+	`createdAt`	DATETIME	NOT NULL	DEFAULT NOW(),
+	`updatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
 CREATE TABLE `favorites` (
@@ -43,7 +62,7 @@ CREATE TABLE `channel` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-
+select *from `post`;
 CREATE TABLE `post` (
 	`postKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -68,9 +87,8 @@ CREATE TABLE `comment` (
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE,
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
-
 CREATE TABLE `like` (
-	`likeLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
+	`likeKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
 	`postKey`	INT	NOT NULL,
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -102,13 +120,13 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
-CREATE TABLE `admin` (
-	`adminKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '어드민 키',
-	`id`	VARCHAR(30) COMMENT '어드민아이디',
-	`pw`	VARCHAR(255)	NOT NULL	COMMENT '비밀번호',
-	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'activate'	COMMENT '어드민 상태 "activate","deactivate","secession"  작업자와 상의',
-	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+CREATE TABLE admin (
+    adminKey    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
+    adminName    VARCHAR(30) COMMENT '어드민아이디',
+    adminPassWord    VARCHAR(255)    NOT NULL    COMMENT '비밀번호',
+    state    VARCHAR(50)    NOT NULL    DEFAULT 'activate'    COMMENT '어드민 상태 "activate","deactivate","secession"  작업자와 상의',
+    createdAt    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `adminLog` (
@@ -137,10 +155,10 @@ CREATE TABLE `alarm` (
 CREATE TABLE `inquiry` (
 	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 키',
 	`userKey`	INT	NOT NULL	COMMENT '유저 키',
-	`Title`	VARCHAR(30)	NOT NULL	COMMENT '문의 제목',
+	`title`	VARCHAR(30)	NOT NULL	COMMENT '문의 제목',
 	`category`	VARCHAR(30)	NOT NULL	COMMENT '문의 주제',
 	`details`	TEXT	NOT NULL	COMMENT '문의 내용',
-	`image`	TEXT	NOT NULL	COMMENT '이미지 URL',
+	`image`	TEXT	COMMENT '이미지 URL',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
@@ -152,7 +170,7 @@ CREATE TABLE `inquiryResponse` (
 	`adminKey`	INT	NOT NULL	COMMENT '어드민 키',
 	`Title`	VARCHAR(30)	NOT NULL	COMMENT '제목',
 	`responseText`	TEXT	NOT NULL	COMMENT '답변 내용',
-	`image`	TEXT	NOT NULL	COMMENT '이미지 URL',
+	`image`	TEXT	COMMENT '이미지 URL',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (`inquiryKey`) REFERENCES `inquiry`(`inquiryKey`) ON DELETE CASCADE
@@ -208,7 +226,7 @@ CREATE TABLE `faq` (
     `title` VARCHAR(32) NOT NULL,
     `content` TEXT NOT NULL,
     `category` VARCHAR(32) NOT NULL,
-    `imagePath` VARCHAR(256),
+    `imagePath` TEXT ,
     `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

@@ -83,10 +83,14 @@ function SignIn() {
                     dispatch(fetchSessionId(email));
                     dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
                     navigate('/');
-                }else{
+                }
+                if(userResponse.data.wrongCount >= 5){
+                    setModalContent('비밀번호를 5회 이상 틀리셨습니다!');
+                    setModalOpen(true);
+                }
+                else{
                     setCount(userResponse.data.wrongCount);
-                    // console.log(userResponse.data);
-                    // console.log(userResponse.data.wrongCount);
+
                 } 
                 setLoginWarn(userResponse.data.warningMessage);
             } catch (error) {

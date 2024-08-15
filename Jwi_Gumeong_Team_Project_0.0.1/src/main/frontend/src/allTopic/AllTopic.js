@@ -18,24 +18,22 @@ function AllTopic() {
     let [loginOn, setLoginOn] = useState(false);
 
     const [channel, setChannel] = useState('');
-    // 첫 번째 쿼리: 채널 정보를 가져오기.
-    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useQuery('channel', () =>
-        axios.get(`/channelRest/search/123123`)
-            .then((response) => {
-                setChannel(response.data.content)
-                return response.data.content
-            })
-            .catch(error => {
-                console.error('Channel API Error:', error);
-                throw error;
-            }),
-    );
-    if (isLoadingChannel) {
-        return <div>로딩중</div>;
-    }
-    if (isErrorChannel) {
-        return <div>에러남</div>;
-    }
+    const [postPage,setPostPage] = useState(1);
+    const searchPost = async (search, channelPage) => {
+        try {
+            const { data } = await axios.get(`/search/allTopic`, {
+                params: {
+                    page: postPage
+                }
+            });
+            return data;
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            throw new Error('Failed to fetch channel data');
+        }
+    };
+
+
 
     return (
         <div >

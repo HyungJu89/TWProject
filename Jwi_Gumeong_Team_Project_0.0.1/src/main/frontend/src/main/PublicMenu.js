@@ -2,6 +2,7 @@
 // ^워링 업애주는 친구
 
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useChannel } from '../recycleCode/ApiQuery.js';
 import styles from './style/PublicMenu.module.css';
@@ -23,18 +24,38 @@ function PublicMenu({ isLoggedIn, onLogout }) {
         }
     }, [dispatch,sessionInfo]); 
     let navigate = useNavigate();
-    // 첫 번째 쿼리: 채널 정보를 가져오기.
+
+    
+    //추천 게시판 :: 개설된 채널 중 무작위 10개 가져오기
+    const [randomBoard, setRandomBoard] = useState();
+    useEffect(() => {
+        const randomBoard = async () => {
+            try {
+                const {data} = await axios.get(`/channel/randomBoard`);
+                setRandomBoard(data);
+            } catch (error) {
+                console.error('Channel API Error:', error);
+            }
+        };
+        randomBoard();
+    }, []);
+
     return (
         <div className={styles.rightDiv}>{/*유저 영역 */}
             {isLoggedIn ? <UserAfter onLogout={onLogout}/> : <UserBefore/>}
             <div className={styles.recommendation}>{/* 추천 */}
                 <p style={{ margin: '0px', marginLeft: '21px' }}>추천</p>
                 <div className={styles.list}>
-                    {/*onClick={()=>{navigate(`/channel/123`); window.scrollTo(0, 0) }}*/}
-                        <div className={styles.reChannel}>
-                            <img src='https://image.utoimage.com/preview/cp872722/2022/12/202212008462_500.jpg' />
-                            DB연결할것 최대 7개
-                        </div>
+                        {randomBoard && randomBoard.success &&
+                        <>
+                            {randomBoard.info.map((item, i)=>
+                            <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel}>
+                                <img src={item.imageUrl} />
+                                {item.name}
+                            </div>
+                            )}
+                        </>
+                        }
                 </div>
             </div>
         </div>
