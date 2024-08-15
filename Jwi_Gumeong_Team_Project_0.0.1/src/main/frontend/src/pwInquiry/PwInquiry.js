@@ -43,6 +43,7 @@ function PwInquiry({ onLogout }) {
 function EmailAvailable({ setEmailCerti, setEmail, email }) {
     // email 관련 state
     const [emailWarning, setEmailWarning] = useState('');
+    const [email2, setEmail2] = useState('');
     const [emailCheck, setEmailCheck] = useState(false);
     // 랜덤으로 발송한 인증번호
     const [certification, setCertification] = useState('');
@@ -113,6 +114,7 @@ function EmailAvailable({ setEmailCerti, setEmail, email }) {
             axios.get('/signUp/emailTest', { params: { email: userEmail } }).then((response) => {
                 if (!response.data) {
                     setEmailWarning('인증번호를 전송했습니다. 메일함에서 확인해주세요.');
+                    setEmail2(userEmail);
                     handleEmailCheck();
                     setEmailCheck(true);
                 } else if (!emailChecks(userEmail)) {
@@ -182,8 +184,11 @@ function EmailAvailable({ setEmailCerti, setEmail, email }) {
                 showCerti ? checkCerti && userCertification !== '' ? <div className={styles.certifiOk} style={{ marginBottom: '30px' }}>인증되었습니다.</div> : <div className={styles.emailWarn} style={{ marginBottom: '30px' }}>인증번호가 알맞지 않습니다.</div> : <div style={{ marginBottom: '50px' }}></div>
             }
             <button onClick={() => {
-                if (checkCerti) {
+                if (checkCerti && emailCheck && email == email2) {
                     setEmailCerti(true);
+                }else if(email !== email2){
+                    setModalContent('이메일을 잘못 입력했습니다. 제대로 입력해주세요!');
+                    setModalOpen(true);
                 } else {
                     setModalContent('이메일을 인증 해주세요!');
                     setModalOpen(true);
