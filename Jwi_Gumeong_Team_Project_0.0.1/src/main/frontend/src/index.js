@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { CookiesProvider } from "react-cookie";
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'  
 import store from './store.js'
 
@@ -14,13 +15,13 @@ const queryClient = new QueryClient();
 
 root.render(
 <QueryClientProvider client={queryClient}>
-    <Provider store={store}>
-      
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      
-    </Provider>
+      <CookiesProvider>
+        <Provider store={store}>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+        </Provider>
+      </CookiesProvider>
   </QueryClientProvider>
 );
 
