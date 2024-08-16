@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CommentUpdateDto {
 	private int commentKey;
-	private int userKey;
+	private String sessionId;
 	private String comment;
 	
 }

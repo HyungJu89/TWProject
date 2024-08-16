@@ -17,7 +17,22 @@
 			post.updatedAt,
 			commentSummary.commentCount,
 			likeSummary.likeCount,
-			user.nickName
+			user.nickName,
+			
+			CASE 
+            	WHEN EXISTS(
+            		SELECT  
+            			1 
+            		FROM 
+            			`like` l
+            		JOIN
+            			userConnection uc ON l.userKey = uc.userKey
+            		WHERE 
+            			l.postKey = post.postKey 
+            			AND uc.sessionId = #{sessionId}
+            	) THEN TRUE
+            	ELSE FALSE
+        	END AS isLike
 		FROM 
 			post 
 		LEFT JOIN
@@ -82,11 +97,13 @@
 		SELECT userKey,image FROM post WHERE postKey = #{postKey}
 	</select>
 	
-
-	
 	<delete id="postDelete" parameterType="int">
 		DELETE FROM post WHERE postKey = #{postKey}
 	</delete>
+
+	<select id="userKey" resultType="int" parameterType="String">
+		SELECT IFNULL(userKey,0) FROM userConnection WHERE sessionId = #{sessionId}
+	</select>
 
 <!-- 	<update id= "postUpdate" parameterType="map">
 		UPDATE post set content = #{content} , image = #{image} WHERE postKey = #{postKey}

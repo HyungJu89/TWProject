@@ -87,7 +87,7 @@ function PublicBoard({ postInfo }) {
                         <img src={comments} /><div className={styles.comments}>{commentCount}</div></div>
                     {/*좋아요*/}    <div onClick={() => { heart == false ? setHeart(true) : setHeart(false) }}>
                         {heart ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
-                        <div className={styles.comments}>{postInfo.likeCount}</div>
+                        <div className={styles.comments}>{postInfo.likeCount + (heart? 1:0)}</div>
                     </div>
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
@@ -194,8 +194,13 @@ function Comments({ postKey ,setCommentCount}) {
 
 
         // 추가로 로직필요하면 여기에
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if(!sessionIdJson){
+            return alert('로그인되어있지않습니다.')
+        }
+        let sessionId = JSON.parse(sessionIdJson).sessionId
         const commentCreate = {
-            userKey: '1',
+            sessionId : sessionId,
             postKey: postKey,
             comment: comment
         };
@@ -381,11 +386,16 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
     const [replyTextColor, setReplyTextColor] = useState('#BBBBBB');
 
     const replyCreate = async () => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if(!sessionIdJson){
+            return alert('로그인되어있지않습니다.')
+        }
 
+        let sessionId = JSON.parse(sessionIdJson).sessionId
         const replyCreateDto = {
             commentKey: commentKey,
             replyreplyKey: replyKey,
-            userKey: '1',
+            sessionId: sessionId,
             reply:reply
         }
 

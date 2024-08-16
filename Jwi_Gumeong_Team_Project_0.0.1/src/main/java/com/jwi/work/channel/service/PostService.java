@@ -34,7 +34,7 @@ public class PostService {
 	
 	private PagingUtil pagingUtil = new PagingUtil();
 	
-	public SearchDto<List<PostDto>> postSelect(int channelKey,int page){
+	public SearchDto<List<PostDto>> postSelect(String sessionId,int channelKey,int page){
 		// 한페이지에 나올 개시글 숫자
 		final int LIMIT_PAGE = 10;
 
@@ -57,7 +57,7 @@ public class PostService {
 		postSelect.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
 		
 		// 게시글 불러오기, 채널키로 해당 채널에 있는 게시글들을 불러오고 LIMIT로 게시글을 몇개 가져올껀지 지정
-			List<PostDto> posts = postMapper.postList(channelKey,postSelect.getPaging().getOffset(),postSelect.getPaging().getLimit());
+			List<PostDto> posts = postMapper.postList(sessionId,channelKey,postSelect.getPaging().getOffset(),postSelect.getPaging().getLimit());
 			
 			// return 해줘야할 객체에 담아줌
 			postSelect.setSearch(posts);
@@ -66,7 +66,7 @@ public class PostService {
 	}
 	
 	
-	public AnswerDto<String> postCreate(int channelKey, int userKey, String content, List<MultipartFile> files) {
+	public AnswerDto<String> postCreate(int channelKey, String sessionId, String content, List<MultipartFile> files) {
 		// 리턴용 객체
 		AnswerDto<String> answer = new AnswerDto<>();
 		// List<image> 를 JSON 형식으로 사용하기위해 변경
@@ -76,7 +76,13 @@ public class PostService {
 		String imageJson = null;
 
 		try {
+			System.out.println(sessionId);
+			int userKey = postMapper.userKey(sessionId);
 			// 리스트로 뽑아야하기에 생성
+			if(userKey == 0) {
+				answer.setMessage("로그인되어있지않습니다.");
+				return answer;
+			}
 			ArrayList<String> imgUrlList = new ArrayList<>();
 			// 이미지 파일 첨부가 되어있지않으면 에러가 발생하지않게 비워줌
 			if (files == null) {
@@ -138,13 +144,7 @@ public class PostService {
 		AnswerDto<String> anwer = new AnswerDto<>();
 		// postKey로 개시글 조회
 		post = postMapper.postInfo(postDelete.getPostKey());
-		// 현제 유저의키와 게시글에서 가져온 유저의 키 정보가 일치하지않을때 return 처리
-		if(post.getUserKey() != postDelete.getUserKey() || postDelete.getUserKey() != 0) {
-			anwer.setMessage("글 작성자가 아닙니다.");
-			anwer.setSuccess(false);
-			return anwer;
-		}
-		
+
 		
 		
 		// image에 정보가 들어있는지 안들어있는지 확인

@@ -25,20 +25,20 @@ public class PostController {
 	private PostService postService;
 	
 	@GetMapping("/select")
-	public SearchDto<List<PostDto>> postSelect(@RequestParam("channelKey") int channelKey,@RequestParam("page")int page){
-		return postService.postSelect(channelKey,page);
+	public SearchDto<List<PostDto>> postSelect(@RequestParam("sessionId") String sessionId,@RequestParam("channelKey") int channelKey,@RequestParam("page")int page){
+		return postService.postSelect(sessionId,channelKey,page);
 	}
 	
 	
 	@PostMapping("/create")
 	public AnswerDto<String> postCreate(
 			@RequestParam("channelKey") int channelKey,
-			@RequestParam("userKey") int userKey,
+			@RequestParam("sessionId") String sessionId,
             @RequestParam("content") String content,
             @RequestParam(value = "files", required = false) List<MultipartFile> files
 			) {
 		
-		return postService.postCreate(channelKey,userKey,content,files);
+		return postService.postCreate(channelKey,sessionId,content,files);
 		
 	}
 	

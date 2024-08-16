@@ -47,9 +47,15 @@ function ChannelHome() {
     };
 
     const fetchData = async (channelKey, page) => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        let sessionId = null;
+        if(sessionIdJson){
+        sessionId = JSON.parse(sessionIdJson).sessionId
+    }
         try {
             const { data } = await axios.get(`/post/select`, {
                 params: {
+                    sessionId : sessionId,
                     channelKey: channelKey,
                     page: page
                 }

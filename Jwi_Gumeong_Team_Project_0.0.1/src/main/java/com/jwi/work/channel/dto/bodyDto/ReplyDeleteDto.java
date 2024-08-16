@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ReplyDeleteDto {
-	private int userKey;
+	private String sessionId;
 	private int replyKey;
 }

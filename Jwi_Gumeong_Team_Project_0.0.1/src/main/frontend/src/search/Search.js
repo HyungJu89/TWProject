@@ -19,9 +19,15 @@ function Search({ search }) {
 
     //get 요청을 할때 params 로 데이터를 실어서 보낼수 있다.
     const searchChannel = async (search, channelPage) => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        let sessionId = null;
+        if(sessionIdJson){
+        sessionId = JSON.parse(sessionIdJson).sessionId
+    }
         try {
             const { data } = await axios.get(`/search/channel`, {
                 params: {
+                    sessionId : sessionId,
                     search: search,
                     page: channelPage
                 }
@@ -34,9 +40,15 @@ function Search({ search }) {
     };
 
     const searchPost = async (search, channelPage) => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        let sessionId = null;
+        if(sessionIdJson){
+        sessionId = JSON.parse(sessionIdJson).sessionId
+    }
         try {
             const { data } = await axios.get(`/search/post`, {
                 params: {
+                    sessionId : sessionId,
                     search: search,
                     page: channelPage
                 }

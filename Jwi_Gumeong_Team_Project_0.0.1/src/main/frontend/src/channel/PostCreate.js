@@ -74,16 +74,23 @@ function PostCreact({channelKey}) {
     }
     // 서버로 게시글 정보를 넘김
     const postCreact = async() => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if(!sessionIdJson){
+            return alert("로그인되어있지않습니다.")
+        } 
+        let sessionId = JSON.parse(sessionIdJson).sessionId
         if(content.length < 3){
             setModalContent('내용이 너무 짧아요.');
             setModalOpen(true);
             return;
         }
+
         // JSP 에서 FORM 과 비슷함
+
         const formData = new FormData();
         formData.append('content',content);
         // 로그인 기능 완성되면 유저 키값이 들어가도록 변경
-        formData.append('userKey', 1);
+        formData.append('sessionId', JSON.parse(sessionId));
         formData.append('channelKey',channelKey);
         selectedImage.forEach(({file}) => {
             formData.append('files',file);

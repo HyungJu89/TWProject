@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class PostDeleteDto {
 
-	private int userKey;
+	private String sessionId;
 	private int postKey;
 	
 }
