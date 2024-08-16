@@ -11,7 +11,7 @@ function Admin(){
     let location = useLocation();
     let navigate = useNavigate();
     let [onOff, setOnOff] = useState(false);
-    const cookieCheck = getCookie('jwtCookie');
+    const cookieCheck = getCookie('frontCookie');
 
     useEffect(()=>{
         if ((location.pathname === '/admin/' || location.pathname === '/admin') && cookieCheck) {
@@ -22,7 +22,7 @@ function Admin(){
             navigate('/admin/login');
         }
     },[location.pathname, cookieCheck])
-
+    
     return(
         <div>
             { onOff !== true ? <Outlet/> : <AdminMain/> }

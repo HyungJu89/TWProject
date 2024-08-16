@@ -24,7 +24,6 @@ public class PagingUtil {
 		
 		paging.setPagingBut(pageCount > 1);
 		
-		
 		int offset = (page - 1) * limitPage;
 		paging.setOffset(offset);
 		
@@ -36,7 +35,6 @@ public class PagingUtil {
 		paging.setPageUp(limitPage < remainingPage);
 		
 		paging.setLimit(Math.min(limitPage, remainingPage));
-		
 		
 		// 페이징처리에 필요한 시작 offset 설정
 		return paging;

@@ -1,5 +1,6 @@
 package com.jwi.work.admin.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.admin.service.AdminService;
+import com.jwi.work.user.dto.User;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,12 +48,10 @@ public class AdminController {
 	// 08.15
 	// 회원관리 관련 만들 예정
 	// 회원정보 JPA로 전부 호출 및 로그인 로그 호출하는거 보여주는쪽 만들어놓으면 좋을듯
-	// 
 	
-	@GetMapping("/")
-	public boolean adminMain(@RequestBody String data) {
-		
-		return true;
+	@GetMapping("/findAllUser")
+	public List<User> findUser() {
+		return adminService.findAllUsers();
 	}
 	
 }

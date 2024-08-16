@@ -10,11 +10,13 @@ import btnLeft from '../icon/btn/btn-left.png';
 import btnRight from '../icon/btn/btn-right.png';
 import inquireIcon from '../icon/32px/inquire.png';
 import addIcon from '../icon/40px/add.png';
+import { getCookie } from '../cookies/Cookies';
 
 function AdminMain() {
     let [tab, setTab] = useState(0);
     let location = useLocation();
     let [login] = useState(false);
+    const cookieCheck = getCookie('frontCookie');
 
     // 제재내역
     const sanctions = [
@@ -30,21 +32,24 @@ function AdminMain() {
         }
     ]
 
-    const [faqs, setFaqs] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        axios.get('/faq/list')
-            .then(response => {
-                if (response.data.result === "success") {
-                    setFaqs(response.data.list);
-                } else {
-                    console.log("FAQ 리스트 불러오기 실패");
-                }
-            })
-            .catch(error => {
-                console.log("API 호출 오류: " + error.message);
-            });
-    }, []);
+        if(cookieCheck){
+            axios.get('/admin/findAllUser')
+                .then(response => {
+                    if (response.data) {
+                        setUsers(response.data);
+                        console.log(response.data)
+                    } else {
+                        console.log("FAQ 리스트 불러오기 실패");
+                    }
+                })
+                .catch(error => {
+                    console.log("API 호출 오류: " + error.message);
+                });
+        }
+    }, [cookieCheck]);
 
     let [currentPage, setCurrentPage] = useState(1);
     let [dropdownOpen, setDropdownOpen] = useState(false);
@@ -66,6 +71,7 @@ function AdminMain() {
     };
 
     /* FAQ 클릭시 열림 */
+    // 여기도 클릭시 KEY 전송하고 셀렉트된 값들중 KEY값있으면 TRUE 반환되게?
     const openedFaq = (idx) => { // idx = 인덱스
         setFaqContent(faqContent === idx ? null : idx);
     };
@@ -80,24 +86,25 @@ function AdminMain() {
             case 0:
                 return (
                     <div className={styles.faqContainer}>
-                        {faqs.map((faq, idx) => (
+                        {/* 이거 순번체킹 말고 key값 받아와서 체킹하는걸로 해야할듯? */}
+                        {users.map((users, idx) => (
                             <div key={idx} onClick={() => openedFaq(idx)} className={styles.faqItem}>
                                 <div className={styles.faqHeader}>
-                                    <img src={asking} className={styles.faqIcon} alt="답변 아이콘"/>
                                     <div className={styles.faqDetails}>
-                                        <div className={styles.faqTitle}>{faq.title}</div>
-                                        <div className={styles.faqSubtitle}>{faq.category}</div>
+                                        <div className={styles.faqTitle}>{users.email}</div>
+                                        <div className={styles.faqSubtitle}>{users.nickName}</div>
                                     </div>
                                 </div>
                                 {/* FAQ의 번호와 인덱스가 같으면 열림 */}
                                 {faqContent === idx && (
                                     <div>
                                         {/* 선 */}
-                                        <div className={styles.faqDivider}></div>
                                         <div className={styles.faqContent}>
-                                            {/* 일단 이미지 넣었는데 내용 중간에 넣는건 아직 현재 내용 맨위 */}
-                                            {faq.image && <img src={faq.image} className={styles.faqContentImage} alt="FAQ 이미지" />}
-                                            <div className={styles.faqContentText}>{faq.content}</div>
+                                            {/* 신고받은거 넣으면 될듯 */}
+                                            <div className={styles.faqContentText}> 신고 내용 </div>
+                                            <div className={styles.faqContentText}>1.ㅅㅂ!</div>
+                                            <div className={styles.faqContentText}>2.ㅅㅂ!</div>
+                                            <div className={styles.faqContentText}>3.ㅅㅂ!</div>
                                         </div>
                                     </div>
                                 )}
@@ -254,7 +261,7 @@ function AdminMain() {
                         </div>
                         <div className={`${styles.navItems} ${tab === 3 ? styles.active : ''}`} 
                             onClick={() => setTab(3)}>
-                            공시 사항
+                            질문 답변
                         </div>
                     </div>
                 </div>

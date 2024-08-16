@@ -1,6 +1,6 @@
 package com.jwi.work.user.mapper;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -68,5 +68,8 @@ public interface UserMapper{
 		
 		//여기부터 비번찾기
 		public void updatePw(User user);
+		
+	// 여기부터 어드민
+		// 유저정보 전부 가져오기
+		public List<User> getAllUser();
 }
-

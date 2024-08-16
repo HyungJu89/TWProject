@@ -10,7 +10,6 @@ import AlarmModal from '../modal/AlarmModal.js';
 
 function AdminLogin() {
 
-    var jsonSessionInfo = localStorage.getItem('sessionId');
     // 세션화성공
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -69,7 +68,7 @@ function AdminLogin() {
                 const userResponse = 
                     await axios.post('/admin/login', adminData);
                 if(userResponse.data){
-                    setCookie('jwtCookie', userResponse.data,{
+                    setCookie('frontCookie', "프론트쿠키",{
                         path: '/',
                         secure: true,
                         maxAge: 100
