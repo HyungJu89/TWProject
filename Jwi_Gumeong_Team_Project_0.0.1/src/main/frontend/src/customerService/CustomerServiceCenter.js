@@ -20,7 +20,7 @@ function CustomerServiceCenter() {
     const [tab, setTab] = useState(0);
     const userKey = useSelector((state) => state.session.userKey); // Redux에서 userKey 가져오기
     const [sanctions, setSanctions] = useState([]); // 제재 내역
-    const userState = useSelector((state) => state.userState); // 로그인한 유저 정보??
+    // const userState = useSelector((state) => state.userState); // 로그인한 유저 정보??
     const [inquiries, setInquiries] = useState([]); // 문의 내역
     const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
