@@ -30,11 +30,14 @@ function PublicBoard({ postInfo }) {
     let state = useSelector((state) => { return state });
     let disPatch = useDispatch();
 
+    const [commentCount,setCommentCount] = useState(0);
+
     useEffect(() => {
         setHeart(postInfo.isLike)
         if (postInfo.image) {
             setImgBeing(JSON.parse(postInfo.image));
         }
+        setCommentCount(postInfo.commentCount)
     }, [])
 
     //모달함수
@@ -81,7 +84,7 @@ function PublicBoard({ postInfo }) {
             <div className={styles.widthNav} style={{ marginBottom: '0px' }}>{/* 하단 댓글,좋아요,공유 */}
                 <div className={styles.commentsDiv}>
                     {/*댓글창*/}    <div onClick={() => { commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
-                        <img src={comments} /><div className={styles.comments}>{postInfo.commentCount}</div></div>
+                        <img src={comments} /><div className={styles.comments}>{commentCount}</div></div>
                     {/*좋아요*/}    <div onClick={() => { heart == false ? setHeart(true) : setHeart(false) }}>
                         {heart ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
                         <div className={styles.comments}>{postInfo.likeCount}</div>
@@ -89,7 +92,7 @@ function PublicBoard({ postInfo }) {
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
-            {commentsON && <Comments postKey={postInfo.postKey} />}
+            {commentsON && <Comments postKey={postInfo.postKey} setCommentCount = {setCommentCount}/>}
         </div>
     )
 }
@@ -105,15 +108,10 @@ function ChannelTitle({ postChannel }) {
     )
 }
 
-function Comments({ postKey }) {
+function Comments({ postKey ,setCommentCount}) {
 
 
-    let commentsArray = [//댓글 리스트 배열 (임시)
-        { reply: false, nickname: "닉네임", time: "4시간", content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ" },
-        { reply: false, nickname: "gd", time: "4시간", content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ" },
-        { reply: false, nickname: "2", time: "4시간", content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ" },
-        { reply: false, nickname: "3", time: "4시간", content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ" }
-    ];
+
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
@@ -223,6 +221,7 @@ function Comments({ postKey }) {
                 }
             });
             setComments(data);
+            setCommentCount(data.info.commentCount);
         } catch (error) {
             console.error('Channel API Error:', error);
             throw new Error('Failed to fetch channel data');
@@ -259,15 +258,17 @@ function Comments({ postKey }) {
             </div>
             {comments.success &&
                 <>
-                    {comments.info.map((comment, index) => {
+                    {comments.info.comment.map((comment, index) => {
                         return (
+                            <div key={index}>
                             <CommentsList
-                                key={index}
                                 index={index}
                                 postKey={postKey}
                                 comment={comment}
                                 setCommentLode = {setCommentLode}
+                                setCommentCount = {setCommentCount}
                             />
+                            </div>
                         );
                     })}
                 </>
@@ -275,7 +276,7 @@ function Comments({ postKey }) {
         </div>
     )
 }
-function CommentsList({ index, postKey, comment,setCommentLode }) {
+function CommentsList({ index, postKey, comment,setCommentLode,setCommentCount }) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     const modalRef = useRef(null);
     const moreRef = useRef(null);
@@ -343,7 +344,7 @@ function CommentsList({ index, postKey, comment,setCommentLode }) {
                                     </div>
                                 </div>
                                 {reply.replyNickName &&
-                                    <div>@{reply.replyNickName}</div>
+                                    <div className={styles.replyNickNameText}>@{reply.replyNickName}</div>
                                     }
                                 
                                 <div className={styles.listContent}>{reply.reply}</div>

@@ -23,9 +23,11 @@
 	<result property="updatedAt" column="R_updatedAt"/>
 </resultMap>
 
+
+
 <select id="commentCount" parameterType="int" resultType="int">
 	SELECT
-		COUNT(*) 
+		COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0)
 	FROM 
 		comment 	
 	LEFT JOIN
