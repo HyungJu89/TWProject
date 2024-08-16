@@ -32,7 +32,6 @@ function CustomerServiceCenter() {
     let [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
     // 문의 내용이 전부 있는지
     const [inputComplete, setInputComplete] = useState(false);
-
     // 알림 모달
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
@@ -45,6 +44,10 @@ function CustomerServiceCenter() {
     const closeModal = () => {
         setModalOpen(false);
     };
+
+    useEffect(() => {
+        setCloseButtonHovered(false); // 버튼 호버초기화
+    }, [imageModalOpen]);
 
     useEffect(() => {
         // 자주 묻는 질문 리스트 불러오기
