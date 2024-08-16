@@ -327,12 +327,11 @@ function CommentsList({ index, postKey, comment,setCommentLode }) {
                             <img className={styles.BcImg} src={big_comment} />
                             <div className={styles.list}>
                                 <div className={styles.listNav}>
-                                    <div className={styles.listName}>{reply.nickName}<div className={styles.time}>{reply.createdAt}</div>
+                                    <div className={styles.listName}>{reply.nickName}<div className={styles.time}>{reply.createdAt}</div></div>
                                         <div>
                                             <img ref={moreRef} onClick={() => { !commentMoreON && setReplyMoreON(true) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                                             {commentMoreON && <div ref={modalRef}><MoreDeleteMini /></div>} {/*신고, 삭제 모달*/}
                                         </div>
-                                    </div>
                                 </div>
                                 {reply.replyNickName &&
                                     <div>@{reply.replyNickName}</div>
@@ -456,7 +455,6 @@ function MoreDeleteMini() {
         <div className={styles.moreUi} style={{ right: '-90px', top: '24px' }}>
             {deleteWrote == true ?
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div className={styles.text}>수정하기</div>
                     <div className={styles.text}>삭제하기</div>
                 </div>
                 :

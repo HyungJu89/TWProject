@@ -191,6 +191,7 @@
 .listNav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     max-width: 726px;
     min-width: 696px;
     position: relative;
