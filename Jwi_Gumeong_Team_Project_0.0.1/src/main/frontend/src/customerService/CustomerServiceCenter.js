@@ -17,7 +17,7 @@ import leftIcon from '../icon/40px/chevron-left-w.png';
 import rightIcon from '../icon/40px/chevron-right-w.png';
 
 function CustomerServiceCenter() {
-    let [tab, setTab] = useState(0);
+    const [tab, setTab] = useState(0);
     const userKey = useSelector((state) => state.session.userKey); // Redux에서 userKey 가져오기
     const [sanctions, setSanctions] = useState([]); // 제재 내역
     const userState = useSelector((state) => state.userState); // 로그인한 유저 정보??
@@ -25,11 +25,12 @@ function CustomerServiceCenter() {
     const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
-    let [dropdownOpen, setDropdownOpen] = useState(false); // 문의 종류 드롭다운
-    let [selectedOption, setSelectedOption] = useState("선택하세요"); // 문의 종류 최초 상태
+    const [dropdownOpen, setDropdownOpen] = useState(false); // 문의 종류 드롭다운
+    const [selectedOption, setSelectedOption] = useState("선택하세요"); // 문의 종류 최초 상태
     const [faqs, setFaqs] = useState([]); // 자주 묻는 질문 리스트
-    let [faqContent, setFaqContent] = useState(null); // 자주 묻는 질문 내용
-    let [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
+    const [faqContent, setFaqContent] = useState(null); // 자주 묻는 질문 내용
+    const [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
+    const [nickName, setNickName] = useState(null);
     // 문의 내용이 전부 있는지
     const [inputComplete, setInputComplete] = useState(false);
     // 알림 모달
@@ -60,7 +61,7 @@ function CustomerServiceCenter() {
                 }
             })
             .catch(error => {
-                console.log("API 호출 오류: " + error.message);
+                console.log("자주묻는 질문 불러오기 오류: " + error.message);
             });
     }, []);
 
@@ -101,6 +102,7 @@ function CustomerServiceCenter() {
                     console.log("문의 내역 가져오기 실패: " + error.message);
                 });
             } else if (tab === 3) {
+                // 제재내역
                 axios.post('/sanction/list', null, {
                     params: { userKey, page: currentPage, limitPage: 10 }
                 })
@@ -113,8 +115,20 @@ function CustomerServiceCenter() {
                     }
                 })
                 .catch(error => {
-                    console.log("API 호출 오류: " + error.message);
+                    console.log("제재내역 불러오기 오류: " + error.message);
                 });
+
+                axios.post('/sanction/user', null, {params: {userKey: userKey}})
+                .then(response => {
+                    if(response.data.result === "success") {
+                        setNickName(response.data.nickName);
+                    } else {
+                        setNickName("알수없음");
+                    }
+                })
+                .catch(error => {
+                    console.log("닉네임 불러오기 오류: " + error.message);
+                })
             }
         }
     }, [userKey, tab, currentPage]);
@@ -451,7 +465,7 @@ function CustomerServiceCenter() {
                                     <div key={index} className={styles.sanctionItem}>
                                         <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
                                         <div className={styles.sanctionDetails}>
-                                            <div className={styles.sanctionTitle}>{userState.nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
+                                            <div className={styles.sanctionTitle}>{nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
                                             <div className={styles.sanctionContent}>
                                                 <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
                                                 <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>

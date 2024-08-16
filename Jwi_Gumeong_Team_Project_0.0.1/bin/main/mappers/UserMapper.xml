@@ -84,4 +84,9 @@
     <select id="getUserInfo" resultType="com.jwi.work.user.dto.User">
     	SELECT * FROM `user` WHERE userKey = #{userKey}
     </select>
+    <!-- 닉네임 불러오기 -->
+    <select id="getNickName" parameterType="int" resultType="String">
+    	SELECT nickName FROM `user` WHERE userKey = #{userKey}
+    </select>
+    
 </mapper>
