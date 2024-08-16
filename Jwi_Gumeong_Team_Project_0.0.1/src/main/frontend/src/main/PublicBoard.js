@@ -106,14 +106,6 @@ function ChannelTitle({ postChannel }) {
 }
 
 function Comments({postKey}) {
-
-
-    let commentsArray = [//댓글 리스트 배열 (임시)
-        {reply: false,nickname: "닉네임", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
-        {reply: false,nickname: "gd", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
-        {reply: false,nickname: "2", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"},
-        {reply: false,nickname: "3", time: "4시간",content: "진짜ㅠ 너무 걱정했는데 잘 됬더라구요ㅠ"}
-    ];
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트

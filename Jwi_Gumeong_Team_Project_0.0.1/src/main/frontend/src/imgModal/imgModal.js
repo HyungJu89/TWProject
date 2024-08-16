@@ -35,7 +35,8 @@ function ImgUi(){
                 </div>
                 <div className={styles.mainImg}>
                     <img
-                        src='https://cdn.discordapp.com/attachments/1186577844755771465/1263754117571018873/image_2.png?ex=669b623d&is=669a10bd&hm=65cbc87a86a710cfeb01c4ca7ce74e82dbb838bfa0ff012eb4ef2973a3fe1971&' />
+                        // src='https://cdn1.epicgames.com/offer/879b0d8776ab46a59a129983ba78f0ce/PortraitProductImage-KOR_1200x1600-0379125a5dee5bbda79bf68aaac62146' />
+                        src='https://images.ctfassets.net/vfkpgemp7ek3/2faNVDHi2juX0zx8rhwZ5g/8ac2c96bf24d987639901164291c9436/Cover_Image.jpg' />
                 </div>
                 <div className={styles.chevron}>
                     <img style={{ marginLeft: '0px' }} src={chevron_right_w} />
