@@ -31,7 +31,6 @@ public class SanctionService {
     public List<SanctionDTO> getPagedList(int userKey, int page, int limitPage, PagingDto pagingDto) {
         
     	// 페이지가 0 이하일 경우 1로 설정
-    	// 자꾸 음수가 뜸
         if (page <= 0) {
             page = 1;
         }
