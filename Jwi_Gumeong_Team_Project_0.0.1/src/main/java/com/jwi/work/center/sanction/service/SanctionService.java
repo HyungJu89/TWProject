@@ -13,6 +13,7 @@ import com.jwi.work.center.sanction.entity.Sanction;
 import com.jwi.work.center.sanction.repository.SanctionRepository;
 import com.jwi.work.channel.dto.PagingDto;
 import com.jwi.work.user.entity.UserEntity;
+import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.user.repository.UserRepository;
 import com.jwi.work.util.PagingUtil;
 
@@ -24,6 +25,7 @@ public class SanctionService {
 
     private SanctionRepository sanctionRepository;
     private UserRepository userRepository;
+    private UserMapper userMapper;
     private PagingUtil pagingUtil;
     
     public List<SanctionDTO> getPagedList(int userKey, int page, int limitPage, PagingDto pagingDto) {
@@ -92,6 +94,10 @@ public class SanctionService {
                 sanctionRepository.save(sanction);
             }
         }
+    }
+    
+    public String bannedUserNick(int userKey) {
+    	return userMapper.getNickName(userKey);
     }
 }
 
