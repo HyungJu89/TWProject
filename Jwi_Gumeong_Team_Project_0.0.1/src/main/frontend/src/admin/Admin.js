@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation , Outlet, useNavigate } from 'react-router-dom';
 import { getCookie } from '../cookies/Cookies.js'
-import AdminMain from './AdminMain.js';
+import AdminMain from './AdminMain.js'
 import axios from 'axios';
 
 function Admin(){
