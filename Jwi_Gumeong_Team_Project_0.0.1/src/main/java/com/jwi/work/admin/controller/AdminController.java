@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.admin.service.AdminService;
+import com.jwi.work.center.inquiry.entity.Inquiry;
+import com.jwi.work.center.inquiry.entity.InquiryResponse;
 import com.jwi.work.user.dto.User;
 
 import jakarta.servlet.http.Cookie;
@@ -52,6 +54,16 @@ public class AdminController {
 	@GetMapping("/findAllUser")
 	public List<User> findUser() {
 		return adminService.findAllUsers();
+	}
+	
+	@GetMapping("/findInquiryAll")
+	public List<Inquiry> findInquiry(){
+		return adminService.selectInquiry();
+	}
+	
+	@GetMapping("/findInquiryResponseAll")
+	public List<InquiryResponse> findInquiryResponse(){
+		return adminService.selectInquiryResponse();
 	}
 	
 }

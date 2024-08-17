@@ -27,6 +27,7 @@ function Admin(){
 
     useEffect(()=>{
         if ((location.pathname === '/admin/' || location.pathname === '/admin') && cookieCheck) {
+            setModalOpen(false);
             setOnOff(true);
         } else {
             setOnOff(false);

@@ -29,7 +29,10 @@ alter table `user` add `pwWrong` int default 0;
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-select * from comment;
+select * from user;
+insert into user (email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values
+('delbabo@naver.com','1234','delbabo','남성',0,null,'deling',now(),now());
+insert into inquiryResponse (inquiryKey,adminKey,title,responseText,image,createdAt,updatedAt) values (1,1,'답변임','내용',null,Now(),Now());
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -121,7 +124,7 @@ CREATE TABLE `report` (
 );
 
 CREATE TABLE admin (
-    adminKey    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
+    `adminKey`    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
     adminName    VARCHAR(30) COMMENT '어드민아이디',
     adminPassWord    VARCHAR(255)    NOT NULL    COMMENT '비밀번호',
     state    VARCHAR(50)    NOT NULL    DEFAULT 'activate'    COMMENT '어드민 상태 "activate","deactivate","secession"  작업자와 상의',

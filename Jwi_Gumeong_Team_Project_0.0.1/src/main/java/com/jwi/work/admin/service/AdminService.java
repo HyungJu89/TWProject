@@ -10,6 +10,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.admin.util.JwtUtil;
+import com.jwi.work.center.inquiry.entity.Inquiry;
+import com.jwi.work.center.inquiry.entity.InquiryResponse;
+import com.jwi.work.center.inquiry.ropository.InquiryRepository;
+import com.jwi.work.center.inquiry.ropository.InquiryResponseRepository;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.mapper.UserMapper;
 
@@ -22,6 +26,12 @@ public class AdminService {
 	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private InquiryRepository inquiryRepository;
+	
+	@Autowired
+	private InquiryResponseRepository inquiryResponseRepository; 
 	
 	// 데이터베이스에 직접 insert 하는거보다 여기에서 인코딩 거치고 넣는게 더 나을듯?
 	public String loginJWT(Map<String,String> data) {
@@ -44,5 +54,12 @@ public class AdminService {
 		return userMapper.getAllUser();
 	}
 	
+    public List<Inquiry> selectInquiry() {
+    	return inquiryRepository.findAll();
+    }
+    
+    public List<InquiryResponse> selectInquiryResponse() {
+    	return inquiryResponseRepository.findAll();
+    }
 	
 }
