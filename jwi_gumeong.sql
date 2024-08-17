@@ -200,6 +200,9 @@ CREATE TABLE `banned` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
+INSERT INTO `banned` (`userKey`, `reason`, `reasonDate`, `date`, `state`, `createdAt`, `updatedAt`) 
+VALUES(1, '사유사유', '2024-04-04', 30, 'activate', now(), now());
+SELECT * FROM `banned`;
 
 CREATE TABLE `managerLog` (
 	`managerLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '매니저 활동로그키',
