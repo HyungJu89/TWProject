@@ -41,9 +41,9 @@ public class ChannelController {
 	}
 	
 	@GetMapping("/get")
-	public AnswerDto<ChannelDto> channelGet(@RequestParam("channelId") String channelId){
-		
-		return channelService.channelGet(channelId);
+	public AnswerDto<ChannelDto> channelGet(@RequestParam("sessionId") String sessionId,@RequestParam("channelId") String channelId){
+
+		return channelService.channelGet(sessionId,channelId);
 	}
 	
 	@GetMapping("/hotTen") //인기 게시판 10개

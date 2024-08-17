@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
+import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.service.PostService;
 
@@ -45,6 +46,11 @@ public class PostController {
 	@PostMapping("/delete")
 	public AnswerDto<String> postDelete(@RequestBody PostDeleteDto deleteDto	){
 		return postService.postDelete(deleteDto);
+	}
+	
+	@PostMapping("/like")
+	public void postLike(@RequestBody PostLikeDto likeDto) {
+		postService.postLike(likeDto);
 	}
 	
 	/*

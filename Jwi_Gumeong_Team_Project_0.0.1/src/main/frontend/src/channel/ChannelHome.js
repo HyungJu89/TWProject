@@ -72,6 +72,7 @@ function ChannelHome() {
         try {
             const channel = await channelGet(channelId); // 비동기 호출
             console.log(channel.info);
+            
             if (!channel.success) {
                 setModalContent('생성되지 않은 게시판입니다.');
                 setModalOpen(true);
@@ -119,7 +120,7 @@ function ChannelHome() {
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
                 <MainBanner channelId={channelId} route={'channel'} />
-                <ChannelBody />
+                <ChannelBody channelInfo={channelInfo}/>
             </div>
             <div className={style.channelInfoBack}>
                 <div className={style.mainList}>

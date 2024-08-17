@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
+import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.dto.sqlDto.ImageInfoDto;
 import com.jwi.work.channel.dto.sqlDto.PostInfoDto;
@@ -193,6 +194,18 @@ public class PostService {
 		anwer.setSuccess(true);
 
 		return anwer;
+	}
+	
+	
+	public void postLike(PostLikeDto likeDto) {
+		
+		if(likeDto.isLike()) {
+			postMapper.likeUp(likeDto);
+		} else {
+			postMapper.likeDown(likeDto);
+		}
+		
+		
 	}
 	
 //	public AnswerDto<String> postUpdate(int postKey,int userKey,String content,List<MultipartFile>files) {

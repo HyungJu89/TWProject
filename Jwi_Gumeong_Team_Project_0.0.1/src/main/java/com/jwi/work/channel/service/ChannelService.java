@@ -54,12 +54,12 @@ public class ChannelService {
 
 	}
 
-	public AnswerDto<ChannelDto> channelGet(String channelId) {
+	public AnswerDto<ChannelDto> channelGet(String sessionId,String channelId) {
 		AnswerDto<ChannelDto> answer = new AnswerDto<ChannelDto>();
 		
 		try {
 			if(channelMapper.channelCheck(channelId) == 1) {
-				answer.setInfo(channelMapper.channelGet(channelId));
+				answer.setInfo(channelMapper.channelGet(sessionId,channelId));
 				answer.setSuccess(true);
 			}else {
 				answer.setSuccess(false);
@@ -79,7 +79,8 @@ public class ChannelService {
             answer.setMessage("Success");
             answer.setSuccess(true);
         } catch (Exception e) {
-            answer.setMessage("에러에요: " + e.getMessage());
+			e.printStackTrace();
+            answer.setMessage("에러 ");
             answer.setSuccess(false);
         }
         return answer;
@@ -94,7 +95,8 @@ public class ChannelService {
             answer.setMessage("Success");
             answer.setSuccess(true);
         } catch (Exception e) {
-            answer.setMessage("에러에요: " + e.getMessage());
+			e.printStackTrace();
+            answer.setMessage("에러 ");
             answer.setSuccess(false);
         }
 		return answer;

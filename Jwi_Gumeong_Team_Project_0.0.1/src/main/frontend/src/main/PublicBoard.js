@@ -85,7 +85,7 @@ function PublicBoard({ postInfo }) {
                 <div className={styles.commentsDiv}>
                     {/*댓글창*/}    <div onClick={() => { commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
                         <img src={comments} /><div className={styles.comments}>{commentCount}</div></div>
-                    {/*좋아요*/}    <div onClick={() => { heart == false ? setHeart(true) : setHeart(false) }}>
+                    {/*좋아요*/}    <div onClick={() => { heart ? setHeart(false) : setHeart(true) }}>
                         {heart ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
                         <div className={styles.comments}>{postInfo.likeCount + (heart? 1:0)}</div>
                     </div>

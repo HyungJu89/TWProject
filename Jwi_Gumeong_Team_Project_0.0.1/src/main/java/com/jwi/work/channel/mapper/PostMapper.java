@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.dto.sqlDto.ImageInfoDto;
 import com.jwi.work.channel.dto.sqlDto.PostInfoDto;
@@ -45,6 +46,12 @@ public interface PostMapper {
 	
 	// 유저키 출력
 	public int  userKey(@Param("sessionId")String sessionId);
+
+	// Like Up
+	
+	public void likeUp(PostLikeDto likeDto);
+	// Like down
+	public void  likeDown(PostLikeDto likeDto);
 	
 //	public void postUpdate(@Param("postKey")int postKey,@Param("content")String content,@Param("image")String image);
 }

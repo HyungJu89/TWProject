@@ -124,7 +124,7 @@ function Search({ search }) {
                                             </div>
                                         </div>
                                         <div className={style.bookmark}>
-                                            <BookmarkButton />
+                                            <BookmarkButton favorite = {channelInfo.favorite}/>
                                         </div>
                                     </div>
                                     <div className={style.dashed} />{/* 회색줄 */}

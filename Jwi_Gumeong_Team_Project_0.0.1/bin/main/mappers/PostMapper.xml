@@ -109,5 +109,39 @@
 		UPDATE post set content = #{content} , image = #{image} WHERE postKey = #{postKey}
 	</update> -->
 
+<!-- 좋아요 누를때 중복방지 -->
+	<insert id="likeUp" parameterType="com.jwi.work.channel.dto.bodyDto.PostLikeDto">
+		INSERT INTO 
+			`like`(userKey,postKey)
+<!-- SELECT 결과값으로 INSERT를 한다. 대신 데이터형식이나 검색한 칼럼의 수가 똑같아야함  -->
+		SELECT 
+			UC.userKey, #{postKey}`
+		FROM 
+			userConnection AS UC
+		WHERE 
+			UC.sessionId = #{sessionId}
+		AND 
+		<!-- NOT EXISTS 는 서브쿼리의 결과가 존재하지않을때 true를 반환하고 존재할때 false를 반환한다.  -->
+		<!-- select 를 할때 where 조건에 false 가 있을때 select 되지않는다. -->
+		<!-- 이를 이용해서 like 테이블에 userKey와 postKey를 같이 가지고있는 행이 있는지 확인하고 없을때만 insert 되게 처리한다. -->
+			NOT EXISTS(
+			SELECT 
+				1 
+			FROM 
+				`like` 
+			WHERE 
+				postKey = #{postKey}
+			AND 
+				userKey = UC.userKey
+		)
+			 
+			
+	</insert>
+
+	<delete id="likeDown" parameterType="com.jwi.work.channel.dto.bodyDto.PostLikeDto">
+		DELETE FROM `like` WHERE postKey = #{postKey} AND userKey = (
+		SELECT UC.userKey FROM userConnection AS UC WHERE UC.sessionId = #{sessionId}
+		)
+	</delete>
 
 </mapper>
