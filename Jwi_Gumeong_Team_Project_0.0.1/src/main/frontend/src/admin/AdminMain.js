@@ -43,7 +43,6 @@ function AdminMain() {
     const [closeButtonHovered, setCloseButtonHovered] = useState(false);
     const cookieCheck = getCookie('frontCookie');
     const [users, setUsers] = useState([]);
-
     const [userState,setUserState] = useState('');
 
     useEffect(() => {
@@ -273,9 +272,13 @@ function AdminMain() {
                                         <div className={styles.faqTitle}>{users.userKey} . {users.email}</div>
                                         <div className={styles.faqSubtitle}>{users.nickName}</div>
                                         <div className={styles.userStateLine}>
-                                            {users.state === "activate" ? <div className={styles.userState}>제재완료</div> : null}
-                                            {users.state === "deactivate" ? <div className={styles.userState}>신고접수</div> : null}
-                                            { <div className={styles.userState}>개멍청함</div>}
+                                            {/* 제제 완료했을때 빨강색 */}
+                                            { users.state === "deactivate" ? <div className={styles.userStateactivate}>제재완료</div> : null}
+                                            {/* 신고 접수 된 상태 파란색 */}
+                                            {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
+                                            { users.state === "deactivate" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
+                                            {/* 자살중인 계정은 회색? */}
+                                            { users.state === "deling" ? <div className={styles.userStatedeling}>비활성화</div> : null}
                                         </div>
                                     </div>
                                 </div>

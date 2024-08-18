@@ -71,7 +71,7 @@ function AdminLogin() {
                     setCookie('frontCookie', "프론트쿠키",{
                         path: '/',
                         secure: true,
-                        maxAge: 100
+                        maxAge: 3600
                     })
                     navigate('/admin');
                 }

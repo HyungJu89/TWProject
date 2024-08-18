@@ -167,7 +167,6 @@
 }
 
 .faqContent {
-    display: flex;
     padding: 10px;
     margin-left: 20px;
     border-radius: 20px;
@@ -175,7 +174,7 @@
 
 .userStateLine{
     display: flex;
-    margin-left: auto;
+    justify-content: space-between;
 }
 
 /* 문의 답변 */
@@ -203,11 +202,21 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 4px;
+    margin-left: 10px;
 }
 
 /* 제재 : 빨강색 */
-/* 신고 :  */
+.userStateactivate{
+    background-color: #fd3f3f;
+}
+/* 신고 : 파랑색*/
+.userStatedeactivate{
+    background-color: #4444ff;
+}
+/* 자살 : 회색 */
+.userStatedeling{
+    background-color: #a1a1a1;
+}
 
 .faqContentText {
     margin-top: 3px;
