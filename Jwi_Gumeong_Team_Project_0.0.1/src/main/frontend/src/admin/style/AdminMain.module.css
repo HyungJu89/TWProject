@@ -235,6 +235,36 @@
     margin: 0px 30px 0px 30px;
 }
 
+.userOption{
+    display: flex;
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+.userOptionReport{
+}
+.userOptionBlock{
+    margin-left: 30px;
+}
+
+.userOptionBlockBtn{
+    cursor: pointer;
+    margin-top: auto;
+    font-size: 12px;
+    font-weight: 500;
+    color: #F3F3F3;
+    background-color: rgb(255, 144, 40);
+    margin-left: auto;
+    margin-right: 15px;
+    padding: 2px 6px 2px 6px;
+}
+
+.userBtnOption{
+    margin-left: 30px
+}
+
+.inqFieldUser{
+    margin-left: 30px;
+}
 
 /* 문의하기 */
 .inqContainer {
@@ -273,7 +303,8 @@
     margin:0 10px 0 10px;
 }
 
-.inqField {
+.inqField,
+.inqFieldUser {
     display: flex;
     align-items: center;
     gap: 5px;

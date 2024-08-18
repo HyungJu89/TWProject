@@ -30,7 +30,7 @@ public class AdminController {
 	public String adminLogin(@RequestBody Map<String,String> data , HttpServletResponse response){
 		// 쿠키설정
 		var cookie = new Cookie("jwt" , adminService.loginJWT(data));
-		cookie.setMaxAge(100);
+		cookie.setMaxAge(3600);
 		// 쿠키를 외부로 조작하는걸 힘들게 만들어줌
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");

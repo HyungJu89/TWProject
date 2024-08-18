@@ -44,6 +44,13 @@ function AdminMain() {
     const cookieCheck = getCookie('frontCookie');
     const [users, setUsers] = useState([]);
     const [userState,setUserState] = useState('');
+    const [moreBtnOption,setMoreBtnOption] = useState(false);
+
+    const [selected, setSelected] = useState("선택하세요");
+
+    const handleSelectChange = (event) => {
+        setSelectedOption(event.target.value);
+    };
 
     useEffect(() => {
         if(cookieCheck){
@@ -266,8 +273,8 @@ function AdminMain() {
                     <div className={styles.faqContainer}>
                         {/* 이거 순번체킹 말고 key값 받아와서 체킹하는걸로 해야할듯? */}
                         {users.map((users, idx) => (
-                            <div key={idx} onClick={() => openedFaq(idx)} className={styles[("faqItem" + users.state)]}>
-                                <div className={styles.faqHeader}>
+                            <div key={idx} className={styles[("faqItem" + users.state)]}>
+                                <div className={styles.faqHeader} onClick={() => openedFaq(idx)}>
                                     <div className={styles.faqDetails}>
                                         <div className={styles.faqTitle}>{users.userKey} . {users.email}</div>
                                         <div className={styles.faqSubtitle}>{users.nickName}</div>
@@ -285,14 +292,48 @@ function AdminMain() {
                                 {/* FAQ의 번호와 인덱스가 같으면 열림 */}
                                 {faqContent === idx && (
                                     <div>
-                                        {/* 선 */}
                                         <div className={styles.faqContent}>
                                             {/* 신고받은거 넣으면 될듯 */}
                                             <div className={styles.faqContentText}> 신고 내용 </div>
-                                            <div className={styles.faqContentText}>1.ㅅㅂ!</div>
-                                            <div className={styles.faqContentText}>2.ㅅㅂ!</div>
-                                            <div className={styles.faqContentText}>3.ㅅㅂ!</div>
+                                            <div className={styles.faqContentText}>1.다메닝겐임</div>
+                                            <div className={styles.faqContentText}>2.걍 신고함</div>
+                                            <div className={styles.faqContentText}>3.바보임</div>
                                         </div>
+                                        {
+                                        users.state !== "activate" ?
+                                            <div className={styles.userOption}>
+                                                <div className={styles.userOptionReport}>신고접수일 : 2024-08-17</div>
+                                                {/* 여기에 제재 했을경우 3항 연산자 하면될꺼같고 */}
+                                                <div className={styles.userOptionBlock}>제재일 : 2024-08-18 ~ 2024-09-01 / 14일</div>
+                                                <div className={styles.userOptionBlockBtn} onClick={()=>{setMoreBtnOption(prev => !prev)}}>제재하기▽</div>
+                                            </div>
+                                            : 
+                                            <div className={styles.userOption}>
+                                                <div className={styles.userOptionBlockBtn} onClick={()=>{setMoreBtnOption(prev => !prev)}}>제재하기▽</div>
+                                            </div>
+                                        }
+                                        {/* 재원이형꺼 돋거했으니까 나중에 정리할꺼임 */}
+                                        {
+                                        moreBtnOption &&
+                                            <div className={styles.inqFieldUser}>
+                                                <label>제재 종류</label>
+                                                <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
+                                                    {selectedOption}
+                                                </div>
+                                                {/* 문의 종류 선택 드롭다운 */}
+                                                {
+                                                dropdownOpen && (
+                                                    <div className={styles.dropdown}>
+                                                        {["시스템 관련", "본인인증", "오류/버그", "신고", "제안", "도용", "보안", "기타"].map((option, index) => (
+                                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
+                                                                {option}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )
+                                                }
+                                            </div>
+                                        }
                                     </div>
                                 )}
                             </div>
