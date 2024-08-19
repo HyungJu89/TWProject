@@ -28,7 +28,7 @@ function ChannelBody({channelInfo}) {
                                 <div className={style.announcement}><img src={announcement} />[필수!]우리 토픽의 공지사항</div>
                             </div>
                             <div  className={style.bookmark}>
-                                <BookmarkButton favorite={channelInfo.favorite}/>
+                                <BookmarkButton channelInfo={channelInfo}/>
                             </div>
                         </div>
                     </div>

@@ -1,3 +1,5 @@
+
+
 -- 2024-08-15 [임재열] V 0.1.12
 -- 수정내용 : admin 테이블 adminName 칼럼에 유니크가 추가되어있지않아 동일한 adminName 의 행이 만들어짐
 ALTER TABLE `admin` ADD CONSTRAINT `uniqueAdminName` UNIQUE (`adminName`);
@@ -38,7 +40,6 @@ alter table `user` add `pwWrong` int default 0;
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-select * from user;
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -51,6 +52,7 @@ CREATE TABLE `user` (
 	`createdAt`	DATETIME	NOT NULL	DEFAULT NOW(),
 	`updatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
+
 CREATE TABLE `favorites` (
 	`favoritesKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL	COMMENT '유저키',
@@ -71,7 +73,7 @@ CREATE TABLE `channel` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-select *from `post`;
+select *from `like`;
 CREATE TABLE `post` (
 	`postKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -185,7 +187,7 @@ CREATE TABLE `inquiryResponse` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (`inquiryKey`) REFERENCES `inquiry`(`inquiryKey`) ON DELETE CASCADE
 );
-select * from reply;
+select * from `like`;
 CREATE TABLE `reply` (
 	`replyKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`commentKey`	INT	NOT NULL	COMMENT '댓글 키',

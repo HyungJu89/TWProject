@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
+import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.service.ChannelService;
 
@@ -88,4 +89,10 @@ public class ChannelController {
 		return channelService.RandomBoard();
 	}
 
+	@PostMapping("/favorite")
+	public void channelFavorite(@RequestBody ChannelFavoriteDto channelFavorite) {
+		channelService.channelFavorite(channelFavorite);
+		
+	}
+	
 }

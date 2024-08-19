@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
+import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.mapper.ChannelMapper;
 
@@ -56,7 +57,6 @@ public class ChannelService {
 
 	public AnswerDto<ChannelDto> channelGet(String sessionId,String channelId) {
 		AnswerDto<ChannelDto> answer = new AnswerDto<ChannelDto>();
-		System.out.println("111111111111111111111111111111");
 		System.out.println(channelMapper.channelGet(sessionId,channelId));
 		try {
 			if(channelMapper.channelCheck(channelId) == 1) {
@@ -101,6 +101,14 @@ public class ChannelService {
             answer.setSuccess(false);
         }
 		return answer;
+    }
+
+    public void channelFavorite(ChannelFavoriteDto channelFavorite) {
+		if(channelFavorite.isFavorite()) {
+			channelMapper.favorite(channelFavorite);
+		} else {
+			channelMapper.unFavorite(channelFavorite);
+		}
     }
 
 }

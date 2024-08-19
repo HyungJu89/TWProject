@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
+import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 
 
@@ -23,4 +24,12 @@ public interface ChannelMapper {
     
     //무작위 10개 가져오기
     List<ChannelDto> RandomBoard();
+    
+    
+    public void favorite(ChannelFavoriteDto channelFavorite);
+
+    public void unFavorite(ChannelFavoriteDto channelFavorite);
+    
+    
+    
 }
