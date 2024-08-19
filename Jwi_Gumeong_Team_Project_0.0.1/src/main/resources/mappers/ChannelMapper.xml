@@ -17,7 +17,37 @@
 	</insert>
 
 	<select id="channelGet" parameterType="String" resultType="com.jwi.work.channel.dto.channelDto.ChannelDto">
-		SELECT * FROM channel WHERE id = #{channelId}
+		SELECT
+			channel.channelKey,
+			channel.id,
+			channel.name,
+			channel.followerCount,
+			channel.imageUrl,
+			COALESCE(COUNT(favorites.channelKey), 0) AS favoriteCount ,
+			<!-- 단순하게 case 문으로 생각하면 됨 CASE WHEN EXISTS 안의 값이  특정 조건을 만족하는 데이터가 있는지-->
+			<!--  EXISTS 는 서브쿼리 안에 행이 존재하면 트루가 반환됨. -->
+        	CASE 
+            	WHEN EXISTS(
+        			SELECT  
+            			1 
+        			FROM 
+        		    	favorites f
+		        	JOIN
+            			userConnection uc ON f.userKey = uc.userKey
+        			WHERE 
+	            		f.channelKey = channel.channelKey 
+	            		AND uc.sessionId = #{sessionId}
+    				) THEN TRUE
+    			ELSE FALSE
+        	END AS isFavorite
+		FROM
+			channel
+		LEFT JOIN
+			favorites ON channel.channelKey = favorites.channelKey
+		WHERE 
+			channel.id = #{channelId}
+		GROUP BY 
+        	channel.channelKey
 	</select>
 	
     <!-- 인기게시판 :: 일정 기간 내 게시글 -->

@@ -125,12 +125,40 @@
     padding: 14px;
     margin-bottom: 20px;
 }
+/*대댓글 태그용*/
+.replyAreaDiv{
+    display: flex;
+}
+/*대댓글 닉네임*/
+.replyAreaDivText{
+    height: 22px;
+    background-color: #FFEDD9;
+    font-family: Spoqa Han Sans Neo;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    text-align: left;
+    color: #101010;
 
-.commentDiv textarea {
+}
+/*대댓글 태그 닉*/
+.replyNickNameText{
+    height: 20px;
+    color: #35559e;
+    font-family: Spoqa Han Sans Neo;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    text-align: left;
+
+}
+
+
+.textarea{
     outline: none;
     resize: none;
     margin-bottom: 10px;
-    width: 698px;
+    width: 100%;
     max-height: 100px;
     
     font-family: Spoqa Han Sans Neo;
@@ -140,9 +168,10 @@
     padding: 0px;
 }
 
+
+
 .commentNav {
     position: relative;
-    width: 698px;
     height: 34px;
     display: flex;
     align-items: center;

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CommentDeleteDto {
 
-	private int userKey;
+	private String sessionId;
 	private int commentKey;
 	
 }

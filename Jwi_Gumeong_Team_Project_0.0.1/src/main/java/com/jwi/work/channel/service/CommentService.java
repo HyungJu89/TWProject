@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.CommentCreateDto;
 import com.jwi.work.channel.dto.bodyDto.CommentDeleteDto;
-import com.jwi.work.channel.dto.commentDto.CommentDto;
+import com.jwi.work.channel.dto.commentDto.CommentListDto;
 import com.jwi.work.channel.mapper.CommentMapper;
 
 @Service
@@ -17,23 +17,25 @@ public class CommentService {
 	@Autowired
 	private CommentMapper commentMapper;
 	
-	public AnswerDto<List<CommentDto>> commentSelect(int postKey,boolean isAsc){
+	public AnswerDto<CommentListDto> commentSelect(int postKey,boolean isAsc){
 		
 		
-		AnswerDto<List<CommentDto>> answer = new AnswerDto<>();
+		AnswerDto<CommentListDto> answer = new AnswerDto<>();
 		
+		CommentListDto commentListDto = new CommentListDto();
 		try {
-			answer.setMessage("게시글 확인중.");
-			
-			if(commentMapper.commentCount(postKey) == 0) {
+			answer.setMessage("댓글 확인중.");
+			int commentCount = commentMapper.commentCount(postKey);
+			if(commentCount == 0) {
 				
 				answer.setInfo(null);
-				answer.setMessage("게시글이 없습니다.");
+				answer.setMessage("댓글이 없습니다.");
 				answer.setSuccess(true);
 				
 			}
-			
-			answer.setInfo(commentMapper.commentSelect(postKey,isAsc));
+			commentListDto.setComment(commentMapper.commentSelect(postKey,isAsc));
+			commentListDto.setCommentCount(commentCount);
+			answer.setInfo(commentListDto);
 			answer.setMessage("null.");
 			answer.setSuccess(true);
 			

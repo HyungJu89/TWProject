@@ -20,6 +20,7 @@ public class ReplyController {
 	
 @PostMapping("/create")
 public AnswerDto<String> replyCreate(@RequestBody ReplyCreateDto createDto){
+	System.out.println(createDto);
 	return replyservice.replyCreate(createDto);
 }
 
