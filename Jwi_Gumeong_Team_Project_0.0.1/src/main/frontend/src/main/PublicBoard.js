@@ -40,6 +40,13 @@ function PublicBoard({ postInfo }) {
         setCommentCount(postInfo.commentCount)
     }, [])
 
+    useEffect(()=>{
+        heart
+    })
+    
+    const likeOnClick = () => {
+        heart ? setHeart(false) : setHeart(true)
+    }
     //모달함수
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
     const modalRef = useRef(null);
@@ -85,7 +92,7 @@ function PublicBoard({ postInfo }) {
                 <div className={styles.commentsDiv}>
                     {/*댓글창*/}    <div onClick={() => { commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
                         <img src={comments} /><div className={styles.comments}>{commentCount}</div></div>
-                    {/*좋아요*/}    <div onClick={() => { heart ? setHeart(false) : setHeart(true) }}>
+                    {/*좋아요*/}    <div onClick={likeOnClick}>
                         {heart ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
                         <div className={styles.comments}>{postInfo.likeCount + (heart? 1:0)}</div>
                     </div>
