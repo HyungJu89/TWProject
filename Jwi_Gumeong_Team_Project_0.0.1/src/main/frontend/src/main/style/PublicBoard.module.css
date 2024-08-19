@@ -127,19 +127,16 @@
 }
 /*대댓글 태그용*/
 .replyAreaDiv{
-    display: flex;
 }
 /*대댓글 닉네임*/
 .replyAreaDivText{
     height: 22px;
     background-color: #FFEDD9;
-    font-family: Spoqa Han Sans Neo;
+    border-radius: 0px;
     font-size: 16px;
     font-weight: 500;
-    line-height: 20.03px;
     text-align: left;
     color: #101010;
-
 }
 
 
@@ -194,19 +191,18 @@
     align-items: center;
     max-width: 726px;
     min-width: 696px;
-    position: relative;
+    position: relative; /*현재 최지은의 가장 큰 적*/
+    z-index: 1;
 }
 
 .listNav .moreImg {
     height: 20px;
     cursor: pointer;
-    position: relative;
 }
 
 
 .listName {
     height: 20px;
-    display: flex;
     align-items: center;
     font-size: 16px;
     font-weight: 700;
@@ -222,6 +218,10 @@
 .listContent {
     font-weight: 400;
     color: #101010;
+}
+.replyNickNameBlue{
+    color: #35559E;
+    margin-right: 4px;
 }
 
 .bigComments {
@@ -265,4 +265,21 @@
 
 .moreUi .text:hover {
     background: #F3F3F3;
+}
+
+.replyDivText {
+    display: flex;
+    align-items: center;
+
+    font-size: 16px;
+    font-weight: 400;
+    text-align: left;
+    color: #999999;
+    margin-top: 6px;
+}
+.replyDivText img{
+    margin-right: 2px;
+}
+.a{
+    position: absolute;
 }

@@ -11,6 +11,7 @@ import more from '../icon/24px/more.png';
 import heart_deactivation from '../icon/24px/heart-deactivation.png';
 import heart_activation from '../icon/24px/heart-activation.png';
 import comments from '../icon/24px/comments.png';
+import comments_20px from '../icon/20px/comments-20px.png';
 import sharing from '../icon/24px/sharing.png';
 import expand_more from '../icon/24px/expand-more.png';
 import emoticon_deactivation from '../icon/24px/emoticon-deactivation.png';
@@ -106,8 +107,6 @@ function ChannelTitle({ postChannel }) {
 }
 
 function Comments({postKey}) {
-    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
-    let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
     // 컴포넌트 로드용 함수
     const [commentLode, setCommentLode] = useState(true);
@@ -129,6 +128,8 @@ function Comments({postKey}) {
     const [isAsc,setIsAsc] = useState(true);
 
     // 이모지 삽입 함수
+    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
+    let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
     const insertEmogiAtCursor = (emoji) => {
         const textarea = textareaRef.current;
         if (!textarea) return;
@@ -302,9 +303,9 @@ function CommentsList({ index, postKey, comment,setCommentLode }) {
     return (
         <>
             <div>{/* 댓글 */}
-                <div className={styles.list}>
+                <div className={styles.list} style={{marginBottom:'0px'}}>
                     <div className={styles.listNav}>
-                        <div className={styles.listName}>{comment.nickName}<div className={styles.time}>{comment.createdAt}</div></div>
+                        <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{comment.createdAt}</a></div>
                         <div>
                             <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                             {commentMoreON && <div ref={modalRef}><MoreDeleteMini /></div>} {/*신고, 삭제 모달*/}
@@ -312,40 +313,38 @@ function CommentsList({ index, postKey, comment,setCommentLode }) {
                     </div>
                     <div className={styles.listContent}>{comment.comment}</div>
                     <div className={styles.replyDiv} onClick={() => (replyInputState == 'comment' && replyInputIndex == index) ? clear() : replyOnclick('comment', index)}>
-                        <img className={styles.replyDivImg} />
-                        <div className={styles.replyDivText}>답글달기</div>
+                        <div className={styles.replyDivText} style={{marginBottom:'20px'}}><img src={comments_20px}/>답글달기</div>
                     </div>
                     {(replyInputState == 'comment' && replyInputIndex == index) &&
                         <ReplyArea postKey={postKey} commentKey={comment.commentKey} setCommentLode={setCommentLode}/>
                     }
                 </div>
             </div>
+            {/*대댓글*/}
             {comment.replys.map((reply, replyIndex) => {
                 return (
                     <>
                         <div className={styles.bigComments} key={replyIndex}>
                             <img className={styles.BcImg} src={big_comment} />
                             <div className={styles.list}>
-                                <div className={styles.listNav}>
-                                    <div className={styles.listName}>{reply.nickName}<div className={styles.time}>{reply.createdAt}</div></div>
+                                <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
+                                    <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{reply.createdAt}</a></div>
                                         <div>
                                             <img ref={moreRef} onClick={() => { !commentMoreON && setReplyMoreON(true) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                                             {commentMoreON && <div ref={modalRef}><MoreDeleteMini /></div>} {/*신고, 삭제 모달*/}
                                         </div>
                                 </div>
                                 {reply.replyNickName &&
-                                    <div>@{reply.replyNickName}</div>
-                                    }
-                                
-                                <div className={styles.listContent}>{reply.reply}</div>
+                                    <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
+                                }
+                                <a className={styles.listContent}>{reply.reply}</a>
                                 <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == replyIndex) ? clear() : replyOnclick('reply', replyIndex)}>
-                                    <img className={styles.replyDivImg} />
-                                    <div className={styles.replyDivText}>답글달기</div>
+                                    <div className={styles.replyDivText}><img src={comments_20px}/>답글달기</div>
                                 </div>
                             </div>
                         </div>
                         {(replyInputState == 'reply' && replyInputIndex == replyIndex) &&
-                            <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} />
+                            <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} clear={clear} />
                         }
                     </>
                 )
@@ -354,10 +353,32 @@ function CommentsList({ index, postKey, comment,setCommentLode }) {
     )
 }
 
-function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLode}) {
+function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLode, clear}) {
     const textareaRef = useRef(null);
-    const [EmojiOn, setEmojiOn] = useState(false);
-
+    
+    // 이모지 삽입 함수
+    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
+    let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
+    const insertEmogiAtCursor = (emoji) => {
+        const textarea = textareaRef.current;
+        if (!textarea) return;
+        const start = textarea.selectionStart;//선택된 텍스트의 시작 위치 또는 커서의 위치
+        const end = textarea.selectionEnd;//선택된 텍스트의 마지막
+        const value = textarea.value;// textarea의 현재 값을 가져옴
+        // 현재 커서 위치 기준으로 텍스트를 나누고 이모지 삽입
+        const newValue = value.slice(0, start) + emoji + value.slice(end);
+        // 텍스트를 업데이트하고 커서를 이모지 뒤에 위치시킴
+        textarea.value = newValue;
+        textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+        // 커서 위치 유지
+        textarea.focus();
+    };
+    useEffect(() => { //이모지 함수 실행
+        if (emogiAdd) {
+            insertEmogiAtCursor(emogiAdd);
+            setEmogiAdd(''); // 이모지 추가 후 초기화
+        }
+    }, [emogiAdd]);
 
     //댓글 길이 제한1
     const replysLimit = 200;
@@ -371,7 +392,6 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
     const [replyTextColor, setReplyTextColor] = useState('#BBBBBB');
 
     const replyCreate = async () => {
-
         const replyCreateDto = {
             commentKey: commentKey,
             replyreplyKey: replyKey,
@@ -379,25 +399,20 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
             reply:reply
         }
 
-
         try {
             const { data } = await axios.post(`/reply/create`, replyCreateDto)
             if (!data.success) {
                 alert("댓글 생성이 안됨 ㅅㄱ")
             }
-
         } catch (error) {
             console.error('Error creating channel:', error);
         }
-
-        setCommentLode((state)=> state? false : true)
+        setCommentLode((state)=> state? false : true);
+        clear();
     }
-
-
 
 const handleInput = (e) => {//스크롤 늘어나게
     const textarea = textareaRef.current;
-
     if (textarea) {
         // text 가 지워질때 높이를 초기화해주기위해
         textarea.style.height = 'auto';
@@ -409,14 +424,12 @@ const handleInput = (e) => {//스크롤 늘어나게
     setReplyTextColor(e.target.value.length <= replysLimit ? '#BBBBBB' : '#EC000E')
 };
 
-
-
 return (
-    <div className={styles.bigComments}>
+    <div className={`${styles.bigComments} fadein`}>
         <img className={styles.BcImg} src={big_comment} />
         <div className={styles.commentDiv}>{/* 댓글 달기 */}
             <div className={styles.replyAreaDiv}>
-                {replyNickName && <div className={styles.replyAreaDivText}>@{replyNickName}</div>}
+                {replyNickName && <a className={styles.replyAreaDivText}>@{replyNickName}</a>}
                 <textarea
                     className={styles.textarea}
                     ref={textareaRef}
@@ -426,7 +439,7 @@ return (
             </div>
             <div className={styles.commentNav}>
                 <img onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
-                {EmojiOn && <Emogi setEmogiAdd={setEmogiAdd} />}
+                {EmojiOn && <div className={styles.a}><Emogi setEmogiAdd={setEmogiAdd} /></div>}
                 <div style={{ color: replyTextColor }}>{replyLength}/{replysLimit}<button style={{ backgroundColor: replyButtonColor }} onClick={replyCreate}>등록</button></div>
             </div>
         </div>
