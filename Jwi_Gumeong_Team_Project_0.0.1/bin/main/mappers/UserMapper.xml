@@ -86,10 +86,19 @@
     </select>
     <!-- 모든 유저 정보 불러오기 -->
     <select id="getAllUser" resultType="com.jwi.work.user.dto.User">
-    	SELECT * FROM `user`
+    	SELECT userKey, email, nickName, gender, pwWrong, birthday, state, createdAt, updatedAt
+    	FROM user
    	</select>
     <!-- 닉네임 불러오기 -->
     <select id="getNickName" parameterType="int" resultType="String">
     	SELECT nickName FROM `user` WHERE userKey = #{userKey}
     </select>
+    <!-- 유저상태 활성화 업데이트문 -->
+    <update id="updateAct" parameterType="int">
+    	UPDATE `user` SET `state` = 'activate' WHERE userKey = #{userKey};
+    </update>
+    <!-- 유저상태 비활성화 업데이트문 -->
+    <update id="updateDeAct" parameterType="int">
+    	UPDATE `user` SET `state` = 'deactivate' WHERE userKey = #{userKey};
+    </update>
 </mapper>

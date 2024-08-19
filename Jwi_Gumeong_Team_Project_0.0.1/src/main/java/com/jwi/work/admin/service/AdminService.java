@@ -2,6 +2,7 @@ package com.jwi.work.admin.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,8 @@ import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.center.inquiry.entity.InquiryResponse;
 import com.jwi.work.center.inquiry.ropository.InquiryRepository;
 import com.jwi.work.center.inquiry.ropository.InquiryResponseRepository;
+import com.jwi.work.center.sanction.entity.Sanction;
+import com.jwi.work.center.sanction.repository.SanctionRepository;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.mapper.UserMapper;
 
@@ -32,6 +35,9 @@ public class AdminService {
 	
 	@Autowired
 	private InquiryResponseRepository inquiryResponseRepository; 
+	
+	@Autowired
+	private SanctionRepository sanctionRepository;
 	
 	// 데이터베이스에 직접 insert 하는거보다 여기에서 인코딩 거치고 넣는게 더 나을듯?
 	public String loginJWT(Map<String,String> data) {
@@ -61,5 +67,35 @@ public class AdminService {
     public List<InquiryResponse> selectInquiryResponse() {
     	return inquiryResponseRepository.findAll();
     }
+    
+    public List<Sanction> selectSanction(){
+    	return sanctionRepository.findAll();
+    }
 	
+    public void updateUserAct(int userKey) {
+    	List<Sanction> sanctions = sanctionRepository.findByUserKey(userKey);
+	    if (!sanctions.isEmpty()) {
+	    	userMapper.updateDeAct(userKey);
+	    	for (Sanction sanction : sanctions) {
+	            sanction.setState("deactivate");
+	            sanctionRepository.save(sanction);
+	        }
+	    } else {
+	    	System.out.println(" ㅋㅋ 없는데 왜찾음 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" + userKey);
+	    }
+    }
+    
+    public void updateUserDeAct(int userKey) {
+    	List<Sanction> sanctions = sanctionRepository.findByUserKey(userKey);
+	    if (!sanctions.isEmpty()) {
+	    	userMapper.updateAct(userKey);
+	        for (Sanction sanction : sanctions) {
+	            sanction.setState("deactivate");
+	            sanctionRepository.save(sanction);
+	        }
+	    } else {
+	        System.out.println(" ㅋㅋ 없는데 왜찾음 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" + userKey);
+	    }
+    }
+    
 }

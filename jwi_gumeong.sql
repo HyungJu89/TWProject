@@ -33,6 +33,7 @@ select * from user;
 insert into user (email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values
 ('delbabo@naver.com','1234','delbabo','남성',0,null,'deling',now(),now());
 insert into inquiryResponse (inquiryKey,adminKey,title,responseText,image,createdAt,updatedAt) values (1,1,'답변임','내용',null,Now(),Now());
+
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -123,6 +124,7 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
+
 CREATE TABLE admin (
     `adminKey`    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
     adminName    VARCHAR(30) COMMENT '어드민아이디',
@@ -204,7 +206,7 @@ CREATE TABLE `banned` (
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 INSERT INTO `banned` (`userKey`, `reason`, `reasonDate`, `date`, `state`, `createdAt`, `updatedAt`) 
-VALUES(1, '사유사유', '2024-04-04', 30, 'activate', now(), now());
+VALUES(2, '사유사유', '2024-08-19', 30, 'activate', now(), now());
 SELECT * FROM `banned`;
 
 CREATE TABLE `managerLog` (

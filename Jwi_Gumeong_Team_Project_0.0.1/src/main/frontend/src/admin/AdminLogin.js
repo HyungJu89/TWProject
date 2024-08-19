@@ -23,7 +23,7 @@ function AdminLogin() {
     let navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-
+    
     useEffect(() => {
         setModalOpen(true);
         setModalContent('관리자 로그인 페이지입니다.');
@@ -71,7 +71,7 @@ function AdminLogin() {
                     setCookie('frontCookie', "프론트쿠키",{
                         path: '/',
                         secure: true,
-                        maxAge: 3600
+                        maxAge: 1800
                     })
                     navigate('/admin');
                 }

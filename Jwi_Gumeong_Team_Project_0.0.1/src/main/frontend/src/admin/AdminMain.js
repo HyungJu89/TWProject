@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import styles from './style/AdminMain.module.css';
 import serviceLogo from '../icon/img/service-Illustration.png';
-import asking from '../icon/img/ask-ing.png';
 import reply from '../icon/img/reply-ing.png';
 import report from '../icon/img/report-ing.png';
 import btnLeft from '../icon/btn/btn-left.png';
@@ -27,7 +26,9 @@ function AdminMain() {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
     const [dropdownOpen, setDropdownOpen] = useState(false); // 문의 종류 드롭다운
+    const [dropdownOpen2, setDropdownOpen2] = useState(false); // 문의 종류 드롭다운
     const [selectedOption, setSelectedOption] = useState("선택하세요"); // 문의 종류 최초 상태
+    const [selectedOption2, setSelectedOption2] = useState("선택하세요"); // 문의 종류 최초 상태
     const [faqContent, setFaqContent] = useState(null); // 자주 묻는 질문 내용
     const [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
     const [nickName, setNickName] = useState(null);
@@ -43,14 +44,10 @@ function AdminMain() {
     const [closeButtonHovered, setCloseButtonHovered] = useState(false);
     const cookieCheck = getCookie('frontCookie');
     const [users, setUsers] = useState([]);
-    const [userState,setUserState] = useState('');
     const [moreBtnOption,setMoreBtnOption] = useState(false);
-
-    const [selected, setSelected] = useState("선택하세요");
-
-    const handleSelectChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
+    const [banned, setBanned] = useState([]);
+    const [revertBtn,setRevertBtn] = useState(false);
+    const [update,setUpdate] = useState(false);
 
     useEffect(() => {
         if(cookieCheck){
@@ -66,7 +63,37 @@ function AdminMain() {
                     console.log("API 호출 오류: " + error.message);
                 });
         }
-    }, [cookieCheck]);
+    }, [cookieCheck,update]);
+
+    useEffect(() => {
+        if(cookieCheck){
+            axios.get('/admin/findAllSanction')
+                .then(response => {
+                    if (response.data) {
+                        setBanned(response.data);
+                    } else {
+                        console.log("밴 리스트 불러오기 실패");
+                    }
+                })
+                .catch(error => {
+                    console.log("API 호출 오류: " + error.message);
+                });
+        }
+    }, [cookieCheck,update]);
+
+    const updateBannedDeAct = (userKey) =>{
+        if(cookieCheck){
+            axios.get('/admin/updateAct',{params:{userKey : userKey}})
+                .then(()=>{
+                    setModalOpen(true);
+                    setModalContent('밴 되돌리기에 성공하였습니다!');
+                    setUpdate(prev => !prev);
+                })
+                .catch(error => {
+                    console.log("API 호출 오류: " + error.message);
+                });
+        }
+    }
 
     const closeModal = () => {
         setModalOpen(false);
@@ -151,6 +178,12 @@ function AdminMain() {
         setSelectedOption(option);
         setForm({ ...form, category: option });
         setDropdownOpen(false);
+    };
+    // 문의 종류 선택
+    const optionSelect2 = (option) => {
+        setSelectedOption2(option);
+        setForm({ ...form, category: option });
+        setDropdownOpen2(false);
     };
 
     const handleInputChange = (e) => {
@@ -272,72 +305,109 @@ function AdminMain() {
                 return (
                     <div className={styles.faqContainer}>
                         {/* 이거 순번체킹 말고 key값 받아와서 체킹하는걸로 해야할듯? */}
-                        {users.map((users, idx) => (
-                            <div key={idx} className={styles[("faqItem" + users.state)]}>
-                                <div className={styles.faqHeader} onClick={() => openedFaq(idx)}>
-                                    <div className={styles.faqDetails}>
-                                        <div className={styles.faqTitle}>{users.userKey} . {users.email}</div>
-                                        <div className={styles.faqSubtitle}>{users.nickName}</div>
-                                        <div className={styles.userStateLine}>
-                                            {/* 제제 완료했을때 빨강색 */}
-                                            { users.state === "deactivate" ? <div className={styles.userStateactivate}>제재완료</div> : null}
-                                            {/* 신고 접수 된 상태 파란색 */}
-                                            {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
-                                            { users.state === "deactivate" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
-                                            {/* 자살중인 계정은 회색? */}
-                                            { users.state === "deling" ? <div className={styles.userStatedeling}>비활성화</div> : null}
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* FAQ의 번호와 인덱스가 같으면 열림 */}
-                                {faqContent === idx && (
-                                    <div>
-                                        <div className={styles.faqContent}>
-                                            {/* 신고받은거 넣으면 될듯 */}
-                                            <div className={styles.faqContentText}> 신고 내용 </div>
-                                            <div className={styles.faqContentText}>1.다메닝겐임</div>
-                                            <div className={styles.faqContentText}>2.걍 신고함</div>
-                                            <div className={styles.faqContentText}>3.바보임</div>
-                                        </div>
-                                        {
-                                        users.state !== "activate" ?
-                                            <div className={styles.userOption}>
-                                                <div className={styles.userOptionReport}>신고접수일 : 2024-08-17</div>
-                                                {/* 여기에 제재 했을경우 3항 연산자 하면될꺼같고 */}
-                                                <div className={styles.userOptionBlock}>제재일 : 2024-08-18 ~ 2024-09-01 / 14일</div>
-                                                <div className={styles.userOptionBlockBtn} onClick={()=>{setMoreBtnOption(prev => !prev)}}>제재하기▽</div>
-                                            </div>
-                                            : 
-                                            <div className={styles.userOption}>
-                                                <div className={styles.userOptionBlockBtn} onClick={()=>{setMoreBtnOption(prev => !prev)}}>제재하기▽</div>
-                                            </div>
-                                        }
-                                        {/* 재원이형꺼 돋거했으니까 나중에 정리할꺼임 */}
-                                        {
-                                        moreBtnOption &&
-                                            <div className={styles.inqFieldUser}>
-                                                <label>제재 종류</label>
-                                                <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
-                                                    {selectedOption}
+                        {users.map((users, idx) => {
+                            let banData = banned.find(ban => ban.userKey === parseInt(users.userKey));
+                                return(
+                                    <div key={idx} className={styles[("faqItem" + users.state)]}>
+                                        <div className={styles.faqHeader} onClick={() => openedFaq(idx)}>
+                                            <div className={styles.faqDetails}>
+                                                <div className={styles.faqTitle}>{users.userKey} . {users.email}</div>
+                                                <div className={styles.faqSubtitle}>{users.nickName}</div>
+                                                <div className={styles.userStateLine}>
+                                                    {/* 제제 완료했을때 빨강색 */}
+                                                    { users.state === "deactivate" && banData?.state === "activate" ? <div className={styles.userStateactivate}>제재완료</div> : null}
+                                                    {/* 신고 접수 된 상태 파란색 */}
+                                                    {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
+                                                    { users.state === "deactivate" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
+                                                    {/* 자살중인 계정은 회색? */}
+                                                    { users.state === "deling" ? <div className={styles.userStatedeling}>비활성화</div> : null}
                                                 </div>
-                                                {/* 문의 종류 선택 드롭다운 */}
-                                                {
-                                                dropdownOpen && (
-                                                    <div className={styles.dropdown}>
-                                                        {["시스템 관련", "본인인증", "오류/버그", "신고", "제안", "도용", "보안", "기타"].map((option, index) => (
-                                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
-                                                                {option}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )
-                                                }
                                             </div>
-                                        }
+                                        </div>
+                                        {/* FAQ의 번호와 인덱스가 같으면 열림 */}
+                                        {faqContent === idx && (
+                                            <div>
+                                                {
+                                                    banData?.state === "activate" ?
+                                                    <div className={styles.faqContent}>
+                                                        {/* 신고받은거 넣으면 될듯 */}
+                                                        <div className={styles.faqContentText}> 중복 제외 신고 내용 ( 3명 ) </div>
+                                                        <div className={styles.faqContentText}>1.다메닝겐임 dud5825@gmail.com 외 2명 ( 재열: 9번 )</div>
+                                                        <div className={styles.faqContentText}>2.걍 신고함 asdf@naver.com 외 4명 </div>
+                                                        {/* 네비게이트로 신고 내역쪽으로 리다이렉트 */}
+                                                        <div className={styles.faqContentText}>3.바보임 delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
+                                                    </div>
+                                                    : null
+                                                }
+
+                                                {
+                                                users.state !== "activate" && banData?.state === "activate" ?
+                                                    <div className={styles.userOption}>
+                                                        {/* 신고 테이블 조회해서 신고 수리내역 표기 */}
+                                                        <div className={styles.userOptionReport}>신고접수일 : 2024-08-17</div>
+                                                        {/* 여기에 제재 했을경우 3항 연산자 하면될꺼같고 */}
+                                                        {/* banned 테이블 조회해서 날짜 표기 */}
+                                                        <div className={styles.userOptionBlock}>제재일 : {banData?.reasonDate.substr(0,10)} ~ {banData?.endDate.substr(0,10)} / {banData?.date}일</div>
+                                                        <div className={styles.userOptionBlockBtn} onClick={()=>{setRevertBtn(prev => !prev)}}>되돌리기</div>
+                                                    </div>
+                                                    : 
+                                                    <div className={styles.userOption}>
+                                                        <div className={styles.userOptionBlockBtn} onClick={()=>{setMoreBtnOption(prev => !prev)}}>더보기▽</div>
+                                                    </div>
+                                                }
+                                                
+                                                {
+                                                moreBtnOption === true && users.state !== "deactivate" && banData?.state !== "activate" ?
+                                                    <div className={styles.inqFieldUser}>
+                                                        <label>제재 종류</label>
+                                                        <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
+                                                            {selectedOption}
+                                                        </div>
+                                                        <div onClick={() => setDropdownOpen2(!dropdownOpen2)} className={styles.inqSelect}>
+                                                            {selectedOption2}
+                                                        </div>
+                                                        {/* 문의 종류 선택 드롭다운 */}
+                                                        {
+                                                            dropdownOpen &&
+                                                                <div className={styles.dropdown}>
+                                                                    {["약관 위반", "도배", "욕설", "다메닝겐", "바보"].map((option, index) => (
+                                                                        <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
+                                                                            {option}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                        }
+                                                        {
+                                                            dropdownOpen2 &&
+                                                                <div className={styles.dropdown2}>
+                                                                    {["1", "7", "14", "30", "60", "90", "365", "영구"].map((option, index) => (
+                                                                        <div key={index} className={styles.dropdownItem} onClick={() => optionSelect2(option)}>
+                                                                            {option} 일 제재
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                        }
+                                                        <div className={styles.bannedBtn}>죽어</div>
+                                                    </div>
+                                                    :null
+                                                }
+                                                
+                                                {
+                                                    revertBtn === true && users.state !== "activate" && banData?.state === "activate" ?
+                                                    <div className={styles.revertOption}>
+                                                        진짜로 밴 취소할꺼에요?
+                                                        <div className={styles.revertSelect}>
+                                                            <div className={styles.revertSelectYes} onClick={()=>{updateBannedDeAct(users.userKey)}}>YES</div>
+                                                            <div className={styles.revertSelectNo} onClick={()=>{setRevertBtn(prev => !prev)}}>NO</div>
+                                                        </div>
+                                                    </div>
+                                                    :null
+                                                }
+
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
-                        ))}
+                            )})}
                     </div>
                 );
             // 문의하기
@@ -544,6 +614,46 @@ function AdminMain() {
                         )}
                     </div>
                 );
+            case 4:
+                return (
+                    <div className={styles.sanctionContainer}>
+                        <div className={styles.sanctionList}>
+                            {/* 내역이 없을 시 */}
+                            {sanctions.length === 0 ? (
+                                <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
+                            ) : (
+                                // 제재 내역이 있을 시
+                                sanctions.map((sanction, index) => (
+                                    <div key={index} className={styles.sanctionItem}>
+                                        <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
+                                        <div className={styles.sanctionDetails}>
+                                            <div className={styles.sanctionTitle}>{nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
+                                            <div className={styles.sanctionContent}>
+                                                <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
+                                                <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>
+                                            </div>
+                                        </div>
+                                        {index < sanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+                        {/* 페이징 */}
+                        {totalPages > 1 && (
+                            <div className={styles.pagination}>
+                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
+                                    <img src={btnLeft} alt="이전 페이지" />
+                                </button>
+                                {/* 현재 페이지 / 전체 페이지 */}
+                                <div className={styles.pageInfo}>{currentPage} / {totalPages}</div>
+                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className={styles.pageNextButton}>
+                                    <img src={btnRight} alt="다음 페이지" />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                );
             default:
                 return null;
         }
@@ -579,6 +689,11 @@ function AdminMain() {
                             onClick={() => setTab(3)}>
                             신고 내역
                         </div>
+                        <div className={`${styles.navItems} ${tab === 4 ? styles.active : ''}`} 
+                            onClick={() => setTab(4)}>
+                            채널 관리
+                        </div>
+                        {/* 여기에다가 정렬기능 만들면 좋을듯? */}
                     </div>
                 </div>
                 <div className={styles.serviceTabContent}>

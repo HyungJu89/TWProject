@@ -76,4 +76,10 @@ public interface UserMapper{
 		// 유저정보 전부 가져오기
 		public List<User> getAllUser();
 		
+		// 유저 활성화로 변경
+		public void updateAct(int userKey);
+		
+		// 유저 비활성화로 변겅
+		public void updateDeAct(int userKey);
+		
 }

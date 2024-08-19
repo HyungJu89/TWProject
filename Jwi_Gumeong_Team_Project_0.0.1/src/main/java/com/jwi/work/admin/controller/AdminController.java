@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.admin.service.AdminService;
 import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.center.inquiry.entity.InquiryResponse;
+import com.jwi.work.center.sanction.entity.Sanction;
 import com.jwi.work.user.dto.User;
 
 import jakarta.servlet.http.Cookie;
@@ -30,7 +32,7 @@ public class AdminController {
 	public String adminLogin(@RequestBody Map<String,String> data , HttpServletResponse response){
 		// 쿠키설정
 		var cookie = new Cookie("jwt" , adminService.loginJWT(data));
-		cookie.setMaxAge(3600);
+		cookie.setMaxAge(1800);
 		// 쿠키를 외부로 조작하는걸 힘들게 만들어줌
 		cookie.setHttpOnly(true);
 		cookie.setPath("/");
@@ -61,9 +63,24 @@ public class AdminController {
 		return adminService.selectInquiry();
 	}
 	
-	@GetMapping("/findInquiryResponseAll")
+	@GetMapping("/findInquiryResponseAll") 
 	public List<InquiryResponse> findInquiryResponse(){
 		return adminService.selectInquiryResponse();
+	}
+	
+	@GetMapping("/findAllSanction")
+	public List<Sanction> findAllSanction(){
+		return adminService.selectSanction();
+	}
+	// 밴 하기
+	@GetMapping("/updateDeAct")
+	public void updateAct(@RequestParam("userKey") int userKey) {
+		adminService.updateUserAct(userKey);
+	}
+	// 밴 되돌리기
+	@GetMapping("/updateAct")
+	public void updateDeAct(@RequestParam("userKey") int userKey) {
+		adminService.updateUserDeAct(userKey);
 	}
 	
 }
