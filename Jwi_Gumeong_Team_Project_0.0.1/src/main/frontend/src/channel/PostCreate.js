@@ -90,7 +90,7 @@ function PostCreact({channelKey}) {
         const formData = new FormData();
         formData.append('content',content);
         // 로그인 기능 완성되면 유저 키값이 들어가도록 변경
-        formData.append('sessionId', JSON.parse(sessionId));
+        formData.append('sessionId', sessionId);
         formData.append('channelKey',channelKey);
         selectedImage.forEach(({file}) => {
             formData.append('files',file);

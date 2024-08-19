@@ -2,7 +2,7 @@
 // ^워링 업애주는 친구
 
 import axios from 'axios';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
@@ -18,6 +18,7 @@ import big_comment from '../icon/20px/bigcomment.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
 import Emogi from '../Emogi/Emogi.js';
+import lodash from 'lodash';
 
 
 function PublicBoard({ postInfo }) {

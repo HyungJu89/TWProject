@@ -41,8 +41,13 @@ public class ChannelController {
 	}
 	
 	@GetMapping("/get")
-	public AnswerDto<ChannelDto> channelGet(@RequestParam("sessionId") String sessionId,@RequestParam("channelId") String channelId){
-
+	public AnswerDto<ChannelDto> channelGet(@RequestParam(value = "sessionId", defaultValue = "") String sessionId,@RequestParam("channelId") String channelId){
+ 
+		   // sessionId가 빈 문자열이면 null로 변환
+	    if (sessionId.isEmpty()) {
+	        sessionId = null;
+	    }
+		
 		return channelService.channelGet(sessionId,channelId);
 	}
 	

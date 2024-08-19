@@ -18,10 +18,10 @@ export const channelGet = async (channelId) => {
     try{
         let sessionIdJson = sessionStorage.getItem('sessionId');
         let sessionId = null
+        
         if(sessionIdJson){
             sessionId = JSON.parse(sessionIdJson).sessionId
-        } 
-
+        }
         //get 요청을 할때 params 로 데이터를 실어서 보낼수 있다.
         const { data } = await axios.get(`/channel/get`,{
             params: { 

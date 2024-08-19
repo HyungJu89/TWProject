@@ -16,8 +16,8 @@ useEffect(()=>{
 
     return (
         <div>
-            {bookmarkOn ? <BookMarkNone setBookmarkImg={setBookmarkImg} bookmarkImg={bookmarkImg} setBookMarkOn={setBookMarkOn}/> 
-                                    : <BookMarkTrue setBookMarkOn={setBookMarkOn}/>}
+            {bookmarkOn ? <BookMarkTrue setBookMarkOn={setBookMarkOn}/> 
+                                    : <BookMarkNone setBookmarkImg={setBookmarkImg} bookmarkImg={bookmarkImg} setBookMarkOn={setBookMarkOn}/> }
         </div>
     )
 }
