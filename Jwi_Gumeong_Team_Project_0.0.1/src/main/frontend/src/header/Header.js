@@ -310,28 +310,22 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                 <Tooltip message={'댓글&대댓글'}>
                     <div className={styles.imgContainer} 
                     onClick={() => handleButtonClick(1)}>
-                        <img
-                            src={activeButton === 1 ? n_comments_activation : n_comments_deactivation}
-                            alt="댓글"
-                        />
+                        <img src={activeButton === 1 ? n_comments_activation : n_comments_deactivation}
+                            alt="댓글"/>
                     </div>
                 </Tooltip>
                 <Tooltip message={'좋아요'}>
                     <div className={styles.imgContainer} 
                     onClick={() => handleButtonClick(2)}>
-                        <img
-                            src={activeButton === 2 ? n_heart_activation : n_heart_deactivation}
-                            alt="좋아요"
-                        />
+                        <img src={activeButton === 2 ? n_heart_activation : n_heart_deactivation}
+                            alt="좋아요"/>
                     </div>
                 </Tooltip>
                 <Tooltip message={'신고&고객센터'}>
                     <div className={styles.imgContainer}
                     onClick={() => handleButtonClick(3)}>
-                        <img
-                            src={activeButton === 3 ? n_service_activation : n_service_deactivation}
-                            alt="신고"
-                        />
+                        <img src={activeButton === 3 ? n_service_activation : n_service_deactivation}
+                            alt="신고"/>
                     </div>
                 </Tooltip>
             </div>
