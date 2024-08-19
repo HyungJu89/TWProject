@@ -162,7 +162,6 @@
 .precautions {
     /*채널 개설하기전 주의사항 문구*/
     width: 666px;
-    height: 88px;
     padding: 20px;
     background-color: #F3F3F3;
     border: 1px solid var(--E5E5E5, #E5E5E5);
@@ -197,7 +196,6 @@
     font-weight: 500;
     text-align: left;
     height: 20px;
-    width: 168px;
 }
 
 .bottomCheckBox {
