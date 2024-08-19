@@ -21,7 +21,11 @@ function Main({onLogout,isLoggedIn}) {
     const [hotBoardList, setHotBoardList] = useState([]);
 
     const searchRecommended = async () => {
-        const sessionId = sessionStorage.getItem('sessionId');
+        const sessionIdJson = sessionStorage.getItem('sessionId');
+        let sessionId = null
+        if(sessionIdJson){
+        sessionId = JSON.parse(sessionIdJson).sessionId
+    }
         try {
             const { data } = await axios.get(`/search/recommended` , {
                 params: {

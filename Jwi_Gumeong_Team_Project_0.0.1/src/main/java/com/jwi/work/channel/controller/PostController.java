@@ -27,7 +27,7 @@ public class PostController {
 	
 	@GetMapping("/select")
 	public SearchDto<List<PostDto>> postSelect(@RequestParam(value = "sessionId", defaultValue = "") String sessionId,@RequestParam("channelKey") int channelKey,@RequestParam("page")int page){
-	    if (sessionId.isEmpty()) {
+		if (sessionId.isEmpty()) {
 	        sessionId = null;
 	    }
 		return postService.postSelect(sessionId,channelKey,page);

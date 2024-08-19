@@ -24,7 +24,7 @@
             		SELECT  
             			1 
             		FROM 
-            			`like` l
+            			`like` AS l
             		JOIN
             			userConnection uc ON l.userKey = uc.userKey
             		WHERE 
@@ -32,7 +32,7 @@
             			AND uc.sessionId = #{sessionId}
             	) THEN TRUE
             	ELSE FALSE
-        	END AS isLike
+        	END AS `like`
 		FROM 
 			post 
 		LEFT JOIN
@@ -115,7 +115,7 @@
 			`like`(userKey,postKey)
 <!-- SELECT 결과값으로 INSERT를 한다. 대신 데이터형식이나 검색한 칼럼의 수가 똑같아야함  -->
 		SELECT 
-			UC.userKey, #{postKey}`
+			UC.userKey, #{postKey}
 		FROM 
 			userConnection AS UC
 		WHERE 
@@ -134,8 +134,6 @@
 			AND 
 				userKey = UC.userKey
 		)
-			 
-			
 	</insert>
 
 	<delete id="likeDown" parameterType="com.jwi.work.channel.dto.bodyDto.PostLikeDto">

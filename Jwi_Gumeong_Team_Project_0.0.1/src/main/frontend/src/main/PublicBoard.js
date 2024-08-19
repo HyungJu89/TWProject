@@ -22,7 +22,12 @@ import lodash from 'lodash';
 
 
 function PublicBoard({ postInfo }) {
-    let [heart, setHeart] = useState(true); //좋아요 누름 확인
+    const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
+    const [likeCount, setLikeCount] = useState(postInfo.likeCount);
+    const [likeMounted,setLikeMounted] = useState(false);
+    // 디바운스요 변수
+    
+    const [debouncedHeart, setDebouncedHeart] = useState(heart);
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     //이미지
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
@@ -34,20 +39,59 @@ function PublicBoard({ postInfo }) {
     const [commentCount,setCommentCount] = useState(0);
 
     useEffect(() => {
-        setHeart(postInfo.isLike)
+        
         if (postInfo.image) {
             setImgBeing(JSON.parse(postInfo.image));
         }
         setCommentCount(postInfo.commentCount)
-    }, [])
+    }, [postInfo])
+
+    // 디바운스 함수 생성
+    const heartDebounce = useCallback(
+        lodash.debounce((term) => {
+            setDebouncedHeart(term);
+        },500) // 0.5초 늘리고싶으면 시간 늘려도 됨
+    ,[]
+    );
 
     useEffect(()=>{
-        heart
-    })
-    
-    const likeOnClick = () => {
-        heart ? setHeart(false) : setHeart(true)
+        if(likeMounted){
+        heartDebounce(heart);
     }
+    },[heart,heartDebounce,likeMounted])
+
+const updateLike = async() => {
+    let sessionIdJson = sessionStorage.getItem('sessionId');
+    if(!sessionIdJson){
+        return alert('로그인되어있지않습니다.')
+    }
+    let sessionId = JSON.parse(sessionIdJson).sessionId
+
+    const like = {
+        like : heart,
+        sessionId : sessionId,
+        postKey: postInfo.postKey
+    };
+    try {
+        const data = await axios.post(`/post/like`, like)
+
+    } catch (error) {
+        console.error('Error creating channel:', error);
+    }
+}
+
+    useEffect(()=>{
+        if(likeMounted){
+        updateLike()
+        }
+},[debouncedHeart,likeMounted])
+
+const likeOnClick = (like)=>{
+    setLikeMounted(true);
+    setLikeCount((state) => like ? state-1 : state+1 )
+    setHeart(!like)
+}
+
     //모달함수
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
     const modalRef = useRef(null);
@@ -93,9 +137,9 @@ function PublicBoard({ postInfo }) {
                 <div className={styles.commentsDiv}>
                     {/*댓글창*/}    <div onClick={() => { commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
                         <img src={comments} /><div className={styles.comments}>{commentCount}</div></div>
-                    {/*좋아요*/}    <div onClick={likeOnClick}>
+                    {/*좋아요*/}    <div onClick={()=>likeOnClick(heart)}>
                         {heart ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
-                        <div className={styles.comments}>{postInfo.likeCount + (heart? 1:0)}</div>
+                        <div className={styles.comments}>{likeCount}</div>
                     </div>
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
