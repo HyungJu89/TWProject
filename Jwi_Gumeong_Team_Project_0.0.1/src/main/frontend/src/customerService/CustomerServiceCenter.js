@@ -188,7 +188,7 @@ function CustomerServiceCenter() {
             .catch(error => {
                 console.log("API 호출 오류: " + error.message);
             });
-    }, []);
+    }, []); 
     let [dropdownOpen, setDropdownOpen] = useState(false);
     let [selectedOption, setSelectedOption] = useState("선택하세요");
     let [faqContent, setFaqContent] = useState(null);
