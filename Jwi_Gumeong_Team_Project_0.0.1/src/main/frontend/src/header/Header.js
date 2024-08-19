@@ -11,7 +11,7 @@ import {Link, useNavigate, useLocation} from 'react-router-dom';
 //이미지 import
 import Logo from '../icon/logo/logo.png'; //로고 이미지
 import searching from '../icon/24px/searching.png';
-import asking from '../icon/img/ask-ing.png';
+import formulation from '../icon/img/formulation-ing.png';
 import reply from '../icon/img/reply-ing.png';
 import report from '../icon/img/report-ing.png';
 import deletion from '../icon/14px/deletion.png';
@@ -170,14 +170,17 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
         setActiveButton(buttonNumber);
     };
 
-    /* 내용 배열로 변경 */
+    // formulation = 내가 신고한거 제재
+    // report = 문의 답변 온 거
+    // reply = 내가 제재 먹은 거
+    // 댓글, 대댓글, 좋아요는 아이콘 가져오기
     const renderContent = () => {
         let notifications = [];
         switch (activeButton) {
             case 1:
                 notifications = [
                     {
-                        icon: asking,
+                        icon: formulation,
                         content: "공무원이 축하해야 할까?",
                         id: "충주시님이 댓글을 달았어요."
                     },
@@ -245,7 +248,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
             case 2:
                 notifications = [
                     {
-                        icon: asking,
+                        icon: formulation,
                         content: "성우가 다른 성우 ARS를 들었을 때 찐반응",
                         id: "무야호님이 댓글을 달았어요."
                     }

@@ -382,7 +382,7 @@ function CustomerServiceCenter() {
                                     month: 'long', 
                                     day: 'numeric' 
                                 }).format(new Date(response.createdAt)) : '-'; // 날짜가 없으면 - 로 표시
-
+                                
                                 return (
                                     <div key={idx} className={styles.inquiryItem}>
                                         {/* 클릭한 내역 내용 오픈 */}
