@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.CommentCreateDto;
 import com.jwi.work.channel.dto.bodyDto.CommentDeleteDto;
 import com.jwi.work.channel.dto.commentDto.CommentListDto;
 import com.jwi.work.channel.mapper.CommentMapper;
+import com.jwi.work.util.dto.AnswerDto;
 
 @Service
 public class CommentService {

@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.CommentCreateDto;
 import com.jwi.work.channel.dto.bodyDto.CommentDeleteDto;
 import com.jwi.work.channel.dto.commentDto.CommentListDto;
 import com.jwi.work.channel.service.CommentService;
+import com.jwi.work.util.dto.AnswerDto;
 
 @RestController
 @RequestMapping("/comment/*")

@@ -24,10 +24,8 @@ import lodash from 'lodash';
 function PublicBoard({ postInfo }) {
     const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(postInfo.likeCount);
-    const [likeMounted,setLikeMounted] = useState(false);
-    // 디바운스요 변수
     
-    const [debouncedHeart, setDebouncedHeart] = useState(heart);
+    // 디바운스요 변수
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     //이미지
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
@@ -39,7 +37,6 @@ function PublicBoard({ postInfo }) {
     const [commentCount,setCommentCount] = useState(0);
 
     useEffect(() => {
-        
         if (postInfo.image) {
             setImgBeing(JSON.parse(postInfo.image));
         }
@@ -48,27 +45,22 @@ function PublicBoard({ postInfo }) {
 
     // 디바운스 함수 생성
     const heartDebounce = useCallback(
-        lodash.debounce((term) => {
-            setDebouncedHeart(term);
+        lodash.debounce(async(newHeart) => {
+            await updateLike(newHeart);
         },500) // 0.5초 늘리고싶으면 시간 늘려도 됨
     ,[]
     );
 
-    useEffect(()=>{
-        if(likeMounted){
-        heartDebounce(heart);
-    }
-    },[heart,heartDebounce,likeMounted])
-
-const updateLike = async() => {
+const updateLike = async(newHeart) => {
     let sessionIdJson = sessionStorage.getItem('sessionId');
     if(!sessionIdJson){
+        // 이건 버튼하나!~
         return alert('로그인되어있지않습니다.')
     }
     let sessionId = JSON.parse(sessionIdJson).sessionId
 
     const like = {
-        like : heart,
+        like : newHeart,
         sessionId : sessionId,
         postKey: postInfo.postKey
     };
@@ -80,16 +72,11 @@ const updateLike = async() => {
     }
 }
 
-    useEffect(()=>{
-        if(likeMounted){
-        updateLike()
-        }
-},[debouncedHeart,likeMounted])
-
-const likeOnClick = (like)=>{
-    setLikeMounted(true);
-    setLikeCount((state) => like ? state-1 : state+1 )
-    setHeart(!like)
+const likeOnClick = ()=>{
+    const newHeart = !heart;
+    setLikeCount((state) => newHeart ? state+1 : state-1 )
+    setHeart(newHeart)
+    heartDebounce(newHeart);
 }
 
     //모달함수

@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import com.jwi.work.center.sanction.dto.SanctionDTO;
 import com.jwi.work.center.sanction.entity.Sanction;
 import com.jwi.work.center.sanction.repository.SanctionRepository;
-import com.jwi.work.channel.dto.PagingDto;
 import com.jwi.work.user.entity.UserEntity;
 import com.jwi.work.user.repository.UserRepository;
 import com.jwi.work.util.PagingUtil;
+import com.jwi.work.util.dto.PagingDto;
 
 import lombok.AllArgsConstructor;
 

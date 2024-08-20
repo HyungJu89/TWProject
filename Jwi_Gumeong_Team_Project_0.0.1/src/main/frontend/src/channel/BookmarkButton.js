@@ -39,7 +39,6 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
             sessionId: sessionId,
             channelKey: channelInfo.channelKey
         };
-        console.log(favorite)
         try {
             // 상태를 업데이트하기 위한 POST 요청 전송
             const data = await axios.post(`/channel/favorite`, favorite);

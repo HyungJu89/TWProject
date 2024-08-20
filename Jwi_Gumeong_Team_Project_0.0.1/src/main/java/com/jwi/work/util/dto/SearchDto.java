@@ -1,4 +1,4 @@
-package com.jwi.work.channel.dto;
+package com.jwi.work.util.dto;
 
 import lombok.Data;
 

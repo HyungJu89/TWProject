@@ -13,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jwi.work.channel.dto.AnswerDto;
-import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
 import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
@@ -23,6 +21,8 @@ import com.jwi.work.channel.dto.sqlDto.PostInfoDto;
 import com.jwi.work.channel.mapper.PostMapper;
 import com.jwi.work.util.FileManagerUtil;
 import com.jwi.work.util.PagingUtil;
+import com.jwi.work.util.dto.AnswerDto;
+import com.jwi.work.util.dto.SearchDto;
 
 @Service
 public class PostService {

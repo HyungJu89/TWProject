@@ -3,10 +3,10 @@ package com.jwi.work.channel.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.ReplyCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ReplyDeleteDto;
 import com.jwi.work.channel.mapper.ReplyMapper;
+import com.jwi.work.util.dto.AnswerDto;
 
 @Service
 public class ReplyService {
