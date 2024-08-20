@@ -198,7 +198,7 @@ public class PostService {
 	
 	
 	public void postLike(PostLikeDto likeDto) {
-		
+
 		if(likeDto.isLike()) {
 			postMapper.likeUp(likeDto);
 		} else {

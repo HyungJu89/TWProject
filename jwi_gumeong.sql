@@ -3,6 +3,10 @@
 ALTER TABLE `alarm` DROP `title`;
 ALTER TABLE `alarm` DROP `content`;
 
+-- 2024-08-15 [임재열] V 0.1.12
+-- 수정내용 : admin 테이블 adminName 칼럼에 유니크가 추가되어있지않아 동일한 adminName 의 행이 만들어짐
+ALTER TABLE `admin` ADD CONSTRAINT `uniqueAdminName` UNIQUE (`adminName`);
+
 -- 2024-08-15 [조영민] V 0.1.10 
 -- 수정내용 : ADMIN TABLE 컬럼명 수정 id => adminName / pw => adminPassWord 헤싱된 insert문 추가
 -- 패스워드 인코더로 insert하는것이 불가능하기 때문에 직접 insert하는걸로 변경했음
@@ -34,7 +38,6 @@ alter table `user` add `pwWrong` int default 0;
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-select * from comment;
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -66,8 +69,6 @@ CREATE TABLE `channel` (
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-DROP TABLE `channel`;
-select * from `like`;
 CREATE TABLE `post` (
 	`postKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -180,7 +181,6 @@ CREATE TABLE `inquiryResponse` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (`inquiryKey`) REFERENCES `inquiry`(`inquiryKey`) ON DELETE CASCADE
 );
-
 CREATE TABLE `reply` (
 	`replyKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`commentKey`	INT	NOT NULL	COMMENT '댓글 키',
