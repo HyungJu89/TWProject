@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
@@ -32,6 +33,13 @@ public class Alarm {
     private LocalDateTime createdAt;  
     @Column(name = "updatedAt", nullable = false)
     private LocalDateTime updatedAt;
+    
+    @Transient
+    private String content;
+    @Transient
+    private String channelImageUrl;
+    @Transient
+    private String nickname;
     
     @PrePersist
     protected void onCreate() {

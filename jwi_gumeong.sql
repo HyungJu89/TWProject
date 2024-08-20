@@ -157,6 +157,7 @@ CREATE TABLE `alarm` (
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
+
 CREATE TABLE `inquiry` (
 	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 키',
 	`userKey`	INT	NOT NULL	COMMENT '유저 키',
