@@ -14,7 +14,7 @@ public interface ChannelMapper {
 	
 	public void channelCreate(ChannelCreateDto channelCreate);
 	
-	public ChannelDto channelGet(@Param("channelId")String channelId);
+	public ChannelDto channelGet(@Param("sessionId")String sessionId,@Param("channelId")String channelId);
 	
     // 시간 범위 내에서 데이터 가져오기
     List<ChannelDto> HotBoardGet(

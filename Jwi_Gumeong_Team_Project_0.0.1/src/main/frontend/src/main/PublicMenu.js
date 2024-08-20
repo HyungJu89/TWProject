@@ -49,7 +49,7 @@ function PublicMenu({ isLoggedIn, onLogout }) {
                         {randomBoard && randomBoard.success &&
                         <>
                             {randomBoard.info.map((item, i)=>
-                            <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel}>
+                            <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
                                 <img src={item.imageUrl} />
                                 {item.name}
                             </div>

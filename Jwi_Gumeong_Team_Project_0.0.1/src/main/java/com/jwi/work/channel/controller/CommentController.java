@@ -1,7 +1,5 @@
 package com.jwi.work.channel.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.CommentCreateDto;
 import com.jwi.work.channel.dto.bodyDto.CommentDeleteDto;
-import com.jwi.work.channel.dto.commentDto.CommentDto;
+import com.jwi.work.channel.dto.commentDto.CommentListDto;
 import com.jwi.work.channel.service.CommentService;
 
 @RestController
@@ -24,7 +22,7 @@ public class CommentController {
 	private CommentService commentService;
 	
 	@GetMapping("/select")
-	public AnswerDto<List<CommentDto>> commentSelect(
+	public AnswerDto<CommentListDto> commentSelect(
 			@RequestParam(value = "postKey", defaultValue = "0") int postKey,
 			@RequestParam(value = "isAsc", defaultValue = "false")boolean isAsc
 			){

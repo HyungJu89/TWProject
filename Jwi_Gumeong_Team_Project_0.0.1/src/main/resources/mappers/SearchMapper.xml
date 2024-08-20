@@ -83,7 +83,7 @@
 			post.createdAt AS P_createdAt,
 			post.updatedAt AS P_updatedAt,
 						<!-- if null 은 오류 방지를 위해 null일때 0을 대신출력 -->
-			IFNULL(commentSummary.commentCount, 0) AS  P_commentCount,
+			IFNULL(commentSummary.totalCommentCount, 0) AS  P_commentCount,
 			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
 			user.nickName AS P_nickName,
 			
@@ -134,12 +134,14 @@
 			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
 			<!-- 서브 쿼리로 그룹화 시킨 값중 post.postKey 와 동일한 postKey를 가진 행을 결과에 추가해준다 -->
    	     	(SELECT 
-            	comment.postKey, 
-            	COUNT(DISTINCT comment.postKey) AS commentCount 
-         	FROM 
-            	comment
-         	GROUP BY 
-            	comment.postKey
+        		comment.postKey, 
+        		COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0) AS totalCommentCount
+     		FROM 
+        		comment
+     		LEFT JOIN 
+        		reply ON comment.commentKey = reply.commentKey
+     		GROUP BY 
+        		comment.postKey
         ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
 			<!-- 검색한 단어를 조건에 추가 + post가 common 인 상태만 출력 -->
@@ -167,7 +169,7 @@
 			post.createdAt AS P_createdAt,
 			post.updatedAt AS P_updatedAt,
 			
-			IFNULL(commentSummary.commentCount, 0) AS  P_commentCount,
+			IFNULL(commentSummary.totalCommentCount, 0) AS  P_commentCount,
 			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
 			user.nickName AS P_nickName,
 			
@@ -219,12 +221,14 @@
 			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
 			<!-- 서브 쿼리로 그룹화 시킨 값중  같은 postKey를 가진 행을 결과에 추가해준다 -->
         	(SELECT 
-            	comment.postKey, 
-            	COUNT(comment.commentKey) AS commentCount 
-         	FROM 
-            	comment
-         	GROUP BY 
-            	comment.postKey
+        		comment.postKey, 
+        		COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0) AS totalCommentCount
+     		FROM 
+        		comment
+     		LEFT JOIN 
+        		reply ON comment.commentKey = reply.commentKey
+     		GROUP BY 
+        		comment.postKey
         ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
 		<!-- state 가 common 인 게시글만 출력 -->
@@ -267,7 +271,7 @@
 			post.createdAt AS P_createdAt,
 			post.updatedAt AS P_updatedAt,
 			
-			IFNULL(commentSummary.commentCount, 0) AS  P_commentCount,
+			IFNULL(commentSummary.totalCommentCount, 0) AS  P_commentCount,
 			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
 			user.nickName AS P_nickName,
 			
@@ -325,12 +329,14 @@
 			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
 			<!-- 서브 쿼리로 그룹화 시킨 값중 같은 postKey를 가진 행을 결과에 추가해준다  -->
         	(SELECT 
-            	comment.postKey, 
-            	COUNT(comment.commentKey) AS commentCount 
-         	FROM 
-            	comment
-         	GROUP BY 
-            	comment.postKey
+        		comment.postKey, 
+        		COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0) AS totalCommentCount
+     		FROM 
+        		comment
+     		LEFT JOIN 
+        		reply ON comment.commentKey = reply.commentKey
+     		GROUP BY 
+        		comment.postKey
         ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
 			post.state = 'common'
@@ -365,7 +371,7 @@
 			post.createdAt AS P_createdAt,
 			post.updatedAt AS P_updatedAt,
 			
-			IFNULL(commentSummary.commentCount, 0) AS  P_commentCount,
+			IFNULL(commentSummary.totalCommentCount, 0) AS  P_commentCount,
 			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
 			user.nickName AS P_nickName,
 			
@@ -415,12 +421,14 @@
 			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
 			<!-- 서브 쿼리로 그룹화 시킨 값중 같은 postKey를 가진 행을 결과에 추가해준다  -->
         	(SELECT 
-            	comment.postKey, 
-            	COUNT(comment.commentKey) AS commentCount 
-         	FROM 
-            	comment
-         	GROUP BY 
-            	comment.postKey
+        		comment.postKey, 
+        		COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0) AS totalCommentCount
+     		FROM 
+        		comment
+     		LEFT JOIN 
+        		reply ON comment.commentKey = reply.commentKey
+     		GROUP BY 
+        		comment.postKey
         ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
 			post.state = 'common'

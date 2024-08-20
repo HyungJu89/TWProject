@@ -2,7 +2,7 @@
 // ^워링 업애주는 친구
 
 import axios from 'axios';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
@@ -19,6 +19,7 @@ import big_comment from '../icon/20px/bigcomment.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
 import Emogi from '../Emogi/Emogi.js';
+import lodash from 'lodash';
 
 
 function PublicBoard({ postInfo }) {
@@ -31,13 +32,23 @@ function PublicBoard({ postInfo }) {
     let state = useSelector((state) => { return state });
     let disPatch = useDispatch();
 
+    const [commentCount,setCommentCount] = useState(0);
+
     useEffect(() => {
         setHeart(postInfo.isLike)
         if (postInfo.image) {
             setImgBeing(JSON.parse(postInfo.image));
         }
+        setCommentCount(postInfo.commentCount)
     }, [])
 
+    useEffect(()=>{
+        heart
+    })
+    
+    const likeOnClick = () => {
+        heart ? setHeart(false) : setHeart(true)
+    }
     //모달함수
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
     const modalRef = useRef(null);
@@ -82,15 +93,15 @@ function PublicBoard({ postInfo }) {
             <div className={styles.widthNav} style={{ marginBottom: '0px' }}>{/* 하단 댓글,좋아요,공유 */}
                 <div className={styles.commentsDiv}>
                     {/*댓글창*/}    <div onClick={() => { commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
-                        <img src={comments} /><div className={styles.comments}>{postInfo.commentCount}</div></div>
-                    {/*좋아요*/}    <div onClick={() => { heart == false ? setHeart(true) : setHeart(false) }}>
+                        <img src={comments} /><div className={styles.comments}>{commentCount}</div></div>
+                    {/*좋아요*/}    <div onClick={likeOnClick}>
                         {heart ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
-                        <div className={styles.comments}>{postInfo.likeCount}</div>
+                        <div className={styles.comments}>{postInfo.likeCount + (heart? 1:0)}</div>
                     </div>
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
-            {commentsON && <Comments postKey={postInfo.postKey} />}
+            {commentsON && <Comments postKey={postInfo.postKey} setCommentCount = {setCommentCount}/>}
         </div>
     )
 }
@@ -106,7 +117,7 @@ function ChannelTitle({ postChannel }) {
     )
 }
 
-function Comments({postKey}) {
+function Comments({ postKey ,setCommentCount}) {
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
     // 컴포넌트 로드용 함수
     const [commentLode, setCommentLode] = useState(true);
@@ -189,8 +200,13 @@ function Comments({postKey}) {
 
 
         // 추가로 로직필요하면 여기에
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if(!sessionIdJson){
+            return alert('로그인되어있지않습니다.')
+        }
+        let sessionId = JSON.parse(sessionIdJson).sessionId
         const commentCreate = {
-            userKey: '1',
+            sessionId : sessionId,
             postKey: postKey,
             comment: comment
         };
@@ -216,6 +232,7 @@ function Comments({postKey}) {
                 }
             });
             setComments(data);
+            setCommentCount(data.info.commentCount);
         } catch (error) {
             console.error('Channel API Error:', error);
             throw new Error('Failed to fetch channel data');
@@ -252,15 +269,17 @@ function Comments({postKey}) {
             </div>
             {comments.success &&
                 <>
-                    {comments.info.map((comment, index) => {
+                    {comments.info.comment.map((comment, index) => {
                         return (
+                            <div key={index}>
                             <CommentsList
-                                key={index}
                                 index={index}
                                 postKey={postKey}
                                 comment={comment}
                                 setCommentLode = {setCommentLode}
+                                setCommentCount = {setCommentCount}
                             />
+                            </div>
                         );
                     })}
                 </>
@@ -268,7 +287,7 @@ function Comments({postKey}) {
         </div>
     )
 }
-function CommentsList({ index, postKey, comment,setCommentLode }) {
+function CommentsList({ index, postKey, comment,setCommentLode,setCommentCount }) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     const modalRef = useRef(null);
     const moreRef = useRef(null);
@@ -392,10 +411,16 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
     const [replyTextColor, setReplyTextColor] = useState('#BBBBBB');
 
     const replyCreate = async () => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if(!sessionIdJson){
+            return alert('로그인되어있지않습니다.')
+        }
+
+        let sessionId = JSON.parse(sessionIdJson).sessionId
         const replyCreateDto = {
             commentKey: commentKey,
             replyreplyKey: replyKey,
-            userKey: '1',
+            sessionId: sessionId,
             reply:reply
         }
 

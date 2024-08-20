@@ -7,7 +7,7 @@ public class ReplyCreateDto {
 
 	private int commentKey; 
 	private int replyreplyKey;
-	private int userKey;
+	private String sessionId;
 	private String reply;
 	
 }

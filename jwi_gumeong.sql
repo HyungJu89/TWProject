@@ -1,12 +1,7 @@
--- 2024-08-15 [임재열] V 0.1.12
--- 수정내용 : admin 테이블 adminName 칼럼에 유니크가 추가되어있지않아 동일한 adminName 의 행이 만들어짐
-ALTER TABLE `admin` ADD CONSTRAINT `uniqueAdminName` UNIQUE (`adminName`);
-
--- 2024-08-15 [임재열] V 0.1.11
--- 수정내용 : 복합 유니크 제약 조건 추가 like 테이블, favorites테이블
--- 추가사유 : 좋아요,즐겨찾기 중복입력 방지
-ALTER TABLE `favorites`ADD CONSTRAINT `uniqueUserChannel` UNIQUE (`userKey`, `channelKey`);
-ALTER TABLE `like`ADD CONSTRAINT `uniqueUserPost` UNIQUE (`userKey`, `postKey`);
+-- 2024-08-19 [안재원] V 0.1.11
+-- 수정내용 : alarm 테이블에서 title 컬럼 제거
+ALTER TABLE `alarm` DROP `title`;
+ALTER TABLE `alarm` DROP `content`;
 
 -- 2024-08-15 [조영민] V 0.1.10 
 -- 수정내용 : ADMIN TABLE 컬럼명 수정 id => adminName / pw => adminPassWord 헤싱된 insert문 추가
@@ -39,7 +34,7 @@ alter table `user` add `pwWrong` int default 0;
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-select * from user;
+select * from comment;
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -52,14 +47,14 @@ CREATE TABLE `user` (
 	`createdAt`	DATETIME	NOT NULL	DEFAULT NOW(),
 	`updatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
+
 CREATE TABLE `favorites` (
 	`favoritesKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL	COMMENT '유저키',
 	`channelKey`	INT	NOT NULL	COMMENT '채널키',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (`userKey`) REFERENCES user(`userKey`) ON DELETE CASCADE,
-    UNIQUE KEY `uniqueUserChannel` (`userKey`,`channelKey`)
+    FOREIGN KEY (`userKey`) REFERENCES user(`userKey`) ON DELETE CASCADE
 );
 
 CREATE TABLE `channel` (
@@ -71,8 +66,8 @@ CREATE TABLE `channel` (
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
-select *from `post`;
+DROP TABLE `channel`;
+select * from `like`;
 CREATE TABLE `post` (
 	`postKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -103,9 +98,10 @@ CREATE TABLE `like` (
 	`postKey`	INT	NOT NULL,
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE,
-    FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE,
-    UNIQUE KEY `uniqueUserPost`(`userKey`,`postKey`)
+    FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
+
+DROP TABLE `like`;
 
 CREATE TABLE `manager` (
 	`managerKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
@@ -131,13 +127,13 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
-CREATE TABLE `admin` (
-    `adminKey`    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
-    `adminName`    VARCHAR(30) UNIQUE COMMENT '어드민아이디',
-    `adminPassWord`    VARCHAR(255)    NOT NULL    COMMENT '비밀번호',
-    `state`    VARCHAR(50)    NOT NULL    DEFAULT 'activate'    COMMENT '어드민 상태 "activate","deactivate","secession"  작업자와 상의',
-    `createdAt`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updatedAt`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+CREATE TABLE admin (
+    adminKey    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
+    adminName    VARCHAR(30) COMMENT '어드민아이디',
+    adminPassWord    VARCHAR(255)    NOT NULL    COMMENT '비밀번호',
+    state    VARCHAR(50)    NOT NULL    DEFAULT 'activate'    COMMENT '어드민 상태 "activate","deactivate","secession"  작업자와 상의',
+    createdAt    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE `adminLog` (
@@ -156,8 +152,6 @@ CREATE TABLE `alarm` (
 	`referenceType`	VARCHAR(50)	NOT NULL	COMMENT '알람종류 "inquiry","post","comment","system","like" 테이블 이름으로  시스템 메세지는 system 으로',
 	`referenceKey`	INT	NULL	COMMENT '참조 키',
 	`read`	TINYINT	NOT NULL	DEFAULT 0	COMMENT 'read유무',
-	`title`	VARCHAR(50)	NOT NULL	COMMENT '알람제목',
-	`content`	VARCHAR(255)	NOT NULL	COMMENT '알람내용',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
@@ -186,7 +180,7 @@ CREATE TABLE `inquiryResponse` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (`inquiryKey`) REFERENCES `inquiry`(`inquiryKey`) ON DELETE CASCADE
 );
-select * from reply;
+
 CREATE TABLE `reply` (
 	`replyKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`commentKey`	INT	NOT NULL	COMMENT '댓글 키',
@@ -211,6 +205,9 @@ CREATE TABLE `banned` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
+INSERT INTO `banned` (`userKey`, `reason`, `reasonDate`, `date`, `state`, `createdAt`, `updatedAt`) 
+VALUES(1, '사유사유', '2024-04-04', 30, 'activate', now(), now());
+SELECT * FROM `banned`;
 
 CREATE TABLE `managerLog` (
 	`managerLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '매니저 활동로그키',
@@ -249,6 +246,7 @@ CREATE TABLE `Image` (
     `referenceCount` INT DEFAULT 0,
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE `loginLog`(
 `loginKey` INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 `userKey` INT NOT NULL,
