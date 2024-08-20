@@ -33,6 +33,8 @@ public class Alarm {
     private LocalDateTime createdAt;  
     @Column(name = "updatedAt", nullable = false)
     private LocalDateTime updatedAt;
+    @Transient
+    private String subContent; 
     
     @Transient
     private String content;

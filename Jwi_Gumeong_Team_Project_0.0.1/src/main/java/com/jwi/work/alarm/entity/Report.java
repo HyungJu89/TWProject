@@ -19,13 +19,17 @@ import lombok.Data;
 @Table(name = "report")
 public class Report {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reportKey;
 
     @ManyToOne
+    @JoinColumn(name = "reportUserKey", nullable = false)
+    private User reportUser; // 신고당한 유저
+
+    @ManyToOne
     @JoinColumn(name = "userKey", nullable = false)
-    private User user;
+    private User user; // 신고한 유저
 
     @Column(name = "referenceType", nullable = false, length = 50)
     private String referenceType;
@@ -57,5 +61,9 @@ public class Report {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+    
+    public int getReportUserKey() {
+        return reportUser.getUserKey();
     }
 }

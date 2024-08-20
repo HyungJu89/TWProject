@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.alarm.entity.Alarm;
+import com.jwi.work.alarm.entity.Banned;
+import com.jwi.work.alarm.entity.User;
 import com.jwi.work.alarm.repository.AlarmRepository;
+import com.jwi.work.alarm.repository.BannedRepository;
 import com.jwi.work.alarm.repository.CommentRepository;
 import com.jwi.work.alarm.repository.InquiryAlarmRepository;
 import com.jwi.work.alarm.repository.PostRepository;
@@ -23,55 +26,57 @@ public class AlarmService {
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
-    private ReplyRepository replyRepository; // 대댓글 나중에 머지 후 추가
+    private ReplyRepository replyRepository; // 댓글,대댓글 머지 후 자세하게
     @Autowired
     private InquiryAlarmRepository inquiryRepository;
     @Autowired
     private ReportRepository reportRepository;
+    @Autowired
+    private BannedRepository bannedRepository;
 
+    // TODO 내가 제재 당한 알림 추가
+    
     public List<Alarm> selectAlarm(int userKey) {
         List<Alarm> alarms = alarmRepository.findByUserKey(userKey);
 
         for (Alarm alarm : alarms) {
             switch (alarm.getReferenceType()) {
                 case "post":
-                    // 댓글
+                case "comment":
                     postRepository.findById(alarm.getReferenceKey()).ifPresent(post -> {
                         alarm.setContent(post.getContent());
                         alarm.setChannelImageUrl(post.getChannel().getImageUrl());
                         alarm.setNickname(post.getUser().getNickName());
                     });
                     break;
-                case "comment":
-                    // 대댓글
-                    commentRepository.findById(alarm.getReferenceKey()).ifPresent(comment -> {
-                        postRepository.findById(comment.getPost().getPostKey()).ifPresent(parentPost -> {
-                            alarm.setContent(parentPost.getContent());
-                            alarm.setChannelImageUrl(parentPost.getChannel().getImageUrl());
-                            alarm.setNickname(comment.getUser().getNickName());
-                        });
-                    });
-                    break;
                 case "like":
-                    // 좋아요
+                    // 좋아요 알림: 좋아요 수에 따라 알림
                     postRepository.findById(alarm.getReferenceKey()).ifPresent(likedPost -> {
-                        alarm.setContent(likedPost.getContent());
-                        alarm.setChannelImageUrl(likedPost.getChannel().getImageUrl());
-                        alarm.setNickname(likedPost.getUser().getNickName());
+                        int likeCount = likedPost.getLikes().size();
+                        if (likeCount == 10 || likeCount == 50 || likeCount == 100 || likeCount == 500 || likeCount == 1000) {
+                            alarm.setContent(likedPost.getContent());
+                            alarm.setChannelImageUrl(likedPost.getChannel().getImageUrl());
+                            alarm.setNickname(likedPost.getUser().getNickName());
+                            alarm.setSubContent("해당글이 ♥" + likeCount + "개를 받았어요.");
+                        }
                     });
                     break;
                 case "inquiry":
-                    // 문의
+                    // 문의 답변 알림
                     inquiryRepository.findById(alarm.getReferenceKey()).ifPresent(inquiry -> {
-                        alarm.setContent(inquiry.getTitle());
-                        alarm.setNickname(inquiry.getUser().getNickName());
+                        alarm.setContent("문의하신 내용을 답변 받았습니다.");
+                        alarm.setSubContent("고객센터에서 확인 가능합니다.");
                     });
                     break;
                 case "system":
-                    // 신고 내역
-                    reportRepository.findById(alarm.getReferenceKey()).ifPresent(report -> {
-                        alarm.setContent(report.getContent());
-                        alarm.setNickname(report.getUser().getNickName());
+                	// 신고 처리 결과 알림
+                	reportRepository.findById(alarm.getReferenceKey()).ifPresent(report -> {
+                        User reportUser = report.getReportUser();
+                        Banned banned = bannedRepository.findByUser(reportUser);
+                        if (banned != null) {
+                            alarm.setContent("당신의 선함으로 '" + reportUser.getNickName() + "'님이 제재를 받았어요!");
+                            alarm.setSubContent("신고내용: '" + report.getContent() + "' 대상자가 " + banned.getDate() + "일 정지를 받았습니다.");
+                        }
                     });
                     break;
                 default:

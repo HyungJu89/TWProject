@@ -109,6 +109,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     const [showDropdown, setShowDropdown] = useState(false); /* more 아이콘 클릭 시 드롭다운 */
     const [notifications, setNotifications] = useState([]); // 알림 리스트
 
+    // 알림 데이터 AXIOS
     useEffect(() => {
         if (userKey) {
             const fetchNotifications = async () => {
@@ -121,6 +122,8 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                         if (JSON.stringify(notifications) !== JSON.stringify(newNotifications)) {
                             setNotifications(newNotifications);
                         }
+                    } else {
+                        console.log("없어요");
                     }
                 } catch (error) {
                     console.log("알람 axios 에러: " + error.message);
@@ -171,15 +174,14 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                 onMouseLeave={handleMouseLeave}>
                 {children}
                 {visible && (
-                    <div className={`${styles.tooltipMsg} ${
-                            animationStarted ? styles.tooltipAnimation : ''}`}>
+                    <div className={`${styles.tooltipMsg} ${animationStarted ? styles.tooltipAnimation : ''}`}>
                         {message}
                     </div>
                 )}
             </div>
         );
     };
-
+    // 알림 버튼 클릭
     const handleButtonClick = (buttonNumber) => {
         setActiveButton(buttonNumber);
     };
@@ -188,6 +190,8 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     // report = 문의 답변 온 거
     // reply = 내가 제재 먹은 거
     // 댓글, 대댓글, 좋아요는 아이콘 가져오기
+
+    // 알림 내용
     const renderContent = () => {
         let filteredNotifications = notifications.filter(notification => {
             if (activeButton === 1) {
@@ -205,7 +209,15 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
 
         // 내용이 없을 때
         if (filteredNotifications.length === 0) {
-            return <div className={styles.emptyNotification}><span>소식이 온 내용이 없어요.</span></div>;
+            let emptyMessage = '';
+            if (activeButton === 1) {
+                emptyMessage = '소식이 온 댓글이 없어요.';
+            } else if (activeButton === 2) {
+                emptyMessage = '소식이 온 좋아요가 없어요.';
+            } else if (activeButton === 3) {
+                emptyMessage = '소식이 온 내용이 없어요.';
+            }
+            return <div className={styles.emptyNotification}><span>{emptyMessage}</span></div>;
         }
 
         return filteredNotifications.map((notification, index) => {
@@ -219,33 +231,41 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     icon = notification.channelImageUrl || formulation;
                     // 글자수가 20자 넘어가면 뒷부분은 ... 으로 변경
                     content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
-                    subContent = `${notification.nickname}님 이댓글을 달았어요.`;
+                    subContent = `${notification.nickname}님이 댓글을 달았어요.`;
                     break;
                 case 'like':
                     icon = notification.channelImageUrl || n_heart_activation;
                     content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
-                    subContent = `${notification.nickname}님이 이 게시글을 좋아합니다.`;
+                    subContent = `해당글이 ♥10개를 받았어요.`; // 좋아요 알림 예시
                     break;
-                case 'inquiry':
-                    content = '문의하신 내용을 답변 받았습니다.';
-                    subContent = `고객센터에서 확인 가능합니다.`;
-                    break;
-                case 'system':
-                    content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
-                    subContent = `${notification.nickname}님의 신고가 접수되었습니다.`;
-                    break;
+                    case 'inquiry':
+                        icon = reply;  // 문의 답변
+                        content = '문의하신 내용을 답변 받았습니다.';
+                        subContent = `고객센터에서 확인 가능합니다.`;
+                        break;
+                    case 'system':
+                        if (notification.content.includes('제재')) {
+                            icon = formulation;  // 신고 처리 결과
+                            content = `당신의 선함으로 '${notification.nickname}'님이 제재를 받았어요!`;
+                            subContent = `신고내용: '${notification.content}' 대상자가 ${notification.date}일 정지를 받았습니다.`;
+                        } else {
+                            icon = report;  // 내가 제재를 당한 경우
+                            content = `당신의 계정이 제재를 받았습니다.`;
+                            subContent = `사유: '${notification.content}' 제재 기간은 ${notification.date}일 입니다.`;
+                        }
+                        break;
                 default:
                     break;
             }
 
             return (
-                <div className={styles.notificationBox}>
-                    <div key={index} className={styles.notificationItem}>
+                <div className={styles.notificationBox} key={index}>
+                    <div className={styles.notificationItem}>
                         <div className={styles.notificationDot}></div> {/* 안 읽은 알림 */}
                         <img src={icon} alt="icon" />  {/* 프로필 or 이미지 */}
                         <div className={styles.notificationItemContent}> {/* 내용 div */}
                             <span className={styles.applyContent}>{content}</span> {/* 게시글 제목 */}
-                            <span className={styles.applyId}>{id}</span> {/* 알림 설명 */}
+                            <span className={styles.applyId}>{subContent}</span> {/* 알림 설명 */}
                         </div>
                     </div>
                 </div>
@@ -292,7 +312,6 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     </div>
                 </Tooltip>
             </div>
-
             <div className={styles.divider}></div>
             <div className={styles.notificationContent}>
                 {renderContent()}
