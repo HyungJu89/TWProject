@@ -245,12 +245,12 @@ function Comments({ postKey ,setCommentCount}) {
         try {
             const { data } = await axios.post(`/comment/create`, commentCreate)
             if (!data.success) {
-                alert("게시글 생성이 안됨 ㅅㄱ")
+                alert("오류가남")
             }
         } catch (error) {
             console.error('Error creating channel:', error);
         }
-
+        setComment('');
         setCommentLode((state) => state ? false : true)
     }
 
@@ -287,6 +287,7 @@ function Comments({ postKey ,setCommentCount}) {
             </div>
             <div className={styles.commentDiv}>{/* 댓글 달기 */}
                 <textarea
+                    value={comment}
                     className={styles.textarea}
                     ref={textareaRef}
                     placeholder='댓글 달기'
@@ -464,6 +465,7 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
             console.error('Error creating channel:', error);
         }
         setCommentLode((state)=> state? false : true);
+        setReply('');
         clear();
     }
 
@@ -487,6 +489,7 @@ return (
             <div className={styles.replyAreaDiv}>
                 {replyNickName && <a className={styles.replyAreaDivText}>@{replyNickName}</a>}
                 <textarea
+                    value={reply}
                     className={styles.textarea}
                     ref={textareaRef}
                     placeholder='댓글 달기'

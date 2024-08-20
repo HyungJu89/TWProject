@@ -15,7 +15,7 @@
 			post.state,
 			post.createdAt,
 			post.updatedAt,
-			commentSummary.commentCount,
+			commentSummary.totalCommentCount AS commentCount,
 			likeSummary.likeCount,
 			user.nickName,
 			
@@ -47,13 +47,18 @@
 		LEFT JOIN
 			user ON post.userKey = user.userKey
 		LEFT JOIN
-        	(SELECT 
-            	comment.postKey, 
-            	COUNT(comment.commentKey) AS commentCount 
-         	FROM 
-            	comment
-         	GROUP BY 
-            	comment.postKey
+			<!-- 서브쿼리 : 댓글 숫자를 뽑기위해 필요 -->
+			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
+			<!-- 서브 쿼리로 그룹화 시킨 값중 post.postKey 와 동일한 postKey를 가진 행을 결과에 추가해준다 -->
+   	     	(SELECT 
+        		comment.postKey, 
+        		COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0) AS totalCommentCount
+     		FROM 
+        		comment
+     		LEFT JOIN 
+        		reply ON comment.commentKey = reply.commentKey
+     		GROUP BY 
+        		comment.postKey
         ) AS commentSummary ON post.postKey = commentSummary.postKey
 		WHERE 
 			post.channelKey = #{channelKey}  AND post.state = 'common'
