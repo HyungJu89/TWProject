@@ -18,12 +18,12 @@ public interface ChannelMapper {
 	public ChannelDto channelGet(@Param("sessionId")String sessionId,@Param("channelId")String channelId);
 	
     // 시간 범위 내에서 데이터 가져오기
-    List<ChannelDto> HotBoardGet(
+	public List<ChannelDto> HotBoardGet(
         @Param("startTime") String startTime,
         @Param("endTime") String endTime);
     
     //무작위 10개 가져오기
-    List<ChannelDto> RandomBoard();
+	public List<ChannelDto> RandomBoard();
     
     
     public void favorite(ChannelFavoriteDto channelFavorite);
