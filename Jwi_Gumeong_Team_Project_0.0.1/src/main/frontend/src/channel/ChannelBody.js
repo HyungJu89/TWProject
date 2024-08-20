@@ -11,6 +11,7 @@ import {formatUnit} from '../recycleCode/FormatUnit.js';
 
 function ChannelBody({channelInfo}) {
 
+    const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
 
     return (
         <div className={style.channelBody}>{/* 채널 정보 bar */}
@@ -28,7 +29,7 @@ function ChannelBody({channelInfo}) {
                                 <div className={style.announcement}><img src={announcement} />[필수!]우리 토픽의 공지사항</div>
                             </div>
                             <div  className={style.bookmark}>
-                                <BookmarkButton channelInfo={channelInfo}/>
+                                <BookmarkButton channelInfo={channelInfo} setFavoriteCount={setFavoriteCount}/>
                             </div>
                         </div>
                     </div>

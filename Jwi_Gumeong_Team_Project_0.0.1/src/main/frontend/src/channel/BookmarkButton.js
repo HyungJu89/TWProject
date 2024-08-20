@@ -18,7 +18,7 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
             setDebounceBookMark(term);
         }, 500), // 500ms 대기 시간
         []
-      );
+    );
     
     useEffect(()=>{
         if(bookMarkMounted){
