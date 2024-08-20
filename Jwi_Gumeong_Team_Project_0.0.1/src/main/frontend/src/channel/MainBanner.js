@@ -85,7 +85,7 @@ function MainBanner({ channelId, route,
                                 </div>)
                                 :
                                 //pageCheck : 게시판 개설 여부 ? 개설된 게시판으로 이동 : 클릭한 스트리머 정보로 게시판 개설 추천
-                                (<div onClick={()=>{navigate(`/pageCheck/${partnersLiveInfo?.channelId}`)}} className={style.liveInfo}>
+                                (<div onClick={()=>{navigate(`/pageCheck/${partnersLiveInfo?.channelId}`); window.scrollTo(0, 0)}} className={style.liveInfo}>
                                 <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */} 
                                 <div className={style.liveTitle}>{partnersLive?.liveTitle}</div>
                                     <div className={style.mainbannerDiv}>
