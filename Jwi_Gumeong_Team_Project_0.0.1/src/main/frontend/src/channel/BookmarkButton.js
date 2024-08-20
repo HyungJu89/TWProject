@@ -11,22 +11,15 @@ import axios from 'axios';
 function BookmarkButton({channelInfo,setFavoriteCount}) {
     const [bookmarkOn, setBookMarkOn] = useState(channelInfo.favorite);
     const [bookmarkImg, setBookmarkImg] = useState(bookmarkActivation);
-    const [debounceBookMark,setDebounceBookMark] = useState(bookmarkOn);
-    const [bookMarkMounted, setBookMarkMounted] = useState(false);
     const bookMarkDebounce = useCallback(
-        lodash.debounce((term) => {
-            setDebounceBookMark(term);
+        lodash.debounce((favorite) => {
+            updateFavorite(favorite);
         }, 500), // 500ms 대기 시간
         []
     );
     
-    useEffect(()=>{
-        if(bookMarkMounted){
-            bookMarkDebounce(bookmarkOn)
-        }
-    },[bookmarkOn,debounceBookMark,bookMarkMounted]);
 
-    const updateFavorite = async()=>{
+    const updateFavorite = async(favorite)=>{
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if (!sessionIdJson) {
             return alert('로그인되어있지않습니다.'); // 사용자가 로그인하지 않은 경우 경고 표시
@@ -34,29 +27,24 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
         let sessionId = JSON.parse(sessionIdJson).sessionId;
 
         // 서버에 보낼 객체 생성
-        const favorite = {
-            favorite: bookmarkOn,
+        const favoriteDto = {
+            favorite: favorite,
             sessionId: sessionId,
             channelKey: channelInfo.channelKey
         };
         try {
             // 상태를 업데이트하기 위한 POST 요청 전송
-            const data = await axios.post(`/channel/favorite`, favorite);
+            const data = await axios.post(`/channel/favorite`, favoriteDto);
         } catch (error) {
             console.error('Error creating channel:', error); // 에러 처리
         }
     };
     
-    useEffect(()=>{
-        if(bookMarkMounted){
-            updateFavorite();
-        }
-    },[debounceBookMark,bookMarkMounted])
-
-    const bookMarkOnclick = (favorite) =>{
-        setBookMarkMounted(true);
-        setFavoriteCount((state) => (favorite ? state -1 : state + 1 ));
-        setBookMarkOn(!favorite)
+    const bookMarkOnclick = () =>{
+        const favorite = !bookmarkOn;
+        setFavoriteCount((state) => (favorite ? state +1 : state - 1 ));
+        setBookMarkOn(favorite)
+        bookMarkDebounce(favorite)
     }
 
     return (
@@ -69,7 +57,7 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
 
 function BookMarkNone({setBookmarkImg,bookmarkImg,bookMarkOnclick}){
     return(
-        <div onClick={()=>{bookMarkOnclick(false)}} className={style.bookmarkButton}
+        <div onClick={()=>{bookMarkOnclick()}} className={style.bookmarkButton}
             onMouseEnter={()=>{setBookmarkImg(bookmarkActivationW)}}
             onMouseLeave={()=>{setBookmarkImg(bookmarkActivation)}} >
             <img src={bookmarkImg} />
