@@ -20,7 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
 import Emogi from '../Emogi/Emogi.js';
 import lodash from 'lodash';
-
+import { changePost } from '../slice/PostSlice.js';
 
 function PublicBoard({ postInfo }) {
     const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
@@ -33,7 +33,7 @@ function PublicBoard({ postInfo }) {
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
 
     let state = useSelector((state) => { return state });
-    let disPatch = useDispatch();
+    let dispatch = useDispatch();
 
     const [commentCount,setCommentCount] = useState(0);
 
@@ -94,7 +94,12 @@ const likeOnClick = ()=>{
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [moreON]);
-
+    const imgOnclick = () => {
+        const{image,...newPostInfo} = postInfo;
+        const updatePostInfo = {...newPostInfo,image:imgBeing}
+        dispatch(changePost(updatePostInfo))
+        dispatch(openImgUiModal())
+    }
     return (
         <div className={styles.mainDiv}>
             {postInfo.postChannel && (
@@ -110,7 +115,7 @@ const likeOnClick = ()=>{
                     {postInfo.content}
                 </div>
                 {imgBeing.length > 0 &&
-                    <div onClick={() => disPatch(openImgUiModal())} className={styles.imgClick}>{/* 이미지 */}
+                    <div onClick={imgOnclick} className={styles.imgClick}>{/* 이미지 */}
                         <div className={styles.imgArea}>
                             <img src={`http://localhost:9090/images/${imgBeing[0]}`} />
                             {imgBeing.length > 0 &&

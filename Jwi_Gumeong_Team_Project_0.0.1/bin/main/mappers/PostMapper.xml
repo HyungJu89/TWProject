@@ -28,7 +28,7 @@
             		JOIN
             			userConnection uc ON l.userKey = uc.userKey
             		WHERE 
-            			l.postKey = post.postKey 
+            			l.postKey = post.postKey  
             			AND uc.sessionId = #{sessionId}
             	) THEN TRUE
             	ELSE FALSE

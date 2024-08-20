@@ -2,7 +2,7 @@
 // ^워링 업애주는 친구
 
 import axios from 'axios';
-import React, { useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect, useCallback} from 'react';
 import { useQuery } from 'react-query';
 import '../App.css';
 import styles from './style/MiniPublicBoard.module.css';
@@ -16,60 +16,98 @@ import emoticon_deactivation from '../icon/24px/emoticon-deactivation.png';
 import big_comment from '../icon/20px/bigcomment.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
+import lodash from 'lodash';
+import { useNavigate } from 'react-router-dom';
+import { openImgUiModalFalse } from '../slice/mainSlice';
+import { clearPost } from '../slice/PostSlice.js';
 
 function MiniPublicBoard() {
-    let [heart, setHeart] = useState(true); //좋아요 누름 확인
+    let postInfo = useSelector((state)=>{ return state.postInfo })
+    const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
+    const [likeCount, setLikeCount] = useState(postInfo.likeCount);
+    
+    // 디바운스요 변수
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
-    let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
-    //이미지
-    let [imgBeing, setImgBeing] = useState(1);// 이미지가 존재하는지 검사
-    let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
 
-    let state = useSelector((state)=>{ return state });
-    let disPatch = useDispatch();
+    const [commentCount,setCommentCount] = useState(0);
 
-    const [channel, setChannel] = useState('');
-    // 첫 번째 쿼리: 채널 정보를 가져오기.
-    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useQuery('channel', () =>
-        axios.get(`/channelAPI/search/0b33823ac81de48d5b78a38cdbc0ab94`)
-            .then((response) => {
-                setChannel(response.data.content)
-                return response.data.content
-            })
-            .catch(error => {
-                console.error('Channel API Error:', error);
-                throw error;
-            }),
+    useEffect(() => {
+        setCommentCount(postInfo.commentCount)
+    }, [postInfo])
+
+    // 디바운스 함수 생성
+    const heartDebounce = useCallback(
+        lodash.debounce(async(newHeart) => {
+            await updateLike(newHeart);
+        },500) // 0.5초 늘리고싶으면 시간 늘려도 됨
+    ,[]
     );
-    if (isLoadingChannel) {
-        return <div>로딩중</div>;
+
+const updateLike = async(newHeart) => {
+    let sessionIdJson = sessionStorage.getItem('sessionId');
+    if(!sessionIdJson){
+        // 이건 버튼하나!~
+        return alert('로그인되어있지않습니다.')
     }
-    if (isErrorChannel) {
-        return <div>에러남</div>;
+    let sessionId = JSON.parse(sessionIdJson).sessionId
+
+    const like = {
+        like : newHeart,
+        sessionId : sessionId,
+        postKey: postInfo.postKey
+    };
+    try {
+        const data = await axios.post(`/post/like`, like)
+
+    } catch (error) {
+        console.error('Error creating channel:', error);
     }
+}
+
+const likeOnClick = ()=>{
+    const newHeart = !heart;
+    setLikeCount((state) => newHeart ? state+1 : state-1 )
+    setHeart(newHeart)
+    heartDebounce(newHeart);
+}
+
+    //모달함수
+    let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
+    const modalRef = useRef(null);
+    const moreRef = useRef(null);
+    useEffect(() => {//영역외 클릭시 모달 닫히는 코드
+        const handleClickOutside = (event) => {
+            if (moreON &&
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target)) { setmoreON(false); } //신고, 삭제 닫음
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => { //클린업
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [moreON]);
 
     return (
         <div className={styles.mainDiv}>
-            <ChannelTitle channel={channel} />
+            {postInfo.postChannel && (
+                <ChannelTitle postChannel={postInfo.postChannel} />
+            )}
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
-                <div className={styles.name}>작성자 이름 <div className={styles.grayText}>· 1일</div></div>
+                <div className={styles.name}>{postInfo.nickName} <div className={styles.grayText}>· {postInfo.createdAt}</div></div>
                 <img onClick={() => { moreON == false ? setmoreON(true) : setmoreON(false) }} src={more} />
                 {moreON && <MoreDelete />} {/*신고, 삭제 모달*/}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
-                    뉴비라 오늘 조합 검 사 받았는데. 진짜 할거 많더라.<br />
-                    피드백 많이 해주셔서 원신 할거 겁나 많이 생김<br />
-                    우리 백출.. 잘 키워야지<br/>
+                {postInfo.content}
                 </div>
             </div>
             <div className={styles.widthNav} style={{ marginBottom: '0px' }}>{/* 하단 댓글,좋아요,공유 */}
-                <div className={styles.commentsDiv}>
+            <div className={styles.commentsDiv}>
                     {/*댓글창*/}    <div onClick={() => { commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
-                        <img src={comments} /><div className={styles.comments}>123</div></div>
-                    {/*좋아요*/}    <div onClick={() => { heart == false ? setHeart(true) : setHeart(false) }}>
-                        {heart === true ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
-                        <div className={styles.comments}>123123</div>
+                        <img src={comments} /><div className={styles.comments}>{commentCount}</div></div>
+                    {/*좋아요*/}    <div onClick={()=>likeOnClick(heart)}>
+                        {heart ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
+                        <div className={styles.comments}>{likeCount}</div>
                     </div>
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
@@ -78,11 +116,22 @@ function MiniPublicBoard() {
         </div>
     )
 }
-function ChannelTitle({ channel }) {
+function ChannelTitle({ postChannel }) {
+    let navigate = useNavigate();
+    let disPatch = useDispatch();
+
+
+
+    const channelOnClick = () =>{
+        navigate(`/channel/${postChannel.id}`)
+        disPatch(clearPost()) 
+        disPatch(openImgUiModalFalse())
+    }
+
     return (
         <div>
-            <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                <img src={channel.channelImageUrl} /><div style={{cursor:'pointer'}}>{channel.name}</div>
+            <div className={styles.title} onClick={channelOnClick}> {/* 클릭시 URL 이동 */}
+                <img src={postChannel.imageUrl} /><div style={{cursor:'pointer'}}>{postChannel.name}</div>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
         </div>
