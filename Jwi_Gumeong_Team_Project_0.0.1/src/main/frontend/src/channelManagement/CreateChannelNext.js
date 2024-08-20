@@ -17,6 +17,8 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
     const [buttonColor, setButtonColor] = useState('#BBBBBB');
     const [iconColor, setIconColor] = useState(check_deactivation);
     const [checkBoxIcon, setCheckBoxIcon] = useState(false);
+    const [notUseNotice, setNotUseNotice] = useState(true);
+    const [v2ComingSoon, setV2ComingSoon] = useState(false);//2차 버전에서 다시 부활
 
     const createChannel = async (channelCreate) => {
         try {
@@ -39,26 +41,6 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
         }
         notice && !checkBoxIcon ? setButtonColor('#FF8901') : setButtonColor('#BBBBBB')
     }
-
-    let [notUseNoticeValue, setNotUseNoticeValue] = useState('공지사항이 없습니다.');
-    let [notUseNoticeColor, setNotUseNoticeColor] = useState('#fffff');
-    let [notUseNoticeON, setNotUseNoticeON] = useState(false);
-    const notUseNotice = () => {
-        if (notUseNoticeValue){
-            setNotUseNoticeValue('');
-            setNotUseNoticeColor('#fffff');
-            setNotUseNoticeON(false);
-        }else{
-            setNotUseNoticeValue('공지사항이 없습니다.');
-            setNotUseNoticeColor('#F3F3F3');
-            setNotUseNoticeON(true);
-        }
-    }
-    // 입력 값이 변경될 때 상태를 업데이트하는 함수
-    const handleChange = (event) => {
-        setNotUseNoticeValue('');
-    };
-
     const onClickButton = async () => {
         // 체크박스 예외처리
         if (!checkBoxIcon) {
@@ -149,11 +131,14 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
                     </div>
                 </div>
             </div>{/*개설 할 채널 확인*/}
+{v2ComingSoon && // v2에서 살리기
+            (notUseNotice === true ?
+            <div className='fadein'>
             <div className={style.announcementTitle}>
                 <div>채널 내 공지사항 제목</div>
-                <div onClick={notUseNotice}> <img style={{ marginRight: '4px' }} src={help} alt="도움말" />공지사항 사용 안함</div>
+                <div onClick={()=>{notUseNotice === true ? setNotUseNotice(false) : setNotUseNotice(true)}} style={{cursor:'pointer'}}> <img style={{ marginRight: '4px' }} src={help} alt="도움말" />공지사항 사용 안함</div>
             </div> {/*채널 내 공지사항 제목 */}
-            <input className={style.noticeInputBox} style={{ backgroundColor: notUseNoticeColor }} value={notUseNoticeValue} onChange={handleChange}
+            <input className={style.noticeInputBox}
                 placeholder='공지사항의 제목을 입력해주세요.' />
 
             <div className={style.announcementTitle}>채널 규칙</div> {/*채널 공지사항 부분 Text */}
@@ -167,7 +152,11 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
 
             <div className={style.announcementTitle}>공지사항 하고 싶은 말</div> {/*채널 공지사항 부분 Text */}
             <textarea className={style.moreText} placeholder='추가적으로 하고 싶은 말을 입력해주세요. (선택)' />
-
+            </div>
+            : <ChannelRulesNotUse notUseNotice={notUseNotice} setNotUseNotice={setNotUseNotice}/>)
+}
+{v2ComingSoon && // v2에서 살리기
+            <>
             <div className={style.announcementText}>채널을 개설하기 전 주의 및 동의 사항!</div>{/* 채널 개설 설명 제목*/}
             <div className={style.precautions}>{/*채널 개설하기전 주의사항 문구*/}
                 <ul className={style.precautionsText}>
@@ -177,9 +166,17 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
                     <li className={style.precautionsLi}>클린 한 쥐구멍 생활을 위해 채널 관리자의 운영 활동 기록이 일정 기간 동안 보관됩니다.</li>
                 </ul>
             </div>
+            </>
+}
             <div className={style.bottom}>{/*하단 동의하기 체크*/}
+{v2ComingSoon && // v2에서 살리기
+            <>
                 <div className={style.bottomText}>위 내용을 동의 하십니까?</div>{/* 동의하기부분 text*/}
                 <div onClick={onClickCheckBoxIcon} className={style.bottomCheckBox}><img className={style.checkBoxIcon} src={iconColor} alt="체크박스" />위 주의사항을 숙지했으며 동의합니다.</div> {/*동의하기 체크박스*/}
+            </>
+}
+            <div className={style.bottomText}>채널을 개설 하시겠습니까?</div>{/* 동의하기부분 text*/}
+            <div onClick={onClickCheckBoxIcon} className={style.bottomCheckBox}><img className={style.checkBoxIcon} src={iconColor} alt="체크박스" />채널 정보를 확인했습니다.</div> {/*동의하기 체크박스*/}
             </div>
             <div className={style.createButton} style={{ backgroundColor: buttonColor }} onClick={onClickButton}> {/*개설하기 버튼*/}
                 개설하기
@@ -200,6 +197,14 @@ function AddRules({length, rulesAdd, setRulesAdd}) {
                 }
             } className={style.hover_image} src={deletion}/>
         </div>
+    )
+}
+
+function ChannelRulesNotUse({notUseNotice, setNotUseNotice}){
+    return(
+        <>
+        <div className={style.RulesNotUseMainDiv} onClick={()=>{notUseNotice === true ? setNotUseNotice(false) : setNotUseNotice(true)}}> <img style={{ marginRight: '4px' }} src={help} alt="도움말" />공지사항 사용</div>
+        </>
     )
 }
 

@@ -1,7 +1,7 @@
 
 .emogiMain div{ border-radius: 0px;}
 .emogiMain{
-        z-index: 1000;
+        z-index: 9999;
         position: absolute;
         padding: 0px 20px;
         top: 30px;

@@ -12,6 +12,7 @@ import com.jwi.work.center.sanction.dto.SanctionDTO;
 import com.jwi.work.center.sanction.entity.Sanction;
 import com.jwi.work.center.sanction.repository.SanctionRepository;
 import com.jwi.work.user.entity.UserEntity;
+import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.user.repository.UserRepository;
 import com.jwi.work.util.PagingUtil;
 import com.jwi.work.util.dto.PagingDto;
@@ -24,12 +25,12 @@ public class SanctionService {
 
     private SanctionRepository sanctionRepository;
     private UserRepository userRepository;
+    private UserMapper userMapper;
     private PagingUtil pagingUtil;
     
     public List<SanctionDTO> getPagedList(int userKey, int page, int limitPage, PagingDto pagingDto) {
         
     	// 페이지가 0 이하일 경우 1로 설정
-    	// 자꾸 음수가 뜸
         if (page <= 0) {
             page = 1;
         }
@@ -92,6 +93,10 @@ public class SanctionService {
                 sanctionRepository.save(sanction);
             }
         }
+    }
+    
+    public String bannedUserNick(int userKey) {
+    	return userMapper.getNickName(userKey);
     }
 }
 

@@ -15,6 +15,7 @@ function ChannelManagement() {
     const location = useLocation();
     const { ManagementChannelId } = location.state || {};
     const [openTap, setOpenTap] = useState(0);
+    const [v2ComingSoon, setV2ComingSoon] = useState(false);//2차 버전에서 다시 부활
 
     // 모달 상태
     const [modalOpen, setModalOpen] = useState(false);
@@ -69,6 +70,8 @@ function ChannelManagement() {
                         </>
                     }
                 </div>
+{v2ComingSoon && 
+<>
                 <div className={style.container}>{/* 관리자 신청 */}
                     <div className={style.createChannelTitle} onClick={() => tapClick(2)}>
                         <img src={enroll} alt="관리자 신청" />
@@ -92,7 +95,9 @@ function ChannelManagement() {
                             <GiveUpManager openModal={openModal} />
                         </>
                     }
-                </div>
+</div>
+</>
+                }
             </div>
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />

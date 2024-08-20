@@ -30,7 +30,7 @@ public class Faq {
 	@Column(name = "category", nullable = false, length = 32)
 	public String category;
 	
-	@Column(name = "imagePath", nullable = true, length = 256)
+	@Column(name = "imagePath", nullable = true)
 	public String imagePath;
 	
 	@Column(name = "createdAt", nullable = false)
