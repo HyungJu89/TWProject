@@ -42,45 +42,47 @@ public class AdminController {
 	
 	// 처음에 코드 입력하게 한 다음에 그거 필터 통해서 내부 코드랑 비교하고 jwt 발급하는것도 괜찮은 방법일꺼같다.
 	// 그러면 첫 코드 + 로그인시 코드 2중 필터이기떄문에 안전할꺼같음
-	
-//	@GetMapping("/")
-//	public boolean adminMain(@RequestBody String data) {
-//		
-//		return true;
-//	}
-	
 	// 08.15
 	// 회원관리 관련 만들 예정
 	// 회원정보 JPA로 전부 호출 및 로그인 로그 호출하는거 보여주는쪽 만들어놓으면 좋을듯
 	
+	// 모든 유저 정보 찾기
+	// 페이징처리 안함 2024-08-20 기준
 	@GetMapping("/findAllUser")
 	public List<User> findUser() {
 		return adminService.findAllUsers();
 	}
 	
+	// 모든 문의 찾기
+	// 페이징처리 안함 2024-08-20 기준
 	@GetMapping("/findInquiryAll")
 	public List<Inquiry> findInquiry(){
 		return adminService.selectInquiry();
 	}
 	
+	// 모든 답장 불러오기
 	@GetMapping("/findInquiryResponseAll") 
 	public List<InquiryResponse> findInquiryResponse(){
 		return adminService.selectInquiryResponse();
 	}
 	
+	// 모든 밴 목록 불러오기
 	@GetMapping("/findAllSanction")
 	public List<Sanction> findAllSanction(){
 		return adminService.selectSanction();
 	}
-	// 밴 하기
-	@GetMapping("/updateDeAct")
-	public void updateAct(@RequestParam("userKey") int userKey) {
-		adminService.updateUserAct(userKey);
+	
+	// 받아온 유저 밴 하기
+	@PostMapping("/banndUser")
+	public void banndUser(@RequestBody Map<String,String> userData) {
+		System.out.println(userData);
+		adminService.banndUser(userData);
 	}
-	// 밴 되돌리기
-	@GetMapping("/updateAct")
-	public void updateDeAct(@RequestParam("userKey") int userKey) {
-		adminService.updateUserDeAct(userKey);
+	
+	// 받아온 유저 밴 되돌리기
+	@GetMapping("/revertBan")
+	public void revertBan(@RequestParam("userKey") int userKey) {
+		adminService.revertBan(userKey);
 	}
 	
 }

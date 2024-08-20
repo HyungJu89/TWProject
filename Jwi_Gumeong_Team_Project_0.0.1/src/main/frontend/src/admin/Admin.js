@@ -6,7 +6,7 @@ import axios from 'axios';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function Admin(){
-
+    
     // axios 통신 에러 나거나 코드적는 jwt 토큰 비교 후 일치하지 않을경우엔 에러뜨고 로그남기면 될듯?
     // csrf 인증문제 해결위해 헤더에 쿠키 저장기능은 ver2에서 진행하겠습니다.
     let location = useLocation();

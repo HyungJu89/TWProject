@@ -81,9 +81,9 @@ function AdminMain() {
         }
     }, [cookieCheck,update]);
 
-    const updateBannedDeAct = (userKey) =>{
+    const updateBannedAct = (userKey) =>{
         if(cookieCheck){
-            axios.get('/admin/updateAct',{params:{userKey : userKey}})
+            axios.get('/admin/revertBan',{params:{userKey : userKey}})
                 .then(()=>{
                     setModalOpen(true);
                     setModalContent('밴 되돌리기에 성공하였습니다!');
@@ -92,6 +92,39 @@ function AdminMain() {
                 .catch(error => {
                     console.log("API 호출 오류: " + error.message);
                 });
+        }
+    }
+
+    function updateBannedDeAct(userKeys){
+        if(selectedOption !== "선택하세요"){
+            if(selectedOption2 !== "선택하세요"){
+                let dates = selectedOption2;
+                if(selectedOption2 === "영구"){
+                    dates = "99999";
+                }
+                let banData = {
+                    userKey : userKeys,
+                    reason : selectedOption,
+                    date : dates
+                }
+                if(cookieCheck){
+                    axios.post('/admin/banndUser',banData)
+                        .then(()=>{
+                            setModalOpen(true);
+                            setModalContent('제재 처리가 완료되었습니다!');
+                            setUpdate(prev => !prev);
+                        })
+                        .catch(error => {
+                            console.log("API 호출 오류: " + error.message);
+                        });
+                }
+            } else {
+                setModalOpen(true);
+                setModalContent('제재하실 날짜를 선택하세요!');
+            }
+        } else {
+            setModalOpen(true);
+            setModalContent('제재하실 목록을 선택하세요!');
         }
     }
 
@@ -363,8 +396,13 @@ function AdminMain() {
                                                         <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
                                                             {selectedOption}
                                                         </div>
+                                                        <label>제재 일수</label>
                                                         <div onClick={() => setDropdownOpen2(!dropdownOpen2)} className={styles.inqSelect}>
-                                                            {selectedOption2}
+                                                            {
+                                                            selectedOption2 === "영구" || selectedOption2 === "선택하세요"
+                                                                ? selectedOption2 : <div>{selectedOption2} 일</div>
+                                                            }
+
                                                         </div>
                                                         {/* 문의 종류 선택 드롭다운 */}
                                                         {
@@ -387,9 +425,10 @@ function AdminMain() {
                                                                     ))}
                                                                 </div>
                                                         }
-                                                        <div className={styles.bannedBtn}>죽어</div>
+                                                        {/* 여기에서 오브젝트 생성해서 넣으면될듯????????????? */}
+                                                        <div className={styles.bannedBtn} onClick={()=>{updateBannedDeAct(users.userKey)}}>제재</div>
                                                     </div>
-                                                    :null
+                                                    : null
                                                 }
                                                 
                                                 {
@@ -397,7 +436,7 @@ function AdminMain() {
                                                     <div className={styles.revertOption}>
                                                         진짜로 밴 취소할꺼에요?
                                                         <div className={styles.revertSelect}>
-                                                            <div className={styles.revertSelectYes} onClick={()=>{updateBannedDeAct(users.userKey)}}>YES</div>
+                                                            <div className={styles.revertSelectYes} onClick={()=>{updateBannedAct(users.userKey)}}>YES</div>
                                                             <div className={styles.revertSelectNo} onClick={()=>{setRevertBtn(prev => !prev)}}>NO</div>
                                                         </div>
                                                     </div>
