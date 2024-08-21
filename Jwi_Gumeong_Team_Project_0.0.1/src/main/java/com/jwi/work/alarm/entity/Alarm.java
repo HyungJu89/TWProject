@@ -35,9 +35,14 @@ public class Alarm {
     private LocalDateTime updatedAt;
     @Transient
     private String subContent; 
-    
     @Transient
     private String content;
+    @Transient
+    private int date;  // 제재 일수
+    @Transient
+    private String reason;  // 제재 사유
+    @Transient
+    private int reportedUserKey;  // 신고된 유저 키
     @Transient
     private String channelImageUrl;
     @Transient

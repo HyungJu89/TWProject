@@ -229,7 +229,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                 case 'post':
                 case 'comment':
                     icon = notification.channelImageUrl || formulation;
-                    // 글자수가 20자 넘어가면 뒷부분은 ... 으로 변경
+                    // 글자수가 20 넘어가면 뒷부분은 ... 으로 변경
                     content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
                     subContent = `${notification.nickname}님이 댓글을 달았어요.`;
                     break;
@@ -238,22 +238,24 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
                     subContent = `해당글이 ♥10개를 받았어요.`; // 좋아요 알림 예시
                     break;
-                    case 'inquiry':
-                        icon = reply;  // 문의 답변
-                        content = '문의하신 내용을 답변 받았습니다.';
-                        subContent = `고객센터에서 확인 가능합니다.`;
-                        break;
-                    case 'system':
-                        if (notification.content.includes('제재')) {
-                            icon = formulation;  // 신고 처리 결과
-                            content = `당신의 선함으로 '${notification.nickname}'님이 제재를 받았어요!`;
-                            subContent = `신고내용: '${notification.content}' 대상자가 ${notification.date}일 정지를 받았습니다.`;
-                        } else {
-                            icon = report;  // 내가 제재를 당한 경우
-                            content = `당신의 계정이 제재를 받았습니다.`;
-                            subContent = `사유: '${notification.content}' 제재 기간은 ${notification.date}일 입니다.`;
-                        }
-                        break;
+                case 'inquiry':
+                    icon = reply;  // 문의 답변
+                    content = '문의하신 내용을 답변 받았습니다.';
+                    subContent = `고객센터에서 확인 가능합니다.`;
+                    break;
+                case 'system':
+                    if (notification.reportedUserKey === userKey) {
+                        // 내가 제재를 당한 경우
+                        icon = report;
+                        content = `${notification.nickname}님은 정지 ${notification.date}일을 받았어요.`;
+                        subContent = `제재내용: '${notification.reason}'`;
+                    } else {
+                        // 내가 신고한 상대가 제재를 받은 경우
+                        icon = formulation;
+                        content = `당신의 선함으로 '${notification.nickname}'님이 제재를 받았어요!`;
+                        subContent = `신고내용: '${notification.content}' 대상자가 ${notification.date}일 정지를 받았습니다.`;
+                    }
+                    break;
                 default:
                     break;
             }

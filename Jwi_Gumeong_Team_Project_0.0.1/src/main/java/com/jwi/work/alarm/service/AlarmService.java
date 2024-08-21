@@ -41,46 +41,47 @@ public class AlarmService {
 
         for (Alarm alarm : alarms) {
             switch (alarm.getReferenceType()) {
-                case "post":
-                case "comment":
-                    postRepository.findById(alarm.getReferenceKey()).ifPresent(post -> {
-                        alarm.setContent(post.getContent());
-                        alarm.setChannelImageUrl(post.getChannel().getImageUrl());
-                        alarm.setNickname(post.getUser().getNickName());
-                    });
-                    break;
-                case "like":
-                    // 좋아요 알림: 좋아요 수에 따라 알림
-                    postRepository.findById(alarm.getReferenceKey()).ifPresent(likedPost -> {
-                        int likeCount = likedPost.getLikes().size();
-                        if (likeCount == 10 || likeCount == 50 || likeCount == 100 || likeCount == 500 || likeCount == 1000) {
-                            alarm.setContent(likedPost.getContent());
-                            alarm.setChannelImageUrl(likedPost.getChannel().getImageUrl());
-                            alarm.setNickname(likedPost.getUser().getNickName());
-                            alarm.setSubContent("해당글이 ♥" + likeCount + "개를 받았어요.");
-                        }
-                    });
-                    break;
-                case "inquiry":
-                    // 문의 답변 알림
-                    inquiryRepository.findById(alarm.getReferenceKey()).ifPresent(inquiry -> {
-                        alarm.setContent("문의하신 내용을 답변 받았습니다.");
-                        alarm.setSubContent("고객센터에서 확인 가능합니다.");
-                    });
-                    break;
-                case "system":
-                	// 신고 처리 결과 알림
-                	reportRepository.findById(alarm.getReferenceKey()).ifPresent(report -> {
-                        User reportUser = report.getReportUser();
-                        Banned banned = bannedRepository.findByUser(reportUser);
-                        if (banned != null) {
-                            alarm.setContent("당신의 선함으로 '" + reportUser.getNickName() + "'님이 제재를 받았어요!");
-                            alarm.setSubContent("신고내용: '" + report.getContent() + "' 대상자가 " + banned.getDate() + "일 정지를 받았습니다.");
-                        }
-                    });
-                    break;
-                default:
-                    break;
+	            case "post":
+	            case "comment":
+	                postRepository.findById(alarm.getReferenceKey()).ifPresent(post -> {
+	                    alarm.setContent(post.getContent());
+	                    alarm.setChannelImageUrl(post.getChannel().getImageUrl());
+	                    alarm.setNickname(post.getUser().getNickName());
+	                });
+	                break;
+	            case "like":
+	                // 좋아요 알림
+	                postRepository.findById(alarm.getReferenceKey()).ifPresent(likedPost -> {
+	                    int likeCount = likedPost.getLikes().size();
+	                    if (likeCount == 10 || likeCount == 50 || likeCount == 100 || likeCount == 500 || likeCount == 1000) {
+	                        alarm.setContent(likedPost.getContent());
+	                        alarm.setChannelImageUrl(likedPost.getChannel().getImageUrl());
+	                        alarm.setNickname(likedPost.getUser().getNickName());
+	                    }
+	                });
+	                break;
+	            case "inquiry":
+	                // 문의 답변 알림
+	                inquiryRepository.findById(alarm.getReferenceKey()).ifPresent(inquiry -> {
+	                    alarm.setContent("문의하신 내용을 답변 받았습니다.");
+	                });
+	                break;
+	            case "system":
+	                // 신고 처리 결과 알림
+	                reportRepository.findById(alarm.getReferenceKey()).ifPresent(report -> {
+	                    User reportUser = report.getReportUser();
+	                    Banned banned = bannedRepository.findByUser(reportUser);
+	                    if (banned != null) {
+	                        alarm.setNickname(reportUser.getNickName());
+	                        alarm.setDate(banned.getDate());
+	                        alarm.setReason(banned.getReason());
+	                        alarm.setContent(report.getContent());
+	                        alarm.setReportedUserKey(reportUser.getUserKey());
+	                    }
+	                });
+	                break;
+	            default:
+	                break;
             }
         }
 
