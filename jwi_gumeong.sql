@@ -1,9 +1,24 @@
--- 2024-08-19 [안재원] V 0.1.11
+-- 2024-08-21 [조영민]
+-- 수정내용 : bannedLog 추가
+-- banned에서 update문으로 데이터를 수정하기 떄문에 로그를 남기는 방식으로 수정함
+CREATE TABLE `bannedLog` (
+   `bannedLogKey`   INT PRIMARY KEY AUTO_INCREMENT   NOT NULL COMMENT '정지 키',
+   `bannedKey`   INT   NOT NULL COMMENT '밴 테이블 키',
+    `userKey`   INT   NOT NULL COMMENT '유저 키',
+    `adminKey` INT NOT NULL COMMENT '어드민 키',
+   `reason` VARCHAR(50) NOT NULL COMMENT '정지 사유',
+   `reasonDate` DATETIME NOT NULL DEFAULT NOW() COMMENT '정지 시작 날짜',
+   `date`   INT   NOT NULL COMMENT '정지일수',
+   `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 2024-08-19 [안재원] V 0.1.12
 -- 수정내용 : alarm 테이블에서 title 컬럼 제거
 ALTER TABLE `alarm` DROP `title`;
 ALTER TABLE `alarm` DROP `content`;
 
--- 2024-08-15 [임재열] V 0.1.12
+-- 2024-08-15 [임재열] V 0.1.11
 -- 수정내용 : admin 테이블 adminName 칼럼에 유니크가 추가되어있지않아 동일한 adminName 의 행이 만들어짐
 ALTER TABLE `admin` ADD CONSTRAINT `uniqueAdminName` UNIQUE (`adminName`);
 
@@ -38,6 +53,7 @@ alter table `user` add `pwWrong` int default 0;
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
+select*from`user`;
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -51,6 +67,7 @@ CREATE TABLE `user` (
 	`updatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
+select*from `favorites`;
 CREATE TABLE `favorites` (
 	`favoritesKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL	COMMENT '유저키',
@@ -59,7 +76,7 @@ CREATE TABLE `favorites` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES user(`userKey`) ON DELETE CASCADE
 );
-
+select*from `channel`;
 CREATE TABLE `channel` (
 	`channelKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`id`	VARCHAR(32)	NOT NULL	COMMENT '채널 아이디',
@@ -157,6 +174,7 @@ CREATE TABLE `alarm` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
+
 
 CREATE TABLE `inquiry` (
 	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 키',

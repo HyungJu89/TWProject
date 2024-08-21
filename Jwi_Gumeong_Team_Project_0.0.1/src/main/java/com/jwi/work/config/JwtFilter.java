@@ -54,8 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	    SecurityContextHolder.getContext().setAuthentication(authToken);
 	    
 	    // 이제 여기에서 로그인 후처리 코드 하면될듯?
-	    
-	    System.out.println(claim);
+	    // 로그 기능 여기다가 추가하면 될듯 ㅋㅋ 역시 JWT 개사기임
 	    
 		filterChain.doFilter(request, response);
 	}
