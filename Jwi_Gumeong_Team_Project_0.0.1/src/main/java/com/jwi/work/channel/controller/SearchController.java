@@ -45,6 +45,7 @@ public class SearchController {
 	public SearchDto<List<PostDto>> searchRecommended(@RequestParam(value = "sessionId", defaultValue = "") String sessionId,@RequestParam(value = "page", defaultValue = "1") int page){
 		return searchService.searchRecommended(sessionId,page);
 	}
+
 	
 	@GetMapping("/allTopic")
 	public SearchDto<List<PostDto>> searchAllTopic(@RequestParam(value = "sessionId", defaultValue = "") String sessionId,@RequestParam(value = "page", defaultValue = "1") int page){

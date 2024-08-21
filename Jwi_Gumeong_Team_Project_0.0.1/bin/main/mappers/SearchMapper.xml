@@ -319,8 +319,6 @@
 				COUNT(`like`.likeKey) AS likeCount
 			FROM
 				`like`
-			WHERE
-				DATE_FORMAT(`like`.createdAt, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
 			GROUP BY
 				`like`.postKey
 			) AS likeSummary ON post.postKey = likeSummary.postKey
