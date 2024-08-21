@@ -78,11 +78,17 @@
     <if test="!isAsc">
         DESC
     </if>
-
+	, reply.createdAt ASC
 </select>
 
 <insert id="commentCreate" parameterType="com.jwi.work.channel.dto.bodyDto.CommentCreateDto">
-	INSERT INTO comment(userKey,postKey,comment)value(#{userKey},#{postKey},#{comment})
+	INSERT INTO comment(userKey,postKey,comment)
+	SELECT 
+		userKey,#{postKey},#{comment}
+	FROM 
+		userConnection
+	WHERE
+		sessionId = #{sessionId}
 </insert>
 
 

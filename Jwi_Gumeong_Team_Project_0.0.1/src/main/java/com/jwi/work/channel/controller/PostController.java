@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jwi.work.channel.dto.AnswerDto;
-import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
 import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.service.PostService;
+import com.jwi.work.util.dto.AnswerDto;
+import com.jwi.work.util.dto.SearchDto;
 
 @RestController
 @RequestMapping("/post/*")

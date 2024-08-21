@@ -2,7 +2,7 @@ package com.jwi.work.util;
 
 import org.springframework.stereotype.Component;
 
-import com.jwi.work.channel.dto.PagingDto;
+import com.jwi.work.util.dto.PagingDto;
 
 @Component
 public class PagingUtil {

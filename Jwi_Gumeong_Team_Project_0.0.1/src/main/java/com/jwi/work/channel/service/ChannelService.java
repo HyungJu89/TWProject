@@ -9,11 +9,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.mapper.ChannelMapper;
+import com.jwi.work.util.dto.AnswerDto;
 
 @Service
 public class ChannelService {

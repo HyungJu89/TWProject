@@ -23,7 +23,6 @@ import { setSessionId,setUserKey,setLoggedIn,logout } from './slice/sessionSlice
 import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
 import axios from 'axios';
-
 function App() {
     let state = useSelector((state)=>{ return state })
     //---------------------------------- 검색 부분
@@ -91,6 +90,7 @@ function App() {
                 </Routes>
                 <Bottom/> {/* 하단 공통 부분 디자인 */}
             </Suspense>
+
         </div>
     );
 }

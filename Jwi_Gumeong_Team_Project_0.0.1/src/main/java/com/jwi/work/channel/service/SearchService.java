@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.mapper.SearchMapper;
 import com.jwi.work.util.PagingUtil;
+import com.jwi.work.util.dto.SearchDto;
 
 @Service
 public class SearchService {

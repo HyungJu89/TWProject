@@ -20,27 +20,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
 import Emogi from '../Emogi/Emogi.js';
 import lodash from 'lodash';
-
+import { changePost } from '../slice/PostSlice.js';
 
 function PublicBoard({ postInfo }) {
     const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(postInfo.likeCount);
-    const [likeMounted,setLikeMounted] = useState(false);
-    // 디바운스요 변수
     
-    const [debouncedHeart, setDebouncedHeart] = useState(heart);
+    // 디바운스요 변수
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     //이미지
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
 
     let state = useSelector((state) => { return state });
-    let disPatch = useDispatch();
+    let dispatch = useDispatch();
 
     const [commentCount,setCommentCount] = useState(0);
 
     useEffect(() => {
-        
         if (postInfo.image) {
             setImgBeing(JSON.parse(postInfo.image));
         }
@@ -49,27 +46,22 @@ function PublicBoard({ postInfo }) {
 
     // 디바운스 함수 생성
     const heartDebounce = useCallback(
-        lodash.debounce((term) => {
-            setDebouncedHeart(term);
+        lodash.debounce(async(newHeart) => {
+            await updateLike(newHeart);
         },500) // 0.5초 늘리고싶으면 시간 늘려도 됨
     ,[]
     );
 
-    useEffect(()=>{
-        if(likeMounted){
-        heartDebounce(heart);
-    }
-    },[heart,heartDebounce,likeMounted])
-
-const updateLike = async() => {
+const updateLike = async(newHeart) => {
     let sessionIdJson = sessionStorage.getItem('sessionId');
     if(!sessionIdJson){
+        // 이건 버튼하나!~
         return alert('로그인되어있지않습니다.')
     }
     let sessionId = JSON.parse(sessionIdJson).sessionId
 
     const like = {
-        like : heart,
+        like : newHeart,
         sessionId : sessionId,
         postKey: postInfo.postKey
     };
@@ -81,16 +73,11 @@ const updateLike = async() => {
     }
 }
 
-    useEffect(()=>{
-        if(likeMounted){
-        updateLike()
-        }
-},[debouncedHeart,likeMounted])
-
-const likeOnClick = (like)=>{
-    setLikeMounted(true);
-    setLikeCount((state) => like ? state-1 : state+1 )
-    setHeart(!like)
+const likeOnClick = ()=>{
+    const newHeart = !heart;
+    setLikeCount((state) => newHeart ? state+1 : state-1 )
+    setHeart(newHeart)
+    heartDebounce(newHeart);
 }
 
     //모달함수
@@ -107,7 +94,12 @@ const likeOnClick = (like)=>{
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [moreON]);
-
+    const imgOnclick = () => {
+        const{image,...newPostInfo} = postInfo;
+        const updatePostInfo = {...newPostInfo,image:imgBeing}
+        dispatch(changePost(updatePostInfo))
+        dispatch(openImgUiModal())
+    }
     return (
         <div className={styles.mainDiv}>
             {postInfo.postChannel && (
@@ -123,7 +115,7 @@ const likeOnClick = (like)=>{
                     {postInfo.content}
                 </div>
                 {imgBeing.length > 0 &&
-                    <div onClick={() => disPatch(openImgUiModal())} className={styles.imgClick}>{/* 이미지 */}
+                    <div onClick={imgOnclick} className={styles.imgClick}>{/* 이미지 */}
                         <div className={styles.imgArea}>
                             <img src={`http://localhost:9090/images/${imgBeing[0]}`} />
                             {imgBeing.length > 0 &&
@@ -258,12 +250,12 @@ function Comments({ postKey ,setCommentCount}) {
         try {
             const { data } = await axios.post(`/comment/create`, commentCreate)
             if (!data.success) {
-                alert("게시글 생성이 안됨 ㅅㄱ")
+                alert("오류가남")
             }
         } catch (error) {
             console.error('Error creating channel:', error);
         }
-
+        setComment('');
         setCommentLode((state) => state ? false : true)
     }
 
@@ -300,6 +292,7 @@ function Comments({ postKey ,setCommentCount}) {
             </div>
             <div className={styles.commentDiv}>{/* 댓글 달기 */}
                 <textarea
+                    value={comment}
                     className={styles.textarea}
                     ref={textareaRef}
                     placeholder='댓글 달기'
@@ -477,6 +470,7 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
             console.error('Error creating channel:', error);
         }
         setCommentLode((state)=> state? false : true);
+        setReply('');
         clear();
     }
 
@@ -500,6 +494,7 @@ return (
             <div className={styles.replyAreaDiv}>
                 {replyNickName && <a className={styles.replyAreaDivText}>@{replyNickName}</a>}
                 <textarea
+                    value={reply}
                     className={styles.textarea}
                     ref={textareaRef}
                     placeholder='댓글 달기'

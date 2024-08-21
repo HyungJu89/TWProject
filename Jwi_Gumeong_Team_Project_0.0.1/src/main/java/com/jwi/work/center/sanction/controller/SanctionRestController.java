@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.center.sanction.dto.SanctionDTO;
 import com.jwi.work.center.sanction.service.SanctionService;
-import com.jwi.work.channel.dto.PagingDto;
+import com.jwi.work.util.dto.PagingDto;
 
 import lombok.AllArgsConstructor;
 
