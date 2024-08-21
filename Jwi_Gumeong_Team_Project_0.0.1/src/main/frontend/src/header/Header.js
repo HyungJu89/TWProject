@@ -8,6 +8,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './style/Header.module.css';
 import {Link, useNavigate, useLocation} from 'react-router-dom';
+import axios from 'axios';
 //이미지 import
 import Logo from '../icon/logo/logo.png'; //로고 이미지
 import searching from '../icon/24px/searching.png';
@@ -38,6 +39,7 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
     let [adminLogin,setAdminLogin] = useState(false);
     let navigate = useNavigate();
     let location = useLocation();
+
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
         let justSearchLocal = localStorage.getItem('search')
@@ -105,26 +107,41 @@ function Icon({navigate, userKey}) { /* 로그인 시 노출되는 알림 아이
 function NotificationModal({ userKey }) { /* 알림 모달찰 */
     const [activeButton, setActiveButton] = useState(1); /* 현재 활성화된 버튼 상태 */
     const [showDropdown, setShowDropdown] = useState(false); /* more 아이콘 클릭 시 드롭다운 */
-    const [notifications, setNotifications] = useState([]);
+    const [notifications, setNotifications] = useState([]); // 알림 리스트
 
-    const handleMoreClick = () => {
-        setShowDropdown(!showDropdown);
-    };
-
+    // 알림 데이터 AXIOS
     useEffect(() => {
         if (userKey) {
-            getNotifications();
-        }
-    }, [userKey, activeButton]);
+            const fetchNotifications = async () => {
+                try {
+                    const response = await axios.post('/alarm/list', null, { params: { userKey } });
+                    if (response.data.result === "success") {
+                        const newNotifications = response.data.list;
 
-    const getNotifications = async () => {
-        try {
-            const response = await axios.get(`아직 없는 url`);
-            setNotifications(response.data);
-        } catch (error) {
-            console.error('알림 Axios 에러:', error);
+                        // 기존 데이터와 비교하여 다를 때만 업데이트
+                        if (JSON.stringify(notifications) !== JSON.stringify(newNotifications)) {
+                            setNotifications(newNotifications);
+                        }
+                    } else {
+                        console.log("없어요");
+                    }
+                } catch (error) {
+                    console.log("알람 axios 에러: " + error.message);
+                }
+            };
+
+            fetchNotifications(); // 처음 한 번 호출
+
+            const intervalId = setInterval(fetchNotifications, 30000); // 30초마다 호출
+
+            // 컴포넌트 언마운트 시 인터벌 정리
+            return () => clearInterval(intervalId);
         }
-    };
+    }, [userKey, notifications]);
+    
+    const handleMoreClick = () => {
+        setShowDropdown(!showDropdown);
+    };  
 
     // 툴팁
     const Tooltip = ({ children, message }) => {
@@ -157,15 +174,14 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                 onMouseLeave={handleMouseLeave}>
                 {children}
                 {visible && (
-                    <div className={`${styles.tooltipMsg} ${
-                            animationStarted ? styles.tooltipAnimation : ''}`}>
+                    <div className={`${styles.tooltipMsg} ${animationStarted ? styles.tooltipAnimation : ''}`}>
                         {message}
                     </div>
                 )}
             </div>
         );
     };
-
+    // 알림 버튼 클릭
     const handleButtonClick = (buttonNumber) => {
         setActiveButton(buttonNumber);
     };
@@ -174,120 +190,89 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     // report = 문의 답변 온 거
     // reply = 내가 제재 먹은 거
     // 댓글, 대댓글, 좋아요는 아이콘 가져오기
-    const renderContent = () => {
-        let notifications = [];
-        switch (activeButton) {
-            case 1:
-                notifications = [
-                    {
-                        icon: formulation,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: reply,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: report,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: report,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: report,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: report,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: report,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: report,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: report,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: report,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    },
-                    {
-                        icon: report,
-                        content: "공무원이 축하해야 할까?",
-                        id: "충주시님이 댓글을 달았어요."
-                    }
-                ];
 
-                // 배열이 비어있을 경우 (알림이 없을 때)
-                if (notifications.length === 0) {
-                    return (
-                        <div className={styles.emptyNotification}>
-                            <span>소식이 온 댓글이 없어요.</span>
-                        </div>
-                    );
-                }
-                break;
-            case 2:
-                notifications = [
-                    {
-                        icon: formulation,
-                        content: "성우가 다른 성우 ARS를 들었을 때 찐반응",
-                        id: "무야호님이 댓글을 달았어요."
-                    }
-                ];
-                if (notifications.length === 0) {
-                    return (
-                        <div className={styles.emptyNotification}>
-                            <span>소식이 온 좋아요가 없어요.</span>
-                        </div>
-                    );
-                }
-                break;
-            case 3:
-                notifications = [];
-                if (notifications.length === 0) {
-                    return (
-                        <div className={styles.emptyNotification}>
-                            <span>소식이 온 내용이 없어요.</span>
-                        </div>
-                    );
-                }
-                break;
-            default:
-                return null;
+    // 알림 내용
+    const renderContent = () => {
+        let filteredNotifications = notifications.filter(notification => {
+            if (activeButton === 1) {
+                // 댓글 또는 대댓글일때
+                return notification.referenceType === 'post' || notification.referenceType === 'comment';
+            } else if (activeButton === 2) {
+                // 좋아요일때
+                return notification.referenceType === 'like';
+            } else if (activeButton === 3) {
+                // 문의나 제재내역일때
+                return notification.referenceType === 'inquiry' || notification.referenceType === 'system';
+            }
+            return false;
+        });
+
+        // 내용이 없을 때
+        if (filteredNotifications.length === 0) {
+            let emptyMessage = '';
+            if (activeButton === 1) {
+                emptyMessage = '소식이 온 댓글이 없어요.';
+            } else if (activeButton === 2) {
+                emptyMessage = '소식이 온 좋아요가 없어요.';
+            } else if (activeButton === 3) {
+                emptyMessage = '소식이 온 내용이 없어요.';
+            }
+            return <div className={styles.emptyNotification}><span>{emptyMessage}</span></div>;
         }
-        return (
-            <div className={styles.notificationBox}>
-                {notifications.map((notification, index) => (
-                    <div key={index} className={styles.notificationItem}>
+
+        return filteredNotifications.map((notification, index) => {
+            let icon = '';
+            let content = '';
+            let subContent = '';
+
+            switch (notification.referenceType) {
+                case 'post':
+                case 'comment':
+                    icon = notification.channelImageUrl || formulation;
+                    // 글자수가 20 넘어가면 뒷부분은 ... 으로 변경
+                    content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
+                    subContent = `${notification.nickname}님이 댓글을 달았어요.`;
+                    break;
+                case 'like':
+                    icon = notification.channelImageUrl || n_heart_activation;
+                    content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
+                    subContent = `해당글이 ♥10개를 받았어요.`; // 좋아요 알림 예시
+                    break;
+                case 'inquiry':
+                    icon = reply;  // 문의 답변
+                    content = '문의하신 내용을 답변 받았습니다.';
+                    subContent = `고객센터에서 확인 가능합니다.`;
+                    break;
+                case 'system':
+                    if (notification.reportedUserKey === userKey) {
+                        // 내가 제재를 당한 경우
+                        icon = report;
+                        content = `${notification.nickname}님은 정지 ${notification.date}일을 받았어요.`;
+                        subContent = `제재내용: '${notification.reason}'`;
+                    } else {
+                        // 내가 신고한 상대가 제재를 받은 경우
+                        icon = formulation;
+                        content = `당신의 선함으로 '${notification.nickname}'님이 제재를 받았어요!`;
+                        subContent = `신고내용: '${notification.content}' 대상자가 ${notification.date}일 정지를 받았습니다.`;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return (
+                <div className={styles.notificationBox} key={index}>
+                    <div className={styles.notificationItem}>
                         <div className={styles.notificationDot}></div> {/* 안 읽은 알림 */}
-                        <img src={notification.icon} alt="icon" />  {/* 프로필 or 이미지 */}
+                        <img src={icon} alt="icon" />  {/* 프로필 or 이미지 */}
                         <div className={styles.notificationItemContent}> {/* 내용 div */}
-                            <span className={styles.applyContent}>{notification.content}</span> {/* 게시글 제목 */}
-                            <span className={styles.applyId}>{notification.id}</span> {/* 알림 설명 */}
+                            <span className={styles.applyContent}>{content}</span> {/* 게시글 제목 */}
+                            <span className={styles.applyId}>{subContent}</span> {/* 알림 설명 */}
                         </div>
                     </div>
-                ))}
-            </div>
-        );
+                </div>
+            );
+        });
     };
 
     return (
@@ -329,7 +314,6 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     </div>
                 </Tooltip>
             </div>
-
             <div className={styles.divider}></div>
             <div className={styles.notificationContent}>
                 {renderContent()}
