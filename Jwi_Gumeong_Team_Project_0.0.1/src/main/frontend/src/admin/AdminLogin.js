@@ -58,6 +58,9 @@ function AdminLogin() {
         }
     };
 
+    const maxAge = 1800; // 30 minutes
+    const expirationTime = Date.now() + maxAge * 1000;
+
     const checkAdmin = async () => {
         if (email !== '' && password !== '') {
             try {
@@ -71,8 +74,9 @@ function AdminLogin() {
                     setCookie('frontCookie', "프론트쿠키",{
                         path: '/',
                         secure: true,
-                        maxAge: 1800
-                    })
+                        maxAge: maxAge
+                    });
+                    localStorage.setItem('frontCookieExpiry', expirationTime);
                     navigate('/admin');
                 }
                 setLoginWarn(userResponse.data.warningMessage);

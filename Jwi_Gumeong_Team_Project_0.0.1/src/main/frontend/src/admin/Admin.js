@@ -15,11 +15,23 @@ function Admin(){
     const cookieCheck = getCookie('frontCookie');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-
+    let [count,setCount] = useState(1800);
+    let 분 = parseInt(count / 60);
+    let 초 = count % 60;
     useEffect(() => {
         setModalOpen(true);
         setModalContent('관리자 로그인 페이지로 이동합니다.');
     }, []);
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            setCount((count) => count - 1);
+          }, 1000);
+        if(count === 0) {
+            clearInterval(id);
+        }
+        return () => clearInterval(id);
+    },[count])
 
     const closeModal = () => {
         setModalOpen(false);
@@ -39,6 +51,7 @@ function Admin(){
     
     return(
         <div>
+            {분} 분 {초} 초
             { onOff !== true ? <Outlet/> : <AdminMain/> }
             {
             modalOpen && 
