@@ -1,5 +1,7 @@
 package com.jwi.work.user.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.jwi.work.user.dto.Banned;
@@ -69,5 +71,15 @@ public interface UserMapper{
 		
 		// 유저 닉네임 찾아오기
 		public String getNickName(int userKey);
+		
+	// 여기부터 어드민
+		// 유저정보 전부 가져오기
+		public List<User> getAllUser();
+		
+		// 유저 활성화로 변경
+		public void updateAct(int userKey);
+		
+		// 유저 비활성화로 변겅
+		public void updateDeAct(int userKey);
+		
 }
-

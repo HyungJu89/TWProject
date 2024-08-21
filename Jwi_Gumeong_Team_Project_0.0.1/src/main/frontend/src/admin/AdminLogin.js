@@ -10,7 +10,6 @@ import AlarmModal from '../modal/AlarmModal.js';
 
 function AdminLogin() {
 
-    var jsonSessionInfo = localStorage.getItem('sessionId');
     // 세션화성공
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -24,7 +23,7 @@ function AdminLogin() {
     let navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-
+    
     useEffect(() => {
         setModalOpen(true);
         setModalContent('관리자 로그인 페이지입니다.');
@@ -69,10 +68,10 @@ function AdminLogin() {
                 const userResponse = 
                     await axios.post('/admin/login', adminData);
                 if(userResponse.data){
-                    setCookie('jwtCookie', userResponse.data,{
+                    setCookie('frontCookie', "프론트쿠키",{
                         path: '/',
                         secure: true,
-                        maxAge: 100
+                        maxAge: 1800
                     })
                     navigate('/admin');
                 }
