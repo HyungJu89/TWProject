@@ -97,7 +97,7 @@ function MainBanner({ channelId, route,
                                                     switch (partnersLive?.liveCategoryValue) {
                                                         case 'talk':
                                                             return <img src={talk} />;
-                                                        case '아트':
+                                                        case '그림/아트':
                                                             return <img src={art} />;
                                                         case '음악/노래':
                                                             return <img src={music} />;
