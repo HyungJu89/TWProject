@@ -94,6 +94,6 @@
 	</select>
 	<!-- 유저 탈퇴 상태로 업데이트 -->
 	<update id="resignUser" parameterType="int">
-		UPDATE `user` SET `state` = 'secession' WHERE userKey = #{userKey}
+		UPDATE `user` SET `state` = 'secession', updatedAt = now() WHERE userKey = #{userKey}
 	</update>
 </mapper>
