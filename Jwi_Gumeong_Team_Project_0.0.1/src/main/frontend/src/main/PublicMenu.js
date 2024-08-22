@@ -66,20 +66,40 @@ function PublicMenu({ isLoggedIn, onLogout }) {
 function UserAfter({ onLogout }) {
     let navigate = useNavigate();
     const userState = useSelector((state) => state.userState);  
+    let sessionIdJson = sessionStorage.getItem('sessionId');
+    let sessionId = JSON.parse(sessionIdJson).sessionId;
 
         //즐겨찾기 게시판  :: 무작위 7개 가져오기 더 많으면 페이징으로 넘겨야함 하는 중~
-        const [randomBoard, setRandomBoard] = useState();
+        const [favoritesList, setFavoritesList] = useState(); //즐겨찾기 key
         useEffect(() => {
-            const randomBoard = async () => {
+            const favorites = async () => {
                 try {
-                    const {data} = await axios.get(`/channel/randomBoard`);
-                    setRandomBoard(data);
+                    const {data} = await axios.get(`/myPage/favorites`,{params:{userKey : 1}});
+                    setFavoritesList(data);
+                    console.log(data);
                 } catch (error) {
                     console.error('Channel API Error:', error);
                 }
             };
-            randomBoard();
+            favorites();
         }, []);
+
+        const [channelList, setChannelList] = useState(); //즐겨찾기에서 찾은key를 기반으로 채널 정보 가져오기
+        useEffect(()=>{
+            const channel = async () => {
+                try {
+                    const { data } = await axios.get('/channel/findKey', {
+                        params: { channelKeys : 1 }
+                    });
+                    setChannelList(data);
+                    console.log('Channel List:', data);
+                } catch (error) {
+                    console.error('Channel API Error:', error);
+                }
+            };
+
+            channel();
+        },[favoritesList]);
 
 
     return (
@@ -99,12 +119,12 @@ function UserAfter({ onLogout }) {
                 <div className={styles.Bookmark}>즐겨찾기<img src={edit} /></div>
                 <div className={styles.recommendation} style={{ marginTop: '0px', paddingTop: '20px' }}>{/* 즐찾 */}
                     <div className={styles.list} style={{ marginTop: '0px' }}>
-                        {randomBoard && randomBoard.success &&
+                        {favoritesList &&
                         <>
-                            {randomBoard.info.map((item, i)=>
+                            {favoritesList.map((item, i)=>
                             <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
-                                <img src={item.imageUrl} />
-                                {item.name}
+                                <img src='https://nng-phinf.pstatic.net/MjAyNDAyMDNfMTI5/MDAxNzA2OTI5NjEwNTg0.8eH_yzVzbSiZMgD9X7NYPk-r66ZqrNZspDlCeGmfVKwg.UgTLf2pU2tue6CbLhU8jx7Ogk2TbRYyt2rjHDGYMQQwg.PNG/%EB%8B%B4%EC%9C%A0%EC%9D%B4_%ED%94%84%EB%A1%9C%ED%95%84_%EC%82%AC%EC%A7%84%EC%9A%A9.png' />
+                                {item.channelKey}
                             </div>
                             )}
                         </>

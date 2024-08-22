@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.user.dto.CheckDto;
+import com.jwi.work.user.dto.Favorites;
 import com.jwi.work.user.dto.User;
+import com.jwi.work.user.entity.FavoritesEntity;
 import com.jwi.work.user.myPage.service.MyPageService;
 
 @RestController
@@ -36,13 +38,10 @@ public class MyPageController {
 	}
 	
 	//즐겨찾기 관리
-//	@GetMapping("/favorites")
-//	public SearchDto<List<ChannelDto>> searchChannelList(
-//			@RequestParam(value = "sessionId", defaultValue = "") String sessionId,
-//			@RequestParam(value = "search", defaultValue = "") String search,
-//			@RequestParam(value = "page", defaultValue = "1") int page) {
-//		return myPageService.searchChannel(sessionId,search, page);
-//		
-//	}
+	@GetMapping("/favorites")
+	public List<FavoritesEntity> userFavoritesList(@RequestParam("userKey") int userKey) {
+		return myPageService.favoritesList(userKey);
+		
+	}
 	
 }

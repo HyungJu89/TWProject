@@ -8,11 +8,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.jwi.work.alarm.entity.Channel;
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
+import com.jwi.work.channel.dto.channelDto.ChannelKeyDto;
+import com.jwi.work.channel.entity.ChannelEntity;
 import com.jwi.work.channel.mapper.ChannelMapper;
+import com.jwi.work.channel.repository.ChannelRepository;
 import com.jwi.work.util.dto.AnswerDto;
 
 @Service
@@ -20,6 +25,8 @@ public class ChannelService {
 
 	@Autowired
 	private ChannelMapper channelMapper;
+	@Autowired
+	private ChannelRepository channelRepository;
 
 	public boolean channelCheck(String channelId) {
 		// 채널 생성이 안되어있으면 true 가 리턴이 된다.
@@ -134,6 +141,11 @@ public class ChannelService {
             answer.setSuccess(false);
         }
 		return answer;
+    }
+    
+	//Key 기준으로 채널 검색
+    public List<ChannelEntity> findKey(@RequestParam("channelKey") int channelKey) {
+    	return channelRepository.findByChannelKey(channelKey);
     }
 
     public void channelFavorite(ChannelFavoriteDto channelFavorite) {
