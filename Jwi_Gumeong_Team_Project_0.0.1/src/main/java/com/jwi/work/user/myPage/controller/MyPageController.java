@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.user.dto.CheckDto;
 import com.jwi.work.user.dto.User;
