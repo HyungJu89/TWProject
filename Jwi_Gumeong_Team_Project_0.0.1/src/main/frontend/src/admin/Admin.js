@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation , Outlet, useNavigate } from 'react-router-dom';
+import styles from './style/Admin.module.css';
 import { getCookie } from '../cookies/Cookies.js'
 import AdminMain from './AdminMain.js'
 import axios from 'axios';
@@ -15,44 +16,65 @@ function Admin(){
     const cookieCheck = getCookie('frontCookie');
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-    let [count,setCount] = useState(1800);
+    // GPT 쓰면서 알게된 사실: 스테이트 내부에서 재밌는짓 가능하다는점
+    const endTime = localStorage.getItem('endTime');
+    const timeLeft = endTime ? endTime - Date.now() : 0;
+    const [count, setCount] = useState(0);
+    
     let 분 = parseInt(count / 60);
     let 초 = count % 60;
+    
     useEffect(() => {
-        setModalOpen(true);
-        setModalContent('관리자 로그인 페이지로 이동합니다.');
-    }, []);
-
-    useEffect(() => {
-        const id = setInterval(() => {
-            setCount((count) => count - 1);
-          }, 1000);
-        if(count === 0) {
-            clearInterval(id);
+        if(count <= 0){
+            if(!cookieCheck) {
+                setModalOpen(true);
+                setModalContent('시간이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                localStorage.removeItem('endTime');
+                return navigate('/admin/login');
+            }
+            setCount(Math.max(Math.floor(timeLeft / 1000), 0))
         }
+            
+        const id = setInterval(() => {
+            setCount((prevCount) => prevCount - 1);
+        }, 1000);
+        
         return () => clearInterval(id);
-    },[count])
 
+    },[count,navigate,cookieCheck])
+    
     const closeModal = () => {
         setModalOpen(false);
     };
-
+    
     useEffect(()=>{
-        if ((location.pathname === '/admin/' || location.pathname === '/admin') && cookieCheck) {
+        if ((location.pathname === '/admin/' || location.pathname === '/admin') && cookieCheck !== undefined) {
             setModalOpen(false);
             setOnOff(true);
         } else {
             setOnOff(false);
             setModalOpen(true);
             setModalContent('관리자 로그인 페이지로 이동합니다.');
-            navigate('/admin/login');
+            return navigate('/admin/login');
         }
     },[location.pathname, cookieCheck])
     
     return(
         <div>
-            {분} 분 {초} 초
-            { onOff !== true ? <Outlet/> : <AdminMain/> }
+            {
+                onOff === true ? (
+                    count >= 60 ? (
+                        <div className={styles.nowTimes}>
+                        만료까지 {분}분 {초}초 남았습니다.
+                    </div>
+                ) : (
+                    <div className={styles.nowTimesSec}>
+                        만료까지 {초}초 남았습니다.
+                    </div>
+                )
+                ) : null
+            }
+            { onOff !== true ? <><Outlet/></> : <AdminMain/> }
             {
             modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />

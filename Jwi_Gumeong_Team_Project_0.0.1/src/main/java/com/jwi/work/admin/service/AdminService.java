@@ -15,6 +15,8 @@ import com.jwi.work.center.inquiry.entity.InquiryResponse;
 import com.jwi.work.center.inquiry.ropository.InquiryRepository;
 import com.jwi.work.center.inquiry.ropository.InquiryResponseRepository;
 import com.jwi.work.center.sanction.entity.Sanction;
+import com.jwi.work.center.sanction.entity.SanctionLog;
+import com.jwi.work.center.sanction.repository.SanctionLogRepository;
 import com.jwi.work.center.sanction.repository.SanctionRepository;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.mapper.UserMapper;
@@ -42,6 +44,9 @@ public class AdminService {
 	private SanctionRepository sanctionRepository;
 	
 	@Autowired
+	private SanctionLogRepository sanctionLogRepository;
+	
+	@Autowired
 	private NowDate dateCal;
 	
 	// 데이터베이스에 직접 insert 하는거보다 여기에서 인코딩 거치고 넣는게 더 나을듯?
@@ -50,7 +55,6 @@ public class AdminService {
 		var authToken = new UsernamePasswordAuthenticationToken(
 				data.get("adminName"), data.get("adminPassWord")
 			);
-			
 		// 정보 허가를 위해서 어센틱케이션에 정보를 넣는다.
 		var auth = authenticationManagerBuilder.getObject().authenticate(authToken);
 		SecurityContextHolder.getContext().setAuthentication(auth);
@@ -86,24 +90,21 @@ public class AdminService {
      * TODO : 
      * 먼저 데이터 찾은다음에 있으면 전환 없으면 생성으로 하면 되려나? // 
      * 로그 만들어야됨 / 로그 테이블 , JPA 엔티티는 만들었음
-     * 
      **/
     
     // 유저 밴하는 기능
     public void banndUser(Map<String,String> userData) {
-    	
     	// JPA 연결되어있는 리파지토리에서 JPA 문법을 이용해 매핑처리해둔 findByUserKey를 호출후 찾은 경우
     	// List<Sanction> 형태로 저장
     	// Integer.parseInt = 문자열을 정수로 전환
     	// userData.get("userKey") HashMap 마냥 Map 자료형으로 저장되어있는 userKey 키값의 벨류를 호출
     	
     	List<Sanction> sanctions = sanctionRepository.findByUserKey(Integer.parseInt(userData.get("userKey")));
+    	Sanction sanction = new Sanction();
     	
     	// 비어있는경우 insert문 작동
 	    if (sanctions.isEmpty()) {
-	    	Sanction sanction = new Sanction();
 	    	//유저 비활성화로 전환 (밴)
-	    	userMapper.updateDeAct(Integer.parseInt(userData.get("userKey")));
 	    	sanction.setReasonDate(dateCal.nowDate());
             sanction.setReason(userData.get("reason"));
             sanction.setUserKey(Integer.parseInt(userData.get("userKey")));
@@ -112,22 +113,28 @@ public class AdminService {
             sanctionRepository.save(sanction);
             
         // 비어있지 않는경우 update 문 작동
-            
 	    } else {
 	    	System.out.println(" 이미 밴 되어있는 유저입니다 업데이트문으로 바꿈" + userData);
-	    	userMapper.updateDeAct(Integer.parseInt(userData.get("userKey")));
-	    	for (Sanction sanction : sanctions) {
-	    		sanction.setReasonDate(dateCal.nowDate());
-	            sanction.setReason(userData.get("reason"));
-	            sanction.setDate(Integer.parseInt(userData.get("date")));
-	    		sanction.setState("activate");
-	            sanctionRepository.save(sanction);
-	        }
+	    	for (Sanction sanctionR : sanctions) {
+	    		sanctionR.setReasonDate(dateCal.nowDate());
+	            sanctionR.setReason(userData.get("reason"));
+	            sanctionR.setDate(Integer.parseInt(userData.get("date")));
+	    		sanctionR.setState("activate");
+	            sanctionRepository.save(sanctionR);
+	    	}
 	    }
 	    
 	    // 중요한점 JPA에선 .save << 이 함수가 update / insert 다 사용할수있음.
 	    // 얘가 똑똑해서 알아서 구분함
-    }
+	    userMapper.updateDeAct(Integer.parseInt(userData.get("userKey")));
+//	    SanctionLog sanctionLog = new SanctionLog();
+//	    // 어드민키 jwt 활용해서 가져올 예정 임시로 1번 고정
+//	    sanctionLog.setAdminKey(1);
+//	    sanctionLog.setBannedKey(sanction.getBannedKey());
+//	    sanctionLog.setUserKey(Integer.parseInt(userData.get("userKey")));
+//	    sanctionLog.setReason(userData.get("reason"));
+//	    sanctionLog.setState(null);
+    } 
     
     // 유저 밴 되돌리기 기능
     public void revertBan(int userKey) {

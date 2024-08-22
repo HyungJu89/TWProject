@@ -354,6 +354,7 @@ function AdminMain() {
                                                     { users.state === "deactivate" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
                                                     {/* 자살중인 계정은 회색? */}
                                                     { users.state === "deling" ? <div className={styles.userStatedeling}>비활성화</div> : null}
+                                                    {/* 탈퇴계정은 안나옴 ㅅㄱ */}
                                                 </div>
                                             </div>
                                         </div>

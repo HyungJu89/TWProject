@@ -58,8 +58,8 @@ function AdminLogin() {
         }
     };
 
-    const maxAge = 1800; // 30 minutes
-    const expirationTime = Date.now() + maxAge * 1000;
+    let maxAge = 1800;
+    let endTime = Date.now() + maxAge * 1000;
 
     const checkAdmin = async () => {
         if (email !== '' && password !== '') {
@@ -76,7 +76,7 @@ function AdminLogin() {
                         secure: true,
                         maxAge: maxAge
                     });
-                    localStorage.setItem('frontCookieExpiry', expirationTime);
+                    localStorage.setItem('endTime', endTime);
                     navigate('/admin');
                 }
                 setLoginWarn(userResponse.data.warningMessage);

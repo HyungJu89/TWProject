@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.jwi.work.alarm.entity.Alarm;
 
 @Repository
-public interface AlarmRepository extends JpaRepository<Alarm, String>{
+public interface AlarmRepository extends JpaRepository<Alarm, Integer>{
 
 	public List<Alarm> findByUserKey(int userKey);
 }
