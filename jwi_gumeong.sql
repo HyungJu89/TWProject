@@ -67,7 +67,7 @@ CREATE TABLE `channel` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 DROP TABLE `channel`;
-select * from `like`;
+select * from `alarm`;
 CREATE TABLE `post` (
 	`postKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -101,7 +101,7 @@ CREATE TABLE `like` (
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
 
-DROP TABLE `like`;
+DROP TABLE `alarm`;
 
 CREATE TABLE `manager` (
 	`managerKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
@@ -194,6 +194,8 @@ CREATE TABLE `reply` (
 	FOREIGN KEY (`commentKey`) REFERENCES `comment`(`commentKey`) ON DELETE CASCADE,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
+
+SELECT * FROM `post`;
 
 CREATE TABLE `banned` (
 	`bannedKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '정지 키',

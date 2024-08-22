@@ -88,5 +88,12 @@
     <select id="getNickName" parameterType="int" resultType="String">
     	SELECT nickName FROM `user` WHERE userKey = #{userKey}
     </select>
-    
+    <!-- 이메일 불러오기 -->
+    <select id="getUserEmail" parameterType="int" resultType="String">
+	    SELECT email FROM user WHERE userKey = #{userKey}
+	</select>
+	<!-- 유저 탈퇴 상태로 업데이트 -->
+	<update id="resignUser" parameterType="int">
+		UPDATE `user` SET `state` = 'secession' WHERE userKey = #{userKey}
+	</update>
 </mapper>

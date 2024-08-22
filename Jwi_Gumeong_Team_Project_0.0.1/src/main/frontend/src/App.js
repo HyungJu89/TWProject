@@ -10,6 +10,7 @@ import SignIn from './signIn/SignIn.js';
 import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import MyPage from './myPage/MyPage.js';
+import Resign from './resign/Resign.js';
 import Search from './search/Search.js';
 import PageCheck from './pageCheck/PageCheck.js';
 import CustomerService from './customerService/CustomerServiceCenter.js';
@@ -80,6 +81,7 @@ function App() {
                     <Route path='/signUp' element={<SignUp/>}/>
                     <Route path='/myPage' element={<MyPage/>}/>
                     <Route path='/pwInquiry' element={<PwInquiry onLogout = {onLogout}/>}/>
+                    <Route path='/resign' element={<Resign onLogout = {onLogout}/>}/>
                     <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
                     <Route path='/channelManagement' element={<ChannelManagement/>}/>
                     <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}

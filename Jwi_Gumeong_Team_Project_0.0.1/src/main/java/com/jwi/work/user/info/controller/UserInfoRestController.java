@@ -34,4 +34,20 @@ public class UserInfoRestController {
 		
 		return result;
 	}
+	
+	@PostMapping("/email")
+	public Map<String, String> getUserEmail(@RequestParam("userKey") int userKey) {
+		String email = userService.selectUserEmail(userKey);
+		
+		Map<String, String> result = new HashMap<>();
+		
+		if(!email.equals(null) || !email.equals("")) {
+			result.put("result", "success");
+			result.put("email", email);
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
 }

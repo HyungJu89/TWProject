@@ -69,5 +69,11 @@ public interface UserMapper{
 		
 		// 유저 닉네임 찾아오기
 		public String getNickName(int userKey);
+		
+		// 유저 이메일 찾아오기
+		public String getUserEmail(@Param("userKey") int userKey);
+		
+		// 유저 탈퇴 처리
+		public int resignUser(@Param("userKey") int userKey);
 }
 
