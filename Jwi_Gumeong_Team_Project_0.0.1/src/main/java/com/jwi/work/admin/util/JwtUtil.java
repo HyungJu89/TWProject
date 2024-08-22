@@ -30,6 +30,7 @@ public class JwtUtil {
 				// 리스트,객체는 출력안됨 문자열(String)만 가능
 				.claim("adminName", user.getUsername())
 				.claim("adminPassWord", user.getPassword())
+				.claim("adminPassWord", user.getPassword())
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis() + 1800000)) // 유효기간 1800초
 				.signWith(key)
@@ -39,8 +40,11 @@ public class JwtUtil {
 
 	// JWT 까주는 함수
 	public static Claims extractToken(String token) {
-		Claims claims = Jwts.parser().verifyWith(key).build()
-				.parseSignedClaims(token).getPayload();
+		Claims claims = Jwts.parser()
+				.verifyWith(key)
+				.build()
+				.parseSignedClaims(token)
+				.getPayload();
 		return claims;
 	}
 

@@ -75,7 +75,6 @@ public class AdminController {
 	// 받아온 유저 밴 하기
 	@PostMapping("/banndUser")
 	public void banndUser(@RequestBody Map<String,String> userData) {
-		System.out.println(userData);
 		adminService.banndUser(userData);
 	}
 	

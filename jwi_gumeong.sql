@@ -1,3 +1,8 @@
+-- 2024-08-23 [조영민] V 0.1.14
+-- 수정내용 : `state` 정지 상태  추가
+ALTER TABLE `bannedLog`
+ADD COLUMN `state` VARCHAR(50) NOT NULL COMMENT '정지 상태';
+
 -- 2024-08-21 [조영민]
 -- 수정내용 : bannedLog 추가
 -- banned에서 update문으로 데이터를 수정하기 떄문에 로그를 남기는 방식으로 수정함
@@ -9,11 +14,12 @@ CREATE TABLE `bannedLog` (
    `reason` VARCHAR(50) NOT NULL COMMENT '정지 사유',
    `reasonDate` DATETIME NOT NULL DEFAULT NOW() COMMENT '정지 시작 날짜',
    `date`   INT   NOT NULL COMMENT '정지일수',
-   `state`  VARCHAR(50) NOT NULL COMMENT '정지 사유',
    `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
 select *from bannedLog;
+select *from banned;
 -- 2024-08-19 [안재원] V 0.1.12
 -- 수정내용 : alarm 테이블에서 title 컬럼 제거
 ALTER TABLE `alarm` DROP `title`;

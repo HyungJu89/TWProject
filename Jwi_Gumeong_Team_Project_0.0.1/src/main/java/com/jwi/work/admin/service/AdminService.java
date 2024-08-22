@@ -22,6 +22,8 @@ import com.jwi.work.user.dto.User;
 import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.util.NowDate;
 
+import io.jsonwebtoken.Claims;
+
 @Service
 public class AdminService {
 	
@@ -101,7 +103,9 @@ public class AdminService {
     	
     	List<Sanction> sanctions = sanctionRepository.findByUserKey(Integer.parseInt(userData.get("userKey")));
     	Sanction sanction = new Sanction();
-    	
+    	SanctionLog sanctionLog = new SanctionLog();
+    	int bannedKey = 0;
+//    	.get("adminName", String.class)
     	// 비어있는경우 insert문 작동
 	    if (sanctions.isEmpty()) {
 	    	//유저 비활성화로 전환 (밴)
@@ -110,7 +114,9 @@ public class AdminService {
             sanction.setUserKey(Integer.parseInt(userData.get("userKey")));
             sanction.setState("activate");
             sanction.setDate(Integer.parseInt(userData.get("date")));
-            sanctionRepository.save(sanction);
+            Sanction savedSanction = sanctionRepository.save(sanction);
+            bannedKey = savedSanction.getBannedKey();
+            sanctionLog.setBannedKey(bannedKey);
             
         // 비어있지 않는경우 update 문 작동
 	    } else {
@@ -120,33 +126,47 @@ public class AdminService {
 	            sanctionR.setReason(userData.get("reason"));
 	            sanctionR.setDate(Integer.parseInt(userData.get("date")));
 	    		sanctionR.setState("activate");
+	    		sanctionLog.setBannedKey(sanctionR.getBannedKey());
 	            sanctionRepository.save(sanctionR);
 	    	}
 	    }
-	    
 	    // 중요한점 JPA에선 .save << 이 함수가 update / insert 다 사용할수있음.
 	    // 얘가 똑똑해서 알아서 구분함
 	    userMapper.updateDeAct(Integer.parseInt(userData.get("userKey")));
-//	    SanctionLog sanctionLog = new SanctionLog();
-//	    // 어드민키 jwt 활용해서 가져올 예정 임시로 1번 고정
-//	    sanctionLog.setAdminKey(1);
-//	    sanctionLog.setBannedKey(sanction.getBannedKey());
-//	    sanctionLog.setUserKey(Integer.parseInt(userData.get("userKey")));
-//	    sanctionLog.setReason(userData.get("reason"));
-//	    sanctionLog.setState(null);
+	    // 어드민키 jwt 활용해서 가져올 예정 임시로 1번 고정
+	    sanctionLog.setAdminKey(1);
+	    sanctionLog.setReasonDate(dateCal.nowDateString());
+	    sanctionLog.setUserKey(Integer.parseInt(userData.get("userKey")));
+	    sanctionLog.setReason(userData.get("reason"));
+	    sanctionLog.setDate(Integer.parseInt(userData.get("date")));
+	    sanctionLog.setState("activate");
+	    sanctionLogRepository.save(sanctionLog);
     } 
     
     // 유저 밴 되돌리기 기능
     public void revertBan(int userKey) {
     	// 밴 기록이 있을경우에만 작동 
     	List<Sanction> sanctions = sanctionRepository.findByUserKey(userKey);
+    	SanctionLog sanctionLog = new SanctionLog();
 	    if (!sanctions.isEmpty()) {
 	    	// 유저 활성화로 전환
 	    	userMapper.updateAct(userKey);
 	        for (Sanction sanction : sanctions) {
+	        	// sanction 설정
 	            sanction.setState("deactivate");
 	            sanctionRepository.save(sanction);
+	            
+	            // sanctionLog 설정
+	    	    sanctionLog.setAdminKey(1);
+	    	    sanctionLog.setReasonDate(dateCal.nowDateString());
+	    	    sanctionLog.setUserKey(sanction.getUserKey());
+	    	    sanctionLog.setReason(sanction.getReason());
+	    	    sanctionLog.setDate(sanction.getDate());
+	    	    sanctionLog.setBannedKey(sanction.getBannedKey());
+	    	    sanctionLog.setState("deactivate");
+	    	    sanctionLogRepository.save(sanctionLog);
 	        }
+	        
 	    } else {
 	        System.out.println(" ㅋㅋ 없는데 왜찾음 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" + userKey);
 	    }
