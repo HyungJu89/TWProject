@@ -1,3 +1,10 @@
-.nowTimes{
+.nowTimes,
+.nowTimesSec{
+    color: #F3F3F3;
+    background-color: #40B9D8;
+    border-radius: 0px;
     display: flex;
+    font-size: 14px;
+    justify-content: flex-end;
+    align-items: flex-start;
 }

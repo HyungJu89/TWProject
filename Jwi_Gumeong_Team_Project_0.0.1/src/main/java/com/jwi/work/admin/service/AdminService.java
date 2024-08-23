@@ -2,6 +2,7 @@ package com.jwi.work.admin.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,10 +22,13 @@ import com.jwi.work.center.sanction.repository.SanctionRepository;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.util.NowDate;
+import com.jwi.work.util.PagingUtil;
+import com.jwi.work.util.dto.PagingDto;
 
-import io.jsonwebtoken.Claims;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class AdminService {
 	
 	// @Autowired << Bean 자동으로 돌려줌 ㅅㄱ
@@ -32,24 +36,20 @@ public class AdminService {
 	// Admin쪽으로 POST 요청 들어오면 처리
 	@Autowired
 	private AuthenticationManagerBuilder authenticationManagerBuilder;
-	
 	@Autowired
 	private UserMapper userMapper;
-	
 	@Autowired
 	private InquiryRepository inquiryRepository;
-	
 	@Autowired
 	private InquiryResponseRepository inquiryResponseRepository; 
-	
 	@Autowired
 	private SanctionRepository sanctionRepository;
-	
 	@Autowired
 	private SanctionLogRepository sanctionLogRepository;
-	
 	@Autowired
 	private NowDate dateCal;
+	@Autowired
+    private PagingUtil pagingUtil;
 	
 	// 데이터베이스에 직접 insert 하는거보다 여기에서 인코딩 거치고 넣는게 더 나을듯?
 	public String loginJWT(Map<String,String> data) {
@@ -73,6 +73,30 @@ public class AdminService {
 		return userMapper.getAllUser();
 	}
 	
+//	public List<User> getPageingUsers(int page, int limitPage, PagingDto pagingDto){
+//		List<User> users = userMapper.getAllUser();
+//		if (page <= 0) {
+//            page = 1;
+//        }
+//		PagingDto pageing = pagingUtil.paging(page, users.size(), limitPage);
+//		List<User> pageingUsers = users.stream()
+//				.skip(pageing.getOffset())
+//                .limit(pageing.getLimit())
+//                .map(new User(
+//    				users.getUserKey(),
+//					users.getEmail(),
+//					users.getPwWrong(),
+//    				users.getNickName(),
+//    				users.getGender(),
+//    				users.getBirthday(),
+//                    users.getState(),
+//                    users.getCreatedAt(),
+//                    users.getUpdatedAt()
+//                ))
+//                .collect(Collectors.toList());
+//		return users;
+//	}
+	
     public List<Inquiry> selectInquiry() {
     	// 재원이 형이 작성한 inquiryRepository(JPA) 문법에 따라 .findAll()을 호출
     	return inquiryRepository.findAll();
@@ -92,6 +116,7 @@ public class AdminService {
      * TODO : 
      * 먼저 데이터 찾은다음에 있으면 전환 없으면 생성으로 하면 되려나? // 
      * 로그 만들어야됨 / 로그 테이블 , JPA 엔티티는 만들었음
+     * 로그 다함 이제 페이징 처리 하고 다른걸로 넘어가면될듯 신고기능을 빨리 받아야지 연결할수있음.
      **/
     
     // 유저 밴하는 기능

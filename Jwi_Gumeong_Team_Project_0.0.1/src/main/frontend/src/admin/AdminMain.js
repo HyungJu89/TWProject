@@ -44,17 +44,18 @@ function AdminMain() {
     const [closeButtonHovered, setCloseButtonHovered] = useState(false);
     const cookieCheck = getCookie('frontCookie');
     const [users, setUsers] = useState([]);
+    const [usersCopy, setUsersCopy] = useState([]);
     const [moreBtnOption,setMoreBtnOption] = useState(false);
     const [banned, setBanned] = useState([]);
     const [revertBtn,setRevertBtn] = useState(false);
     const [update,setUpdate] = useState(false);
-
     useEffect(() => {
         if(cookieCheck){
             axios.get('/admin/findAllUser')
                 .then(response => {
                     if (response.data) {
                         setUsers(response.data);
+                        setUsersCopy(response.data);
                     } else {
                         console.log("유저 리스트 불러오기 실패");
                     }
@@ -80,6 +81,16 @@ function AdminMain() {
                 });
         }
     }, [cookieCheck,update]);
+    
+    let sortRun = (btnData) =>{
+        if(users){
+            if(btnData === "reset"){
+                return setUsers(usersCopy);
+            }
+            let copy = usersCopy.filter(item => item.state === btnData);
+            setUsers(copy);
+        }
+    }
 
     const updateBannedAct = (userKey) =>{
         if(cookieCheck){
@@ -94,7 +105,7 @@ function AdminMain() {
                 });
         }
     }
-
+    
     function updateBannedDeAct(userKeys){
         if(selectedOption !== "선택하세요"){
             if(selectedOption2 !== "선택하세요"){
@@ -341,7 +352,7 @@ function AdminMain() {
                         {users.map((users, idx) => {
                             let banData = banned.find(ban => ban.userKey === parseInt(users.userKey));
                                 return(
-                                    <div key={idx} className={styles[("faqItem" + users.state)]}>
+                                    <div key={idx} className={styles.faqItem}>
                                         <div className={styles.faqHeader} onClick={() => openedFaq(idx)}>
                                             <div className={styles.faqDetails}>
                                                 <div className={styles.faqTitle}>{users.userKey} . {users.email}</div>
@@ -353,7 +364,7 @@ function AdminMain() {
                                                     {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
                                                     { users.state === "deactivate" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
                                                     {/* 자살중인 계정은 회색? */}
-                                                    { users.state === "deling" ? <div className={styles.userStatedeling}>비활성화</div> : null}
+                                                    { users.state === "secession" ? <div className={styles.userStatedeling}>비활성화</div> : null}
                                                     {/* 탈퇴계정은 안나옴 ㅅㄱ */}
                                                 </div>
                                             </div>
@@ -448,6 +459,11 @@ function AdminMain() {
                                         )}
                                     </div>
                             )})}
+                            <div className={styles.adminPageing}>
+                                <div>이전</div>
+                                <div>현재애들</div>
+                                <div>다음</div>
+                            </div>
                     </div>
                 );
             // 문의하기
@@ -710,6 +726,21 @@ function AdminMain() {
                     </div>
                 </div>
             </div>
+
+            {
+                tab === 0 ?
+                <div className={styles.sortBtn}>
+                    <div className={styles.userStateResetBtn} onClick={()=>{sortRun("reset")}}>리셋</div>
+                    <div className={styles.userStateactivateBtn} onClick={()=>{sortRun("deactivate")}}>제재완료</div>
+                    {/* 신고 기능완성후 수정 예정 */}
+                    <div className={styles.userStatedeactivateBtn} onClick={()=>{sortRun("deactivate")}}>신고접수</div>
+                    <div className={styles.userStatedelingBtn} onClick={()=>{sortRun("secession")}}>비활성화</div>
+                    {/* 검색기능 만들면 여기다가 추가 하면될듯 */}
+                    {/* <input></input> */}
+                </div>
+                : null
+            }
+
             <div className={styles.serviceContents}>
                 <div className={styles.serviceNav}>
                     <div className={styles.navContent}>

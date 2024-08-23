@@ -17,9 +17,10 @@ CREATE TABLE `bannedLog` (
    `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
+	
 select *from bannedLog;
 select *from banned;
+
 -- 2024-08-19 [안재원] V 0.1.12
 -- 수정내용 : alarm 테이블에서 title 컬럼 제거
 ALTER TABLE `alarm` DROP `title`;
@@ -61,6 +62,7 @@ CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
 select*from`user`;
+insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt)
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,

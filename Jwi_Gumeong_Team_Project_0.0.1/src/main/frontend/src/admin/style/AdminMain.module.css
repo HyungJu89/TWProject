@@ -177,11 +177,22 @@
     justify-content: space-between;
 }
 
+.adminPageing{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+
 /* 문의 답변 */
 .userState,
 .userStateactivate,
 .userStatedeactivate,
-.userStatedeling {
+.userStatedeling,
+.userStateactivateBtn,
+.userStatedeactivateBtn,
+.userStatedelingBtn,
+.userStateResetBtn {
     margin-top: auto;
     margin-bottom: auto;
     
@@ -206,16 +217,35 @@
 }
 
 /* 제재 : 빨강색 */
-.userStateactivate{
+.userStateactivate,
+.userStateactivateBtn{
     background-color: #fd3f3f;
 }
 /* 신고 : 파랑색*/
-.userStatedeactivate{
+.userStatedeactivate,
+.userStatedeactivateBtn{
     background-color: #4444ff;
 }
 /* 자살 : 회색 */
-.userStatedeling{
+.userStatedeling,
+.userStatedelingBtn{
     background-color: #a1a1a1;
+}
+
+.sortBtn{
+    margin-top: 30px;
+    display: flex;
+    gap: 25px;
+}
+
+.userStateactivateBtn,
+.userStatedeactivateBtn,
+.userStatedelingBtn,
+.userStateResetBtn{
+    cursor: pointer;
+    font-size: 20px;
+    width: 100px;
+    height: 35px;
 }
 
 .faqContentText {

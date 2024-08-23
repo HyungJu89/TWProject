@@ -65,18 +65,18 @@ function Admin(){
                 onOff === true ? (
                     count >= 60 ? (
                         <div className={styles.nowTimes}>
-                        만료까지 {분}분 {초}초 남았습니다.
+                        로그인 만료까지 {분}분 {초}초 남았습니다.
                     </div>
                 ) : (
                     <div className={styles.nowTimesSec}>
-                        만료까지 {초}초 남았습니다.
+                        로그인 만료까지 {초}초 남았습니다.
                     </div>
                 )
                 ) : null
             }
             { onOff !== true ? <><Outlet/></> : <AdminMain/> }
             {
-            modalOpen && 
+                modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }
         </div>
