@@ -159,6 +159,7 @@ public class AdminService {
 	    // 얘가 똑똑해서 알아서 구분함
 	    userMapper.updateDeAct(Integer.parseInt(userData.get("userKey")));
 	    // 어드민키 jwt 활용해서 가져올 예정 임시로 1번 고정
+	    // 로그 관련 게터세터
 	    sanctionLog.setAdminKey(1);
 	    sanctionLog.setReasonDate(dateCal.nowDateString());
 	    sanctionLog.setUserKey(Integer.parseInt(userData.get("userKey")));
