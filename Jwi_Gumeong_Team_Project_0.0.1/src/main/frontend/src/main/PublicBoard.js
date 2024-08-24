@@ -174,6 +174,10 @@ function Comments({ postKey ,setCommentCount}) {
     //댓글 정렬순서
     const [isAsc,setIsAsc] = useState(true);
 
+
+    const [replyInputState, setReplyInputState] = useState('');
+    const [replyInputIndex, setReplyInputIndex] = useState(0);
+
     // 이모지 삽입 함수
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
@@ -281,6 +285,17 @@ function Comments({ postKey ,setCommentCount}) {
     }, [commentLode,isAsc])
 
 
+    const replyOnclick = (state, index) => {
+        setReplyInputState(state)
+        setReplyInputIndex(index)
+    }
+
+    const onClear = () => {
+        setReplyInputState('')
+        setReplyInputIndex(0)
+    }
+
+
     return (
         <div>
             <div className={styles.dashed} />{/* 회색줄 */}
@@ -314,7 +329,10 @@ function Comments({ postKey ,setCommentCount}) {
                                 postKey={postKey}
                                 comment={comment}
                                 setCommentLode = {setCommentLode}
-                                setCommentCount = {setCommentCount}
+                                replyOnclick ={replyOnclick}
+                                onClear = {onClear}
+                                replyInputState={replyInputState}
+                                replyInputIndex={replyInputIndex}
                             />
                             </div>
                         );
@@ -324,12 +342,11 @@ function Comments({ postKey ,setCommentCount}) {
         </div>
     )
 }
-function CommentsList({ index, postKey, comment,setCommentLode,setCommentCount }) {
+function CommentsList({ index, postKey, comment,setCommentLode,replyOnclick,onClear,replyInputState,replyInputIndex }) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     const modalRef = useRef(null);
     const moreRef = useRef(null);
-    const [replyInputState, setReplyInputState] = useState('');
-    const [replyInputIndex, setReplyInputIndex] = useState(0);
+
     const [replyMoreON, setReplyMoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
@@ -342,16 +359,6 @@ function CommentsList({ index, postKey, comment,setCommentLode,setCommentCount }
         };
     }, [commentMoreON]);
 
-
-    const replyOnclick = (state, index) => {
-        setReplyInputState(state)
-        setReplyInputIndex(index)
-    }
-
-    const clear = () => {
-        setReplyInputState(null)
-        setReplyInputIndex(null)
-    }
 
 
 
@@ -368,11 +375,11 @@ function CommentsList({ index, postKey, comment,setCommentLode,setCommentCount }
                         </div>
                     </div>
                     <div className={styles.listContent}>{comment.comment}</div>
-                    <div className={styles.replyDiv} onClick={() => (replyInputState == 'comment' && replyInputIndex == index) ? clear() : replyOnclick('comment', index)}>
+                    <div className={styles.replyDiv} onClick={() => (replyInputState == 'comment' && replyInputIndex == index) ? onClear() : replyOnclick('comment', index)}>
                         <div className={styles.replyDivText} style={{marginBottom:'20px'}}><img src={comments_20px}/>답글달기</div>
                     </div>
                     {(replyInputState == 'comment' && replyInputIndex == index) &&
-                        <ReplyArea postKey={postKey} commentKey={comment.commentKey} setCommentLode={setCommentLode}/>
+                        <ReplyArea postKey={postKey} commentKey={comment.commentKey} setCommentLode={setCommentLode} onClear={onClear}/>
                     }
                 </div>
             </div>
@@ -394,13 +401,13 @@ function CommentsList({ index, postKey, comment,setCommentLode,setCommentCount }
                                     <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
                                 }
                                 <a className={styles.listContent}>{reply.reply}</a>
-                                <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == replyIndex) ? clear() : replyOnclick('reply', replyIndex)}>
+                                <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == replyIndex) ? onClear() : replyOnclick('reply', replyIndex)}>
                                     <div className={styles.replyDivText}><img src={comments_20px}/>답글달기</div>
                                 </div>
                             </div>
                         </div>
                         {(replyInputState == 'reply' && replyInputIndex == replyIndex) &&
-                            <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} clear={clear} />
+                            <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} onClear={onClear} />
                         }
                     </>
                 )
@@ -409,7 +416,7 @@ function CommentsList({ index, postKey, comment,setCommentLode,setCommentCount }
     )
 }
 
-function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLode, clear}) {
+function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLode, onClear}) {
     const textareaRef = useRef(null);
     
     // 이모지 삽입 함수
@@ -471,7 +478,8 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
         }
         setCommentLode((state)=> state? false : true);
         setReply('');
-        clear();
+        onClear();
+
     }
 
 const handleInput = (e) => {//스크롤 늘어나게
@@ -504,7 +512,7 @@ return (
             <div className={styles.commentNav}>
                 <img onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
                 {EmojiOn && <div className={styles.a}><Emogi setEmogiAdd={setEmogiAdd} /></div>}
-                <div style={{ color: replyTextColor }}>{replyLength}/{replysLimit}<button style={{ backgroundColor: replyButtonColor }} onClick={replyCreate}>등록</button></div>
+                <div style={{ color: replyTextColor }}>{replyLength}/{replysLimit}<button style={{ backgroundColor: replyButtonColor }} onClick={()=>replyCreate()}>등록</button></div>
             </div>
         </div>
     </div>
