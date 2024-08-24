@@ -1,0 +1,108 @@
+.resignContainer {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+.resignBox {
+    background-color: #FFFFFF;
+    width: 786px;
+    height: 739px;
+    margin: 200px 0 200px 0;
+    justify-content: center;
+}
+
+.resignMain {
+    margin: 80px;
+}
+
+.resignTitle {
+    font-weight: 500px;
+    font-size: 32px;
+    color: #101010;
+    text-align: center;
+}
+
+.check{
+    margin-top: 60px;
+    font-weight: 500;
+    font-size: 20px;
+    color: #101010;
+}
+
+.reCheck {
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.email {
+    color: #FF8901;
+}
+
+.cautionContainer {
+    border: 1px solid #E5E5E5;
+    margin: 20px 0px 20px 0px;
+}
+
+.cautionBox {
+    margin: 30px;
+    color: #101010;
+    font-weight: 500;
+}
+
+.cautionOne {
+    margin-bottom: 30px;
+}
+
+.cautionTitle {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.cautionOne li {
+    font-size: 14px;
+}
+
+.checkBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkOk {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.checkImgBox {
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+}
+
+.checkImgBox div {
+    margin-left: 8px;
+}
+
+.buttonContainer{
+    margin-top: 60px;
+}
+
+.resignButton {
+    display: flex;
+    width: 626px;
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 16px;
+    background-color: #BBBBBB;
+    cursor: default;
+}
+
+.resignButton.active {
+    background-color: #FF8901;
+    cursor: pointer;
+}

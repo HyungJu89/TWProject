@@ -333,6 +333,7 @@
 }
 
 .uploadedFile {
+    position: relative;
     flex: 1;
     max-width: calc(20% - 10px);
     height: 138px;
@@ -345,6 +346,26 @@
     width: 138px; 
     height: 138px;
     border-radius: 5px;
+}
+
+/* 이미지 제거 버튼 */
+.removeButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: none;
+}
+
+.uploadedFile:hover .removeButton {
+    display: block;
+}
+
+.removeButton img {
+    width: 20px;
+    height: 20px;
 }
 
 /* 문의넣기 버튼 구간 */

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from './style/AlarmTwoModal.module.css';
 
 // 알림 모달
-function AlarmTwoModal({ content, onClose }) {
+function AlarmTwoModal({ content, onClose, confirmText = "확인", cancelText = "닫기" }) {
 
     useEffect(() => {
         // 모달 열리면 스크롤 막음
@@ -22,10 +22,12 @@ function AlarmTwoModal({ content, onClose }) {
                 </div>
                 <div className={styles.footer}>
                     <button className={styles.okBtn} onClick={() => onClose('confirm')}>
-                        확인
+                        {/* 확인버튼 */}
+                        {confirmText}
                     </button>
                     <button className={styles.closeBtn} onClick={() => onClose('cancel')}>
-                        닫기
+                        {/* 닫기버튼 */}
+                        {cancelText}
                     </button>
                 </div>
             </div>
