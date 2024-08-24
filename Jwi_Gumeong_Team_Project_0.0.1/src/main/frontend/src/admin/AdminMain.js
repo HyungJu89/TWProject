@@ -49,6 +49,23 @@ function AdminMain() {
     const [banned, setBanned] = useState([]);
     const [revertBtn,setRevertBtn] = useState(false);
     const [update,setUpdate] = useState(false);
+    const [report,setReport] = useState([]);
+    useEffect(() => {
+        if(cookieCheck){
+            axios.get('/admin/report')
+            .then(response => {
+                if (response.data) {
+                    setReport(response.data);
+                } else {
+                    console.log("유저 리스트 불러오기 실패");
+                }
+                })
+                .catch(error => {
+                    console.log("API 호출 오류: " + error.message);
+                });
+        }
+    }, [cookieCheck,update]);
+
     useEffect(() => {
         if(cookieCheck){
             axios.get('/admin/findAllUser')
@@ -351,6 +368,7 @@ function AdminMain() {
                         {/* 이거 순번체킹 말고 key값 받아와서 체킹하는걸로 해야할듯? */}
                         {users.map((users, idx) => {
                             let banData = banned.find(ban => ban.userKey === parseInt(users.userKey));
+                            let reportData = report.filter(repot => repot.user.userKey === parseInt(users.userKey));
                                 return(
                                     <div key={idx} className={styles.faqItem}>
                                         <div className={styles.faqHeader} onClick={() => openedFaq(idx)}>
@@ -362,7 +380,8 @@ function AdminMain() {
                                                     { users.state === "deactivate" && banData?.state === "activate" ? <div className={styles.userStateactivate}>제재완료</div> : null}
                                                     {/* 신고 접수 된 상태 파란색 */}
                                                     {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
-                                                    { users.state === "deactivate" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
+                                                    { reportData[idx]?.state === "unprocessed" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
+                                                    {/* 신고 처리 완료 딱지도 만들면 좋을듯? */}
                                                     {/* 자살중인 계정은 회색? */}
                                                     { users.state === "secession" ? <div className={styles.userStatedeling}>비활성화</div> : null}
                                                     {/* 탈퇴계정은 안나옴 ㅅㄱ */}
@@ -373,14 +392,21 @@ function AdminMain() {
                                         {faqContent === idx && (
                                             <div>
                                                 {
-                                                    banData?.state === "activate" ?
+                                                    reportData[idx]?.state === "unprocessed" ?
                                                     <div className={styles.faqContent}>
                                                         {/* 신고받은거 넣으면 될듯 */}
-                                                        <div className={styles.faqContentText}> 중복 제외 신고 내용 ( 3명 ) </div>
-                                                        <div className={styles.faqContentText}>1.다메닝겐임 dud5825@gmail.com 외 2명 ( 재열: 9번 )</div>
-                                                        <div className={styles.faqContentText}>2.걍 신고함 asdf@naver.com 외 4명 </div>
                                                         {/* 네비게이트로 신고 내역쪽으로 리다이렉트 */}
-                                                        <div className={styles.faqContentText}>3.바보임 delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
+                                                        {console.log(reportData[idx].category)}
+                                                        <div className={styles.faqContentText}> 전체 신고 갯수 ( {reportData.length}개 ) </div>
+                                                        {/* 전체참조문으로 만들 필요성이 있음. */}
+                                                        {
+                                                            reportData[0]?.category === "보안" ? <div className={styles.faqContentText}>{reportData[0].category} 음란성 콘텐츠입니다 {reportData[0].reportUser.email} 외 2명 ( {reportData[idx].category.length} )</div> : null
+                                                        }
+                                                        <div className={styles.faqContentText}>불법성 콘텐츠입니다. asdf@naver.com 외 4명 </div>
+                                                        <div className={styles.faqContentText}>청소년 부적합 콘텐츠입니다. delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
+                                                        <div className={styles.faqContentText}>사회 질서 저해 콘텐츠입니다. delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
+                                                        <div className={styles.faqContentText}>쥐구멍 자체 기준 위반 콘텐츠입니다. delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
+                                                        <div className={styles.faqContentText}>욕설/생명경시/혐오/차별적 표현입니다. delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
                                                     </div>
                                                     : null
                                                 }
@@ -655,7 +681,7 @@ function AdminMain() {
                             )}
                         </div>
 
-                        {/* 페이징 */}
+                            
                         {totalPages > 1 && (
                             <div className={styles.pagination}>
                                 <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
@@ -675,39 +701,28 @@ function AdminMain() {
                     <div className={styles.sanctionContainer}>
                         <div className={styles.sanctionList}>
                             {/* 내역이 없을 시 */}
-                            {sanctions.length === 0 ? (
+                            {console.log(report)}
+                            {
+                            report.length === 0 ? (
                                 <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
                             ) : (
                                 // 제재 내역이 있을 시
-                                sanctions.map((sanction, index) => (
-                                    <div key={index} className={styles.sanctionItem}>
-                                        <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
-                                        <div className={styles.sanctionDetails}>
-                                            <div className={styles.sanctionTitle}>{nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
-                                            <div className={styles.sanctionContent}>
-                                                <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
-                                                <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>
-                                            </div>
-                                        </div>
-                                        {index < sanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
-                                    </div>
-                                ))
-                            )}
-                        </div>
+                                report.map((a,i)=>{
+                                    return(
+                                        <div>
+                                            <br></br>
 
-                        {/* 페이징 */}
-                        {totalPages > 1 && (
-                            <div className={styles.pagination}>
-                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
-                                    <img src={btnLeft} alt="이전 페이지" />
-                                </button>
-                                {/* 현재 페이지 / 전체 페이지 */}
-                                <div className={styles.pageInfo}>{currentPage} / {totalPages}</div>
-                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className={styles.pageNextButton}>
-                                    <img src={btnRight} alt="다음 페이지" />
-                                </button>
-                            </div>
-                        )}
+                                            <div>신고한놈 : {report[i].reportUser.nickName}</div>
+                                            <div>신고내용 : {report[i].content.substr(0,80)}</div>
+                                            <div>카테고리 : {report[i].category}</div>
+                                            <div>신고 받은놈 :{report[i].user.nickName}</div>
+                                            <br></br>
+                                        </div>
+                                    )
+                                })    
+                            )
+                            }
+                        </div>
                     </div>
                 );
             default:
@@ -758,11 +773,11 @@ function AdminMain() {
                         </div>
                         <div className={`${styles.navItems} ${tab === 3 ? styles.active : ''}`} 
                             onClick={() => setTab(3)}>
-                            신고 내역
+                            더미 파일
                         </div>
                         <div className={`${styles.navItems} ${tab === 4 ? styles.active : ''}`} 
                             onClick={() => setTab(4)}>
-                            채널 관리
+                            신고 내역
                         </div>
                         {/* 여기에다가 정렬기능 만들면 좋을듯? */}
                     </div>

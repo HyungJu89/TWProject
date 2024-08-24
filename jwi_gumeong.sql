@@ -1,8 +1,23 @@
 -- 2024-08-24 [조영민] V 0.1.15
--- 수정내용 : report 테이블 category int -> varchar로 수정
+-- 수정내용 : report 테이블 category int -> varchar로 수정 report 인서트문 추가
+-- DB자체에서도 바꿔뒀으니 알터만 하면됨
 ALTER TABLE `report`
 MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
 select *from report;
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('1','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
+
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('1','2','post','4','도용','왜 처리 안함 ㅡㅡ','unprocessed',now(),now());
+
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('4','2','post','4','오류/버그','에이펙스에서 핵쓰고다녔음 ㅡㅡ','unprocessed',now(),now());
+
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('4','2','post','4','오류/버그','엉덩이에서 총나옴 이거 어케 처리할껀데 진짜','unprocessed',now(),now());
+
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('4','2','post','4','오류/버그','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
 
 -- 2024-08-23 [조영민] V 0.1.14
 -- 수정내용 : `state` 정지 상태  추가
@@ -20,6 +35,7 @@ CREATE TABLE `bannedLog` (
    `reason` VARCHAR(50) NOT NULL COMMENT '정지 사유',
    `reasonDate` DATETIME NOT NULL DEFAULT NOW() COMMENT '정지 시작 날짜',
    `date`   INT   NOT NULL COMMENT '정지일수',
+   `state` VARCHAR(50) NOT NULL COMMENT '정지 상태',
    `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -154,7 +170,7 @@ CREATE TABLE `report` (
 	`userKey`	INT	NOT NULL	COMMENT '신고한 유저',
 	`referenceType`	VARCHAR(50)	NOT NULL	COMMENT '신고 종류 "post","comment","reply" 테이블 이름 넣기',
 	`referenceKey`	INT	NOT NULL	COMMENT '참조키',
-	`category`	INT	NOT NULL	COMMENT '신고 사유',
+	`category` VARCHAR(32) NOT NULL COMMENT '신고 사유',
 	`content`	TEXT	NOT NULL	COMMENT '신고 내용',
 	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'unprocessed'	COMMENT '처리현황 "unprocessed","process" 작업자와 상의',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

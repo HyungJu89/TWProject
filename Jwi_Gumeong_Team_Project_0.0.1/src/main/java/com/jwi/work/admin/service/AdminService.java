@@ -118,6 +118,10 @@ public class AdminService {
     	return sanctionRepository.findAll();
     }
     
+    public List<Report> selectReport(){
+    	return reportRepository.findAll();
+    }
+    
     /** 
      * TODO : 
      * 먼저 데이터 찾은다음에 있으면 전환 없으면 생성으로 하면 되려나? // 
