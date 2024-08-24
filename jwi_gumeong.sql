@@ -42,7 +42,6 @@ ALTER TABLE `admin` ADD CONSTRAINT `uniqueAdminName` UNIQUE (`adminName`);
 -- id : asdf /  pw : asdf123
 select *from admin;
 insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("asdf","$2a$12$qWMhwV31meoA0C6fvoVLX.OBe4NXvyz09HIewoxQ8EPProosm54z6","activate",now(),now());
-insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("admin","$2a$12$rzBhzPVttxvPy2JJDxUEful/ngUpyuC.73k4rd1l0jPc3xRn0CObe","activate",now(),now());
 insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("dsfs3975","$2a$12$5UdVf8drVmy.R/dNuULOAej7jmz7aqoS7ON50aG.zzdSNZbJlYdBq","activate",now(),now());
 
 -- 2024-08-15 [안재원] V 0.1.9 
