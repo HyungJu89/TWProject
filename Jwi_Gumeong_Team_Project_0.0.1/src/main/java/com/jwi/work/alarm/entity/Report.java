@@ -15,7 +15,6 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Data
 @Table(name = "report")
 public class Report {
 
@@ -37,8 +36,8 @@ public class Report {
     @Column(name = "referenceKey", nullable = false)
     private int referenceKey;
 
-    @Column(name = "category", nullable = false)
-    private int category;
+    @Column(name = "category", nullable = false, length = 32)
+    private String category;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -66,4 +65,85 @@ public class Report {
     public int getReportUserKey() {
         return reportUser.getUserKey();
     }
+
+	public int getReportKey() {
+		return reportKey;
+	}
+
+	public void setReportKey(int reportKey) {
+		this.reportKey = reportKey;
+	}
+
+	public User getReportUser() {
+		return reportUser;
+	}
+
+	public void setReportUser(User reportUser) {
+		this.reportUser = reportUser;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getReferenceType() {
+		return referenceType;
+	}
+
+	public void setReferenceType(String referenceType) {
+		this.referenceType = referenceType;
+	}
+
+	public int getReferenceKey() {
+		return referenceKey;
+	}
+
+	public void setReferenceKey(int referenceKey) {
+		this.referenceKey = referenceKey;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+    
 }

@@ -1,4 +1,4 @@
-package com.jwi.work.center.inquiry.ropository;
+package com.jwi.work.center.inquiry.repository;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;

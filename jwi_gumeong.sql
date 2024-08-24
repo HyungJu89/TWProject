@@ -1,3 +1,9 @@
+-- 2024-08-24 [조영민] V 0.1.15
+-- 수정내용 : report 테이블 category int -> varchar로 수정
+ALTER TABLE `report`
+MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
+select *from report;
+
 -- 2024-08-23 [조영민] V 0.1.14
 -- 수정내용 : `state` 정지 상태  추가
 ALTER TABLE `bannedLog`
@@ -34,7 +40,10 @@ ALTER TABLE `admin` ADD CONSTRAINT `uniqueAdminName` UNIQUE (`adminName`);
 -- 수정내용 : ADMIN TABLE 컬럼명 수정 id => adminName / pw => adminPassWord 헤싱된 insert문 추가
 -- 패스워드 인코더로 insert하는것이 불가능하기 때문에 직접 insert하는걸로 변경했음
 -- id : asdf /  pw : asdf123
+select *from admin;
 insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("asdf","$2a$12$qWMhwV31meoA0C6fvoVLX.OBe4NXvyz09HIewoxQ8EPProosm54z6","activate",now(),now());
+insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("admin","$2a$12$rzBhzPVttxvPy2JJDxUEful/ngUpyuC.73k4rd1l0jPc3xRn0CObe","activate",now(),now());
+insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("dsfs3975","$2a$12$5UdVf8drVmy.R/dNuULOAej7jmz7aqoS7ON50aG.zzdSNZbJlYdBq","activate",now(),now());
 
 -- 2024-08-15 [안재원] V 0.1.9 
 -- 수정내용 : inquiry 테이블 Title 소문자로 변경 및 이미지 Null 가능으로 변경 , inquiryResponse 이미지 Null 가능, faq 이미지 Null 가능
@@ -62,7 +71,7 @@ CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
 select*from`user`;
-insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt)
+insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zddsaszxdasdf1@naver.com','12s4','f4fzcvx3r','비밀',0,null,'activate',NOW(),NOW());
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,

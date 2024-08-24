@@ -1,4 +1,4 @@
-package com.jwi.work.center.inquiry.ropository;
+package com.jwi.work.center.inquiry.repository;
 
 import java.util.List;
 

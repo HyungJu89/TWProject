@@ -2,7 +2,6 @@ package com.jwi.work.admin.service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,10 +10,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.admin.util.JwtUtil;
+import com.jwi.work.alarm.entity.Report;
+import com.jwi.work.alarm.repository.ReportRepository;
 import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.center.inquiry.entity.InquiryResponse;
-import com.jwi.work.center.inquiry.ropository.InquiryRepository;
-import com.jwi.work.center.inquiry.ropository.InquiryResponseRepository;
+import com.jwi.work.center.inquiry.repository.InquiryRepository;
+import com.jwi.work.center.inquiry.repository.InquiryResponseRepository;
 import com.jwi.work.center.sanction.entity.Sanction;
 import com.jwi.work.center.sanction.entity.SanctionLog;
 import com.jwi.work.center.sanction.repository.SanctionLogRepository;
@@ -23,7 +24,6 @@ import com.jwi.work.user.dto.User;
 import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.util.NowDate;
 import com.jwi.work.util.PagingUtil;
-import com.jwi.work.util.dto.PagingDto;
 
 import lombok.AllArgsConstructor;
 
@@ -46,6 +46,8 @@ public class AdminService {
 	private SanctionRepository sanctionRepository;
 	@Autowired
 	private SanctionLogRepository sanctionLogRepository;
+	@Autowired
+	private ReportRepository reportRepository;
 	@Autowired
 	private NowDate dateCal;
 	@Autowired
@@ -95,6 +97,10 @@ public class AdminService {
 //                ))
 //                .collect(Collectors.toList());
 //		return users;
+//	}
+	
+//	public List<Report> asdf(){
+//		
 //	}
 	
     public List<Inquiry> selectInquiry() {

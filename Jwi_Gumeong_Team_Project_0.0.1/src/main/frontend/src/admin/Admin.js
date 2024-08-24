@@ -64,14 +64,14 @@ function Admin(){
             {
                 onOff === true ? (
                     count >= 60 ? (
-                        <div className={styles.nowTimes}>
+                    <div className={styles.nowTimes}>
                         로그인 만료까지 {분}분 {초}초 남았습니다.
                     </div>
-                ) : (
+                    ) : (
                     <div className={styles.nowTimesSec}>
                         로그인 만료까지 {초}초 남았습니다.
                     </div>
-                )
+                    )
                 ) : null
             }
             { onOff !== true ? <><Outlet/></> : <AdminMain/> }
