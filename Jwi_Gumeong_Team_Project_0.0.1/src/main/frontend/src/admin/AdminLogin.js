@@ -1,12 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import styles from './style/AdminLogin.module.css';
-import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
-import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { setCookie, getCookie, removeCookie } from '../cookies/Cookies.js';
+import { setCookie } from '../cookies/Cookies.js';
+import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
+import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import AlarmModal from '../modal/AlarmModal.js';
+import styles from './style/AdminLogin.module.css';
 
 function AdminLogin() {
 
@@ -19,7 +18,6 @@ function AdminLogin() {
     const [showPassword, setShowPassword] = useState(false);
     //로그인 틀릴 시 경고문 저장
     const [loginWarn, setLoginWarn] = useState('');
-    const dispatch = useDispatch();
     let navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
@@ -140,7 +138,7 @@ function AdminLogin() {
                             onChange={handlePasswordChange}
                             onKeyDown={handleEnter}
                         />
-                        <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} />
+                        <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} alt='ㅋㅋ' />
                     </div>
                 </div>
                 {

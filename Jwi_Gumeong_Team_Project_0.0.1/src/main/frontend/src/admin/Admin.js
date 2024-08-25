@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useLocation , Outlet, useNavigate } from 'react-router-dom';
-import styles from './style/Admin.module.css';
-import { getCookie } from '../cookies/Cookies.js'
-import AdminMain from './AdminMain.js'
-import axios from 'axios';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { getCookie } from '../cookies/Cookies.js';
 import AlarmModal from '../modal/AlarmModal.js';
+import AdminMain from './AdminMain.js';
+import styles from './style/Admin.module.css';
 
 function Admin(){
     
@@ -41,7 +40,7 @@ function Admin(){
         
         return () => clearInterval(id);
 
-    },[count,navigate,cookieCheck])
+    },[count,navigate,cookieCheck,timeLeft])
     
     const closeModal = () => {
         setModalOpen(false);
@@ -57,7 +56,7 @@ function Admin(){
             setModalContent('관리자 로그인 페이지로 이동합니다.');
             return navigate('/admin/login');
         }
-    },[location.pathname, cookieCheck])
+    },[location.pathname,cookieCheck,navigate])
     
     return(
         <div>
