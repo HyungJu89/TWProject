@@ -14,6 +14,7 @@ import closeModalIcon from '../icon/btn/btn-image-Close.png';
 import closeModalIconHover from '../icon/btn/btn-image-Close-a.png';
 import leftIcon from '../icon/40px/chevron-left-w.png';
 import rightIcon from '../icon/40px/chevron-right-w.png';
+import removeIcon from '../icon/btn/bnt_img_x.png';
 import { getCookie } from '../cookies/Cookies.js';
 
 function AdminMain() {
@@ -50,6 +51,7 @@ function AdminMain() {
     const [revertBtn,setRevertBtn] = useState(false);
     const [update,setUpdate] = useState(false);
     const [report,setReport] = useState([]);
+    
     useEffect(() => {
         if(cookieCheck){
             axios.get('/admin/report')
@@ -328,6 +330,10 @@ function AdminMain() {
         });
     };
 
+    const removeImage = (index) => {
+        setFiles(files.filter((_, i) => i !== index));
+    };
+
     // faq 클릭시 상세 내용 표시
     const openedFaq = (idx) => {
         setFaqContent(faqContent === idx ? null : idx);
@@ -588,66 +594,133 @@ function AdminMain() {
                                 }).format(new Date(response.createdAt)) : '-'; // 날짜가 없으면 - 로 표시
 
                                 return (
-                                    <div key={idx} className={styles.inquiryItem}>
-                                        {/* 클릭한 내역 내용 오픈 */}
-                                        <div onClick={() => openedInquiry(idx)}>
-                                            <div className={styles.inquiryHeader}>
-                                                <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
-                                                <div className={styles.inquiryDetails}>
-                                                    <div className={styles.inquiryTitleContainer}>
-                                                        <div className={styles.inquiryTitle}>{inquiry.title}</div>
-                                                        {response && (
-                                                            <div className={styles.inquiryResponse}>답변완료</div>
+                                    <div className={styles.inquiryContainer}>
+                                        {/* 문의 내용이 없을 시 */}
+                                        {inquiries.length === 0 ? (
+                                            <div className={styles.noHistory}>문의 내역이 없습니다.</div>
+                                        ) : (
+                                            inquiries.map((inquiry, idx) => {
+                                                const response = inquiryResponses[inquiry.inquiryKey];
+                                                // 날짜 형식 변경 2024년 O월 O일
+                                                const formattedDate = response ? new Intl.DateTimeFormat('ko', { 
+                                                    year: 'numeric', 
+                                                    month: 'long', 
+                                                    day: 'numeric' 
+                                                }).format(new Date(response.createdAt)) : '-'; // 날짜가 없으면 - 로 표시
+                                
+                                                return (
+                                                    <div key={idx} className={styles.inquiryItem}>
+                                                        {/* 클릭한 내역 내용 오픈 */}
+                                                        <div onClick={() => openedInquiry(idx)}>
+                                                            <div className={styles.inquiryHeader}>
+                                                                <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
+                                                                <div className={styles.inquiryDetails}>
+                                                                    <div className={styles.inquiryTitleContainer}>
+                                                                        <div className={styles.inquiryTitle}>{inquiry.title}</div>
+                                                                        {response && (
+                                                                            <div className={styles.inquiryResponse}>답변완료</div>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className={styles.inquirySubtitle}>답변 받은 날짜: {formattedDate}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {inquiryContent === idx && (
+                                                            <div>
+                                                                <div className={styles.faqDivider}></div>
+                                                                <div className={styles.faqContent}>
+                                                                    <div className={styles.faqContentText}>{inquiry.details}</div>
+                                                                    <div className={styles.inquiryImageBox}>
+                                                                        {/* 이미지 목록에서 , 를 기준으로 자름 */}
+                                                                        {inquiry.image && inquiry.image.split(',').map((imgUrl, imgIdx) => (
+                                                                            // 이미지 링크 앞 뒤 공백 제거 해서 표시
+                                                                            <img key={imgIdx} 
+                                                                                src={`http://localhost:9090/images/${imgUrl.trim()}`}
+                                                                                className={styles.inquiryContentImage}
+                                                                                onClick={() => openImageModal(inquiry.image.split(','), imgIdx)}
+                                                                                alt="문의 이미지"
+                                                                            />
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                                {response ? (
+                                                                    <div>
+                                                                        <div className={styles.faqDivider}></div>
+                                                                        <div className={styles.responsHeader}>답변</div>
+                                                                        <div className={styles.responseContent}>
+                                                                            <div className={styles.responseContentText}>
+                                                                                {response.responseText}
+                                                                            </div>
+                                                                            {response.image && (
+                                                                                <div className={styles.inquiryImageBox}>
+                                                                                    {/* 이미지 목록에서 , 를 기준으로 자름 */}
+                                                                                    {response.image.split(',').map((imgUrl, imgIdx) => (
+                                                                                        // 이미지 링크 앞 뒤 공백 제거 해서 표시
+                                                                                        <img key={imgIdx} 
+                                                                                            src={`http://localhost:9090/images/${imgUrl.trim()}`}
+                                                                                            className={styles.inquiryContentImage}
+                                                                                            onClick={() => openImageModal(response.image.split(','), imgIdx)}
+                                                                                            alt="답변 이미지"
+                                                                                        />
+                                                                                    ))}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div>
+                                                                        <div className={styles.faqDivider}></div>
+                                                                        {/* 답변 내용 입력 칸 */}
+                                                                        <div className={styles.responseContent}>
+                                                                            <div className={styles.inqField}>
+                                                                                <textarea 
+                                                                                    name="responseText"
+                                                                                    value={form.responseText}
+                                                                                    onChange={handleInputChange}
+                                                                                    className={styles.inqTextarea}
+                                                                                    placeholder="답변 내용을 입력하세요."
+                                                                                ></textarea>
+                                                                            </div>
+                                                                            {/* 답변 이미지 추가 */}
+                                                                            <div className={styles.inqField}>
+                                                                                <div className={styles.imageBox}>
+                                                                                    {/* 이미지 미리 보기 */}
+                                                                                    {files.map((fileObj, index) => (
+                                                                                        <div key={index} className={styles.uploadedFile}>
+                                                                                            <img src={fileObj.preview} alt={fileObj.file.name} style={{maxWidth: "100px", maxHeight: "100px"}} />
+                                                                                            {/* 이미지 제거 버튼 */}
+                                                                                            <button className={styles.removeButton} onClick={() => removeImage(index)}>
+                                                                                                <img src={removeIcon} alt="이미지 제거" />
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    ))}
+                                                                                    {/* 이미지가 5개보다 적을 때 추가 버튼 보임  */}
+                                                                                    {/* 이미지 넣을 때마다 한칸씩 오른쪽으로 */}
+                                                                                    {files.length < 5 && (
+                                                                                        <div className={styles.fileUpload} onClick={() => document.getElementById('file-upload').click()}>
+                                                                                            <img src={addIcon} className={styles.uploadIcon} alt="파일 추가 버튼 아이콘" />
+                                                                                            <input id="file-upload" type="file" accept="image/*" onChange={fileChange} multiple style={{ display: 'none' }} />
+                                                                                        </div>
+                                                                                    )}
+                                                                                </div>
+                                                                            </div>
+                                                                            {/* 답변 제출 버튼 */}
+                                                                            <div className={styles.submitButtonContainer}>
+                                                                                {/* 답변 내용이 전부 입력이 안 되었을 때 버튼 비 활성화 */}
+                                                                                <button onClick={submit} 
+                                                                                    className={inputComplete ? styles.activeSubmitButton : styles.disabledSubmitButton}
+                                                                                    disabled={!inputComplete}>
+                                                                                    답변 등록
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         )}
                                                     </div>
-                                                    <div className={styles.inquirySubtitle}>답변 받은 날짜: {formattedDate}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {inquiryContent === idx && (
-                                            <div>
-                                                <div className={styles.faqDivider}></div>
-                                                <div className={styles.faqContent}>
-                                                    <div className={styles.faqContentText}>{inquiry.details}</div>
-                                                    <div className={styles.inquiryImageBox}>
-                                                        {/* 이미지 목록에서 , 를 기준으로 자름 */}
-                                                        {inquiry.image && inquiry.image.split(',').map((imgUrl, imgIdx) => (
-                                                            // 이미지 링크 앞 뒤 공백 제거 해서 표시
-                                                            <img key={imgIdx} 
-                                                                src={`http://localhost:9090/images/${imgUrl.trim()}`}
-                                                                className={styles.inquiryContentImage}
-                                                                onClick={() => openImageModal(inquiry.image.split(','), imgIdx)}
-                                                                alt="문의 이미지"
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                                {response && (
-                                                    <div>
-                                                        <div className={styles.faqDivider}></div>
-                                                        <div className={styles.responsHeader}>답변</div>
-                                                        <div className={styles.responseContent}>
-                                                            <div className={styles.responseContentText}>
-                                                                {response.responseText}
-                                                            </div>
-                                                            {response.image && (
-                                                                <div className={styles.inquiryImageBox}>
-                                                                    {/* 이미지 목록에서 , 를 기준으로 자름 */}
-                                                                    {response.image.split(',').map((imgUrl, imgIdx) => (
-                                                                        // 이미지 링크 앞 뒤 공백 제거 해서 표시
-                                                                        <img key={imgIdx} 
-                                                                            src={`http://localhost:9090/images/${imgUrl.trim()}`}
-                                                                            className={styles.inquiryContentImage}
-                                                                            onClick={() => openImageModal(response.image.split(','), imgIdx)}
-                                                                            alt="답변 이미지"
-                                                                        />
-                                                                    ))}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
+                                                );
+                                            })
                                         )}
                                     </div>
                                 );
