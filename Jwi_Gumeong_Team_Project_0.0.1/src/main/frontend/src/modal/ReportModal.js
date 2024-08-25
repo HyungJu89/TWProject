@@ -46,17 +46,15 @@ function ReportModal({userName,referenceType,referenceKey,content,onClose}) {
 
         try{
             // 서버로 데이터 전달
-            const {data} = await axios.post(`/post/create`,repotDto,);
+            const {data} = await axios.post(`/report/submit`,repotDto);
             // 성공적으로 업로드된 경우 추가적인 처리
             if(!data.success){
                 // 버튼 하나짜리 알람창 필요합니다!
-                return alert("오류가 발생하여 신고가 성공적으로 완료되지않았습니다.");
+                return 
             }
             onClose()
         } catch (error) {
-            // console.error('업로드 실패:', error);
-            // setModalContent('서버에 이상이 생겨 업로드를 실패하였습니다. 다시 시도해주세요.');
-            // setModalOpen(true);
+            console.error('업로드 실패:', error);
         }
 
 
