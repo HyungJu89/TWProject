@@ -119,12 +119,12 @@ public class SignInService {
                     return userCheck;
         		} else {
         			userCheck.setCheck(false);
-                    userCheck.setState("비활성화된 계정");
+                    userCheck.setState("비활성화된 계정입니다.");
                     return userCheck;
         		}
     		} else if(state.equals("secession")) {
     			userCheck.setCheck(false);
-                userCheck.setState("탈퇴한 계정");
+                userCheck.setState("탈퇴한 계정입니다.");
                 
                 return userCheck;
     		}

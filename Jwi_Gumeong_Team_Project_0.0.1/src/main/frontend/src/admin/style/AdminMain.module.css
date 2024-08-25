@@ -177,11 +177,22 @@
     justify-content: space-between;
 }
 
+.adminPageing{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+
 /* 문의 답변 */
 .userState,
 .userStateactivate,
 .userStatedeactivate,
-.userStatedeling {
+.userStatedeling,
+.userStateactivateBtn,
+.userStatedeactivateBtn,
+.userStatedelingBtn,
+.userStateResetBtn {
     margin-top: auto;
     margin-bottom: auto;
     
@@ -206,16 +217,35 @@
 }
 
 /* 제재 : 빨강색 */
-.userStateactivate{
+.userStateactivate,
+.userStateactivateBtn{
     background-color: #fd3f3f;
 }
 /* 신고 : 파랑색*/
-.userStatedeactivate{
+.userStatedeactivate,
+.userStatedeactivateBtn{
     background-color: #4444ff;
 }
 /* 자살 : 회색 */
-.userStatedeling{
+.userStatedeling,
+.userStatedelingBtn{
     background-color: #a1a1a1;
+}
+
+.sortBtn{
+    margin-top: 30px;
+    display: flex;
+    gap: 25px;
+}
+
+.userStateactivateBtn,
+.userStatedeactivateBtn,
+.userStatedelingBtn,
+.userStateResetBtn{
+    cursor: pointer;
+    font-size: 20px;
+    width: 100px;
+    height: 35px;
 }
 
 .faqContentText {
@@ -473,6 +503,7 @@
 }
 
 .uploadedFile {
+    position: relative;
     flex: 1;
     max-width: calc(20% - 10px);
     height: 138px;
@@ -485,6 +516,26 @@
     width: 138px; 
     height: 138px;
     border-radius: 5px;
+}
+
+/* 이미지 제거 버튼 */
+.removeButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: none;
+}
+
+.uploadedFile:hover .removeButton {
+    display: block;
+}
+
+.removeButton img {
+    width: 20px;
+    height: 20px;
 }
 
 /* 문의넣기 버튼 구간 */
@@ -508,7 +559,7 @@
     cursor: not-allowed; /* 클릭 하지마! */
     font-size: 16px;
     font-weight: 500;
-    margin: 40px 0 50px 0;
+    margin-top: 30px;
     border: none;
 }
 

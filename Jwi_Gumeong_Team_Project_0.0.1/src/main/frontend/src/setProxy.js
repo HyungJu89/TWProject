@@ -6,7 +6,7 @@ module.exports = function(app) {
   app.use(
     '/jieun',
     createProxyMiddleware({
-      target: 'http://localhost:9090',	
+      target: 'http://localhost:9090',
 //      # 서버 URL or localhost:설정한포트번호
       changeOrigin: true,
     })

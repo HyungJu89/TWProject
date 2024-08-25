@@ -10,8 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.center.inquiry.entity.InquiryResponse;
-import com.jwi.work.center.inquiry.ropository.InquiryRepository;
-import com.jwi.work.center.inquiry.ropository.InquiryResponseRepository;
+import com.jwi.work.center.inquiry.repository.InquiryRepository;
+import com.jwi.work.center.inquiry.repository.InquiryResponseRepository;
 import com.jwi.work.util.FileManagerUtil;
 
 @Service

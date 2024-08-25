@@ -14,6 +14,7 @@ import closeModalIcon from '../icon/btn/btn-image-Close.png';
 import closeModalIconHover from '../icon/btn/btn-image-Close-a.png';
 import leftIcon from '../icon/40px/chevron-left-w.png';
 import rightIcon from '../icon/40px/chevron-right-w.png';
+import removeIcon from '../icon/btn/bnt_img_x.png';
 import { getCookie } from '../cookies/Cookies.js';
 
 function AdminMain() {
@@ -44,10 +45,28 @@ function AdminMain() {
     const [closeButtonHovered, setCloseButtonHovered] = useState(false);
     const cookieCheck = getCookie('frontCookie');
     const [users, setUsers] = useState([]);
+    const [usersCopy, setUsersCopy] = useState([]);
     const [moreBtnOption,setMoreBtnOption] = useState(false);
     const [banned, setBanned] = useState([]);
     const [revertBtn,setRevertBtn] = useState(false);
     const [update,setUpdate] = useState(false);
+    const [report,setReport] = useState([]);
+    
+    useEffect(() => {
+        if(cookieCheck){
+            axios.get('/admin/report')
+            .then(response => {
+                if (response.data) {
+                    setReport(response.data);
+                } else {
+                    console.log("유저 리스트 불러오기 실패");
+                }
+                })
+                .catch(error => {
+                    console.log("API 호출 오류: " + error.message);
+                });
+        }
+    }, [cookieCheck,update]);
 
     useEffect(() => {
         if(cookieCheck){
@@ -55,6 +74,7 @@ function AdminMain() {
                 .then(response => {
                     if (response.data) {
                         setUsers(response.data);
+                        setUsersCopy(response.data);
                     } else {
                         console.log("유저 리스트 불러오기 실패");
                     }
@@ -80,6 +100,16 @@ function AdminMain() {
                 });
         }
     }, [cookieCheck,update]);
+    
+    let sortRun = (btnData) =>{
+        if(users){
+            if(btnData === "reset"){
+                return setUsers(usersCopy);
+            }
+            let copy = usersCopy.filter(item => item.state === btnData);
+            setUsers(copy);
+        }
+    }
 
     const updateBannedAct = (userKey) =>{
         if(cookieCheck){
@@ -94,7 +124,7 @@ function AdminMain() {
                 });
         }
     }
-
+    
     function updateBannedDeAct(userKeys){
         if(selectedOption !== "선택하세요"){
             if(selectedOption2 !== "선택하세요"){
@@ -300,6 +330,10 @@ function AdminMain() {
         });
     };
 
+    const removeImage = (index) => {
+        setFiles(files.filter((_, i) => i !== index));
+    };
+
     // faq 클릭시 상세 내용 표시
     const openedFaq = (idx) => {
         setFaqContent(faqContent === idx ? null : idx);
@@ -340,8 +374,9 @@ function AdminMain() {
                         {/* 이거 순번체킹 말고 key값 받아와서 체킹하는걸로 해야할듯? */}
                         {users.map((users, idx) => {
                             let banData = banned.find(ban => ban.userKey === parseInt(users.userKey));
+                            let reportData = report.filter(repot => repot.user.userKey === parseInt(users.userKey));
                                 return(
-                                    <div key={idx} className={styles[("faqItem" + users.state)]}>
+                                    <div key={idx} className={styles.faqItem}>
                                         <div className={styles.faqHeader} onClick={() => openedFaq(idx)}>
                                             <div className={styles.faqDetails}>
                                                 <div className={styles.faqTitle}>{users.userKey} . {users.email}</div>
@@ -351,9 +386,11 @@ function AdminMain() {
                                                     { users.state === "deactivate" && banData?.state === "activate" ? <div className={styles.userStateactivate}>제재완료</div> : null}
                                                     {/* 신고 접수 된 상태 파란색 */}
                                                     {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
-                                                    { users.state === "deactivate" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
+                                                    { reportData[idx]?.state === "unprocessed" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
+                                                    {/* 신고 처리 완료 딱지도 만들면 좋을듯? */}
                                                     {/* 자살중인 계정은 회색? */}
-                                                    { users.state === "deling" ? <div className={styles.userStatedeling}>비활성화</div> : null}
+                                                    { users.state === "secession" ? <div className={styles.userStatedeling}>비활성화</div> : null}
+                                                    {/* 탈퇴계정은 안나옴 ㅅㄱ */}
                                                 </div>
                                             </div>
                                         </div>
@@ -361,14 +398,21 @@ function AdminMain() {
                                         {faqContent === idx && (
                                             <div>
                                                 {
-                                                    banData?.state === "activate" ?
+                                                    reportData[idx]?.state === "unprocessed" ?
                                                     <div className={styles.faqContent}>
                                                         {/* 신고받은거 넣으면 될듯 */}
-                                                        <div className={styles.faqContentText}> 중복 제외 신고 내용 ( 3명 ) </div>
-                                                        <div className={styles.faqContentText}>1.다메닝겐임 dud5825@gmail.com 외 2명 ( 재열: 9번 )</div>
-                                                        <div className={styles.faqContentText}>2.걍 신고함 asdf@naver.com 외 4명 </div>
                                                         {/* 네비게이트로 신고 내역쪽으로 리다이렉트 */}
-                                                        <div className={styles.faqContentText}>3.바보임 delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
+                                                        {console.log(reportData[idx].category)}
+                                                        <div className={styles.faqContentText}> 전체 신고 갯수 ( {reportData.length}개 ) </div>
+                                                        {/* 전체참조문으로 만들 필요성이 있음. */}
+                                                        {
+                                                            reportData[0]?.category === "보안" ? <div className={styles.faqContentText}>{reportData[0].category} 음란성 콘텐츠입니다 {reportData[0].reportUser.email} 외 2명 ( {reportData[idx].category.length} )</div> : null
+                                                        }
+                                                        <div className={styles.faqContentText}>불법성 콘텐츠입니다. asdf@naver.com 외 4명 </div>
+                                                        <div className={styles.faqContentText}>청소년 부적합 콘텐츠입니다. delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
+                                                        <div className={styles.faqContentText}>사회 질서 저해 콘텐츠입니다. delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
+                                                        <div className={styles.faqContentText}>쥐구멍 자체 기준 위반 콘텐츠입니다. delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
+                                                        <div className={styles.faqContentText}>욕설/생명경시/혐오/차별적 표현입니다. delbabo@naver.com 외 2명 ( delbabo: 10번 )</div>
                                                     </div>
                                                     : null
                                                 }
@@ -447,6 +491,11 @@ function AdminMain() {
                                         )}
                                     </div>
                             )})}
+                            <div className={styles.adminPageing}>
+                                <div>이전</div>
+                                <div>현재애들</div>
+                                <div>다음</div>
+                            </div>
                     </div>
                 );
             // 문의하기
@@ -545,66 +594,133 @@ function AdminMain() {
                                 }).format(new Date(response.createdAt)) : '-'; // 날짜가 없으면 - 로 표시
 
                                 return (
-                                    <div key={idx} className={styles.inquiryItem}>
-                                        {/* 클릭한 내역 내용 오픈 */}
-                                        <div onClick={() => openedInquiry(idx)}>
-                                            <div className={styles.inquiryHeader}>
-                                                <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
-                                                <div className={styles.inquiryDetails}>
-                                                    <div className={styles.inquiryTitleContainer}>
-                                                        <div className={styles.inquiryTitle}>{inquiry.title}</div>
-                                                        {response && (
-                                                            <div className={styles.inquiryResponse}>답변완료</div>
+                                    <div className={styles.inquiryContainer}>
+                                        {/* 문의 내용이 없을 시 */}
+                                        {inquiries.length === 0 ? (
+                                            <div className={styles.noHistory}>문의 내역이 없습니다.</div>
+                                        ) : (
+                                            inquiries.map((inquiry, idx) => {
+                                                const response = inquiryResponses[inquiry.inquiryKey];
+                                                // 날짜 형식 변경 2024년 O월 O일
+                                                const formattedDate = response ? new Intl.DateTimeFormat('ko', { 
+                                                    year: 'numeric', 
+                                                    month: 'long', 
+                                                    day: 'numeric' 
+                                                }).format(new Date(response.createdAt)) : '-'; // 날짜가 없으면 - 로 표시
+                                
+                                                return (
+                                                    <div key={idx} className={styles.inquiryItem}>
+                                                        {/* 클릭한 내역 내용 오픈 */}
+                                                        <div onClick={() => openedInquiry(idx)}>
+                                                            <div className={styles.inquiryHeader}>
+                                                                <img src={reply} className={styles.inquiryIcon} alt="답변 아이콘"/>
+                                                                <div className={styles.inquiryDetails}>
+                                                                    <div className={styles.inquiryTitleContainer}>
+                                                                        <div className={styles.inquiryTitle}>{inquiry.title}</div>
+                                                                        {response && (
+                                                                            <div className={styles.inquiryResponse}>답변완료</div>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className={styles.inquirySubtitle}>답변 받은 날짜: {formattedDate}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {inquiryContent === idx && (
+                                                            <div>
+                                                                <div className={styles.faqDivider}></div>
+                                                                <div className={styles.faqContent}>
+                                                                    <div className={styles.faqContentText}>{inquiry.details}</div>
+                                                                    <div className={styles.inquiryImageBox}>
+                                                                        {/* 이미지 목록에서 , 를 기준으로 자름 */}
+                                                                        {inquiry.image && inquiry.image.split(',').map((imgUrl, imgIdx) => (
+                                                                            // 이미지 링크 앞 뒤 공백 제거 해서 표시
+                                                                            <img key={imgIdx} 
+                                                                                src={`http://localhost:9090/images/${imgUrl.trim()}`}
+                                                                                className={styles.inquiryContentImage}
+                                                                                onClick={() => openImageModal(inquiry.image.split(','), imgIdx)}
+                                                                                alt="문의 이미지"
+                                                                            />
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                                {response ? (
+                                                                    <div>
+                                                                        <div className={styles.faqDivider}></div>
+                                                                        <div className={styles.responsHeader}>답변</div>
+                                                                        <div className={styles.responseContent}>
+                                                                            <div className={styles.responseContentText}>
+                                                                                {response.responseText}
+                                                                            </div>
+                                                                            {response.image && (
+                                                                                <div className={styles.inquiryImageBox}>
+                                                                                    {/* 이미지 목록에서 , 를 기준으로 자름 */}
+                                                                                    {response.image.split(',').map((imgUrl, imgIdx) => (
+                                                                                        // 이미지 링크 앞 뒤 공백 제거 해서 표시
+                                                                                        <img key={imgIdx} 
+                                                                                            src={`http://localhost:9090/images/${imgUrl.trim()}`}
+                                                                                            className={styles.inquiryContentImage}
+                                                                                            onClick={() => openImageModal(response.image.split(','), imgIdx)}
+                                                                                            alt="답변 이미지"
+                                                                                        />
+                                                                                    ))}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div>
+                                                                        <div className={styles.faqDivider}></div>
+                                                                        {/* 답변 내용 입력 칸 */}
+                                                                        <div className={styles.responseContent}>
+                                                                            <div className={styles.inqField}>
+                                                                                <textarea 
+                                                                                    name="responseText"
+                                                                                    value={form.responseText}
+                                                                                    onChange={handleInputChange}
+                                                                                    className={styles.inqTextarea}
+                                                                                    placeholder="답변 내용을 입력하세요."
+                                                                                ></textarea>
+                                                                            </div>
+                                                                            {/* 답변 이미지 추가 */}
+                                                                            <div className={styles.inqField}>
+                                                                                <div className={styles.imageBox}>
+                                                                                    {/* 이미지 미리 보기 */}
+                                                                                    {files.map((fileObj, index) => (
+                                                                                        <div key={index} className={styles.uploadedFile}>
+                                                                                            <img src={fileObj.preview} alt={fileObj.file.name} style={{maxWidth: "100px", maxHeight: "100px"}} />
+                                                                                            {/* 이미지 제거 버튼 */}
+                                                                                            <button className={styles.removeButton} onClick={() => removeImage(index)}>
+                                                                                                <img src={removeIcon} alt="이미지 제거" />
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    ))}
+                                                                                    {/* 이미지가 5개보다 적을 때 추가 버튼 보임  */}
+                                                                                    {/* 이미지 넣을 때마다 한칸씩 오른쪽으로 */}
+                                                                                    {files.length < 5 && (
+                                                                                        <div className={styles.fileUpload} onClick={() => document.getElementById('file-upload').click()}>
+                                                                                            <img src={addIcon} className={styles.uploadIcon} alt="파일 추가 버튼 아이콘" />
+                                                                                            <input id="file-upload" type="file" accept="image/*" onChange={fileChange} multiple style={{ display: 'none' }} />
+                                                                                        </div>
+                                                                                    )}
+                                                                                </div>
+                                                                            </div>
+                                                                            {/* 답변 제출 버튼 */}
+                                                                            <div className={styles.submitButtonContainer}>
+                                                                                {/* 답변 내용이 전부 입력이 안 되었을 때 버튼 비 활성화 */}
+                                                                                <button onClick={submit} 
+                                                                                    className={inputComplete ? styles.activeSubmitButton : styles.disabledSubmitButton}
+                                                                                    disabled={!inputComplete}>
+                                                                                    답변 등록
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         )}
                                                     </div>
-                                                    <div className={styles.inquirySubtitle}>답변 받은 날짜: {formattedDate}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {inquiryContent === idx && (
-                                            <div>
-                                                <div className={styles.faqDivider}></div>
-                                                <div className={styles.faqContent}>
-                                                    <div className={styles.faqContentText}>{inquiry.details}</div>
-                                                    <div className={styles.inquiryImageBox}>
-                                                        {/* 이미지 목록에서 , 를 기준으로 자름 */}
-                                                        {inquiry.image && inquiry.image.split(',').map((imgUrl, imgIdx) => (
-                                                            // 이미지 링크 앞 뒤 공백 제거 해서 표시
-                                                            <img key={imgIdx} 
-                                                                src={`http://localhost:9090/images/${imgUrl.trim()}`}
-                                                                className={styles.inquiryContentImage}
-                                                                onClick={() => openImageModal(inquiry.image.split(','), imgIdx)}
-                                                                alt="문의 이미지"
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                                {response && (
-                                                    <div>
-                                                        <div className={styles.faqDivider}></div>
-                                                        <div className={styles.responsHeader}>답변</div>
-                                                        <div className={styles.responseContent}>
-                                                            <div className={styles.responseContentText}>
-                                                                {response.responseText}
-                                                            </div>
-                                                            {response.image && (
-                                                                <div className={styles.inquiryImageBox}>
-                                                                    {/* 이미지 목록에서 , 를 기준으로 자름 */}
-                                                                    {response.image.split(',').map((imgUrl, imgIdx) => (
-                                                                        // 이미지 링크 앞 뒤 공백 제거 해서 표시
-                                                                        <img key={imgIdx} 
-                                                                            src={`http://localhost:9090/images/${imgUrl.trim()}`}
-                                                                            className={styles.inquiryContentImage}
-                                                                            onClick={() => openImageModal(response.image.split(','), imgIdx)}
-                                                                            alt="답변 이미지"
-                                                                        />
-                                                                    ))}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
+                                                );
+                                            })
                                         )}
                                     </div>
                                 );
@@ -638,7 +754,7 @@ function AdminMain() {
                             )}
                         </div>
 
-                        {/* 페이징 */}
+                            
                         {totalPages > 1 && (
                             <div className={styles.pagination}>
                                 <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
@@ -658,39 +774,28 @@ function AdminMain() {
                     <div className={styles.sanctionContainer}>
                         <div className={styles.sanctionList}>
                             {/* 내역이 없을 시 */}
-                            {sanctions.length === 0 ? (
+                            {console.log(report)}
+                            {
+                            report.length === 0 ? (
                                 <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
                             ) : (
                                 // 제재 내역이 있을 시
-                                sanctions.map((sanction, index) => (
-                                    <div key={index} className={styles.sanctionItem}>
-                                        <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
-                                        <div className={styles.sanctionDetails}>
-                                            <div className={styles.sanctionTitle}>{nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
-                                            <div className={styles.sanctionContent}>
-                                                <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
-                                                <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>
-                                            </div>
-                                        </div>
-                                        {index < sanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
-                                    </div>
-                                ))
-                            )}
-                        </div>
+                                report.map((a,i)=>{
+                                    return(
+                                        <div>
+                                            <br></br>
 
-                        {/* 페이징 */}
-                        {totalPages > 1 && (
-                            <div className={styles.pagination}>
-                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
-                                    <img src={btnLeft} alt="이전 페이지" />
-                                </button>
-                                {/* 현재 페이지 / 전체 페이지 */}
-                                <div className={styles.pageInfo}>{currentPage} / {totalPages}</div>
-                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className={styles.pageNextButton}>
-                                    <img src={btnRight} alt="다음 페이지" />
-                                </button>
-                            </div>
-                        )}
+                                            <div>신고한놈 : {report[i].reportUser.nickName}</div>
+                                            <div>신고내용 : {report[i].content.substr(0,80)}</div>
+                                            <div>카테고리 : {report[i].category}</div>
+                                            <div>신고 받은놈 :{report[i].user.nickName}</div>
+                                            <br></br>
+                                        </div>
+                                    )
+                                })    
+                            )
+                            }
+                        </div>
                     </div>
                 );
             default:
@@ -709,6 +814,21 @@ function AdminMain() {
                     </div>
                 </div>
             </div>
+
+            {
+                tab === 0 ?
+                <div className={styles.sortBtn}>
+                    <div className={styles.userStateResetBtn} onClick={()=>{sortRun("reset")}}>리셋</div>
+                    <div className={styles.userStateactivateBtn} onClick={()=>{sortRun("deactivate")}}>제재완료</div>
+                    {/* 신고 기능완성후 수정 예정 */}
+                    <div className={styles.userStatedeactivateBtn} onClick={()=>{sortRun("deactivate")}}>신고접수</div>
+                    <div className={styles.userStatedelingBtn} onClick={()=>{sortRun("secession")}}>비활성화</div>
+                    {/* 검색기능 만들면 여기다가 추가 하면될듯 */}
+                    {/* <input></input> */}
+                </div>
+                : null
+            }
+
             <div className={styles.serviceContents}>
                 <div className={styles.serviceNav}>
                     <div className={styles.navContent}>
@@ -726,11 +846,11 @@ function AdminMain() {
                         </div>
                         <div className={`${styles.navItems} ${tab === 3 ? styles.active : ''}`} 
                             onClick={() => setTab(3)}>
-                            신고 내역
+                            더미 파일
                         </div>
                         <div className={`${styles.navItems} ${tab === 4 ? styles.active : ''}`} 
                             onClick={() => setTab(4)}>
-                            채널 관리
+                            신고 내역
                         </div>
                         {/* 여기에다가 정렬기능 만들면 좋을듯? */}
                     </div>

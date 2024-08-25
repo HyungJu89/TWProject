@@ -43,5 +43,5 @@ logging:
 file:
   upload-dir: uploads/resources/fileupload/
   
-  jwt:
-    key: chldldlarladkswh0828chldldlarladkswh0828chldldlarladkswh0828
+jwt:
+  key: chldldlarladkswh0828chldldlarladkswh0828chldldlarladkswh0828

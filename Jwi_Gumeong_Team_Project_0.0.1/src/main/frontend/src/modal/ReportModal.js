@@ -77,7 +77,7 @@ function ReportModal({userName,referenceType,referenceKey,content,onClose}) {
                         </div>
                         {dropdownOpen && (
                             <div className={styles.dropdown}>
-                                {["시스템 관련", "본인인증", "오류/버그", "신고", "제안", "도용", "보안", "기타"].map((option, index) => (
+                                {["음란성", "불법성", "청소년 부적합", "신고", "제안", "도용", "보안", "기타"].map((option, index) => (
                                     <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
                                         {option}
                                     </div>

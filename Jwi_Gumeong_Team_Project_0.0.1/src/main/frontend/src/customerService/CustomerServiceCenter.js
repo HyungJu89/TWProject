@@ -15,6 +15,7 @@ import closeModalIcon from '../icon/btn/btn-image-Close.png';
 import closeModalIconHover from '../icon/btn/btn-image-Close-a.png';
 import leftIcon from '../icon/40px/chevron-left-w.png';
 import rightIcon from '../icon/40px/chevron-right-w.png';
+import removeIcon from '../icon/btn/bnt_img_x.png';
 
 function CustomerServiceCenter() {
     const [tab, setTab] = useState(0);
@@ -187,6 +188,12 @@ function CustomerServiceCenter() {
         }));
         setFiles([...files, ...previewFiles]);
     };
+
+    // 이미지 제거
+    const removeImage = (index) => {
+        setFiles(files.filter((_, i) => i !== index));
+    };
+
     // 문의 제출
     const submit = (event) => {
         event.preventDefault();
@@ -341,6 +348,10 @@ function CustomerServiceCenter() {
                                     {files.map((fileObj, index) => (
                                         <div key={index} className={styles.uploadedFile}>
                                             <img src={fileObj.preview} alt={fileObj.file.name} style={{maxWidth: "100px", maxHeight: "100px"}} />
+                                            {/* 이미지 제거 버튼 */}
+                                            <button className={styles.removeButton} onClick={() => removeImage(index)}>
+                                                <img src={removeIcon} alt="이미지 제거" />
+                                            </button>
                                         </div>
                                     ))}
                                     {/* 이미지가 5개보다 적을 때 추가 버튼 보임  */}

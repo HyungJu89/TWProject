@@ -1,5 +1,6 @@
 package com.jwi.work.admin.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.admin.service.AdminService;
+import com.jwi.work.alarm.entity.Report;
 import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.center.inquiry.entity.InquiryResponse;
 import com.jwi.work.center.sanction.entity.Sanction;
@@ -72,10 +74,15 @@ public class AdminController {
 		return adminService.selectSanction();
 	}
 	
+	// 신고목록 전부 호출
+	@GetMapping("/report")
+	public List<Report> findReportAll(){
+		return adminService.selectReport();
+	}
+	
 	// 받아온 유저 밴 하기
 	@PostMapping("/banndUser")
 	public void banndUser(@RequestBody Map<String,String> userData) {
-		System.out.println(userData);
 		adminService.banndUser(userData);
 	}
 	

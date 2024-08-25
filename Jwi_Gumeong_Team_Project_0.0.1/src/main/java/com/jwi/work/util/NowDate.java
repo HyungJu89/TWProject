@@ -30,4 +30,19 @@ public class NowDate {
 	    
 	    return date;
 	}
+	
+	public String nowDateString() {
+		LocalDateTime now = LocalDateTime.now();
+	    
+	    // 원하는 형식으로 포맷 지정하기
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	    
+	    // 날짜와 시간을 포맷에 맞춰 문자열로 변환하기
+        String formattedDateTime = now.format(formatter);
+        
+        // LocalDateTime을 Instant로 변환
+        Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
+	    
+	    return formattedDateTime;
+	}
 }
