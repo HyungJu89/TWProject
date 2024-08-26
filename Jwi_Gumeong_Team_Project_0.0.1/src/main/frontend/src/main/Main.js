@@ -20,6 +20,7 @@ function Main({onLogout,isLoggedIn}) {
     const [partnersLive, setPartnersLive] = useState([]);
     const [hotBoardList, setHotBoardList] = useState([]);
 
+    //메인화면 추천순 게시글
     const searchRecommended = async () => {
         const sessionIdJson = sessionStorage.getItem('sessionId');
         let sessionId = null
