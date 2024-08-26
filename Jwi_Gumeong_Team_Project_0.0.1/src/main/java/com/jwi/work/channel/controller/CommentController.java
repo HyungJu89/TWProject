@@ -1,7 +1,5 @@
 package com.jwi.work.channel.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.CommentCreateDto;
 import com.jwi.work.channel.dto.bodyDto.CommentDeleteDto;
-import com.jwi.work.channel.dto.commentDto.CommentDto;
+import com.jwi.work.channel.dto.commentDto.CommentListDto;
 import com.jwi.work.channel.service.CommentService;
+import com.jwi.work.util.dto.AnswerDto;
 
 @RestController
 @RequestMapping("/comment/*")
@@ -24,15 +22,17 @@ public class CommentController {
 	private CommentService commentService;
 	
 	@GetMapping("/select")
-	public AnswerDto<List<CommentDto>> commentSelect(
+	public AnswerDto<CommentListDto> commentSelect(
+			@RequestParam(value = "sessionId", defaultValue = "") String sessionId,
 			@RequestParam(value = "postKey", defaultValue = "0") int postKey,
 			@RequestParam(value = "isAsc", defaultValue = "false")boolean isAsc
 			){
-        return commentService.commentSelect(postKey,isAsc);
+        return commentService.commentSelect(sessionId,postKey,isAsc);
 	}
 	
 	@PostMapping("/create")
 	public AnswerDto<String> commentCreate(@RequestBody CommentCreateDto createDto){
+		
 		return commentService.commentCreate(createDto);
 	}
 	

@@ -1,6 +1,6 @@
 package com.jwi.work.user.mapper;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -20,7 +20,7 @@ public interface UserMapper{
 		//닉네임 중복검사
 		public int nickNameTest(String nickName);
 		
-	//여기부터 로그인
+		//여기부터 로그인
 		//로그인 유저정보 검사
 		public int loginCheck(User user);
 		
@@ -68,5 +68,23 @@ public interface UserMapper{
 		
 		//여기부터 비번찾기
 		public void updatePw(User user);
+		
+		// 유저 닉네임 찾아오기
+		public String getNickName(int userKey);
+		
+	// 여기부터 어드민
+		// 유저정보 전부 가져오기
+		public List<User> getAllUser();
+		
+		// 유저 활성화로 변경
+		public void updateAct(int userKey);
+		
+		// 유저 비활성화로 변겅
+		public void updateDeAct(int userKey);
+		
+		// 유저 이메일 찾아오기
+		public String getUserEmail(@Param("userKey") int userKey);
+		
+		// 유저 탈퇴 처리
+		public int resignUser(@Param("userKey") int userKey);
 }
-

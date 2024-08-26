@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jwi.work.channel.dto.AnswerDto;
-import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
+import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.service.PostService;
+import com.jwi.work.util.dto.AnswerDto;
+import com.jwi.work.util.dto.SearchDto;
 
 @RestController
 @RequestMapping("/post/*")
@@ -25,26 +26,34 @@ public class PostController {
 	private PostService postService;
 	
 	@GetMapping("/select")
-	public SearchDto<List<PostDto>> postSelect(@RequestParam("channelKey") int channelKey,@RequestParam("page")int page){
-		return postService.postSelect(channelKey,page);
+	public SearchDto<List<PostDto>> postSelect(@RequestParam(value = "sessionId", defaultValue = "") String sessionId,@RequestParam("channelKey") int channelKey,@RequestParam("page")int page){
+		if (sessionId.isEmpty()) {
+	        sessionId = null;
+	    }
+		return postService.postSelect(sessionId,channelKey,page);
 	}
 	
 	
 	@PostMapping("/create")
 	public AnswerDto<String> postCreate(
 			@RequestParam("channelKey") int channelKey,
-			@RequestParam("userKey") int userKey,
+			@RequestParam("sessionId") String sessionId,
             @RequestParam("content") String content,
             @RequestParam(value = "files", required = false) List<MultipartFile> files
 			) {
 		
-		return postService.postCreate(channelKey,userKey,content,files);
+		return postService.postCreate(channelKey,sessionId,content,files);
 		
 	}
 	
 	@PostMapping("/delete")
 	public AnswerDto<String> postDelete(@RequestBody PostDeleteDto deleteDto	){
 		return postService.postDelete(deleteDto);
+	}
+	
+	@PostMapping("/like")
+	public void postLike(@RequestBody PostLikeDto likeDto) {
+		postService.postLike(likeDto);
 	}
 	
 	/*

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
+import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 
 
@@ -14,13 +15,21 @@ public interface ChannelMapper {
 	
 	public void channelCreate(ChannelCreateDto channelCreate);
 	
-	public ChannelDto channelGet(@Param("channelId")String channelId);
+	public ChannelDto channelGet(@Param("sessionId")String sessionId,@Param("channelId")String channelId);
 	
     // 시간 범위 내에서 데이터 가져오기
-    List<ChannelDto> HotBoardGet(
+	public List<ChannelDto> HotBoardGet(
         @Param("startTime") String startTime,
         @Param("endTime") String endTime);
     
     //무작위 10개 가져오기
-    List<ChannelDto> RandomBoard();
+	public List<ChannelDto> RandomBoard();
+    
+    
+    public void favorite(ChannelFavoriteDto channelFavorite);
+
+    public void unFavorite(ChannelFavoriteDto channelFavorite);
+    
+    
+    
 }

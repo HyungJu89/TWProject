@@ -1,16 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import styles from './style/AdminLogin.module.css';
-import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
-import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { setCookie, getCookie, removeCookie } from '../cookies/Cookies.js';
+import { setCookie } from '../cookies/Cookies.js';
+import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
+import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import AlarmModal from '../modal/AlarmModal.js';
+import styles from './style/AdminLogin.module.css';
 
 function AdminLogin() {
 
-    var jsonSessionInfo = localStorage.getItem('sessionId');
     // 세션화성공
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -20,11 +18,10 @@ function AdminLogin() {
     const [showPassword, setShowPassword] = useState(false);
     //로그인 틀릴 시 경고문 저장
     const [loginWarn, setLoginWarn] = useState('');
-    const dispatch = useDispatch();
     let navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-
+    
     useEffect(() => {
         setModalOpen(true);
         setModalContent('관리자 로그인 페이지입니다.');
@@ -59,6 +56,9 @@ function AdminLogin() {
         }
     };
 
+    let maxAge = 1800;
+    let endTime = Date.now() + maxAge * 1000;
+
     const checkAdmin = async () => {
         if (email !== '' && password !== '') {
             try {
@@ -69,11 +69,12 @@ function AdminLogin() {
                 const userResponse = 
                     await axios.post('/admin/login', adminData);
                 if(userResponse.data){
-                    setCookie('jwtCookie', userResponse.data,{
+                    setCookie('frontCookie', "프론트쿠키",{
                         path: '/',
                         secure: true,
-                        maxAge: 100
-                    })
+                        maxAge: maxAge
+                    });
+                    localStorage.setItem('endTime', endTime);
                     navigate('/admin');
                 }
                 setLoginWarn(userResponse.data.warningMessage);
@@ -137,7 +138,7 @@ function AdminLogin() {
                             onChange={handlePasswordChange}
                             onKeyDown={handleEnter}
                         />
-                        <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} />
+                        <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} alt='ㅋㅋ' />
                     </div>
                 </div>
                 {

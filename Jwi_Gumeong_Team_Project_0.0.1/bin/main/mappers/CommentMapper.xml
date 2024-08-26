@@ -8,6 +8,7 @@
 	<result property="nickName" column="C_nickName"/>
 	<result property="comment" column="C_comment"/>
 	<result property="state" column="C_state"/>
+	<result property="myComment" column="myComment"/>
 	<result property="createdAt" column="C_createdAt"/>
 	<result property="updatedAt" column="C_updatedAt"/>
 	<collection property="replys" ofType="com.jwi.work.channel.dto.postDto.ReplyDto" resultMap="replyResultMap"/>
@@ -19,13 +20,16 @@
 	<result property="replyNickName" column="R_replyNickName"/>
 	<result property="reply" column="R_reply"/>
 	<result property="state" column="R_state"/>
+	<result property="myReply" column="myReply"/>
 	<result property="createdAt" column="R_createdAt"/>
 	<result property="updatedAt" column="R_updatedAt"/>
 </resultMap>
 
+
+
 <select id="commentCount" parameterType="int" resultType="int">
 	SELECT
-		COUNT(*) 
+		IFNULL(COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0),0)
 	FROM 
 		comment 	
 	LEFT JOIN
@@ -51,7 +55,35 @@
 		reply.updatedAt AS R_updatedAt,
 		
 		r.nickName AS R_nickName,
-		rr.nickName AS R_replyNickName
+		rr.nickName AS R_replyNickName,
+        	
+			CASE
+				WHEN EXISTS(
+					SELECT
+						1
+					FROM
+						`userConnection` uc
+					WHERE
+						uc.userKey = comment.userKey
+						AND uc.sessionId = #{sessionId}
+
+				) THEN TRUE
+				ELSE FALSE
+				END AS myComment,
+        	
+			CASE
+				WHEN EXISTS(
+					SELECT
+						1
+					FROM
+						`userConnection` uc
+					WHERE
+						uc.userKey = reply.userKey
+						AND uc.sessionId = #{sessionId}
+
+				) THEN TRUE
+				ELSE FALSE
+				END AS myReply
 	
 	
 	FROM 
@@ -76,11 +108,17 @@
     <if test="!isAsc">
         DESC
     </if>
-
+	, reply.createdAt ASC
 </select>
 
-<insert id="commentCreate" parameterType="com.jwi.work.channel.dto.bodyDto.CommentCreateDto">
-	INSERT INTO comment(userKey,postKey,comment)value(#{userKey},#{postKey},#{comment})
+<insert id="commentCreate" parameterType="com.jwi.work.channel.dto.bodyDto.CommentCreateDto" >
+	INSERT INTO comment(userKey,postKey,comment)
+	SELECT 
+		userKey,#{postKey},#{comment}
+	FROM 
+		userConnection
+	WHERE
+		sessionId = #{sessionId}
 </insert>
 
 

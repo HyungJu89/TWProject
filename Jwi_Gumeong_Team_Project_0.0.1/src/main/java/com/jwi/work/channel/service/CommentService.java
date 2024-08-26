@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jwi.work.channel.dto.AnswerDto;
 import com.jwi.work.channel.dto.bodyDto.CommentCreateDto;
 import com.jwi.work.channel.dto.bodyDto.CommentDeleteDto;
-import com.jwi.work.channel.dto.commentDto.CommentDto;
+import com.jwi.work.channel.dto.commentDto.CommentListDto;
 import com.jwi.work.channel.mapper.CommentMapper;
+import com.jwi.work.util.dto.AnswerDto;
 
 @Service
 public class CommentService {
@@ -17,29 +17,33 @@ public class CommentService {
 	@Autowired
 	private CommentMapper commentMapper;
 	
-	public AnswerDto<List<CommentDto>> commentSelect(int postKey,boolean isAsc){
+	public AnswerDto<CommentListDto> commentSelect(String sessionId,int postKey,boolean isAsc){
 		
 		
-		AnswerDto<List<CommentDto>> answer = new AnswerDto<>();
+		AnswerDto<CommentListDto> answer = new AnswerDto<>();
 		
+		CommentListDto commentListDto = new CommentListDto();
 		try {
-			answer.setMessage("게시글 확인중.");
-			
-			if(commentMapper.commentCount(postKey) == 0) {
+			answer.setMessage("댓글 확인중.");
+			int commentCount = commentMapper.commentCount(postKey);
+			if(commentCount == 0) {
 				
 				answer.setInfo(null);
-				answer.setMessage("게시글이 없습니다.");
-				answer.setSuccess(true);
-				
+				answer.setMessage("댓글이 없습니다.");
+				answer.setSuccess(false);
+				return answer;
 			}
-			
-			answer.setInfo(commentMapper.commentSelect(postKey,isAsc));
+			commentListDto.setComment(commentMapper.commentSelect(sessionId,postKey,isAsc));
+			commentListDto.setCommentCount(commentCount);
+			answer.setInfo(commentListDto);
 			answer.setMessage("null.");
 			answer.setSuccess(true);
 			
 		} catch (Exception e) {
 			
 			answer.setSuccess(false);
+			System.out.println("에러");
+			e.printStackTrace();  // 예외의 스택 트레이스를 출력하여 오류의 원인 파악
 			
 		}
 		
@@ -50,6 +54,7 @@ public class CommentService {
 	public AnswerDto<String> commentCreate(CommentCreateDto createDto){
 		AnswerDto<String> answer = new AnswerDto<>();
 		commentMapper.commentCreate(createDto);
+		
 		answer.setSuccess(true);
 		answer.setMessage("성공");
 		return answer;

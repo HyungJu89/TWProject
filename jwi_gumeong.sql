@@ -1,10 +1,66 @@
--- 2024-08-15 [조영민]
+-- 2024-08-24 [조영민] V 0.1.15
+-- 수정내용 : report 테이블 category int -> varchar로 수정 report 인서트문 추가
+-- DB자체에서도 바꿔뒀으니 알터만 하면됨
+ALTER TABLE `report`
+MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
+select *from report;
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('1','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
+
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('2','8','post','4','욕설/혐오','왜 처리 안함 ㅡㅡ','unprocessed',now(),now());
+
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('4','2','post','4','오류/버그','에이펙스에서 핵쓰고다녔음 ㅡㅡ','unprocessed',now(),now());
+
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('4','2','post','4','오류/버그','엉덩이에서 총나옴 이거 어케 처리할껀데 진짜','unprocessed',now(),now());
+
+insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
+values ('4','2','post','4','욕설/혐오','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
+
+-- 2024-08-23 [조영민] V 0.1.14
+-- 수정내용 : `state` 정지 상태  추가
+ALTER TABLE `bannedLog`
+ADD COLUMN `state` VARCHAR(50) NOT NULL COMMENT '정지 상태';
+
+-- 2024-08-21 [조영민] V 0.1.13
+-- 수정내용 : bannedLog 추가
+-- banned에서 update문으로 데이터를 수정하기 떄문에 로그를 남기는 방식으로 수정함
+CREATE TABLE `bannedLog` (
+   `bannedLogKey`   INT PRIMARY KEY AUTO_INCREMENT   NOT NULL COMMENT '정지 키',
+   `bannedKey`   INT   NOT NULL COMMENT '밴 테이블 키',
+   `userKey`   INT   NOT NULL COMMENT '유저 키',
+   `adminKey` INT NOT NULL COMMENT '어드민 키',
+   `reason` VARCHAR(50) NOT NULL COMMENT '정지 사유',
+   `reasonDate` DATETIME NOT NULL DEFAULT NOW() COMMENT '정지 시작 날짜',
+   `date`   INT   NOT NULL COMMENT '정지일수',
+   `state` VARCHAR(50) NOT NULL COMMENT '정지 상태',
+   `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+	
+select *from bannedLog;
+select *from banned;
+
+-- 2024-08-19 [안재원] V 0.1.12
+-- 수정내용 : alarm 테이블에서 title 컬럼 제거
+ALTER TABLE `alarm` DROP `title`;
+ALTER TABLE `alarm` DROP `content`;
+
+-- 2024-08-15 [임재열] V 0.1.11
+-- 수정내용 : admin 테이블 adminName 칼럼에 유니크가 추가되어있지않아 동일한 adminName 의 행이 만들어짐
+ALTER TABLE `admin` ADD CONSTRAINT `uniqueAdminName` UNIQUE (`adminName`);
+
+-- 2024-08-15 [조영민] V 0.1.10 
 -- 수정내용 : ADMIN TABLE 컬럼명 수정 id => adminName / pw => adminPassWord 헤싱된 insert문 추가
 -- 패스워드 인코더로 insert하는것이 불가능하기 때문에 직접 insert하는걸로 변경했음
 -- id : asdf /  pw : asdf123
+select *from admin;
 insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("asdf","$2a$12$qWMhwV31meoA0C6fvoVLX.OBe4NXvyz09HIewoxQ8EPProosm54z6","activate",now(),now());
+insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("dsfs3975","$2a$12$5UdVf8drVmy.R/dNuULOAej7jmz7aqoS7ON50aG.zzdSNZbJlYdBq","activate",now(),now());
 
--- 2024-08-15 [안재원]
+-- 2024-08-15 [안재원] V 0.1.9 
 -- 수정내용 : inquiry 테이블 Title 소문자로 변경 및 이미지 Null 가능으로 변경 , inquiryResponse 이미지 Null 가능, faq 이미지 Null 가능
 ALTER TABLE `inquiry` RENAME COLUMN `Title` to `title`;
 ALTER TABLE `inquiry` MODIFY `image` TEXT COMMENT '이미지 URL';
@@ -29,7 +85,8 @@ alter table `user` add `pwWrong` int default 0;
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-select * from comment;
+select*from`user`;
+insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zddsaszxdasdf1@naver.com','12s4','f4fzcvx3r','비밀',0,null,'activate',NOW(),NOW());
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -43,6 +100,7 @@ CREATE TABLE `user` (
 	`updatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
+select*from `favorites`;
 CREATE TABLE `favorites` (
 	`favoritesKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL	COMMENT '유저키',
@@ -51,7 +109,7 @@ CREATE TABLE `favorites` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES user(`userKey`) ON DELETE CASCADE
 );
-
+select*from `channel`;
 CREATE TABLE `channel` (
 	`channelKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`id`	VARCHAR(32)	NOT NULL	COMMENT '채널 아이디',
@@ -61,8 +119,6 @@ CREATE TABLE `channel` (
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
-select *from `post`;
 CREATE TABLE `post` (
 	`postKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -96,6 +152,8 @@ CREATE TABLE `like` (
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
 
+DROP TABLE `like`;
+
 CREATE TABLE `manager` (
 	`managerKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL	COMMENT '유저키',
@@ -112,7 +170,7 @@ CREATE TABLE `report` (
 	`userKey`	INT	NOT NULL	COMMENT '신고한 유저',
 	`referenceType`	VARCHAR(50)	NOT NULL	COMMENT '신고 종류 "post","comment","reply" 테이블 이름 넣기',
 	`referenceKey`	INT	NOT NULL	COMMENT '참조키',
-	`category`	INT	NOT NULL	COMMENT '신고 사유',
+	`category` VARCHAR(32) NOT NULL COMMENT '신고 사유',
 	`content`	TEXT	NOT NULL	COMMENT '신고 내용',
 	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'unprocessed'	COMMENT '처리현황 "unprocessed","process" 작업자와 상의',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -145,12 +203,11 @@ CREATE TABLE `alarm` (
 	`referenceType`	VARCHAR(50)	NOT NULL	COMMENT '알람종류 "inquiry","post","comment","system","like" 테이블 이름으로  시스템 메세지는 system 으로',
 	`referenceKey`	INT	NULL	COMMENT '참조 키',
 	`read`	TINYINT	NOT NULL	DEFAULT 0	COMMENT 'read유무',
-	`title`	VARCHAR(50)	NOT NULL	COMMENT '알람제목',
-	`content`	VARCHAR(255)	NOT NULL	COMMENT '알람내용',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
+
 
 CREATE TABLE `inquiry` (
 	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 키',
@@ -175,7 +232,6 @@ CREATE TABLE `inquiryResponse` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (`inquiryKey`) REFERENCES `inquiry`(`inquiryKey`) ON DELETE CASCADE
 );
-
 CREATE TABLE `reply` (
 	`replyKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`commentKey`	INT	NOT NULL	COMMENT '댓글 키',
@@ -200,6 +256,9 @@ CREATE TABLE `banned` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
+INSERT INTO `banned` (`userKey`, `reason`, `reasonDate`, `date`, `state`, `createdAt`, `updatedAt`) 
+VALUES(1, '사유사유', '2024-04-04', 30, 'activate', now(), now());
+SELECT * FROM `banned`;
 
 CREATE TABLE `managerLog` (
 	`managerLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '매니저 활동로그키',

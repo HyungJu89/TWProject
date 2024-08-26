@@ -1,13 +1,18 @@
 package com.jwi.work.user.myPage.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jwi.work.user.dto.CheckDto;
+import com.jwi.work.user.dto.Favorites;
 import com.jwi.work.user.dto.User;
+import com.jwi.work.user.entity.FavoritesEntity;
 import com.jwi.work.user.mapper.UserMapper;
+import com.jwi.work.user.repository.FavoritesRepository;
 import com.jwi.work.user.signIn.service.SignInService;
-import com.jwi.work.user.signUp.service.SignUpService;
 
 @Service
 public class MyPageService {
@@ -17,6 +22,8 @@ public class MyPageService {
 	//로그인 테스트
 	@Autowired
 	SignInService signInService;
+	@Autowired
+	private FavoritesRepository favoritesRepository; //즐겨찾기 레파
 	
 	public boolean loginTest(User user) {
 		if(userMapper.loginCheck(user) == 1) {
@@ -62,6 +69,11 @@ public class MyPageService {
     	return userCheck;
 	}
 	
+	//즐겨찾기 :: 현재 로그인된 유저키 기반으로 데이터 검색
+	public List<FavoritesEntity> favoritesList(int userKey){
+		return favoritesRepository.findByUserKey(userKey);
+		
+	}
 //	//정보수정 처리 로직
 //	public CheckDto edit(User user) {
 //    	//반환하기위한 객체 생성

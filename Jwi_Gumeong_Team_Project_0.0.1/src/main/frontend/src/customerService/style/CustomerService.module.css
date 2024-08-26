@@ -1,3 +1,4 @@
+/* 고객센터 */
 .pageContainer {
     display: flex;
     flex-direction: column;
@@ -5,6 +6,7 @@
     margin: auto;
 }
 
+/* 배너 이미지 */
 .serviceBanner {
     background-color: #40B9D8;
     width: 100%;
@@ -38,6 +40,7 @@
     width: 118px;
 }
 
+/* 고객센터 탭 */
 .serviceContents {
     width: 786px;
     display: flex;
@@ -111,7 +114,7 @@
     text-align: left;
 }
 
-/* FAQ */
+/* FAQ(자주 묻는 질문) */
 .faqContainer {
     display: flex;
     flex-direction: column;
@@ -181,10 +184,11 @@
 }
 
 .faqDivider {
-    width: 100%;
+    width: 726px;
     height: 1px;
     background-color: #F3F3F3;
-    margin: 0px 30px 0px 30px;
+    position: absolute;
+    margin-left: 30px;
 }
 
 /* 문의하기 */
@@ -213,7 +217,8 @@
     width: 726px;
     height: 1px;
     background-color: #F3F3F3;
-    margin: 10px 0;
+    position: absolute;
+
 }
 
 .inqForm {
@@ -247,6 +252,7 @@
     cursor: pointer;
 }
 
+/* 문의 종류 */
 .dropdown {
     position: absolute;
     width: 106px;
@@ -264,6 +270,7 @@
 
 }
 
+/* 문의 종류 리스트 */
 .dropdownItem {
     display: flex;
     flex-direction: column;
@@ -286,12 +293,14 @@
 .inqInput,
 .inqTextarea {
     border: none;
+    outline: none;
 }
 
 .inqInput {
     width:683.77px;
     font-weight: 500;
     font-size: 16px;
+    outline: none;
 }
 
 .inqTextarea {
@@ -324,6 +333,7 @@
 }
 
 .uploadedFile {
+    position: relative;
     flex: 1;
     max-width: calc(20% - 10px);
     height: 138px;
@@ -336,6 +346,26 @@
     width: 138px; 
     height: 138px;
     border-radius: 5px;
+}
+
+/* 이미지 제거 버튼 */
+.removeButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: none;
+}
+
+.uploadedFile:hover .removeButton {
+    display: block;
+}
+
+.removeButton img {
+    width: 20px;
+    height: 20px;
 }
 
 /* 문의넣기 버튼 구간 */
@@ -385,6 +415,7 @@
     /* margin-top: 11px; */
 }
 
+/* 문의 내역 전체 리스트 */
 .inquiryItem {
     display: flex;
     flex-direction: column;
@@ -392,6 +423,7 @@
     background-color: #ffffff;
 }
 
+/* 문의 내역 리스트 1칸 */
 .inquiryHeader {
     display: flex;
     padding: 30px;
@@ -399,12 +431,14 @@
     cursor: pointer;
 }
 
+/* 문의 내역 아이콘 */
 .inquiryIcon {
     width: 50px;
     height: 50px;
     margin-right: 10px;
 }
 
+/* 제목 및 답변받은 날짜 */
 .inquiryDetails {
     display: flex;
     flex-direction: column;
@@ -412,10 +446,12 @@
     height: 50px;
 }
 
+/* 문의 제목 구간 */
 .inquiryTitleContainer {
     display: flex;
 }
 
+/* 문의 제목 */
 .inquiryTitle {
     font-size: 16px;
     font-weight: 700;
@@ -423,21 +459,26 @@
     color: #101010;
 }
 
+/* 문의 이미지 박스 */
 .inquiryImageBox {
     display: flex;
     gap: 9px;
     width: 726px;
     border-radius: 0px;
+    margin-top: 20px;
 }
 
+/* 문의 이미지 */
 .inquiryContentImage {
     width: 138px;
     height: 138px;
+    cursor: pointer;
     object-fit: cover; /* 이미지 비율 유지 */
     border-radius: 0px;
     /* border: #BBBBBB 1px solid; */
 }
 
+/* 문의 답변 */
 .inquiryResponse {
     /* 배경 */
     width: 50px;
@@ -459,6 +500,7 @@
     margin-left: 4px;
 }
 
+/* 답변 받은 날짜 */
 .inquirySubtitle {
     font-size: 15px;
     font-weight: 400;
@@ -466,40 +508,35 @@
     color: #999999;
 }
 
+/* 문의 내역 내용 */
 .inquiryContent {
     padding: 30px;
     border-radius: 20px;
     background-color: #ffffff;
 }
 
-.inquiryContentText {
-    font-size: 15px;
-    font-weight: 500;
-    color: #101010;
-    line-height: 18.78px;
-}
-
+/* 답변 글자 */
 .responsHeader {
     padding: 20px 30px 0 30px;
     font-weight: 700;
     font-size: 18px;
     color: #FF8901;
 }
-
+/* 답변 내용 */
 .responseContent {
     padding: 20px 30px 30px 30px;
     border-radius: 20px;
     background-color: #ffffff;
 }
-
+/* 답변 내용 글 */
 .responseContentText {
     font-size: 15px;
     font-weight: 500;
     color: #101010;
     white-space: pre-line;
-    padding-bottom: 20px;
 }
 
+/* 내역 없을 때 */
 .noHistory {
     display: flex;
     width: 786px;
@@ -541,6 +578,7 @@
     position: relative;
 }
 
+/* 제재내역 아이콘 이미지 */
 .sanctionIcon {
     width: 50px;
     height: 50px;
@@ -584,6 +622,7 @@
     text-align: right;
 }
 
+/* 제재내역 구분 선 */
 .sanctionDivider {
     width: 726px;
     height: 1px;
@@ -599,22 +638,88 @@
     align-items: center;
     margin: 14px;
 }
-
+/* 이전 페이지 버튼 */
 .pagePreButton {
     border: none;
     background-color: transparent;
     cursor: pointer;
     margin-right: 84px;
 }
-
+/* 다음 페이지 버튼 */
 .pageNextButton {
     border: none;
     background-color: transparent;
     cursor: pointer;
     margin-left: 84px;
 }
-
+/* 페이지/전체페이지 */
 .pageInfo {
     font-size: 16px;
     font-weight: 500;
+}
+
+/* 이미지 모달 */
+.imageModalContainer {
+    position: fixed;
+    display: flex;
+    z-index: 1000;
+    top: 0px;
+    left: 0px;
+    background-color: rgb(0, 0, 0,0.9);
+    width: 100%;
+    height: 100%;
+    min-height: 50%;
+    border-radius: 0px;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* 이미지 + 버튼 */
+.imageModalContent {
+    position: relative;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-height: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 닫기 버튼 */
+.imageModalCloseButton {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.imageModalPrevButton,
+.imageModalNextButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width:40px;
+}
+
+.imageModalImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100%;
+    margin-bottom:10px;
+}
+
+/* 이미지 크기 */
+.imageModalImage img {
+    width: 70%;
+    height: 70%;
+}
+
+/* 처음과 마지막 버튼 안보이게 하기 */
+.airBox {
+    display: none;
 }

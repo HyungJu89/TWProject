@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jwi.work.channel.dto.SearchDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.mapper.SearchMapper;
 import com.jwi.work.util.PagingUtil;
+import com.jwi.work.util.dto.SearchDto;
 
 @Service
 public class SearchService {
@@ -19,7 +19,7 @@ public class SearchService {
 
 	private PagingUtil pagingUtil = new PagingUtil();
 
-	public SearchDto<List<ChannelDto>> searchChannel(String search, int page) {
+	public SearchDto<List<ChannelDto>> searchChannel(String sessionId,String search, int page) {
 
 		final int LIMIT_PAGE = 8;
 
@@ -41,7 +41,7 @@ public class SearchService {
 		searchChannel.setPaging(pagingUtil.paging(page, channelCount, LIMIT_PAGE));
 
 		// 채널의 갯수리턴
-		List<ChannelDto> channels = searchMapper.searchChannelList(search, searchChannel.getPaging().getOffset(),
+		List<ChannelDto> channels = searchMapper.searchChannelList(sessionId,search, searchChannel.getPaging().getOffset(),
 				searchChannel.getPaging().getLimit());
 
 		searchChannel.setSearch(channels);
@@ -50,7 +50,7 @@ public class SearchService {
 
 	}
 
-	public SearchDto<List<PostDto>> searchPost(String search, int page) {
+	public SearchDto<List<PostDto>> searchPost(String sessionId,String search, int page) {
 
 		final int LIMIT_PAGE = 10;
 
@@ -73,7 +73,7 @@ public class SearchService {
 		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
 		
 
-			List<PostDto> posts = searchMapper.searchPostList(search, searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
+			List<PostDto> posts = searchMapper.searchPostList(sessionId,search, searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
 			
 			searchPost.setSearch(posts);
 
@@ -81,7 +81,7 @@ public class SearchService {
 
 	}
 	 
-	public SearchDto<List<PostDto>> searchRecommended(int page){
+	public SearchDto<List<PostDto>> searchRecommended(String sessionId,int page){
 		final int LIMIT_PAGE = 10;
 		
 		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
@@ -98,7 +98,7 @@ public class SearchService {
 
 		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
 		
-		List<PostDto> posts = searchMapper.searchRecommended(searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
+		List<PostDto> posts = searchMapper.searchRecommended(sessionId,searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
 		
 		searchPost.setSearch(posts);
 
@@ -116,7 +116,7 @@ public class SearchService {
 		return null;
 	}
 	
-	public SearchDto<List<PostDto>> searchAllTopic(int page){
+	public SearchDto<List<PostDto>> searchAllTopic(String sessionId,int page){
 		
 		final int LIMIT_PAGE = 10;
 		
@@ -134,7 +134,7 @@ public class SearchService {
 
 		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
 		
-		List<PostDto> posts = searchMapper.searchAllTopic(searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
+		List<PostDto> posts = searchMapper.searchAllTopic(sessionId,searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
 		
 		searchPost.setSearch(posts);
 

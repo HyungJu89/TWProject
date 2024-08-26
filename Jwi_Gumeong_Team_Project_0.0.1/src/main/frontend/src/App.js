@@ -10,6 +10,7 @@ import SignIn from './signIn/SignIn.js';
 import SignUp from './signUp/SignUp.js';
 import PwInquiry from './pwInquiry/PwInquiry.js';
 import MyPage from './myPage/MyPage.js';
+import Resign from './resign/Resign.js';
 import Search from './search/Search.js';
 import PageCheck from './pageCheck/PageCheck.js';
 import CustomerService from './customerService/CustomerServiceCenter.js';
@@ -19,11 +20,11 @@ import Admin from './admin/Admin.js';
 import AdminMain from './admin/AdminMain.js';
 import AdminLogin from './admin/AdminLogin.js';
 import NotFound from './notFound/NotFound.js';
+import Report from './modal/ReportModal.js';
 import { setSessionId,setUserKey,setLoggedIn,logout } from './slice/sessionSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
 import axios from 'axios';
-
 function App() {
     let state = useSelector((state)=>{ return state })
     //---------------------------------- 검색 부분
@@ -71,6 +72,7 @@ function App() {
             {/* Suspense 의 기능은 컴포넌트가 불러오는 도중일때 fallback 에 등록한 Div 및 컴포넌트를 보여줌 */}
             <Suspense fallback={<div>로딩중임</div>}>
                 <Header onClickSearch={onClickSearch} onLogout={onLogout} isLoggedIn = {isLoggedIn}/> {/* 상단 공통 부분 디자인 */}
+                {state.reportModal && <Report />}
                 {state.imgUiModal.popUp && <ImgUi/>}{/*이미지 팝업*/}
                 <Routes>
                     <Route path='/' element={<Main onLogout={onLogout} isLoggedIn = {isLoggedIn}/>}/> {/* 메인(홈) 접속 페이지 */}
@@ -80,6 +82,7 @@ function App() {
                     <Route path='/signUp' element={<SignUp/>}/>
                     <Route path='/myPage' element={<MyPage/>}/>
                     <Route path='/pwInquiry' element={<PwInquiry onLogout = {onLogout}/>}/>
+                    <Route path='/resign' element={<Resign onLogout = {onLogout}/>}/>
                     <Route path='/search' element={<Search search={searchText}/>}/>{/*채널 검색*/}
                     <Route path='/channelManagement' element={<ChannelManagement/>}/>
                     <Route path='/customerService' element={<CustomerService/>}/>{/*고객센터*/}
@@ -91,6 +94,7 @@ function App() {
                 </Routes>
                 <Bottom/> {/* 하단 공통 부분 디자인 */}
             </Suspense>
+
         </div>
     );
 }

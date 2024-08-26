@@ -11,5 +11,6 @@ public class ChannelDto {
 	private String imageUrl;
 	private int followerCount;
 	private int favoriteCount;
+	private boolean isFavorite;
 	
 }

@@ -20,11 +20,18 @@ function Main({onLogout,isLoggedIn}) {
     const [partnersLive, setPartnersLive] = useState([]);
     const [hotBoardList, setHotBoardList] = useState([]);
 
+    //메인화면 추천순 게시글
     const searchRecommended = async () => {
+        const sessionIdJson = sessionStorage.getItem('sessionId');
+        let sessionId = null
+        if(sessionIdJson){
+        sessionId = JSON.parse(sessionIdJson).sessionId
+    }
         try {
             const { data } = await axios.get(`/search/recommended` , {
                 params: {
-                    page: '1'
+                    page: '1',
+                    sessionId : sessionId
                 }
             });
             return data;

@@ -3,6 +3,7 @@ package com.jwi.work.user.entity;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userKey;
-
+    @Column(name = "email", nullable = false, length = 50)
     private String email;
     private String pw;
     private String nickName;

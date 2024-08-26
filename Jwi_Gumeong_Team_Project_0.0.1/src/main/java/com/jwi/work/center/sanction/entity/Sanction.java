@@ -63,4 +63,5 @@ public class Sanction {
         calendar.add(Calendar.DATE, date); // 시작일로부터 date만큼 일수를 더함
         return calendar.getTime();
     }
+    
 }

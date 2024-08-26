@@ -3,8 +3,16 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.channel.mapper.ReplyMapper">
 
-<insert id="replyCreate" parameterType="com.jwi.work.channel.dto.bodyDto.CommentCreateDto">
-	INSERT INTO reply(commentKey,replyreplyKey,userKey,reply) value (#{commentKey},#{replyreplyKey},#{userKey},#{reply})
+<insert id="replyCreate" parameterType="com.jwi.work.channel.dto.bodyDto.ReplyCreateDto">
+	INSERT INTO reply(commentKey,replyreplyKey,userKey,reply)
+		SELECT 
+		#{commentKey},#{replyreplyKey},userKey,#{reply}
+	FROM 
+		userConnection
+	WHERE
+		sessionId = #{sessionId}
 </insert>
+
+
 
 </mapper>

@@ -1,14 +1,15 @@
 package com.jwi.work.config;
 
 import java.io.IOException;
-import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.jwi.work.admin.repository.AdminRepository;
 import com.jwi.work.admin.util.JwtUtil;
 
 import io.jsonwebtoken.Claims;
@@ -19,8 +20,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 // OncePerRequestFilter 1회만 실행됨
+@Component
 public class JwtFilter extends OncePerRequestFilter {
-
+	
+	@Autowired
+	private AdminRepository adminRepository;
+	
 	// 필터코드 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -38,7 +43,6 @@ public class JwtFilter extends OncePerRequestFilter {
 				jwtCookie = cookies[i].getValue();
 			}
 		}
-		
 		Claims claim;
 		
 	    try {
@@ -48,15 +52,13 @@ public class JwtFilter extends OncePerRequestFilter {
 	        filterChain.doFilter(request, response);
 		    return;
 	    }
-	    
 	    var authToken = new UsernamePasswordAuthenticationToken(claim,null);
 	    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 	    SecurityContextHolder.getContext().setAuthentication(authToken);
 	    
 	    // 이제 여기에서 로그인 후처리 코드 하면될듯?
-	    
-	    System.out.println(claim);
-	    
+	    // 로그 기능 여기다가 추가하면 될듯 ㅋㅋ 역시 JWT 개사기임
+	    // 와 너무힘듬 시큐리티 조금만건들면 이상해지네 ㅡㅡ
 		filterChain.doFilter(request, response);
 	}
 }

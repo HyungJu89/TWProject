@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.center.sanction.dto.SanctionDTO;
 import com.jwi.work.center.sanction.service.SanctionService;
-import com.jwi.work.channel.dto.PagingDto;
+import com.jwi.work.util.dto.PagingDto;
 
 import lombok.AllArgsConstructor;
 
@@ -40,4 +40,19 @@ public class SanctionRestController {
         
         return result;
     }
+	
+	@PostMapping("/user")
+	public Map<String, String> getBannedUserNickname(@RequestParam("userKey") int userKey) {
+		String nickName = sanctionService.bannedUserNick(userKey);
+		
+		Map<String, String> result = new HashMap<>();
+		if(nickName != null) {
+			result.put("result", "success");
+			result.put("nickName", nickName);
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
 }
