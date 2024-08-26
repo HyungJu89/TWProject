@@ -66,20 +66,43 @@ function PublicMenu({ isLoggedIn, onLogout }) {
 function UserAfter({ onLogout }) {
     let navigate = useNavigate();
     const userState = useSelector((state) => state.userState);  
+    let sessionIdJson = sessionStorage.getItem('sessionId');
+    let sessionId = JSON.parse(sessionIdJson).sessionId;
 
         //즐겨찾기 게시판  :: 무작위 7개 가져오기 더 많으면 페이징으로 넘겨야함 하는 중~
-        const [randomBoard, setRandomBoard] = useState();
+        const [favoritesList, setFavoritesList] = useState(); //즐겨찾기 key
         useEffect(() => {
-            const randomBoard = async () => {
+            const favorites = async () => {
                 try {
-                    const {data} = await axios.get(`/channel/randomBoard`);
-                    setRandomBoard(data);
+                    const {data} = await axios.get(`/myPage/favorites`,{params:{userKey : 1}});
+                    setFavoritesList(data);
+                    console.log(data);
                 } catch (error) {
                     console.error('Channel API Error:', error);
                 }
             };
-            randomBoard();
+            favorites();
         }, []);
+        
+        //즐겨찾기 게시판(2)  :: 채널 정보 가져오기
+        const [channelList, setChannelList] = useState([]); //즐겨찾기에서 찾은key를 기반으로 채널 정보 가져오기
+        useEffect(() => {
+            const fetchChannels = async () => {
+            try {
+                //favoritesList에서 구한 channelKey만 골라서 배열저장
+                const channelKeys = favoritesList.map(item => item.channelKey); 
+                const channelInfo = await Promise.all( //비동기 통신이 완료 될 때 까지 기다림
+                    channelKeys.map(key =>
+                        axios.get('/channel/findKey', { params: { channelKey: key } })
+                    ));
+                setChannelList(channelInfo.map(channelInfo => channelInfo.data));
+                console.log(channelInfo.map(channelInfo => channelInfo.data));
+            } catch (error) {
+                console.error('Channel API Error:', error);
+                }
+            }
+            fetchChannels();
+            }, [favoritesList]);
 
 
     return (
@@ -99,16 +122,16 @@ function UserAfter({ onLogout }) {
                 <div className={styles.Bookmark}>즐겨찾기<img src={edit} /></div>
                 <div className={styles.recommendation} style={{ marginTop: '0px', paddingTop: '20px' }}>{/* 즐찾 */}
                     <div className={styles.list} style={{ marginTop: '0px' }}>
-                        {randomBoard && randomBoard.success &&
+                        {channelList &&
                         <>
-                            {randomBoard.info.map((item, i)=>
+                            {channelList.map((item, i)=>
                             <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
-                                <img src={item.imageUrl} />
-                                {item.name}
+                                <img src={item[0].imageUrl} />
+                                {item[0].name}
                             </div>
                             )}
                         </>
-                        }     
+                        } 
                     </div>
                 </div>
                 <div className={styles.bottom}>

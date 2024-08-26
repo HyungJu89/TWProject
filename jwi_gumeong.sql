@@ -24,7 +24,7 @@ values ('4','2','post','4','욕설/혐오','아니 이새끼좀 처리하라고 
 ALTER TABLE `bannedLog`
 ADD COLUMN `state` VARCHAR(50) NOT NULL COMMENT '정지 상태';
 
--- 2024-08-21 [조영민]
+-- 2024-08-21 [조영민] V 0.1.13
 -- 수정내용 : bannedLog 추가
 -- banned에서 update문으로 데이터를 수정하기 떄문에 로그를 남기는 방식으로 수정함
 CREATE TABLE `bannedLog` (

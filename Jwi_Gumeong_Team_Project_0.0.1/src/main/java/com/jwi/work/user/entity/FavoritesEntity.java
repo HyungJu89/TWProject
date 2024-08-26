@@ -1,5 +1,7 @@
 package com.jwi.work.user.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,15 +18,56 @@ public class FavoritesEntity {
     private int favoritesKey;
     
 	@Column(name = "userKey", nullable = true)
-	private String userKey;
+	private int userKey;
 	
 	@Column(name = "channelKey", nullable = true)
-	private String channelKey;
+	private int channelKey;
 	
 	@Column(name = "createdAt", nullable = true)
-	private String createdAt;
+	private LocalDateTime createdAt;
 	
 	@Column(name = "updatedAt", nullable = true)
-	private String updatedAt;
+	private LocalDateTime updatedAt;
+
+	public int getFavoritesKey() {
+		return favoritesKey;
+	}
+
+	public void setFavoritesKey(int favoritesKey) {
+		this.favoritesKey = favoritesKey;
+	}
+
+	public int getUserKey() {
+		return userKey;
+	}
+
+	public void setUserKey(int userKey) {
+		this.userKey = userKey;
+	}
+
+	public int getChannelKey() {
+		return channelKey;
+	}
+
+	public void setChannelKey(int channelKey) {
+		this.channelKey = channelKey;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+	
 
 }

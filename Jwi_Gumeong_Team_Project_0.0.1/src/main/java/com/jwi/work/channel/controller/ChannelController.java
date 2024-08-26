@@ -1,12 +1,9 @@
 package com.jwi.work.channel.controller;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
+import com.jwi.work.channel.dto.channelDto.ChannelKeyDto;
+import com.jwi.work.channel.entity.ChannelEntity;
 import com.jwi.work.channel.service.ChannelService;
 import com.jwi.work.util.dto.AnswerDto;
 
@@ -60,6 +59,11 @@ public class ChannelController {
 	@GetMapping("/randomBoard") //무작위 추천 게시판
 	public AnswerDto<List<ChannelDto>> randomBoard() {
 		return channelService.RandomBoard();
+	}
+	
+	@GetMapping("/findKey") //채널 key값으로 검색
+	public List<ChannelEntity> findKey(@RequestParam("channelKey") int channelKey) {
+        return channelService.findKey(channelKey);
 	}
 
 	@PostMapping("/favorite")
