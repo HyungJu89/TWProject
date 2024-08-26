@@ -405,7 +405,7 @@
 	
 	
 			<select id="searchAllTopic" parameterType="map" resultMap="postResultMap">
-		SELECT 
+		SELECT 	
 			post.postKey AS postKey,
 			post.content AS P_content,
 			post.image AS P_image,

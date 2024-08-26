@@ -281,7 +281,9 @@ function Comments({ postKey ,setCommentCount}) {
             });
             setComments(data);
             console.log(data)
+            if(data.success){
             setCommentCount(data.info.commentCount);
+            }
         } catch (error) {
             console.error('Channel API Error:', error);
             throw new Error('Failed to fetch channel data');
