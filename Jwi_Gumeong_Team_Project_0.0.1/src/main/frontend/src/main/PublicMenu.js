@@ -125,7 +125,7 @@ function UserAfter({ onLogout }) {
                         {channelList &&
                         <>
                             {channelList.map((item, i)=>
-                            <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
+                            <div onClick={()=>{navigate(`/channel/${item[0].id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
                                 <img src={item[0].imageUrl} />
                                 {item[0].name}
                             </div>
