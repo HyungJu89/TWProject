@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.report.mapper.ReportMapper">
 
-<insert id="reportSumbit" parameterType="com.jwi.work.report.dto.bodyDto.ReportDto">           
+<insert id="reportSubmit" parameterType="com.jwi.work.report.dto.bodyDto.ReportDto">           
 	INSERT INTO report(reportUserKey,userKey,referenceType,referenceKey,category,content)
 	SELECT 
 		t.userKey,uc.userKey,#{referenceType},#{referenceKey},#{category},#{content}
@@ -40,6 +40,7 @@
 			AND 
 				referenceKey = #{referenceKey}
 		)
+	AND t.userKey != uc.userKey
 </insert>
 
 

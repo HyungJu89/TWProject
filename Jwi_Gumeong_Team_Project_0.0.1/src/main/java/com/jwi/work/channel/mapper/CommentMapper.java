@@ -11,7 +11,7 @@ public interface CommentMapper {
 
 	public int commentCount(@Param("postKey")int postKey);
 	
-	public List<CommentDto> commentSelect(@Param("postKey") int postKey,@Param("isAsc")boolean isAsc);
+	public List<CommentDto> commentSelect(@Param("sessionId")String sessionId,@Param("postKey") int postKey,@Param("isAsc")boolean isAsc);
 	
 	public void commentCreate(CommentCreateDto createDto);
 	

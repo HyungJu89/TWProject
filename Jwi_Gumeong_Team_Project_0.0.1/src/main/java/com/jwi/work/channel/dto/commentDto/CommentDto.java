@@ -11,6 +11,7 @@ public class CommentDto{
 	private String nickName;
 	private String comment;
 	private String state;
+	private boolean myComment;
 	private List<ReplyDto> replys;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;

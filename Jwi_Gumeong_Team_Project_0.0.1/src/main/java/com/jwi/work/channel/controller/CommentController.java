@@ -23,10 +23,11 @@ public class CommentController {
 	
 	@GetMapping("/select")
 	public AnswerDto<CommentListDto> commentSelect(
+			@RequestParam(value = "sessionId", defaultValue = "") String sessionId,
 			@RequestParam(value = "postKey", defaultValue = "0") int postKey,
 			@RequestParam(value = "isAsc", defaultValue = "false")boolean isAsc
 			){
-        return commentService.commentSelect(postKey,isAsc);
+        return commentService.commentSelect(sessionId,postKey,isAsc);
 	}
 	
 	@PostMapping("/create")

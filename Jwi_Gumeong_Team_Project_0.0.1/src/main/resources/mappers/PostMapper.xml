@@ -32,7 +32,21 @@
             			AND uc.sessionId = #{sessionId}
             	) THEN TRUE
             	ELSE FALSE
-        	END AS `like`
+        	END AS `like`,
+        	
+			CASE
+				WHEN EXISTS(
+					SELECT
+						1
+					FROM
+						`userConnection` uc
+					WHERE
+						uc.userKey = post.userKey
+						AND uc.sessionId = #{sessionId}
+
+				) THEN TRUE
+				ELSE FALSE
+				END AS myPost
 		FROM 
 			post 
 		LEFT JOIN
