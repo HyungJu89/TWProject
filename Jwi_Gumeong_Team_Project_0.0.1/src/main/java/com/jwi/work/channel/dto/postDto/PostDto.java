@@ -15,6 +15,7 @@ public class PostDto {
 	private int likeCount;
 	private int commentCount;
 	private boolean like;
+	private boolean myPost;
 	private PostChannelDto postChannel;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;

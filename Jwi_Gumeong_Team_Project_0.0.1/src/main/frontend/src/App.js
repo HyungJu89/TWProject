@@ -20,6 +20,7 @@ import Admin from './admin/Admin.js';
 import AdminMain from './admin/AdminMain.js';
 import AdminLogin from './admin/AdminLogin.js';
 import NotFound from './notFound/NotFound.js';
+import Report from './modal/ReportModal.js';
 import { setSessionId,setUserKey,setLoggedIn,logout } from './slice/sessionSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
@@ -71,6 +72,7 @@ function App() {
             {/* Suspense 의 기능은 컴포넌트가 불러오는 도중일때 fallback 에 등록한 Div 및 컴포넌트를 보여줌 */}
             <Suspense fallback={<div>로딩중임</div>}>
                 <Header onClickSearch={onClickSearch} onLogout={onLogout} isLoggedIn = {isLoggedIn}/> {/* 상단 공통 부분 디자인 */}
+                {state.reportModal && <Report />}
                 {state.imgUiModal.popUp && <ImgUi/>}{/*이미지 팝업*/}
                 <Routes>
                     <Route path='/' element={<Main onLogout={onLogout} isLoggedIn = {isLoggedIn}/>}/> {/* 메인(홈) 접속 페이지 */}

@@ -1,28 +1,8 @@
--- 2024-08-24 [조영민] V 0.1.15
--- 수정내용 : report 테이블 category int -> varchar로 수정 report 인서트문 추가
--- DB자체에서도 바꿔뒀으니 알터만 하면됨
+-- 2024-08-25 [임재열]
+-- 수정내용 : report 카테고리 데이터 타입 변경
 ALTER TABLE `report`
-MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
-select *from report;
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('1','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
+MODIFY `category` VARCHAR(50) NOT NULL COMMENT '신고 사유';
 
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('1','2','post','4','도용','왜 처리 안함 ㅡㅡ','unprocessed',now(),now());
-
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('4','2','post','4','오류/버그','에이펙스에서 핵쓰고다녔음 ㅡㅡ','unprocessed',now(),now());
-
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('4','2','post','4','오류/버그','엉덩이에서 총나옴 이거 어케 처리할껀데 진짜','unprocessed',now(),now());
-
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('4','2','post','4','오류/버그','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
-
--- 2024-08-23 [조영민] V 0.1.14
--- 수정내용 : `state` 정지 상태  추가
-ALTER TABLE `bannedLog`
-ADD COLUMN `state` VARCHAR(50) NOT NULL COMMENT '정지 상태';
 
 -- 2024-08-21 [조영민]
 -- 수정내용 : bannedLog 추가
@@ -30,18 +10,14 @@ ADD COLUMN `state` VARCHAR(50) NOT NULL COMMENT '정지 상태';
 CREATE TABLE `bannedLog` (
    `bannedLogKey`   INT PRIMARY KEY AUTO_INCREMENT   NOT NULL COMMENT '정지 키',
    `bannedKey`   INT   NOT NULL COMMENT '밴 테이블 키',
-   `userKey`   INT   NOT NULL COMMENT '유저 키',
-   `adminKey` INT NOT NULL COMMENT '어드민 키',
+    `userKey`   INT   NOT NULL COMMENT '유저 키',
+    `adminKey` INT NOT NULL COMMENT '어드민 키',
    `reason` VARCHAR(50) NOT NULL COMMENT '정지 사유',
    `reasonDate` DATETIME NOT NULL DEFAULT NOW() COMMENT '정지 시작 날짜',
    `date`   INT   NOT NULL COMMENT '정지일수',
-   `state` VARCHAR(50) NOT NULL COMMENT '정지 상태',
    `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-	
-select *from bannedLog;
-select *from banned;
 
 -- 2024-08-19 [안재원] V 0.1.12
 -- 수정내용 : alarm 테이블에서 title 컬럼 제거
@@ -56,9 +32,7 @@ ALTER TABLE `admin` ADD CONSTRAINT `uniqueAdminName` UNIQUE (`adminName`);
 -- 수정내용 : ADMIN TABLE 컬럼명 수정 id => adminName / pw => adminPassWord 헤싱된 insert문 추가
 -- 패스워드 인코더로 insert하는것이 불가능하기 때문에 직접 insert하는걸로 변경했음
 -- id : asdf /  pw : asdf123
-select *from admin;
 insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("asdf","$2a$12$qWMhwV31meoA0C6fvoVLX.OBe4NXvyz09HIewoxQ8EPProosm54z6","activate",now(),now());
-insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("dsfs3975","$2a$12$5UdVf8drVmy.R/dNuULOAej7jmz7aqoS7ON50aG.zzdSNZbJlYdBq","activate",now(),now());
 
 -- 2024-08-15 [안재원] V 0.1.9 
 -- 수정내용 : inquiry 테이블 Title 소문자로 변경 및 이미지 Null 가능으로 변경 , inquiryResponse 이미지 Null 가능, faq 이미지 Null 가능
@@ -85,8 +59,7 @@ alter table `user` add `pwWrong` int default 0;
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-select*from`user`;
-insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zddsaszxdasdf1@naver.com','12s4','f4fzcvx3r','비밀',0,null,'activate',NOW(),NOW());
+select*from`report`;
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -170,7 +143,7 @@ CREATE TABLE `report` (
 	`userKey`	INT	NOT NULL	COMMENT '신고한 유저',
 	`referenceType`	VARCHAR(50)	NOT NULL	COMMENT '신고 종류 "post","comment","reply" 테이블 이름 넣기',
 	`referenceKey`	INT	NOT NULL	COMMENT '참조키',
-	`category` VARCHAR(32) NOT NULL COMMENT '신고 사유',
+	`category`	VARCHAR(50)	NOT NULL	COMMENT '신고 사유',
 	`content`	TEXT	NOT NULL	COMMENT '신고 내용',
 	`state`	VARCHAR(50)	NOT NULL	DEFAULT 'unprocessed'	COMMENT '처리현황 "unprocessed","process" 작업자와 상의',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

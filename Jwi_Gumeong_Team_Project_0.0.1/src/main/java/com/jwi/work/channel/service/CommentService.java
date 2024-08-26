@@ -17,7 +17,7 @@ public class CommentService {
 	@Autowired
 	private CommentMapper commentMapper;
 	
-	public AnswerDto<CommentListDto> commentSelect(int postKey,boolean isAsc){
+	public AnswerDto<CommentListDto> commentSelect(String sessionId,int postKey,boolean isAsc){
 		
 		
 		AnswerDto<CommentListDto> answer = new AnswerDto<>();
@@ -31,9 +31,9 @@ public class CommentService {
 				answer.setInfo(null);
 				answer.setMessage("댓글이 없습니다.");
 				answer.setSuccess(true);
-				
+				return answer;
 			}
-			commentListDto.setComment(commentMapper.commentSelect(postKey,isAsc));
+			commentListDto.setComment(commentMapper.commentSelect(sessionId,postKey,isAsc));
 			commentListDto.setCommentCount(commentCount);
 			answer.setInfo(commentListDto);
 			answer.setMessage("null.");
@@ -42,6 +42,8 @@ public class CommentService {
 		} catch (Exception e) {
 			
 			answer.setSuccess(false);
+			System.out.println("에러");
+			e.printStackTrace();  // 예외의 스택 트레이스를 출력하여 오류의 원인 파악
 			
 		}
 		

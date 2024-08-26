@@ -14,6 +14,7 @@
 	<result property="createdAt" column="P_createdAt" />
 	<result property="updatedAt" column="P_updatedAt" />
 	<result property="like" column="isLike"/>
+	<result property="myPost" column="myPost"/>
 	<association property="postChannel" javaType="com.jwi.work.channel.dto.postDto.PostChannelDto" resultMap="postChannelResultMap"/>
 </resultMap>
 
@@ -106,8 +107,23 @@
             			AND uc.sessionId = #{sessionId}
             	) THEN TRUE
             	ELSE FALSE
-        	END AS isLike
+        	END AS isLike,
+        	
+			CASE
+				WHEN EXISTS(
+					SELECT
+						1
+					FROM
+						`userConnection` uc
+					WHERE
+						uc.userKey = post.userKey
+						AND uc.sessionId = #{sessionId}
 
+				) THEN TRUE
+				ELSE FALSE
+				END AS myPost
+				
+				
 		FROM 
 			<!-- post 테이블이 메인 -->
 			post 
@@ -192,7 +208,21 @@
             			AND uc.sessionId = #{sessionId}
             	) THEN TRUE
             	ELSE FALSE
-        	END AS isLike
+        	END AS isLike,
+        	
+			CASE
+				WHEN EXISTS(
+					SELECT
+						1
+					FROM
+						`userConnection` uc
+					WHERE
+						uc.userKey = post.userKey
+						AND uc.sessionId = #{sessionId}
+
+				) THEN TRUE
+				ELSE FALSE
+				END AS myPost
         	
 		FROM 
 			post 
@@ -294,7 +324,21 @@
             			AND uc.sessionId = #{sessionId}
             	) THEN TRUE
             	ELSE FALSE
-        	END AS isLike
+        	END AS isLike,
+        	
+			CASE
+				WHEN EXISTS(
+					SELECT
+						1
+					FROM
+						`userConnection` uc
+					WHERE
+						uc.userKey = post.userKey
+						AND uc.sessionId = #{sessionId}
+
+				) THEN TRUE
+				ELSE FALSE
+				END AS myPost
 
 		FROM 
 			post 
@@ -392,7 +436,21 @@
             			AND uc.sessionId = #{sessionId}
             	) THEN TRUE
             	ELSE FALSE
-        	END AS isLike
+        	END AS isLike,
+        	
+			CASE
+				WHEN EXISTS(
+					SELECT
+						1
+					FROM
+						`userConnection` uc
+					WHERE
+						uc.userKey = post.userKey
+						AND uc.sessionId = #{sessionId}
+
+				) THEN TRUE
+				ELSE FALSE
+				END AS myPost
 
 		FROM 
 			post 

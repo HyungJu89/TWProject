@@ -72,8 +72,8 @@ function TopicBtn({ topic, settopic }) {
             {topic == 0 &&
                 <div className={styles.topicdiv}>
                     <div>추천 토픽<div className={styles.bar} /></div>
-                    <div onClick={() => { settopic(1) }} style={{ color: '#999999' }}>즐겨찾기 토픽</div>
-                    <div onClick={() => { settopic(2) }} style={{ color: '#999999' }}>실시간 토픽</div>
+                    <div onClick={() => { settopic(1) }} style={{ color: '#999999' }}>즐겨찾기 토픽</div>`
+                    <div onClick={() => { settopic(2) }} style={{ color: '#999999' }}>실시간 토픽</div>`
                 </div>}
             {topic == 1 &&
             <div className={styles.topicdiv}>

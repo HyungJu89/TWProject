@@ -12,6 +12,7 @@ public class ReplyDto{
 	private String replyNickName;
 	private String reply;
 	private String state;
+	private boolean myReply;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 }

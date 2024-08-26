@@ -3,6 +3,8 @@ import imgUiModal from './slice/mainSlice'
 import userState from './slice/loginSlice'
 import session from './slice/sessionSlice';
 import postInfo from './slice/PostSlice';
+import reportModal from './slice/ReportModalSlice';
+import reportDto from './slice/ReportDtoSlice';
 /**
  * -리덕스 쓰는이유 
  * -컴포넌트간 state 공유 편해짐
@@ -26,8 +28,10 @@ export default configureStore({
     imgUiModal : imgUiModal.reducer,
     userState : userState.reducer,
     session: session,
-    postInfo: postInfo.reducer
+    postInfo: postInfo.reducer,
+    reportModal: reportModal.reducer,
+    reportDto: reportDto.reducer
   }
 
 
-}) 
+})
