@@ -1,14 +1,14 @@
 /* eslint-disable */
 // ^워링 업애주는 친구
 import '../../App.css';
+import axios from 'axios';
 import React, { useState, useRef, useEffect, useCallback } from 'react'
-import styles from '../style/MiniPublicBoard.module.css';
+import styles from '../style/PublicBoard.module.css';
 import MoreDeleteMini from './MoreDeleteMini.js';
 import ReplyArea from './ReplyArea.js';
 import more from '../../icon/24px/more.png';
 import comments_20px from '../../icon/20px/comments-20px.png';
 import big_comment from '../../icon/20px/bigcomment.png';
-
 
 function CommentsList({ index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex }) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    

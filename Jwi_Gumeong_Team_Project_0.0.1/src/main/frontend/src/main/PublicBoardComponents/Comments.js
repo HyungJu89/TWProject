@@ -1,8 +1,9 @@
 /* eslint-disable */
 // ^워링 업애주는 친구
 import '../../App.css';
+import axios from 'axios';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import styles from '../style/MiniPublicBoard.module.css';
+import styles from '../style/PublicBoard.module.css';
 import Emogi from '../../Emogi/Emogi.js';
 import expand_more from '../../icon/24px/expand-more.png';
 import emoticon_deactivation from '../../icon/24px/emoticon-deactivation.png';
@@ -135,7 +136,6 @@ function Comments({ postKey, setCommentCount }) {
             }
         } catch (error) {
             console.error('Channel API Error:', error);
-            throw new Error('Failed to fetch channel data');
         }
     };
 
@@ -198,6 +198,12 @@ function Comments({ postKey, setCommentCount }) {
                     })}
                 </>
             }
+        </div>
+    )
+}function CommentsZero(){
+    return(
+        <div className={styles.CommentsZero}>
+            댓글이 없어요.
         </div>
     )
 }

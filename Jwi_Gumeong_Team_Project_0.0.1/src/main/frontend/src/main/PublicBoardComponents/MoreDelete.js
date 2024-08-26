@@ -2,6 +2,7 @@
 // ^워링 업애주는 친구
 import '../../App.css';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import styles from '../style/MiniPublicBoard.module.css';
 import { reportInfo } from '../../slice/ReportDtoSlice.js';
 import { openModal } from '../../slice/ReportModalSlice.js';

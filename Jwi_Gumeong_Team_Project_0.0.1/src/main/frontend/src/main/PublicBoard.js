@@ -16,7 +16,7 @@ import { changePost } from '../slice/PostSlice.js';
 import Comments from './PublicBoardComponents/Comments.js';
 import MoreDelete from './PublicBoardComponents/MoreDelete.js';
 import ChannelTitle from './PublicBoardComponents/ChannelTitle.js';
-    
+
 function PublicBoard({ postInfo }) {
     const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(postInfo.likeCount);
