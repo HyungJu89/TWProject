@@ -29,7 +29,7 @@
 
 <select id="commentCount" parameterType="int" resultType="int">
 	SELECT
-		COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0)
+		IFNULL(COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0),0)
 	FROM 
 		comment 	
 	LEFT JOIN
@@ -111,7 +111,7 @@
 	, reply.createdAt ASC
 </select>
 
-<insert id="commentCreate" parameterType="com.jwi.work.channel.dto.bodyDto.CommentCreateDto">
+<insert id="commentCreate" parameterType="com.jwi.work.channel.dto.bodyDto.CommentCreateDto" >
 	INSERT INTO comment(userKey,postKey,comment)
 	SELECT 
 		userKey,#{postKey},#{comment}

@@ -30,7 +30,7 @@ public class CommentService {
 				
 				answer.setInfo(null);
 				answer.setMessage("댓글이 없습니다.");
-				answer.setSuccess(true);
+				answer.setSuccess(false);
 				return answer;
 			}
 			commentListDto.setComment(commentMapper.commentSelect(sessionId,postKey,isAsc));
@@ -54,6 +54,7 @@ public class CommentService {
 	public AnswerDto<String> commentCreate(CommentCreateDto createDto){
 		AnswerDto<String> answer = new AnswerDto<>();
 		commentMapper.commentCreate(createDto);
+		
 		answer.setSuccess(true);
 		answer.setMessage("성공");
 		return answer;
