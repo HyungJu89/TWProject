@@ -20,11 +20,20 @@ import lodash from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { openImgUiModalFalse } from '../slice/mainSlice';
 import { clearPost } from '../slice/PostSlice.js';
+import AlarmModal from '../modal/AlarmModal.js';
 
 function MiniPublicBoard() {
     let postInfo = useSelector((state)=>{ return state.postInfo })
     const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(postInfo.likeCount);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate('/signIn');
+    };
     
     // 디바운스요 변수
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
@@ -43,33 +52,35 @@ function MiniPublicBoard() {
     ,[]
     );
 
-const updateLike = async(newHeart) => {
-    let sessionIdJson = sessionStorage.getItem('sessionId');
-    if(!sessionIdJson){
-        // 이건 버튼하나!~
-        return alert('로그인되어있지않습니다.')
+    const updateLike = async(newHeart) => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if(!sessionIdJson){
+                setModalContent('로그인 되어 있지 않습니다.');
+                setModalOpen(true);
+                return;
+            //return alert('로그인되어있지않습니다.')
+        }
+        let sessionId = JSON.parse(sessionIdJson).sessionId
+
+        const like = {
+            like : newHeart,
+            sessionId : sessionId,
+            postKey: postInfo.postKey
+        };
+        try {
+            const data = await axios.post(`/post/like`, like)
+
+        } catch (error) {
+            console.error('Error creating channel:', error);
+        }
     }
-    let sessionId = JSON.parse(sessionIdJson).sessionId
 
-    const like = {
-        like : newHeart,
-        sessionId : sessionId,
-        postKey: postInfo.postKey
-    };
-    try {
-        const data = await axios.post(`/post/like`, like)
-
-    } catch (error) {
-        console.error('Error creating channel:', error);
+    const likeOnClick = ()=>{
+        const newHeart = !heart;
+        setLikeCount((state) => newHeart ? state+1 : state-1 )
+        setHeart(newHeart)
+        heartDebounce(newHeart);
     }
-}
-
-const likeOnClick = ()=>{
-    const newHeart = !heart;
-    setLikeCount((state) => newHeart ? state+1 : state-1 )
-    setHeart(newHeart)
-    heartDebounce(newHeart);
-}
 
     //모달함수
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
@@ -113,6 +124,9 @@ const likeOnClick = ()=>{
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
             {commentsON && <Comments />}
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     )
 }

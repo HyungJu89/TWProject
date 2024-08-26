@@ -23,6 +23,7 @@ import lodash from 'lodash';
 import {openModal} from '../slice/ReportModalSlice.js'
 import { changePost } from '../slice/PostSlice.js';
 import { reportInfo } from '../slice/ReportDtoSlice.js';
+import AlarmModal from '../modal/AlarmModal.js';
 
 function PublicBoard({ postInfo }) {
     const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
@@ -33,6 +34,15 @@ function PublicBoard({ postInfo }) {
     //이미지
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate('/signIn');
+    };
 
     let state = useSelector((state) => { return state });
     let dispatch = useDispatch();
@@ -54,33 +64,35 @@ function PublicBoard({ postInfo }) {
     ,[]
     );
 
-const updateLike = async(newHeart) => {
-    let sessionIdJson = sessionStorage.getItem('sessionId');
-    if(!sessionIdJson){
-        // 이건 버튼하나!~
-        return alert('로그인되어있지않습니다.')
+    const updateLike = async(newHeart) => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if(!sessionIdJson){
+            // 이건 버튼하나!~
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
+        }
+        let sessionId = JSON.parse(sessionIdJson).sessionId
+
+        const like = {
+            like : newHeart,
+            sessionId : sessionId,
+            postKey: postInfo.postKey
+        };
+        try {
+            const data = await axios.post(`/post/like`, like)
+
+        } catch (error) {
+            console.error('Error creating channel:', error);
+        }
     }
-    let sessionId = JSON.parse(sessionIdJson).sessionId
 
-    const like = {
-        like : newHeart,
-        sessionId : sessionId,
-        postKey: postInfo.postKey
-    };
-    try {
-        const data = await axios.post(`/post/like`, like)
-
-    } catch (error) {
-        console.error('Error creating channel:', error);
+    const likeOnClick = ()=>{
+        const newHeart = !heart;
+        setLikeCount((state) => newHeart ? state+1 : state-1 )
+        setHeart(newHeart)
+        heartDebounce(newHeart);
     }
-}
-
-const likeOnClick = ()=>{
-    const newHeart = !heart;
-    setLikeCount((state) => newHeart ? state+1 : state-1 )
-    setHeart(newHeart)
-    heartDebounce(newHeart);
-}
 
     //모달함수
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
@@ -140,6 +152,9 @@ const likeOnClick = ()=>{
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
             {commentsON && <Comments postKey={postInfo.postKey} setCommentCount = {setCommentCount}/>}
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     )
 }
@@ -160,6 +175,14 @@ function Comments({ postKey ,setCommentCount}) {
     // 컴포넌트 로드용 함수
     const [commentLode, setCommentLode] = useState(true);
     let [comments, setComments] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate('/signIn');
+    };
 
     const textareaRef = useRef(null); //
 
@@ -244,7 +267,9 @@ function Comments({ postKey ,setCommentCount}) {
         // 추가로 로직필요하면 여기에
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if(!sessionIdJson){
-            return alert('로그인되어있지않습니다.')
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
         }
         let sessionId = JSON.parse(sessionIdJson).sessionId
         const commentCreate = {
@@ -350,6 +375,9 @@ function Comments({ postKey ,setCommentCount}) {
                     })}
                 </>
             }
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     )
 }
@@ -432,6 +460,14 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
     // 이모지 삽입 함수
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate('/signIn');
+    };
     const insertEmogiAtCursor = (emoji) => {
         const textarea = textareaRef.current;
         if (!textarea) return;
@@ -467,7 +503,9 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
     const replyCreate = async () => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if(!sessionIdJson){
-            return alert('로그인되어있지않습니다.')
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
         }
 
         let sessionId = JSON.parse(sessionIdJson).sessionId
@@ -492,41 +530,44 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
 
     }
 
-const handleInput = (e) => {//스크롤 늘어나게
-    const textarea = textareaRef.current;
-    if (textarea) {
-        // text 가 지워질때 높이를 초기화해주기위해
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-    setReply(e.target.value)
-    setReplyLength(e.target.value.length)
-    setReplyButtonColor(e.target.value.length <= replysLimit ? '#FF8901' : '#BBBBBB')
-    setReplyTextColor(e.target.value.length <= replysLimit ? '#BBBBBB' : '#EC000E')
-};
+    const handleInput = (e) => {//스크롤 늘어나게
+        const textarea = textareaRef.current;
+        if (textarea) {
+            // text 가 지워질때 높이를 초기화해주기위해
+            textarea.style.height = 'auto';
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        }
+        setReply(e.target.value)
+        setReplyLength(e.target.value.length)
+        setReplyButtonColor(e.target.value.length <= replysLimit ? '#FF8901' : '#BBBBBB')
+        setReplyTextColor(e.target.value.length <= replysLimit ? '#BBBBBB' : '#EC000E')
+    };
 
-return (
-    <div className={`${styles.bigComments} fadein`}>
-        <img className={styles.BcImg} src={big_comment} />
-        <div className={styles.commentDiv}>{/* 댓글 달기 */}
-            <div className={styles.replyAreaDiv}>
-                {replyNickName && <a className={styles.replyAreaDivText}>@{replyNickName}</a>}
-                <textarea
-                    value={reply}
-                    className={styles.textarea}
-                    ref={textareaRef}
-                    placeholder='댓글 달기'
-                    onInput={handleInput}
-                />
+    return (
+        <div className={`${styles.bigComments} fadein`}>
+            <img className={styles.BcImg} src={big_comment} />
+            <div className={styles.commentDiv}>{/* 댓글 달기 */}
+                <div className={styles.replyAreaDiv}>
+                    {replyNickName && <a className={styles.replyAreaDivText}>@{replyNickName}</a>}
+                    <textarea
+                        value={reply}
+                        className={styles.textarea}
+                        ref={textareaRef}
+                        placeholder='댓글 달기'
+                        onInput={handleInput}
+                    />
+                </div>
+                <div className={styles.commentNav}>
+                    <img onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
+                    {EmojiOn && <div className={styles.a}><Emogi setEmogiAdd={setEmogiAdd} /></div>}
+                    <div style={{ color: replyTextColor }}>{replyLength}/{replysLimit}<button style={{ backgroundColor: replyButtonColor }} onClick={()=>replyCreate()}>등록</button></div>
+                </div>
             </div>
-            <div className={styles.commentNav}>
-                <img onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
-                {EmojiOn && <div className={styles.a}><Emogi setEmogiAdd={setEmogiAdd} /></div>}
-                <div style={{ color: replyTextColor }}>{replyLength}/{replysLimit}<button style={{ backgroundColor: replyButtonColor }} onClick={()=>replyCreate()}>등록</button></div>
-            </div>
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
-    </div>
-)
+    )
 }
 
 
