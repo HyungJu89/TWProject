@@ -17,7 +17,8 @@ insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,c
 values ('4','2','post','4','오류/버그','엉덩이에서 총나옴 이거 어케 처리할껀데 진짜','unprocessed',now(),now());
 
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('4','2','post','4','욕설/혐오','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
+values ('8','2','post','4','욕설/혐오','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
+
 
 -- 2024-08-23 [조영민] V 0.1.14
 -- 수정내용 : `state` 정지 상태  추가
@@ -178,6 +179,7 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
+select *from report;
 CREATE TABLE admin (
     adminKey    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
     adminName    VARCHAR(30) COMMENT '어드민아이디',

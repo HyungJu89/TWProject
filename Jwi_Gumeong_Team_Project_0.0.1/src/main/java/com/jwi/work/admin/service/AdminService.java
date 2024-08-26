@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.jwi.work.admin.util.JwtUtil;
 import com.jwi.work.alarm.entity.Report;
+import com.jwi.work.alarm.entity.UserAlarmEntity;
 import com.jwi.work.alarm.repository.ReportRepository;
 import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.center.inquiry.entity.InquiryResponse;
@@ -135,13 +136,21 @@ public class AdminService {
     	// List<Sanction> 형태로 저장
     	// Integer.parseInt = 문자열을 정수로 전환
     	// userData.get("userKey") HashMap 마냥 Map 자료형으로 저장되어있는 userKey 키값의 벨류를 호출
-    	
+    	UserAlarmEntity users = new UserAlarmEntity();
+    	users.setUserKey(Integer.parseInt(userData.get("userKey")));
     	List<Sanction> sanctions = sanctionRepository.findByUserKey(Integer.parseInt(userData.get("userKey")));
+    	List<Report> report = reportRepository.findByReportUserUserKey(Integer.parseInt(userData.get("userKey")));
     	Sanction sanction = new Sanction();
     	SanctionLog sanctionLog = new SanctionLog();
     	int bannedKey = 0;
 //    	.get("adminName", String.class)
     	// 비어있는경우 insert문 작동
+    	for(Report reports :report) {
+    		System.out.println(reports.getState());
+    		reports.setState("process");
+    		reportRepository.save(reports);
+    	}
+    	
 	    if (sanctions.isEmpty()) {
 	    	//유저 비활성화로 전환 (밴)
 	    	sanction.setReasonDate(dateCal.nowDate());
@@ -188,6 +197,7 @@ public class AdminService {
 	    	// 유저 활성화로 전환
 	    	userMapper.updateAct(userKey);
 	        for (Sanction sanction : sanctions) {
+	        	
 	        	// sanction 설정
 	            sanction.setState("deactivate");
 	            sanctionRepository.save(sanction);
@@ -202,7 +212,6 @@ public class AdminService {
 	    	    sanctionLog.setState("deactivate");
 	    	    sanctionLogRepository.save(sanctionLog);
 	        }
-	        
 	    } else {
 	        System.out.println(" ㅋㅋ 없는데 왜찾음 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" + userKey);
 	    }

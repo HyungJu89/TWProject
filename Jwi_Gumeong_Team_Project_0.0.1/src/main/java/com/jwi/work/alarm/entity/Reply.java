@@ -29,7 +29,7 @@ public class Reply {
 
     @ManyToOne
     @JoinColumn(name = "userKey", nullable = false)
-    private User user;
+    private UserAlarmEntity user;
 
     @Column(name = "reply", nullable = false, length = 200)
     private String reply;

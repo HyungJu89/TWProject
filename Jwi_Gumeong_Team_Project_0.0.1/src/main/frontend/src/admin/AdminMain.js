@@ -115,17 +115,26 @@ function AdminMain() {
         }
     }
     
+    // 중복제거 나중에할꺼야 개짜증남 ㅡㅡ
+    // 내일합시다.
     let sortRunReport = () =>{
-        let reportData ;
-        let copy ;
-        for(let i=0 ; i < users.length ; i++){
-            reportData = report.filter(repot => repot.user.userKey === parseInt(users[i].userKey));
-            copy = reportData?.filter(item => item?.state === 'unprocessed');
-            console.log(copy);
+        // 필터링된 데이터 가져오기
+        let reportData = report.filter(repot => repot.state === 'unprocessed');
+        let reportDatas = [];
+
+        for(let i = 0 ; i < reportData.length ; i++){
+            if(reportData[i].reportUser.userKey !== reportDatas[i]?.userKey){
+                reportDatas.push(reportData[i].reportUser)
+            }
+            console.log(reportData[i].reportUser.userKey !== reportDatas[i].userKey);
+            console.log(reportDatas[i].userKey);
         }
-        // let reportDataCategory = (categorys) =>{
-        //     return reportData.filter(data => data.category === categorys);
-        // }
+
+        if (reportData.length > 0) {
+            // setUsers(uniqueArrayData);
+        } else {
+            alert("깨끗합니다");
+        }
     }
     
     const updateBannedAct = (userKey) =>{
@@ -399,7 +408,7 @@ function AdminMain() {
                         {/* 이거 순번체킹 말고 key값 받아와서 체킹하는걸로 해야할듯? */}
                         {users.map((users, idx) => {
                             let banData = banned.find(ban => ban.userKey === parseInt(users.userKey));
-                            let reportData = report.filter(repot => repot.user.userKey === parseInt(users.userKey));
+                            let reportData = report.filter(repot => repot.reportUser.userKey === parseInt(users.userKey));
                             let reportDataCategory = (categorys) =>{
                                 return reportData.filter(data => data.category === categorys);
                             }
@@ -416,7 +425,10 @@ function AdminMain() {
                                                     {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
                                                     {/* 데이터가 오브젝트 배열인데 일단 한개만임시로 참조하게끔 해놨음. */}
                                                     {/* 나중에 하나하나 처리할 예정 */}
-                                                    { reportData[idx]?.state === "unprocessed" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
+                                                    { reportData.length !== 0 
+                                                        && reportData.find(prev => prev.state === "unprocessed")?.state === "unprocessed" 
+                                                        ? <div className={styles.userStatedeactivate}>신고접수</div> 
+                                                        : null}
                                                     {/* 신고 처리 완료 딱지도 만들면 좋을듯? */}
                                                     {/* 자살중인 계정은 회색? */}
                                                     { users.state === "secession" ? <div className={styles.userStatedeling}>비활성화</div> : null}
@@ -425,11 +437,11 @@ function AdminMain() {
                                             </div>
                                         </div>
                                         {/* FAQ의 번호와 인덱스가 같으면 열림 */}
-                                        {faqContent === idx && (
+                                        { faqContent === idx && (
                                             <div>
                                                 {
                                                     // 데이터가 오브젝트 배열인데 일단 한개만임시로 참조하게끔 해놨음.
-                                                    reportData[idx]?.state === "unprocessed" ?
+                                                    reportData.length !== 0 && reportData.find(prev => prev.state === "unprocessed")?.state === "unprocessed" ?
                                                     <div className={styles.faqContent}>
                                                         {/* 신고받은거 넣으면 될듯 */}
                                                         {/* 네비게이트로 신고 내역쪽으로 리다이렉트 */}
@@ -795,13 +807,19 @@ function AdminMain() {
                                 report.map((a,i)=>{
                                     return(
                                         <div>
-                                            <br></br>
-
-                                            <div>신고한놈 : {report[i].reportUser.nickName}</div>
-                                            <div>신고내용 : {report[i].content.substr(0,80)}</div>
-                                            <div>카테고리 : {report[i].category}</div>
-                                            <div>신고 받은놈 :{report[i].user.nickName}</div>
-                                            <br></br>
+                                                {
+                                                    report[i].state === "unprocessed" ?
+                                                        <div>
+                                                            <br></br>
+                
+                                                            <div>신고한놈 : {report[i].reportUser.nickName}</div>
+                                                            <div>신고내용 : {report[i].content.substr(0,80)}</div>
+                                                            <div>카테고리 : {report[i].category}</div>
+                                                            <div>신고 받은놈 :{report[i].user.nickName}</div>
+                                                            <br></br>
+                                                        </div>
+                                                        :null
+                                                }
                                         </div>
                                     )
                                 })    

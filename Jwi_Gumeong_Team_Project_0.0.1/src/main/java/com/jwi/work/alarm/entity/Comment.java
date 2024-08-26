@@ -25,7 +25,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "userKey", nullable = false)
-    private User user;
+    private UserAlarmEntity user;
 
     @ManyToOne
     @JoinColumn(name = "postKey", nullable = false)

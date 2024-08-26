@@ -24,7 +24,7 @@ public class Like {
 
     @ManyToOne
     @JoinColumn(name = "userKey", nullable = false)
-    private User user;
+    private UserAlarmEntity user;
 
     @ManyToOne
     @JoinColumn(name = "postKey", nullable = false)
