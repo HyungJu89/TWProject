@@ -1,8 +1,12 @@
 /* eslint-disable */
 // ^워링 업애주는 친구
+import axios from 'axios';
 import '../../App.css';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import styles from '../style/MiniPublicBoard.module.css';
+import styles from '../style/PublicBoard.module.css';
+import big_comment from '../../icon/20px/bigcomment.png';
+import emoticon_activation from '../../icon/24px/emoticon-activation.png';
+import emoticon_deactivation from '../../icon/24px/emoticon-deactivation.png';
 import Emogi from '../../Emogi/Emogi.js';
 
 function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLode, onClear }) {
