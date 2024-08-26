@@ -70,11 +70,10 @@ public class MyPageService {
 	}
 	
 	//즐겨찾기 :: 현재 로그인된 유저키 기반으로 데이터 검색
-	public List<FavoritesEntity> favoritesList(@RequestParam("userKey") int userKey){
+	public List<FavoritesEntity> favoritesList(int userKey){
 		return favoritesRepository.findByUserKey(userKey);
 		
 	}
-	
 //	//정보수정 처리 로직
 //	public CheckDto edit(User user) {
 //    	//반환하기위한 객체 생성

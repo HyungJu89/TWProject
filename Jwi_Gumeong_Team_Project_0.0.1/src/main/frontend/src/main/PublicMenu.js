@@ -66,8 +66,8 @@ function PublicMenu({ isLoggedIn, onLogout }) {
 function UserAfter({ onLogout }) {
     let navigate = useNavigate();
     const userState = useSelector((state) => state.userState);  
-    let sessionIdJson = sessionStorage.getItem('sessionId');
-    let sessionId = JSON.parse(sessionIdJson).sessionId;
+    // let sessionIdJson = sessionStorage.getItem('sessionId');
+    // let sessionId = JSON.parse(sessionIdJson).sessionId;
 
         //즐겨찾기 게시판  :: 무작위 7개 가져오기 더 많으면 페이징으로 넘겨야함 하는 중~
         const [favoritesList, setFavoritesList] = useState(); //즐겨찾기 key
