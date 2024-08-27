@@ -193,7 +193,7 @@ function Comments({ postKey, setCommentCount }) {
             <div className={styles.widthNav} style={{ justifyContent: 'start' }}>
                 <div ref={moreRef} style={{ cursor: 'pointer' }} onClick={() => { !moreON && setmoreON(true) }} >
                     정렬순서<img style={{ marginLeft: '4px' }} src={expand_more} />
-                    {moreON && <div ref={modalRef}><MoreAlign setIsAsc={setIsAsc} /></div>} {/*신고, 삭제 모달*/}
+                    {moreON && <div ref={modalRef}><MoreAlign setIsAsc={setIsAsc} /></div>} {/*정렬 모달*/}
                 </div>
             </div>
             <div className={styles.commentDiv}>{/* 댓글 달기 */}

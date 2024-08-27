@@ -13,7 +13,8 @@ import big_comment from '../../icon/20px/bigcomment.png';
 //댓글 포커스용 ref 받는 코드(forwardRef)
 const CommentsList = forwardRef(function CommentsList(
 { index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex, setCommentStart, commentStart }, ref) {
-    let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
+    let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off   
+    const [nowRef, setNowRef] = useState(0) ; //모달(Ref)지정용 함수 = 현재 누른 댓글의 key를 비교해서 동일한 모달만 오픈
     const modalRef = useRef(null);
     const moreRef = useRef(null);
 
@@ -21,7 +22,8 @@ const CommentsList = forwardRef(function CommentsList(
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
             if (commentMoreON &&
-                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target)) { setCommentmoreON(false); } //신고, 삭제 닫음
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target)) 
+                { setCommentmoreON(false); } //신고, 삭제 닫음
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => { //클린업
@@ -37,8 +39,10 @@ const CommentsList = forwardRef(function CommentsList(
                     <div className={styles.listNav}>
                         <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{comment.createdAt}</a></div>
                         <div>
-                            <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
-                            {commentMoreON && <div ref={modalRef}><MoreDeleteMini nickName={comment.nickName} referenceType={'comment'} referenceKey={comment.commentKey} myContent={comment.myComment} /></div>} {/*신고, 삭제 모달*/}
+                            <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(comment.commentKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
+                            {commentMoreON &&
+                            nowRef === comment.commentKey ?
+                            <div ref={modalRef}><MoreDeleteMini nickName={comment.nickName} referenceType={'comment'} referenceKey={comment.commentKey} myContent={comment.myComment} /></div> : null} {/*신고, 삭제 모달*/}
                         </div>
                     </div>
                     <div className={styles.listContent}>{comment.comment}</div>
@@ -62,8 +66,10 @@ const CommentsList = forwardRef(function CommentsList(
                                         <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
                                             <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{reply.createdAt}</a></div>
                                             <div>
-                                                <img ref={moreRef} onClick={() => { !commentMoreON && setReplyMoreON(true) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
-                                                {commentMoreON && <div ref={modalRef}><MoreDeleteMini nickName={reply.nickName} referenceType={'reply'} referenceKey={reply.replyKey} myContent={reply.myReply} /></div>} {/*신고, 삭제 모달*/}
+                                                <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(reply.replyKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
+                                                {commentMoreON &&
+                                                nowRef === reply.replyKey ?
+                                                <div ref={modalRef}><MoreDeleteMini nickName={reply.nickName} referenceType={'reply'} referenceKey={reply.replyKey} myContent={reply.myReply} /></div>:null} {/*신고, 삭제 모달*/}
                                             </div>
                                         </div>
                                         {reply.replyNickName &&
