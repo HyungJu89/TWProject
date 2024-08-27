@@ -11,6 +11,9 @@ import emoticon_deactivation from '../../icon/24px/emoticon-deactivation.png';
 import CommentsList from './CommentsList.js';
 import MoreAlign from '../PublicBoardComponents/MoreAlign.js';
 import { reportInfo } from '../../slice/ReportDtoSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { openImgUiModalFalse } from '../../slice/mainSlice';
+import { clearPost } from '../../slice/PostSlice.js';
 import AlarmModal from '../../modal/AlarmModal.js';
 
 function Comments({ postKey, setCommentCount }) {
@@ -22,10 +25,14 @@ function Comments({ postKey, setCommentCount }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const navigate = useNavigate();
+    let disPatch = useDispatch();
 
     const closeModal = () => {
         setModalOpen(false);
+        disPatch(clearPost())
+        disPatch(openImgUiModalFalse())
         navigate('/signIn');
+        window.scrollTo(0, 0);
     };
 
     //댓글 길이 제한
@@ -155,7 +162,6 @@ function Comments({ postKey, setCommentCount }) {
     useEffect(() => {
         fetchData()
     }, [commentLode, isAsc])
-
 
     const replyOnclick = (state, index) => {
         setReplyInputState(state)
