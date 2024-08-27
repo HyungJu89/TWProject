@@ -175,7 +175,7 @@
 			SELECT COUNT(*) FROM post WHERE state = 'common';
 	</select>
 	
-	
+	<!-- 좋아요 순으로 정렬된 게시글 -->
 		<select id="searchRecommended" parameterType="map"  resultMap="postResultMap">
 		SELECT 
 			post.postKey AS postKey,
@@ -221,8 +221,8 @@
 						AND uc.sessionId = #{sessionId}
 
 				) THEN TRUE
-				ELSE FALSE
-				END AS myPost
+			ELSE FALSE
+		END AS myPost
         	
 		FROM 
 			post 
@@ -291,7 +291,7 @@
 			AND userConnection.sessionId = #{sessionId}
 	</select>
 
-
+<!-- 팔로우한 게시판의 게시글 출력--> 
 	<select id="searchFavoritesPost" parameterType="map"  resultMap="postResultMap">
 		SELECT 
 			post.postKey AS postKey,

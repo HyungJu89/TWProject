@@ -1,10 +1,10 @@
 package com.jwi.work.channel.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jwi.work.alarm.dto.AlarmDto;
+import com.jwi.work.alarm.mapper.AlarmMapper;
 import com.jwi.work.channel.dto.bodyDto.CommentCreateDto;
 import com.jwi.work.channel.dto.bodyDto.CommentDeleteDto;
 import com.jwi.work.channel.dto.commentDto.CommentListDto;
@@ -16,6 +16,9 @@ public class CommentService {
 	
 	@Autowired
 	private CommentMapper commentMapper;
+	
+	@Autowired
+	private AlarmMapper alarmMapper;
 	
 	public AnswerDto<CommentListDto> commentSelect(String sessionId,int postKey,boolean isAsc){
 		
@@ -52,12 +55,24 @@ public class CommentService {
 	}
 	
 	public AnswerDto<String> commentCreate(CommentCreateDto createDto){
+		
 		AnswerDto<String> answer = new AnswerDto<>();
+		
 		commentMapper.commentCreate(createDto);
 		
+		AlarmDto alarmDto = alarmMapper.getPostUserKey(createDto.getPostKey());
+		
+		int userKey = alarmMapper.getUserKey(createDto.getSessionId());
+		
+		if(alarmDto.getPostUserKey() != userKey) {
+		alarmMapper.postAlarm(alarmDto);
+		}
 		answer.setSuccess(true);
+		
 		answer.setMessage("성공");
+		
 		return answer;
+		
 	}
 	
 	public AnswerDto<String> commentDelete(CommentDeleteDto createDto){
