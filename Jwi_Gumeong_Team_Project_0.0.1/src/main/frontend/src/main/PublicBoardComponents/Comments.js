@@ -127,7 +127,7 @@ function Comments({ postKey, setCommentCount }) {
         };
         try {
             const { data } = await axios.post(`/comment/create`, commentCreate)
-            setCommentStart(commentFocusStart+1);
+            setCommentStart(commentFocusStart+1); //댓글 작성시에만 포커스 되도록 하는 함수
             if (!data.success) {
                 alert("오류가남")
             }
