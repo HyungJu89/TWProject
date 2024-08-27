@@ -25,7 +25,7 @@ public int searchRecommendedCount();
 
 public List<PostDto> searchRecommended(@Param("sessionId") String sessionId,@Param("offset") int offset,@Param("limit") int limit);
 
-public int searchFavoritesPostCount();
+public int searchFavoritesPostCount(@Param("sessionId") String sessionId);
 
 public List<PostDto> searchFavoritesPost(@Param("sessionId") String sessionId,@Param("offset") int offset,@Param("limit") int limit);
 

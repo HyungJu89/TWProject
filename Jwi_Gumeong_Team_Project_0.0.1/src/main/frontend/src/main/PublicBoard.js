@@ -21,8 +21,8 @@ import { reportInfo } from '../slice/ReportDtoSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function PublicBoard({ postInfo }) {
-    const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
-    const [likeCount, setLikeCount] = useState(postInfo.likeCount);
+    const [heart, setHeart] = useState(false); //좋아요 누름 확인
+    const [likeCount, setLikeCount] = useState(0);
     // 디바운스요 변수
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     //이미지
@@ -40,6 +40,9 @@ function PublicBoard({ postInfo }) {
             setImgBeing(JSON.parse(postInfo.image));
         }
         setCommentCount(postInfo.commentCount)
+        setHeart(postInfo.like)
+        setLikeCount(postInfo.likeCount)
+        setCommentsON(false)
     }, [postInfo])
 
     // 디바운스 함수 생성
@@ -53,8 +56,8 @@ function PublicBoard({ postInfo }) {
     const updateLike = async(newHeart) => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if(!sessionIdJson){
-            setModalContent('로그인 되어 있지 않습니다.');
-            setModalOpen(true);
+            //setModalContent('로그인 되어 있지 않습니다.');
+            //setModalOpen(true);
             return;
         }
         let sessionId = JSON.parse(sessionIdJson).sessionId
