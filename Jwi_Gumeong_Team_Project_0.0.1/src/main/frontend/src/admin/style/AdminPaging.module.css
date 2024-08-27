@@ -1,0 +1,30 @@
+.adminPageing{
+    margin-top: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.adminPageingPrevBtn,
+.adminPageingNowBtn,
+.adminPageingNextBtn{
+    cursor: pointer;
+    width: 45px;
+    height: 30px;
+    justify-content: center;
+    text-align: center;
+}
+.adminPageingPrevBtn:hover,
+.adminPageingNowBtn:hover,
+.adminPageingNextBtn:hover{
+    color: red;
+}
+.adminPageingPrevBtn{
+    margin-right: 15px;
+}
+.adminPageingNextBtn{
+    margin-left: 15px;
+}
+.adminPageingNowBtn.active{
+    color: red;
+}

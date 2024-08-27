@@ -143,10 +143,12 @@ public class AdminService {
     	Sanction sanction = new Sanction();
     	SanctionLog sanctionLog = new SanctionLog();
     	int bannedKey = 0;
-//    	.get("adminName", String.class)
+    	// .get("adminName", String.class)
+    	// 재원이형 여기서 알람리파지토리.save 하면됨!!!
     	// 비어있는경우 insert문 작동
     	for(Report reports :report) {
-    		System.out.println(reports.getState());
+    		// 이게 신고게시글 신고한놈의 User.UserKey 부분
+//    		System.out.println(reports.getUser().getUserKey());
     		reports.setState("process");
     		reportRepository.save(reports);
     	}
@@ -216,5 +218,5 @@ public class AdminService {
 	        System.out.println(" ㅋㅋ 없는데 왜찾음 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" + userKey);
 	    }
     }
-    
+    // 
 }
