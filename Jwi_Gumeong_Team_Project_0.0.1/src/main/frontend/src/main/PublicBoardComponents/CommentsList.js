@@ -2,7 +2,7 @@
 // ^워링 업애주는 친구
 import '../../App.css';
 import axios from 'axios';
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect, useCallback, forwardRef } from 'react'
 import styles from '../style/PublicBoard.module.css';
 import MoreDeleteMini from './MoreDeleteMini.js';
 import ReplyArea from './ReplyArea.js';
@@ -10,7 +10,9 @@ import more from '../../icon/24px/more.png';
 import comments_20px from '../../icon/20px/comments-20px.png';
 import big_comment from '../../icon/20px/bigcomment.png';
 
-function CommentsList({ index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex }) {
+//댓글 포커스용 ref 받는 코드(forwardRef)
+const CommentsList = forwardRef(function CommentsList(
+{ index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex }, ref) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     const modalRef = useRef(null);
     const moreRef = useRef(null);
@@ -27,10 +29,11 @@ function CommentsList({ index, postKey, comment, setCommentLode, replyOnclick, o
         };
     }, [commentMoreON]);
 
+    
     return (
         <>
             <div>{/* 댓글 */}
-                <div className={styles.list} style={{ marginBottom: '0px' }}>
+                <div className={styles.list} style={{ marginBottom: '0px' }}  ref={ref}>
                     <div className={styles.listNav}>
                         <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{comment.createdAt}</a></div>
                         <div>
@@ -80,5 +83,5 @@ function CommentsList({ index, postKey, comment, setCommentLode, replyOnclick, o
                     })}</>)}
         </>
     )
-}
+});
 export default CommentsList;

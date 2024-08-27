@@ -47,6 +47,8 @@ function Comments({ postKey, setCommentCount }) {
     const [commentTextColor, setCommentTextColor] = useState('#BBBBBB');
     //댓글 정렬순서
     const [isAsc, setIsAsc] = useState(true);
+    //댓글 포커스
+    const commentFocus = useRef(null);
 
     const [replyInputState, setReplyInputState] = useState('');
     const [replyInputIndex, setReplyInputIndex] = useState(0);
@@ -173,6 +175,17 @@ function Comments({ postKey, setCommentCount }) {
         setReplyInputIndex(0)
     }
 
+    //댓글 작성후 화면 포커스
+    useEffect(() => {
+        if (commentFocus.current) {
+            commentFocus.current.scrollIntoView({
+                behavior: 'smooth', //부드럽게 움직이기
+                block: 'center'  // 중앙
+            });
+            commentFocus.current.focus();
+        }
+    }, [comments]);
+
     return (
         <div>
             <div className={styles.dashed} />{/* 회색줄 */}
@@ -210,6 +223,7 @@ function Comments({ postKey, setCommentCount }) {
                                     onClear={onClear}
                                     replyInputState={replyInputState}
                                     replyInputIndex={replyInputIndex}
+                                    ref={index === comments.info.comment.length-1 ? commentFocus : null}
                                 />
                             </div>
                         );
