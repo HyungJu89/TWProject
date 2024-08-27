@@ -51,7 +51,7 @@ function PublicMenu({ isLoggedIn, onLogout }) {
                         <>
                             {randomBoard.info.map((item, i)=>
                             <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
-                                <img src={item.imageUrl} />
+                                <div className={styles.imgDiv}><img src={item.imageUrl} /></div>
                                 {item.name}
                             </div>
                             )}
@@ -129,8 +129,8 @@ function UserAfter({ onLogout }) {
                         {channelList &&
                         <>
                             {channelList.map((item, i)=>
-                            <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
-                                <img src={item[0].imageUrl} />
+                            <div onClick={()=>{navigate(`/channel/${item[0].id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
+                                <div className={styles.imgDiv}><img src={item[0].imageUrl} /></div>
                                 {item[0].name}
                             </div>
                             )}

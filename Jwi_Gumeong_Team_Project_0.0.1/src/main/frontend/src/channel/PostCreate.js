@@ -29,6 +29,7 @@ function PostCreact({channelKey}) {
     const [postCreateButtonColor,setPostCreateButtonColor] = useState('#FF8901');
     const closeModal = () => {
         setModalOpen(false);
+        navigate('/signIn');
     };
 
     // text 의 상태 저장시켜줌, 길이가 300이 넘어갈때 글자 색 변경
@@ -76,7 +77,9 @@ function PostCreact({channelKey}) {
     const postCreact = async() => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if(!sessionIdJson){
-            return alert("로그인되어있지않습니다.")
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
         } 
         let sessionId = JSON.parse(sessionIdJson).sessionId
         if(content.length < 3){
