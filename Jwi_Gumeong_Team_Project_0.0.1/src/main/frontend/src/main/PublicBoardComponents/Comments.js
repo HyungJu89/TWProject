@@ -3,12 +3,15 @@
 import '../../App.css';
 import axios from 'axios';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../style/PublicBoard.module.css';
 import Emogi from '../../Emogi/Emogi.js';
 import expand_more from '../../icon/24px/expand-more.png';
 import emoticon_deactivation from '../../icon/24px/emoticon-deactivation.png';
 import CommentsList from './CommentsList.js';
 import MoreAlign from '../PublicBoardComponents/MoreAlign.js';
+import { reportInfo } from '../../slice/ReportDtoSlice.js';
+import AlarmModal from '../../modal/AlarmModal.js';
 
 function Comments({ postKey, setCommentCount }) {
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
@@ -16,6 +19,14 @@ function Comments({ postKey, setCommentCount }) {
     const [commentLode, setCommentLode] = useState(true);
     let [comments, setComments] = useState([]);
     const textareaRef = useRef(null); //
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+    const navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate('/signIn');
+    };
 
     //댓글 길이 제한
     const commentsLimit = 200;
@@ -85,24 +96,25 @@ function Comments({ postKey, setCommentCount }) {
         };
     }, [moreON]);
 
+
     //댓글 작성 
     const createComment = async () => {
         if (commentsLimit < commentLength) {
             return alert('너무 김');
         }
-
         // 추가로 로직필요하면 여기에
         let sessionIdJson = sessionStorage.getItem('sessionId');
-        if (!sessionIdJson) {
-            return alert('로그인되어있지않습니다.')
+        if(!sessionIdJson){
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
         }
         let sessionId = JSON.parse(sessionIdJson).sessionId
         const commentCreate = {
-            sessionId: sessionId,
+            sessionId : sessionId,
             postKey: postKey,
             comment: comment
         };
-
         try {
             const { data } = await axios.post(`/comment/create`, commentCreate)
             if (!data.success) {
@@ -198,9 +210,13 @@ function Comments({ postKey, setCommentCount }) {
                     })}
                 </>
             }
+                {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     )
-}function CommentsZero(){
+}
+function CommentsZero(){
     return(
         <div className={styles.CommentsZero}>
             댓글이 없어요.

@@ -16,16 +16,19 @@ import { changePost } from '../slice/PostSlice.js';
 import Comments from './PublicBoardComponents/Comments.js';
 import MoreDelete from './PublicBoardComponents/MoreDelete.js';
 import ChannelTitle from './PublicBoardComponents/ChannelTitle.js';
+import { useNavigate } from 'react-router-dom';
+import { reportInfo } from '../slice/ReportDtoSlice.js';
+import AlarmModal from '../modal/AlarmModal.js';
 
 function PublicBoard({ postInfo }) {
     const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(postInfo.likeCount);
-
     // 디바운스요 변수
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     //이미지
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
+    const navigate = useNavigate();
 
     let state = useSelector((state) => { return state });
     let dispatch = useDispatch();
@@ -47,17 +50,18 @@ function PublicBoard({ postInfo }) {
         , []
     );
 
-    const updateLike = async (newHeart) => {
+    const updateLike = async(newHeart) => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
-        if (!sessionIdJson) {
-            // 이건 버튼하나!~
-            return alert('로그인되어있지않습니다.')
+        if(!sessionIdJson){
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
         }
         let sessionId = JSON.parse(sessionIdJson).sessionId
 
         const like = {
-            like: newHeart,
-            sessionId: sessionId,
+            like : newHeart,
+            sessionId : sessionId,
             postKey: postInfo.postKey
         };
         try {
@@ -68,9 +72,9 @@ function PublicBoard({ postInfo }) {
         }
     }
 
-    const likeOnClick = () => {
+    const likeOnClick = ()=>{
         const newHeart = !heart;
-        setLikeCount((state) => newHeart ? state + 1 : state - 1)
+        setLikeCount((state) => newHeart ? state+1 : state-1 )
         setHeart(newHeart)
         heartDebounce(newHeart);
     }
@@ -89,6 +93,7 @@ function PublicBoard({ postInfo }) {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [moreON]);
+
     const imgOnclick = () => {
         const { image, ...newPostInfo } = postInfo;
         const updatePostInfo = { ...newPostInfo, image: imgBeing }
