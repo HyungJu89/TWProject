@@ -49,6 +49,7 @@ function Comments({ postKey, setCommentCount }) {
     const [isAsc, setIsAsc] = useState(true);
     //댓글 포커스
     const commentFocus = useRef(null);
+    const [commentFocusStart, setCommentStart] = useState(0);
 
     const [replyInputState, setReplyInputState] = useState('');
     const [replyInputIndex, setReplyInputIndex] = useState(0);
@@ -126,6 +127,7 @@ function Comments({ postKey, setCommentCount }) {
         };
         try {
             const { data } = await axios.post(`/comment/create`, commentCreate)
+            setCommentStart(commentFocusStart+1);
             if (!data.success) {
                 alert("오류가남")
             }
@@ -151,7 +153,6 @@ function Comments({ postKey, setCommentCount }) {
                 }
             });
             setComments(data);
-            console.log(data)
             if (data.success) {
                 setCommentCount(data.info.commentCount);
             }
@@ -184,7 +185,7 @@ function Comments({ postKey, setCommentCount }) {
             });
             commentFocus.current.focus();
         }
-    }, [comments]);
+    }, [commentFocusStart]);
 
     return (
         <div>
