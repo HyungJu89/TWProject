@@ -9,7 +9,7 @@ import emoticon_activation from '../../icon/24px/emoticon-activation.png';
 import emoticon_deactivation from '../../icon/24px/emoticon-deactivation.png';
 import Emogi from '../../Emogi/Emogi.js';
 
-function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLode, onClear }) {
+function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLode, onClear, setCommentStart,commentStart }) {
     const textareaRef = useRef(null);
     // 이모지 삽입 함수
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
@@ -62,6 +62,8 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLod
 
         try {
             const { data } = await axios.post(`/reply/create`, replyCreateDto)
+            setCommentStart(commentStart+1); //댓글 작성시에만 포커스 되도록 하는 함수
+            console.log('리플에리플');
             if (!data.success) {
                 alert("댓글 생성이 안됨 ㅅㄱ")
             }

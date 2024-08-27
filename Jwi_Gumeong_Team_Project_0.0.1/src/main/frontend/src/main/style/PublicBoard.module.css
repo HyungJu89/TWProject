@@ -281,12 +281,14 @@
 .replyDivText {
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     font-size: 16px;
     font-weight: 400;
     text-align: left;
     color: #999999;
     margin-top: 6px;
+    width: 100px;
 }
 .replyDivText img{
     margin-right: 2px;

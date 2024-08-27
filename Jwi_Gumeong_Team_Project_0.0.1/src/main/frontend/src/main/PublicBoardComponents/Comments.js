@@ -49,7 +49,7 @@ function Comments({ postKey, setCommentCount }) {
     const [isAsc, setIsAsc] = useState(true);
     //댓글 포커스
     const commentFocus = useRef(null);
-    const [commentFocusStart, setCommentStart] = useState(0);
+    const [commentStart, setCommentStart] = useState(0);
 
     const [replyInputState, setReplyInputState] = useState('');
     const [replyInputIndex, setReplyInputIndex] = useState(0);
@@ -127,7 +127,7 @@ function Comments({ postKey, setCommentCount }) {
         };
         try {
             const { data } = await axios.post(`/comment/create`, commentCreate)
-            setCommentStart(commentFocusStart+1); //댓글 작성시에만 포커스 되도록 하는 함수
+            setCommentStart(commentStart+1); //댓글 작성시에만 포커스 되도록 하는 함수
             if (!data.success) {
                 alert("오류가남")
             }
@@ -185,7 +185,7 @@ function Comments({ postKey, setCommentCount }) {
             });
             commentFocus.current.focus();
         }
-    }, [commentFocusStart]);
+    }, [commentStart]);
 
     return (
         <div>
@@ -225,6 +225,8 @@ function Comments({ postKey, setCommentCount }) {
                                     replyInputState={replyInputState}
                                     replyInputIndex={replyInputIndex}
                                     ref={index === comments.info.comment.length-1 ? commentFocus : null}
+                                    setCommentStart={setCommentStart}
+                                    commentStart={commentStart}
                                 />
                             </div>
                         );

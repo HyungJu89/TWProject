@@ -12,7 +12,7 @@ import big_comment from '../../icon/20px/bigcomment.png';
 
 //댓글 포커스용 ref 받는 코드(forwardRef)
 const CommentsList = forwardRef(function CommentsList(
-{ index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex }, ref) {
+{ index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex, setCommentStart, commentStart }, ref) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     const modalRef = useRef(null);
     const moreRef = useRef(null);
@@ -46,7 +46,7 @@ const CommentsList = forwardRef(function CommentsList(
                         <div className={styles.replyDivText} style={{ marginBottom: '20px' }}><img src={comments_20px} />답글달기</div>
                     </div>
                     {(replyInputState == 'comment' && replyInputIndex == comment.commentKey) &&
-                        <ReplyArea postKey={postKey} commentKey={comment.commentKey} setCommentLode={setCommentLode} onClear={onClear} />
+                        <ReplyArea postKey={postKey} commentKey={comment.commentKey} setCommentLode={setCommentLode} onClear={onClear}  setCommentStart={setCommentStart} commentStart={commentStart}/>
                     }
                 </div>
             </div>
@@ -76,7 +76,7 @@ const CommentsList = forwardRef(function CommentsList(
                                     </div>
                                 </div>
                                 {(replyInputState == 'reply' && replyInputIndex == reply.replyKey) &&
-                                    <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} onClear={onClear} />
+                                    <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} onClear={onClear} setCommentStart={setCommentStart} commentStart={commentStart} />
                                 }
                             </div>
                         )
