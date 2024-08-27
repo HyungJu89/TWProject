@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jwi.work.user.dto.CheckDto;
-import com.jwi.work.user.dto.Favorites;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.entity.FavoritesEntity;
 import com.jwi.work.user.mapper.UserMapper;
@@ -70,8 +68,8 @@ public class MyPageService {
 	}
 	
 	//즐겨찾기 :: 현재 로그인된 유저키 기반으로 데이터 검색
-	public List<FavoritesEntity> favoritesList(int userKey){
-		return favoritesRepository.findByUserKey(userKey);
+	public List<FavoritesEntity> favoritesList(String sessionId){
+		return favoritesRepository.findByUserConnectionSessionId(sessionId);
 		
 	}
 //	//정보수정 처리 로직
