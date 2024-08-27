@@ -14,13 +14,13 @@ import { channelGet } from '../recycleCode/ChannelAxios.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSessionId, setUserKey, logout, setLoggedIn, fetchUserKey } from '../slice/sessionSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
-
+import Paging from '../Paging/Paging.js'
 function ChannelHome() {
     let { channelId } = useParams();
     const navigate = useNavigate();
     const [channelInfo,setChannelInfo] = useState();
     const [postList,setPostList] = useState([]);
-    const [page,setPage] = useState(1);
+    const [postPage,setPostPage] = useState(1);
     
     //세션화용 코드,state
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
@@ -46,7 +46,7 @@ function ChannelHome() {
         setModalOpen(false);
     };
 
-    const fetchData = async (channelKey, page) => {
+    const fetchData = async (channelKey, postPage) => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         let sessionId = null;
         if(sessionIdJson){
@@ -57,7 +57,7 @@ function ChannelHome() {
                 params: {
                     sessionId : sessionId,
                     channelKey: channelKey,
-                    page: page
+                    page: postPage
                 }
             });
             setPostList(data);
@@ -80,7 +80,7 @@ function ChannelHome() {
             }
 
             setChannelInfo(channel.info);
-            fetchData(channel.info.channelKey, page);
+            fetchData(channel.info.channelKey, postPage);
 
         } catch (error) {
             console.error('채널 확인 중 오류 발생:', error);
@@ -99,10 +99,9 @@ function ChannelHome() {
 
     useEffect(() => {
         if (channelInfo) {
-            fetchData(channelInfo.channelKey, page);
-            
+            fetchData(channelInfo.channelKey, postPage);
         }
-    }, [channelInfo, page]);
+    }, [channelInfo, postPage]);
 
     //------------------------------------------------------------------------------
     // 첫 번째 쿼리: 채널 정보를 가져오기.
@@ -135,7 +134,11 @@ function ChannelHome() {
                                 </>
                             }
                         </div>
-                        <div className={style.bottomPaging}>페이징</div>
+                        <div className={style.bottomPaging}>
+                            {(postList.success && postList.paging.pageCount > 1) && 
+                            <Paging paging = {postList.paging} postPage={postPage} setPostPage={setPostPage}/>
+                        }
+                        </div>
                     </div>
                     <div className={style.listRight}>
                         <div className={style.sideBar}>

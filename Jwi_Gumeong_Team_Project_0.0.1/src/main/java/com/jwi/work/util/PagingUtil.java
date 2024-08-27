@@ -14,6 +14,8 @@ public class PagingUtil {
 			page = 1;
 		}
 
+		paging.setTotalPostCount(count);
+		
 		// 전체 페이지 수 계산 나머지가 있을때 올림처리하는 방식과 동일한 결과가 출력된다.
 		int pageCount = (count + limitPage - 1) / limitPage;
 		paging.setPageCount(pageCount);
