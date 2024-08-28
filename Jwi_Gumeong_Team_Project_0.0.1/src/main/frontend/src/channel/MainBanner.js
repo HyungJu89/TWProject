@@ -89,7 +89,7 @@ function MainBanner({ channelId, route,
                                 <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */} 
                                 <div className={style.liveTitle}>{partnersLive?.liveTitle}</div>
                                     <div className={style.mainbannerDiv}>
-                                        <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
+                                        <div className={style.divImg}> <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" /></div>
                                         <div className={style.textArea}>
                                             {partnersLiveInfo?.channelName}
                                             <div className={style.category}>

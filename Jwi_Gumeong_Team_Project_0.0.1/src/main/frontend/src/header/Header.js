@@ -220,7 +220,9 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
             return <div className={styles.emptyNotification}><span>{emptyMessage}</span></div>;
         }
 
-        return filteredNotifications.map((notification, index) => {
+        return filteredNotifications &&
+            filteredNotifications.map((notification, index) => {
+                console.log(notification);
             let icon = '';
             let content = '';
             let subContent = '';
@@ -230,7 +232,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                 case 'comment':
                     icon = notification.channelImageUrl || formulation;
                     // 글자수가 20 넘어가면 뒷부분은 ... 으로 변경
-                    content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
+                    // content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
                     subContent = `${notification.nickname}님이 댓글을 달았어요.`;
                     break;
                 case 'like':
@@ -272,7 +274,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     </div>
                 </div>
             );
-        });
+        })
     };
 
     return (
