@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.jwi.work.alarm.entity.Alarm;
 import com.jwi.work.alarm.entity.Banned;
 import com.jwi.work.alarm.entity.UserAlarmEntity;
+import com.jwi.work.alarm.mapper.AlarmMapper;
 import com.jwi.work.alarm.repository.AlarmRepository;
 import com.jwi.work.alarm.repository.BannedRepository;
 import com.jwi.work.alarm.repository.CommentRepository;
@@ -21,6 +22,8 @@ public class AlarmService {
 
 	@Autowired
 	private AlarmRepository alarmRepository;
+	@Autowired
+	private AlarmMapper alarmMapper;
     @Autowired
     private PostRepository postRepository;
     @Autowired
@@ -98,5 +101,9 @@ public class AlarmService {
         } else {
             return 0;
         }
+    }
+    
+    public int updateAlarm(int notificationId) {
+    	return alarmMapper.readUpdateAlarm(notificationId);
     }
 }

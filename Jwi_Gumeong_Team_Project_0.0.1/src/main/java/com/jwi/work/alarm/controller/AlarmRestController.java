@@ -51,4 +51,19 @@ public class AlarmRestController {
 		
 		return result;
 	}
+	
+	@PostMapping("/read")
+	public Map<String, String> updateAlarm(@RequestParam("notificationId") int notificationId) {
+		
+		int num = alarmService.updateAlarm(notificationId);
+		Map<String, String> result = new HashMap<>();
+		
+		if(num == 1) {
+			result.put("result", "success");
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
 }

@@ -2,75 +2,74 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.alarm.mapper.AlarmMapper">
-<select id="getUserKey" parameterType="String" resultType="int">
-	SELECT userKey FROM userConnection WHERE sessionId = #{sessionId}
-</select>
+	<select id="getUserKey" parameterType="String" resultType="int">
+		SELECT userKey FROM userConnection WHERE sessionId = #{sessionId}
+	</select>
+	
+	<!-- 게시글에 알람보내기 -->
+	<insert id="postAlarm" parameterType="com.jwi.work.alarm.dto.AlarmDto">
+	 	INSERT INTO 
+	 		alarm(userKey,referenceType,referenceKey) value (#{postUserKey},'post',#{postPostKey})
+	</insert>
+	
+	<insert id="commentAlarm" parameterType="com.jwi.work.alarm.dto.AlarmDto">
+	 	INSERT INTO 
+	 		alarm(userKey,referenceType,referenceKey) value (#{commentUserKey},'comment',#{commentCommentKey})
+	</insert>
+	
+	<insert id="replyAlarm" parameterType="com.jwi.work.alarm.dto.AlarmDto">
+	 	INSERT INTO 
+	 		alarm(userKey,referenceType,referenceKey) value (#{replyUserKey},'reply',#{replyReplyKey})
+	</insert>
+	
+	
+	<select id="getPostUserKey" parameterType="int" resultType="com.jwi.work.alarm.dto.AlarmDto">
+		SELECT 
+			userKey AS postUserKey,
+			postKey AS postPostKey
+		FROM
+			post
+		WHERE
+			postKey = #{postKey}
+	</select>
+	
+	<!-- 대댓글 작성하고 게시글 알람, 댓글 알람 보내기 -->
+	<!-- 댓글을 바탕으로 게시글의 유저키 출력 -->
+	<select id="getCommentUserKey"  parameterType="int" resultType="com.jwi.work.alarm.dto.AlarmDto">
+		SELECT 
+			p.userKey AS postUserKey,
+			p.postKey AS postPostKey, 
+			c.userKey AS commentUserKey , 
+			c.commentKey AS commentCommentKey
+		FROM
+			post as p
+		JOIN
+			comment AS c ON p.postKey = c.postKey
+		WHERE
+			c.commentKey = #{commentKey}
+	</select>
 
-<!-- 게시글에 알람보내기 -->
-<insert id="postAlarm" parameterType="com.jwi.work.alarm.dto.AlarmDto">
- 	INSERT INTO 
- 		alarm(userKey,referenceType,referenceKey) value (#{postUserKey},'post',#{postPostKey})
-</insert>
+	<!-- 지정댓글을 작성하고 게시글 알람, 댓글알람, 대댓글알람 보내기 -->
+	<!-- 대댓글을 바탕으로 게시글키, 댓글키 출력 -->
+	<select id="getReplyUserKey"  parameterType="int" resultType="com.jwi.work.alarm.dto.AlarmDto">
+		SELECT
+			p.userKey AS postUserKey,
+			p.postKey AS postPostKey,
+			c.userKey AS commentUserKey,
+			c.commentKey AS commentCommentKey,
+			r.userKey AS replyUserKey,
+			r.replyKey AS replyReplyKey
+		FROM 
+			post AS p
+		JOIN
+			comment AS c ON p.postKey = c.postKey
+		JOIN
+			reply AS r ON c.commentKey = r.commentKey
+		WHERE
+			r.replyKey  =  #{replyKey}
+	</select>
 
-<insert id="commentAlarm" parameterType="com.jwi.work.alarm.dto.AlarmDto">
- 	INSERT INTO 
- 		alarm(userKey,referenceType,referenceKey) value (#{commentUserKey},'comment',#{commentCommentKey})
-</insert>
-
-<insert id="replyAlarm" parameterType="com.jwi.work.alarm.dto.AlarmDto">
- 	INSERT INTO 
- 		alarm(userKey,referenceType,referenceKey) value (#{replyUserKey},'reply',#{replyReplyKey})
-</insert>
-
-
-<select id="getPostUserKey" parameterType="int" resultType="com.jwi.work.alarm.dto.AlarmDto">
-	SELECT 
-		userKey AS postUserKey,
-		postKey AS postPostKey
-	FROM
-		post
-	WHERE
-		postKey = #{postKey}
-</select>
-
-<!-- 대댓글 작성하고 게시글 알람, 댓글 알람 보내기 -->
-<!-- 댓글을 바탕으로 게시글의 유저키 출력 -->
-<select id="getCommentUserKey"  parameterType="int" resultType="com.jwi.work.alarm.dto.AlarmDto">
-	SELECT 
-		p.userKey AS postUserKey,
-		p.postKey AS postPostKey, 
-		c.userKey AS commentUserKey , 
-		c.commentKey AS commentCommentKey
-	FROM
-		post as p
-	JOIN
-		comment AS c ON p.postKey = c.postKey
-	WHERE
-		c.commentKey = #{commentKey}
-</select>
-
-<!-- 지정댓글을 작성하고 게시글 알람, 댓글알람, 대댓글알람 보내기 -->
-<!-- 대댓글을 바탕으로 게시글키, 댓글키 출력 -->
-<select id="getReplyUserKey"  parameterType="int" resultType="com.jwi.work.alarm.dto.AlarmDto">
-	SELECT
-		p.userKey AS postUserKey,
-		p.postKey AS postPostKey,
-		c.userKey AS commentUserKey,
-		c.commentKey AS commentCommentKey,
-		r.userKey AS replyUserKey,
-		r.replyKey AS replyReplyKey
-	FROM 
-		post AS p
-	JOIN
-		comment AS c ON p.postKey = c.postKey
-	JOIN
-		reply AS r ON c.commentKey = r.commentKey
-	WHERE
-		r.replyKey  =  #{replyKey}
-</select>
-
-
-
-
-
+	<update id="readUpdateAlarm" parameterType="int">
+		UPDATE `alarm` SET `read` = 1 WHERE `alarmKey` = #{notificationId}
+	</update>
 </mapper>

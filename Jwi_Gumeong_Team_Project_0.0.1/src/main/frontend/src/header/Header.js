@@ -212,10 +212,14 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     // 알림 읽음
     const onRead = async (notificationId) => {
         try {
-            await axios.post('/alarm/read', { notificationId });
-            setNotifications(notifications.map(notification =>
-                notification.alarmKey === notificationId ? { ...notification, read: true } : notification
-            ));
+            const response = await axios.post('/alarm/read', null, { params: { notificationId }});
+            if (response.data.result === 'success') {
+                setNotifications(notifications.map(notification =>
+                    notification.alarmKey === notificationId ? { ...notification, read: true } : notification));
+                } else {
+                    setModalContent('알람 읽기에 실패 하였습니다.\n잠시 후 다시 시도해 주세요 ');
+                    setModalOpen(true);
+                }
         } catch (error) {
             console.log("알람 1개 읽음 에러: " + error.message);
         }
