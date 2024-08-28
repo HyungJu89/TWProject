@@ -1,6 +1,5 @@
 /* eslint-disable */
 // ^워링 업애주는 친구
-
 import axios from 'axios';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useQuery } from 'react-query';
@@ -255,14 +254,11 @@ function Comments({ postKey ,setCommentCount}) {
         };
     }, [moreON]);
 
-
     //댓글 작성 
     const createComment = async () => {
         if (commentsLimit < commentLength) {
             return alert('너무 김');
         }
-
-
 
         // 추가로 로직필요하면 여기에
         let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -331,7 +327,6 @@ function Comments({ postKey ,setCommentCount}) {
         setReplyInputIndex(0)
     }
 
-
     return (
         <div>
             <div className={styles.dashed} />{/* 회색줄 */}
@@ -397,10 +392,6 @@ function CommentsList({ index, postKey, comment,setCommentLode,replyOnclick,onCl
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [commentMoreON]);
-
-
-
-
 
     return (
         <>
@@ -527,7 +518,6 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
         setCommentLode((state)=> state? false : true);
         setReply('');
         onClear();
-
     }
 
     const handleInput = (e) => {//스크롤 늘어나게
@@ -570,12 +560,8 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
     )
 }
 
-
 function MoreDelete({ nickName,referenceType,referenceKey, modalRef, right, top , myContent}) {
-    const dispatch = useDispatch()
-
-
-
+    const dispatch = useDispatch();
     const reportOnClick = () =>{
         dispatch(reportInfo({
             nickName : nickName,
@@ -609,7 +595,6 @@ function MoreDeleteMini({nickName,referenceType,referenceKey,myContent}) {
                 referenceKey : referenceKey
             })
         )
-
         dispatch(openModal())
         
     }

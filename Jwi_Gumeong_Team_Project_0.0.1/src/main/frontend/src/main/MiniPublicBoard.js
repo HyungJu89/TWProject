@@ -130,11 +130,10 @@ function MiniPublicBoard() {
         </div>
     )
 }
+
 function ChannelTitle({ postChannel }) {
     let navigate = useNavigate();
     let disPatch = useDispatch();
-
-
 
     const channelOnClick = () =>{
         navigate(`/channel/${postChannel.id}`)
@@ -175,6 +174,7 @@ function Comments() {
         </div>
     )
 }
+
 function CommentsZero(){
     return(
         <div className={styles.CommentsZero}>
@@ -182,6 +182,7 @@ function CommentsZero(){
         </div>
     )
 }
+
 function CommentsSet(){
     return(
         <>
@@ -190,6 +191,7 @@ function CommentsSet(){
         </>
     )
 }
+
 function CommentsList() {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     const modalRef = useRef();
@@ -221,6 +223,7 @@ function CommentsList() {
         </div>
     )
 }
+
 function BigCommentsList() {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off 
     const modalRef = useRef();
@@ -253,6 +256,7 @@ function BigCommentsList() {
         </div>
     )
 }
+
 function MoreDelete() {
     let [deleteWrote, setDeleteWrote] = useState(true) //★내가 쓴 글이면 활성화 코드 추가★
     return (
@@ -267,6 +271,7 @@ function MoreDelete() {
         </div>
     )
 }
+
 function MoreDeleteMini() {
     let [deleteWrote, setDeleteWrote] = useState(true) //★내가 쓴 댓글이면 활성화 코드 추가★
     return (
@@ -281,6 +286,7 @@ function MoreDeleteMini() {
         </div>
     )
 }
+
 function MoreAlign() {
     return (
     <div className={styles.moreUi}style={{left:'60px',top:'30px'}}>

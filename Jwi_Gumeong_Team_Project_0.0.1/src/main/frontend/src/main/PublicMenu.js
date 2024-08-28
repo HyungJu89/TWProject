@@ -25,7 +25,6 @@ function PublicMenu({ isLoggedIn, onLogout }) {
         }
     }, [dispatch,sessionInfo]); 
     let navigate = useNavigate();
-
     
     //추천 게시판 :: 개설된 채널 중 무작위 10개 가져오기
     const [randomBoard, setRandomBoard] = useState();
@@ -68,7 +67,6 @@ function UserAfter({ onLogout }) {
     const userState = useSelector((state) => state.userState);  
     // let sessionIdJson = sessionStorage.getItem('sessionId');
     // let sessionId = JSON.parse(sessionIdJson).sessionId;
-
         //즐겨찾기 게시판  :: 무작위 7개 가져오기 더 많으면 페이징으로 넘겨야함 하는 중~
         const [favoritesList, setFavoritesList] = useState(); //즐겨찾기 key
         useEffect(() => {
@@ -103,7 +101,6 @@ function UserAfter({ onLogout }) {
             }
             fetchChannels();
             }, [favoritesList]);
-
 
     return (
         <div className={styles.fadein}>
