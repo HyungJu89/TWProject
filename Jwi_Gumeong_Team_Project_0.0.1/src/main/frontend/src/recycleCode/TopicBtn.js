@@ -7,7 +7,6 @@ function TopicBtn({ topic, settopic }) {
 
 useEffect(()=>{
     setLoginChanck(sessionStorage.getItem('sessionId') != null)
-    console.log(loginCheck)
 },[])
 
     return (

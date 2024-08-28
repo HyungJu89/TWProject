@@ -80,7 +80,6 @@ function UserAfter({ onLogout }) {
                 try {
                     const {data} = await axios.get(`/myPage/favorites`,{params:{sessionId : sessionId}});
                     setFavoritesList(data);
-                    console.log(data);
                 } catch (error) {
                     console.error('Channel API Error:', error);
                 }
@@ -100,7 +99,6 @@ function UserAfter({ onLogout }) {
                         axios.get('/channel/findKey', { params: { channelKey: key } })
                     ));
                 setChannelList(channelInfo.map(channelInfo => channelInfo.data));
-                console.log(channelInfo.map(channelInfo => channelInfo.data));
             } catch (error) {
                 console.error('Channel API Error:', error);
                 }
