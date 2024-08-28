@@ -15,7 +15,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "user")
-public class User {
+public class UserAlarmEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

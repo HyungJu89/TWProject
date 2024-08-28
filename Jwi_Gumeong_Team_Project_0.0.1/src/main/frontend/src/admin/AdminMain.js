@@ -2,6 +2,7 @@ import React, {  useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import styles from './style/AdminMain.module.css';
+import AdminPaging from './AdminPaging.js';
 import serviceLogo from '../icon/img/service-Illustration.png';
 import reply from '../icon/img/reply-ing.png';
 import btnLeft from '../icon/btn/btn-left.png';
@@ -50,8 +51,11 @@ function AdminMain() {
     const [revertBtn,setRevertBtn] = useState(false);
     const [update,setUpdate] = useState(false);
     const [report,setReport] = useState([]);
+    const [currentItems, setCurrentItems] = useState([]);
 
-
+    const handleItemsChange = (items) => {
+        setCurrentItems(items);
+    };
     useEffect(() => {
         if(cookieCheck){
             axios.get('/admin/report')
@@ -115,17 +119,30 @@ function AdminMain() {
         }
     }
     
+    // 중복제거 나중에할꺼야 개짜증남 ㅡㅡ
+    // 내일합시다.
+    // ㅋㅋ .some 함수를 왜 생각 못하고있었지 배열 2개 비교할때 너무좋음
+
     let sortRunReport = () =>{
-        let reportData ;
-        let copy ;
-        for(let i=0 ; i < users.length ; i++){
-            reportData = report.filter(repot => repot.user.userKey === parseInt(users[i].userKey));
-            copy = reportData?.filter(item => item?.state === 'unprocessed');
-            console.log(copy);
+        // 필터 사용해서 state가 unprocessed (신고접수) 값인 객체 데이터 전부 호출
+        let reportData = report.filter(repot => repot.state === 'unprocessed');
+        // 추가용 배열 선언
+        let userReportData = [];
+        // reportData(신고접수) 의 길이 만큼 반복문 진행
+        for(let i = 0 ; i < reportData.length ; i++){
+            // .some()함수 활용해서 미리 배열 선언한곳에 userKey와 reportData의 userKey를 비교 후
+            // false로 반환된 데이터만 userReportData에 push
+            // 즉 중복값이 없는 데이터만 들어가게끔
+            if(!userReportData.some(data => data.userKey === reportData[i].reportUser.userKey)){
+                userReportData.push(reportData[i].reportUser)
+            }
         }
-        // let reportDataCategory = (categorys) =>{
-        //     return reportData.filter(data => data.category === categorys);
-        // }
+        // 예외처리
+        if (userReportData.length > 0) {
+            setUsers(userReportData);
+        } else {
+            alert("깨끗합니다");
+        }
     }
     
     const updateBannedAct = (userKey) =>{
@@ -397,9 +414,9 @@ function AdminMain() {
                 return (
                     <div className={styles.faqContainer}>
                         {/* 이거 순번체킹 말고 key값 받아와서 체킹하는걸로 해야할듯? */}
-                        {users.map((users, idx) => {
+                        {currentItems.map((users, idx) => {
                             let banData = banned.find(ban => ban.userKey === parseInt(users.userKey));
-                            let reportData = report.filter(repot => repot.user.userKey === parseInt(users.userKey));
+                            let reportData = report.filter(repot => repot.reportUser.userKey === parseInt(users.userKey));
                             let reportDataCategory = (categorys) =>{
                                 return reportData.filter(data => data.category === categorys);
                             }
@@ -416,7 +433,10 @@ function AdminMain() {
                                                     {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
                                                     {/* 데이터가 오브젝트 배열인데 일단 한개만임시로 참조하게끔 해놨음. */}
                                                     {/* 나중에 하나하나 처리할 예정 */}
-                                                    { reportData[idx]?.state === "unprocessed" ? <div className={styles.userStatedeactivate}>신고접수</div> : null}
+                                                    { reportData.length !== 0 
+                                                        && reportData.find(prev => prev.state === "unprocessed")?.state === "unprocessed" 
+                                                        ? <div className={styles.userStatedeactivate}>신고접수</div> 
+                                                        : null}
                                                     {/* 신고 처리 완료 딱지도 만들면 좋을듯? */}
                                                     {/* 자살중인 계정은 회색? */}
                                                     { users.state === "secession" ? <div className={styles.userStatedeling}>비활성화</div> : null}
@@ -425,11 +445,11 @@ function AdminMain() {
                                             </div>
                                         </div>
                                         {/* FAQ의 번호와 인덱스가 같으면 열림 */}
-                                        {faqContent === idx && (
+                                        { faqContent === idx && (
                                             <div>
                                                 {
                                                     // 데이터가 오브젝트 배열인데 일단 한개만임시로 참조하게끔 해놨음.
-                                                    reportData[idx]?.state === "unprocessed" ?
+                                                    reportData.length !== 0 && reportData.find(prev => prev.state === "unprocessed")?.state === "unprocessed" ?
                                                     <div className={styles.faqContent}>
                                                         {/* 신고받은거 넣으면 될듯 */}
                                                         {/* 네비게이트로 신고 내역쪽으로 리다이렉트 */}
@@ -518,11 +538,6 @@ function AdminMain() {
                                         )}
                                     </div>
                             )})}
-                            <div className={styles.adminPageing}>
-                                <div>이전</div>
-                                <div>현재애들</div>
-                                <div>다음</div>
-                            </div>
                     </div>
                 );
             // 문의하기
@@ -786,7 +801,6 @@ function AdminMain() {
                     <div className={styles.sanctionContainer}>
                         <div className={styles.sanctionList}>
                             {/* 내역이 없을 시 */}
-                            {console.log(report)}
                             {
                             report.length === 0 ? (
                                 <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
@@ -795,13 +809,19 @@ function AdminMain() {
                                 report.map((a,i)=>{
                                     return(
                                         <div>
-                                            <br></br>
-
-                                            <div>신고한놈 : {report[i].reportUser.nickName}</div>
-                                            <div>신고내용 : {report[i].content.substr(0,80)}</div>
-                                            <div>카테고리 : {report[i].category}</div>
-                                            <div>신고 받은놈 :{report[i].user.nickName}</div>
-                                            <br></br>
+                                                {
+                                                    report[i].state === "unprocessed" ?
+                                                        <div>
+                                                            <br></br>
+                                                            {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
+                                                            <div>신고내용 : {report[i].content.substr(0,80)}</div>
+                                                            <div>카테고리 : {report[i].category}</div>
+                                                            <div>신고자 : {report[i].reportUser.nickName}</div>
+                                                            <div>신고받은 닉네임 :{report[i].user.nickName}</div>
+                                                            <br></br>
+                                                        </div>
+                                                        :null
+                                                }
                                         </div>
                                     )
                                 })    
@@ -870,6 +890,12 @@ function AdminMain() {
                 <div className={styles.serviceTabContent}>
                     {renderTabContent()}
                 </div>
+                {
+                    tab !== 1 ?
+                    <AdminPaging users={users} onItemsChange={handleItemsChange}/>
+                    :null
+                }
+
             </div>
             {/* 알람 모달 */}
             {modalOpen && 

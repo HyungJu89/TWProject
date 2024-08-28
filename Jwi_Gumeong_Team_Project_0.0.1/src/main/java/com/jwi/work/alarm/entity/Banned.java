@@ -15,7 +15,7 @@ public class Banned {
 
     @ManyToOne
     @JoinColumn(name = "userKey", nullable = false)
-    private User user;  // User 엔티티와의 연관관계 설정
+    private UserAlarmEntity user;  // User 엔티티와의 연관관계 설정
 
     @Column(name = "reason", nullable = false, length = 50)
     private String reason;

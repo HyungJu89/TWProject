@@ -19,7 +19,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
 import Emogi from '../Emogi/Emogi.js';
 import lodash from 'lodash';
-import {openModal} from '../slice/ReportModalSlice.js'
+import { openModal } from '../slice/ReportModalSlice.js'
 import { changePost } from '../slice/PostSlice.js';
 import { reportInfo } from '../slice/ReportDtoSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
@@ -27,7 +27,7 @@ import AlarmModal from '../modal/AlarmModal.js';
 function PublicBoard({ postInfo }) {
     const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(postInfo.likeCount);
-    
+
     // 디바운스요 변수
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     //이미지
@@ -46,7 +46,7 @@ function PublicBoard({ postInfo }) {
     let state = useSelector((state) => { return state });
     let dispatch = useDispatch();
 
-    const [commentCount,setCommentCount] = useState(0);
+    const [commentCount, setCommentCount] = useState(0);
 
     useEffect(() => {
         if (postInfo.image) {
@@ -57,10 +57,10 @@ function PublicBoard({ postInfo }) {
 
     // 디바운스 함수 생성
     const heartDebounce = useCallback(
-        lodash.debounce(async(newHeart) => {
+        lodash.debounce(async (newHeart) => {
             await updateLike(newHeart);
-        },500) // 0.5초 늘리고싶으면 시간 늘려도 됨
-    ,[]
+        }, 500) // 0.5초 늘리고싶으면 시간 늘려도 됨
+        , []
     );
 
     const updateLike = async(newHeart) => {
@@ -74,8 +74,8 @@ function PublicBoard({ postInfo }) {
         let sessionId = JSON.parse(sessionIdJson).sessionId
 
         const like = {
-            like : newHeart,
-            sessionId : sessionId,
+            like: newHeart,
+            sessionId: sessionId,
             postKey: postInfo.postKey
         };
         try {
@@ -108,8 +108,8 @@ function PublicBoard({ postInfo }) {
         };
     }, [moreON]);
     const imgOnclick = () => {
-        const{image,...newPostInfo} = postInfo;
-        const updatePostInfo = {...newPostInfo,image:imgBeing}
+        const { image, ...newPostInfo } = postInfo;
+        const updatePostInfo = { ...newPostInfo, image: imgBeing }
         dispatch(changePost(updatePostInfo))
         dispatch(openImgUiModal())
     }
@@ -121,7 +121,7 @@ function PublicBoard({ postInfo }) {
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
                 <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true) }} src={more} />
-                {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-82px'} top={'30px'} myContent={postInfo.myPost}/>} {/*신고, 삭제 모달*/}
+                {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-82px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
@@ -143,7 +143,7 @@ function PublicBoard({ postInfo }) {
                 <div className={styles.commentsDiv}>
                     {/*댓글창*/}    <div onClick={() => { commentsON == false ? setCommentsON(true) : setCommentsON(false) }}>
                         <img src={comments} /><div className={styles.comments}>{commentCount}</div></div>
-                    {/*좋아요*/}    <div onClick={()=>likeOnClick(heart)}>
+                    {/*좋아요*/}    <div onClick={() => likeOnClick(heart)}>
                         {heart ? <img src={heart_activation} /> : <img src={heart_deactivation} />}
                         <div className={styles.comments}>{likeCount}</div>
                     </div>
@@ -169,7 +169,7 @@ function ChannelTitle({ postChannel }) {
     )
 }
 
-function Comments({ postKey ,setCommentCount}) {
+function Comments({ postKey, setCommentCount }) {
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
     // 컴포넌트 로드용 함수
     const [commentLode, setCommentLode] = useState(true);
@@ -196,7 +196,7 @@ function Comments({ postKey ,setCommentCount}) {
     //댓글 길이 text 색상
     const [commentTextColor, setCommentTextColor] = useState('#BBBBBB');
     //댓글 정렬순서
-    const [isAsc,setIsAsc] = useState(true);
+    const [isAsc, setIsAsc] = useState(true);
 
 
     const [replyInputState, setReplyInputState] = useState('');
@@ -269,7 +269,7 @@ function Comments({ postKey ,setCommentCount}) {
         }
         let sessionId = JSON.parse(sessionIdJson).sessionId
         const commentCreate = {
-            sessionId : sessionId,
+            sessionId: sessionId,
             postKey: postKey,
             comment: comment
         };
@@ -289,21 +289,21 @@ function Comments({ postKey ,setCommentCount}) {
     const fetchData = async () => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         let sessionId = null;
-        if(sessionIdJson){
-        sessionId = JSON.parse(sessionIdJson).sessionId
-    }
+        if (sessionIdJson) {
+            sessionId = JSON.parse(sessionIdJson).sessionId
+        }
         try {
             const { data } = await axios.get(`/comment/select`, {
                 params: {
-                    sessionId : sessionId,
+                    sessionId: sessionId,
                     postKey: postKey,
                     isAsc: isAsc
                 }
             });
             setComments(data);
             console.log(data)
-            if(data.success){
-            setCommentCount(data.info.commentCount);
+            if (data.success) {
+                setCommentCount(data.info.commentCount);
             }
         } catch (error) {
             console.error('Channel API Error:', error);
@@ -314,7 +314,7 @@ function Comments({ postKey ,setCommentCount}) {
     //댓글 불러오기
     useEffect(() => {
         fetchData()
-    }, [commentLode,isAsc])
+    }, [commentLode, isAsc])
 
 
     const replyOnclick = (state, index) => {
@@ -333,7 +333,7 @@ function Comments({ postKey ,setCommentCount}) {
             <div className={styles.widthNav} style={{ justifyContent: 'start' }}>
                 <div ref={moreRef} style={{ cursor: 'pointer' }} onClick={() => { !moreON && setmoreON(true) }} >
                     정렬순서<img style={{ marginLeft: '4px' }} src={expand_more} />
-                    {moreON && <div ref={modalRef}><MoreAlign setIsAsc={setIsAsc}/></div>} {/*신고, 삭제 모달*/}
+                    {moreON && <div ref={modalRef}><MoreAlign setIsAsc={setIsAsc} /></div>} {/*신고, 삭제 모달*/}
                 </div>
             </div>
             <div className={styles.commentDiv}>{/* 댓글 달기 */}
@@ -355,16 +355,16 @@ function Comments({ postKey ,setCommentCount}) {
                     {comments.info.comment.map((comment, index) => {
                         return (
                             <div key={comment.commentKey}>
-                            <CommentsList
-                                index={index}
-                                postKey={postKey}
-                                comment={comment}
-                                setCommentLode = {setCommentLode}
-                                replyOnclick ={replyOnclick}
-                                onClear = {onClear}
-                                replyInputState={replyInputState}
-                                replyInputIndex={replyInputIndex}
-                            />
+                                <CommentsList
+                                    index={index}
+                                    postKey={postKey}
+                                    comment={comment}
+                                    setCommentLode={setCommentLode}
+                                    replyOnclick={replyOnclick}
+                                    onClear={onClear}
+                                    replyInputState={replyInputState}
+                                    replyInputIndex={replyInputIndex}
+                                />
                             </div>
                         );
                     })}
@@ -376,7 +376,7 @@ function Comments({ postKey ,setCommentCount}) {
         </div>
     )
 }
-function CommentsList({ index, postKey, comment,setCommentLode,replyOnclick,onClear,replyInputState,replyInputIndex }) {
+function CommentsList({ index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex }) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     const modalRef = useRef(null);
     const moreRef = useRef(null);
@@ -396,57 +396,59 @@ function CommentsList({ index, postKey, comment,setCommentLode,replyOnclick,onCl
     return (
         <>
             <div>{/* 댓글 */}
-                <div className={styles.list} style={{marginBottom:'0px'}}>
+                <div className={styles.list} style={{ marginBottom: '0px' }}>
                     <div className={styles.listNav}>
                         <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{comment.createdAt}</a></div>
                         <div>
                             <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
-                            {commentMoreON && <div ref={modalRef}><MoreDeleteMini  nickName={comment.nickName} referenceType={'comment'} referenceKey={comment.commentKey}  myContent={comment.myComment} /></div>} {/*신고, 삭제 모달*/}
+                            {commentMoreON && <div ref={modalRef}><MoreDeleteMini nickName={comment.nickName} referenceType={'comment'} referenceKey={comment.commentKey} myContent={comment.myComment} /></div>} {/*신고, 삭제 모달*/}
                         </div>
                     </div>
                     <div className={styles.listContent}>{comment.comment}</div>
-                    <div className={styles.replyDiv} onClick={() => (replyInputState == 'comment' && replyInputIndex == index) ? onClear() : replyOnclick('comment', index)}>
-                        <div className={styles.replyDivText} style={{marginBottom:'20px'}}><img src={comments_20px}/>답글달기</div>
+                    <div className={styles.replyDiv} onClick={() => (replyInputState == 'comment' && replyInputIndex == comment.commentKey) ? onClear() : replyOnclick('comment', comment.commentKey)}>
+                        <div className={styles.replyDivText} style={{ marginBottom: '20px' }}><img src={comments_20px} />답글달기</div>
                     </div>
-                    {(replyInputState == 'comment' && replyInputIndex == index) &&
-                        <ReplyArea postKey={postKey} commentKey={comment.commentKey} setCommentLode={setCommentLode} onClear={onClear}/>
+                    {(replyInputState == 'comment' && replyInputIndex == comment.commentKey) &&
+                        <ReplyArea postKey={postKey} commentKey={comment.commentKey} setCommentLode={setCommentLode} onClear={onClear} />
                     }
                 </div>
             </div>
             {/*대댓글*/}
-            {comment.replys.map((reply, replyIndex) => {
-                return (
-                    <div key={reply.replyKey}>
-                        <div className={styles.bigComments}>
-                            <img className={styles.BcImg} src={big_comment} />
-                            <div className={styles.list}>
-                                <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
-                                    <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{reply.createdAt}</a></div>
-                                        <div>
-                                            <img ref={moreRef} onClick={() => { !commentMoreON && setReplyMoreON(true) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
-                                            {commentMoreON && <div ref={modalRef}><MoreDeleteMini nickName={reply.nickName} referenceType={'reply'} referenceKey={reply.replyKey}  myContent={reply.myReply}/></div>} {/*신고, 삭제 모달*/}
+            {comment.replys[0].replyKey != 0 && (
+                <>
+                    {comment.replys.map((reply, replyIndex) => {
+                        return (
+                            <div key={reply.replyKey}>
+                                <div className={styles.bigComments}>
+                                    <img className={styles.BcImg} src={big_comment} />
+                                    <div className={styles.list}>
+                                        <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
+                                            <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{reply.createdAt}</a></div>
+                                            <div>
+                                                <img ref={moreRef} onClick={() => { !commentMoreON && setReplyMoreON(true) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
+                                                {commentMoreON && <div ref={modalRef}><MoreDeleteMini nickName={reply.nickName} referenceType={'reply'} referenceKey={reply.replyKey} myContent={reply.myReply} /></div>} {/*신고, 삭제 모달*/}
+                                            </div>
                                         </div>
+                                        {reply.replyNickName &&
+                                            <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
+                                        }
+                                        <a className={styles.listContent}>{reply.reply}</a>
+                                        <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == reply.replyKey) ? onClear() : replyOnclick('reply', reply.replyKey)}>
+                                            <div className={styles.replyDivText}><img src={comments_20px} />답글달기</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                {reply.replyNickName &&
-                                    <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
+                                {(replyInputState == 'reply' && replyInputIndex == reply.replyKey) &&
+                                    <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} onClear={onClear} />
                                 }
-                                <a className={styles.listContent}>{reply.reply}</a>
-                                <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == replyIndex) ? onClear() : replyOnclick('reply', replyIndex)}>
-                                    <div className={styles.replyDivText}><img src={comments_20px}/>답글달기</div>
-                                </div>
                             </div>
-                        </div>
-                        {(replyInputState == 'reply' && replyInputIndex == replyIndex) &&
-                            <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} onClear={onClear} />
-                        }
-                    </div>
-                )
-            })}
+                        )
+                    })}</>)}
         </>
     )
 }
 
-function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLode, onClear}) {
+function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLode, onClear }) {
     const textareaRef = useRef(null);
     // 이모지 삽입 함수
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
@@ -504,7 +506,7 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
             commentKey: commentKey,
             replyreplyKey: replyKey,
             sessionId: sessionId,
-            reply:reply
+            reply: reply
         }
 
         try {
@@ -515,7 +517,7 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
         } catch (error) {
             console.error('Error creating channel:', error);
         }
-        setCommentLode((state)=> state? false : true);
+        setCommentLode((state) => state ? false : true);
         setReply('');
         onClear();
     }
@@ -550,7 +552,7 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName ,setCommentLod
                 <div className={styles.commentNav}>
                     <img onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
                     {EmojiOn && <div className={styles.a}><Emogi setEmogiAdd={setEmogiAdd} /></div>}
-                    <div style={{ color: replyTextColor }}>{replyLength}/{replysLimit}<button style={{ backgroundColor: replyButtonColor }} onClick={()=>replyCreate()}>등록</button></div>
+                    <div style={{ color: replyTextColor }}>{replyLength}/{replysLimit}<button style={{ backgroundColor: replyButtonColor }} onClick={() => replyCreate()}>등록</button></div>
                 </div>
             </div>
             {modalOpen && 
@@ -564,12 +566,12 @@ function MoreDelete({ nickName,referenceType,referenceKey, modalRef, right, top 
     const dispatch = useDispatch();
     const reportOnClick = () =>{
         dispatch(reportInfo({
-            nickName : nickName,
-            referenceType : referenceType,
-            referenceKey : referenceKey
+            nickName: nickName,
+            referenceType: referenceType,
+            referenceKey: referenceKey
         }))
         dispatch(openModal())
-        
+
     }
     return (
         <div ref={modalRef} className={styles.moreUi} style={{ right: right, top: top }}>
@@ -583,20 +585,20 @@ function MoreDelete({ nickName,referenceType,referenceKey, modalRef, right, top 
         </div>
     )
 }
-function MoreDeleteMini({nickName,referenceType,referenceKey,myContent}) {
-    
+function MoreDeleteMini({ nickName, referenceType, referenceKey, myContent }) {
+
     const dispatch = useDispatch()
-    
-    const reportOnClick = () =>{
+
+    const reportOnClick = () => {
         dispatch(
             reportInfo({
-                nickName : nickName,
-                referenceType : referenceType,
-                referenceKey : referenceKey
+                nickName: nickName,
+                referenceType: referenceType,
+                referenceKey: referenceKey
             })
         )
         dispatch(openModal())
-        
+
     }
 
     return (
@@ -610,11 +612,11 @@ function MoreDeleteMini({nickName,referenceType,referenceKey,myContent}) {
         </div>
     )
 }
-function MoreAlign({setIsAsc}) {
+function MoreAlign({ setIsAsc }) {
     return (
         <div className={styles.moreUi} style={{ left: '60px', top: '30px' }}>
-            <div className={styles.text} onClick={()=>setIsAsc(false)}>최신순</div>
-            <div className={styles.text} onClick={()=>setIsAsc(true)}>과거순</div>
+            <div className={styles.text} onClick={() => setIsAsc(false)}>최신순</div>
+            <div className={styles.text} onClick={() => setIsAsc(true)}>과거순</div>
         </div>
     )
 }
