@@ -1,5 +1,6 @@
 package com.jwi.work.admin.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,9 +9,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jwi.work.admin.util.JwtUtil;
 import com.jwi.work.alarm.entity.Report;
+import com.jwi.work.alarm.entity.UserAlarmEntity;
 import com.jwi.work.alarm.repository.ReportRepository;
 import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.center.inquiry.entity.InquiryResponse;
@@ -22,6 +25,7 @@ import com.jwi.work.center.sanction.repository.SanctionLogRepository;
 import com.jwi.work.center.sanction.repository.SanctionRepository;
 import com.jwi.work.user.dto.User;
 import com.jwi.work.user.mapper.UserMapper;
+import com.jwi.work.util.FileManagerUtil;
 import com.jwi.work.util.NowDate;
 import com.jwi.work.util.PagingUtil;
 
@@ -51,7 +55,7 @@ public class AdminService {
 	@Autowired
 	private NowDate dateCal;
 	@Autowired
-    private PagingUtil pagingUtil;
+    private FileManagerUtil fileManagerUtil;
 	
 	// 데이터베이스에 직접 insert 하는거보다 여기에서 인코딩 거치고 넣는게 더 나을듯?
 	public String loginJWT(Map<String,String> data) {
@@ -74,6 +78,8 @@ public class AdminService {
 		// 형주가 작성한 userMapper(myBatis) 문법에 따라 Mapping처리한걸 Get함
 		return userMapper.getAllUser();
 	}
+	
+	// 페이징 관련 더미코드
 	
 //	public List<User> getPageingUsers(int page, int limitPage, PagingDto pagingDto){
 //		List<User> users = userMapper.getAllUser();
@@ -135,13 +141,23 @@ public class AdminService {
     	// List<Sanction> 형태로 저장
     	// Integer.parseInt = 문자열을 정수로 전환
     	// userData.get("userKey") HashMap 마냥 Map 자료형으로 저장되어있는 userKey 키값의 벨류를 호출
-    	
+    	UserAlarmEntity users = new UserAlarmEntity();
+    	users.setUserKey(Integer.parseInt(userData.get("userKey")));
     	List<Sanction> sanctions = sanctionRepository.findByUserKey(Integer.parseInt(userData.get("userKey")));
+    	List<Report> report = reportRepository.findByReportUserUserKey(Integer.parseInt(userData.get("userKey")));
     	Sanction sanction = new Sanction();
     	SanctionLog sanctionLog = new SanctionLog();
     	int bannedKey = 0;
-//    	.get("adminName", String.class)
+    	// .get("adminName", String.class)
+    	// 재원이형 여기서 알람리파지토리.save 하면됨!!!
     	// 비어있는경우 insert문 작동
+    	for(Report reports :report) {
+    		// 이게 신고게시글 신고한놈의 User.UserKey 부분
+//    		System.out.println(reports.getUser().getUserKey());
+    		reports.setState("process");
+    		reportRepository.save(reports);
+    	}
+    	
 	    if (sanctions.isEmpty()) {
 	    	//유저 비활성화로 전환 (밴)
 	    	sanction.setReasonDate(dateCal.nowDate());
@@ -188,6 +204,7 @@ public class AdminService {
 	    	// 유저 활성화로 전환
 	    	userMapper.updateAct(userKey);
 	        for (Sanction sanction : sanctions) {
+	        	
 	        	// sanction 설정
 	            sanction.setState("deactivate");
 	            sanctionRepository.save(sanction);
@@ -202,10 +219,40 @@ public class AdminService {
 	    	    sanctionLog.setState("deactivate");
 	    	    sanctionLogRepository.save(sanctionLog);
 	        }
-	        
 	    } else {
 	        System.out.println(" ㅋㅋ 없는데 왜찾음 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" + userKey);
 	    }
     }
+    
+	public String createInquiryResponse(int inquiryKey, String responseText, List<MultipartFile> files) {
+		try {
+			List<String> fileUrls = new ArrayList<>();
+			// 이미지가 null이 아니고 비어 있지 않을 때만 처리
+			if (files != null && !files.isEmpty()) {
+				for (MultipartFile file : files) {
+					String savedFileName = fileManagerUtil.saveFile(file);
+					if (savedFileName != null) {
+						fileUrls.add(savedFileName);
+					}
+				}
+			}
+			int adminKey = 1;
+			String title = "임시";
+			// 어드민 키 아직 못받아와서 하드코딩 했음
+			InquiryResponse inquiryResponse = new InquiryResponse();
+			System.out.println(responseText);
+			inquiryResponse.setInquiryKey(inquiryKey);
+			inquiryResponse.setAdminKey(adminKey);
+			inquiryResponse.setTitle(title);
+			inquiryResponse.setResponseText(responseText);
+			inquiryResponse.setImage(String.join(",", fileUrls));
+			inquiryResponseRepository.save(inquiryResponse);
+
+			return "success";
+
+		} catch (Exception e) {
+			return "fail";
+		}
+	}
     
 }

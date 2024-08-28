@@ -1,6 +1,6 @@
 package com.jwi.work.admin.controller;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jwi.work.admin.service.AdminService;
 import com.jwi.work.alarm.entity.Report;
@@ -90,6 +91,14 @@ public class AdminController {
 	@GetMapping("/revertBan")
 	public void revertBan(@RequestParam("userKey") int userKey) {
 		adminService.revertBan(userKey);
+	}
+	
+	@PostMapping("/inquiryResp")
+	public Map<String, Object> createInquiryResponse(@RequestParam("inquiryKey") int inquiryKey,@RequestParam("responseText") String responseText,@RequestParam(value = "files" , required = false) List<MultipartFile> files ) {
+		String result = adminService.createInquiryResponse(inquiryKey, responseText, files);
+		Map<String, Object> response = new HashMap<>();
+		response.put("result", result);
+		return response;
 	}
 	
 }

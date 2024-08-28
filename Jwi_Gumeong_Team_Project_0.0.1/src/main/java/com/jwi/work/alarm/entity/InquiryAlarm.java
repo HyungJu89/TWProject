@@ -25,7 +25,7 @@ public class InquiryAlarm {
 
     @ManyToOne
     @JoinColumn(name = "userKey", nullable = false)
-    private User user;
+    private UserAlarmEntity user;
 
     @Column(name = "title", nullable = false, length = 30)
     private String title;
