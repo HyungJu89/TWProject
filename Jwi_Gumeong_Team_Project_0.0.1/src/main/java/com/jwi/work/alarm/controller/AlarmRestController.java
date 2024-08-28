@@ -35,4 +35,20 @@ public class AlarmRestController {
 		
 		 return result;
 	}
+	
+	// 알림 삭제
+	@PostMapping("/delete")
+	public Map<String, String> deleteAlarm(@RequestParam("notificationId") int notificationId) {
+		
+		int num = alarmService.deleteAlarm(notificationId);
+		Map<String, String> result = new HashMap<>();
+		
+		if(num == 1) {
+			result.put("result", "success");
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
 }

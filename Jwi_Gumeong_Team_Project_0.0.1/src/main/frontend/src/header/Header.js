@@ -31,14 +31,22 @@ import '../App.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
 import { getCookie } from '../cookies/Cookies.js';
+import AlarmModal from '../modal/AlarmModal.js';
 
 function Header({onClickSearch, onLogout, isLoggedIn}) {
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
     let [adminLogin,setAdminLogin] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+
     let navigate = useNavigate();
     let location = useLocation();
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
@@ -186,6 +194,53 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
         setActiveButton(buttonNumber);
     };
 
+    // 알림 삭제
+    const deleteNotification = async (notificationId) => {
+        try {
+            const response = await axios.post('/alarm/delete', null, { params: { notificationId } });
+            if (response.data.result === 'success') {
+                setNotifications(notifications.filter(notification => notification.alarmKey !== notificationId));
+            } else {
+                setModalContent('알람 삭제에 실패 하였습니다.\n잠시 후 다시 시도해 주세요 ');
+                setModalOpen(true);
+            }
+        } catch (error) {
+            console.log("알람 삭제 에러: " + error.message);
+        }
+    };
+
+    // 알림 읽음
+    const onRead = async (notificationId) => {
+        try {
+            await axios.post('/alarm/read', { notificationId });
+            setNotifications(notifications.map(notification =>
+                notification.alarmKey === notificationId ? { ...notification, read: true } : notification
+            ));
+        } catch (error) {
+            console.log("알람 1개 읽음 에러: " + error.message);
+        }
+    };
+
+    // 모두 읽음
+    const onAllRead = async () => {
+        try {
+            await axios.post('/alarm/readAll', { userKey });
+            setNotifications(notifications.map(notification => ({ ...notification, read: true })));
+        } catch (error) {
+            console.log("모두 읽음 에러: " + error.message);
+        }
+    };
+    
+    // 모두 지우기
+    const onAllDelete = async () => {
+        try {
+            await axios.post('/alarm/deleteAll', { userKey });
+            setNotifications([]);
+        } catch (error) {
+            console.log("전체 삭제 에러: " + error.message);
+        }
+    };
+
     // formulation = 내가 신고한거 제재
     // report = 문의 답변 온 거
     // reply = 내가 제재 먹은 거
@@ -231,13 +286,13 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                 case 'post':
                 case 'comment':
                     icon = notification.channelImageUrl || formulation;
-                    // 글자수가 20 넘어가면 뒷부분은 ... 으로 변경
-                    // content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
+                    // 글자수가 20 넘어가면 뒷부분은 ... 으로 변경 css에서 처리했음
+                    content = notification.content;
                     subContent = `${notification.nickname}님이 댓글을 달았어요.`;
                     break;
                 case 'like':
                     icon = notification.channelImageUrl || n_heart_activation;
-                    content = notification.content.length > 20 ? `${notification.content.substring(0, 20)}...` : notification.content;
+                    content = notification.content;
                     subContent = `해당글이 ♥10개를 받았어요.`; // 좋아요 알림 예시
                     break;
                 case 'inquiry':
@@ -265,12 +320,13 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
             return (
                 <div className={styles.notificationBox} key={index}>
                     <div className={styles.notificationItem}>
-                        <div className={styles.notificationDot}></div> {/* 안 읽은 알림 */}
-                        <img src={icon} alt="icon" />  {/* 프로필 or 이미지 */}
-                        <div className={styles.notificationItemContent}> {/* 내용 div */}
+                    {!notification.read && <div className={styles.notificationDot}></div>} {/* 안 읽은 알림 */}
+                        <img className={styles.iconImg} src={icon} alt="icon" />  {/* 프로필 or 이미지 */}
+                        <div className={styles.notificationItemContent} onClick={() => onRead(notification.alarmKey)}> {/* 내용 div onClick는 읽음처리 */}
                             <span className={styles.applyContent}>{content}</span> {/* 게시글 제목 */}
                             <span className={styles.applyId}>{subContent}</span> {/* 알림 설명 */}
                         </div>
+                        <img className={styles.deleteIcon} src={deletion} alt="제거 아이콘" onClick={() => deleteNotification(notification.alarmKey)} />
                     </div>
                 </div>
             );
@@ -285,8 +341,8 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     <img src={more} className={styles.moreBtn} alt="더보기" onClick={handleMoreClick} />
                     {showDropdown && (
                         <div className={styles.dropdownMenu}>
-                            <div className={styles.dropdownItem}>모두 읽음</div>
-                            <div className={styles.dropdownItem}>알림 전체 삭제</div>
+                            <div className={styles.dropdownItem} onClick={onAllRead}>모두 읽음</div>
+                            <div className={styles.dropdownItem} onClick={onAllDelete}>알림 전체 삭제</div>
                         </div>
                     )}
                 </div>

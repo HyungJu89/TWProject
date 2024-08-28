@@ -87,4 +87,16 @@ public class AlarmService {
 
         return alarms;
     }
+    
+    public int deleteAlarm(int notificationId) {
+    	// 알람이 데이터 베이스에 있는지 확인
+    	if (alarmRepository.existsById(notificationId)) {
+    		// 있으면 삭제
+    		// deleteById 가 void 타입이므로 int로 선언해서 return이 불가능
+            alarmRepository.deleteById(notificationId);
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

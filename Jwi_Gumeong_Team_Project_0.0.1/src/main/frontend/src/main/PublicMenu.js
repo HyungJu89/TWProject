@@ -25,7 +25,6 @@ function PublicMenu({ isLoggedIn, onLogout }) {
         }
     }, [dispatch,sessionInfo]); 
     let navigate = useNavigate();
-
     
     //추천 게시판 :: 개설된 채널 중 무작위 10개 가져오기
     const [randomBoard, setRandomBoard] = useState();
@@ -105,7 +104,6 @@ function UserAfter({ onLogout }) {
             }
             fetchChannels();
             }, [favoritesList]);
-
 
     return (
         <div className={styles.fadein}>

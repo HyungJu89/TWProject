@@ -1,6 +1,5 @@
 /* eslint-disable */
 // ^워링 업애주는 친구
-
 import axios from 'axios';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import '../App.css';
@@ -28,7 +27,14 @@ function PublicBoard({ postInfo }) {
     //이미지
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
     const navigate = useNavigate();
+
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate('/signIn');
+    };
 
     let state = useSelector((state) => { return state });
     let dispatch = useDispatch();
@@ -56,15 +62,15 @@ function PublicBoard({ postInfo }) {
     const updateLike = async(newHeart) => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if(!sessionIdJson){
-            //setModalContent('로그인 되어 있지 않습니다.');
-            //setModalOpen(true);
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
             return;
         }
         let sessionId = JSON.parse(sessionIdJson).sessionId
 
         const like = {
-            like : newHeart,
-            sessionId : sessionId,
+            like: newHeart,
+            sessionId: sessionId,
             postKey: postInfo.postKey
         };
         try {
@@ -141,6 +147,9 @@ function PublicBoard({ postInfo }) {
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
             {commentsON && <Comments postKey={postInfo.postKey} setCommentCount={setCommentCount} />}
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     )
 }
