@@ -214,7 +214,8 @@ function AdminMain() {
                         })
                         .then(respon => {
                             if (respon.data.result === "success") {
-                                setInquiryResponses(prevResponses => ({
+                                setInquiryResponses(
+                                    prevResponses => ({
                                     ...prevResponses,
                                     [inquiry.inquiryKey]: respon.data.response // 각 문의마다 응답 저장
                                 }));
@@ -261,7 +262,7 @@ function AdminMain() {
                 console.log("닉네임 불러오기 오류: " + error.message);
             })
         }
-    }, [tab, currentPage,userKey]);
+    }, [tab, currentPage, userKey, update]);
 
     // 문의 하기 내용
     const [files, setFiles] = useState([]); // 문의 넣을 때 이미지
@@ -289,8 +290,17 @@ function AdminMain() {
     };
 
     // 제목, 내용, 종류에 전부 입력 했을 시 문의넣기 버튼 활성화
+    // useEffect(() => {
+    //     if (form.title && form.category && form.details ) {
+    //         setInputComplete(true);
+    //     } else {
+    //         setInputComplete(false);
+    //     }
+    // }, [form]);
+
     useEffect(() => {
-        if (form.title && form.category && form.details) {
+        console.log(inputComplete);
+        if (form.responseText) {
             setInputComplete(true);
         } else {
             setInputComplete(false);
@@ -334,7 +344,7 @@ function AdminMain() {
         formData.append("category", form.category);
         formData.append("details", form.details);
         files.forEach(file => formData.append("files", file.file));
-
+        
         axios.post('/inquiry/create', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data', //이미지 때문에 넣음
@@ -361,6 +371,47 @@ function AdminMain() {
         })
         .catch(error => {
             console.log("문의 등록 실패: " + error.message);
+        });
+    };
+
+    const submitResponse = (event,inquiryKey) => {
+        console.log(inquiryKey);
+        event.preventDefault();
+        if (!inputComplete) return;
+        // 위에서 설정한 데이터들을 하나에 저장
+        const formData = new FormData();
+        formData.append("inquiryKey", inquiryKey);
+        formData.append("responseText", form.responseText);
+        files.forEach(file => formData.append("files", file.file));
+
+        axios.post('/admin/inquiryResp', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data', //이미지 때문에 넣음
+            }
+        })
+
+        .then(response => {
+            if(response.data.result === "success") {
+                // 성공 시 접수 성공 모달 띄우기
+                setModalContent("문의답변 등록에 성공적으로 접수되었습니다.");
+                setModalOpen(true);
+                // 모달 닫으면 적었던 내용 초기화
+                setForm({
+                    title: '',
+                    category: '',
+                    details: ''
+                });
+                setFiles([]);
+                setSelectedOption("선택하세요");
+                setUpdate(prev => !prev);
+            } else {
+                // 실패 시
+                setModalContent("문의답변 등록에 실패하였습니다.");
+                setModalOpen(true);
+            }
+        })
+        .catch(error => {
+            console.log("문의답변 등록 실패: " + error.message);
         });
     };
 
@@ -627,6 +678,7 @@ function AdminMain() {
                             <div className={styles.noHistory}>문의 내역이 없습니다.</div>
                         ) : (
                             inquiries.map((inquiry, idx) => {
+                                // const response = inquiryResponses.find(responseData => responseData.inquiryKey === inquiry.inquiryKey );
                                 const response = inquiryResponses[inquiry.inquiryKey];
                                 // 날짜 형식 변경 2024년 O월 O일
                                 const formattedDate = response ? new Intl.DateTimeFormat('ko', { 
@@ -737,7 +789,7 @@ function AdminMain() {
                                                                 {/* 답변 제출 버튼 */}
                                                                 <div className={styles.submitButtonContainer}>
                                                                     {/* 답변 내용이 전부 입력이 안 되었을 때 버튼 비 활성화 */}
-                                                                    <button onClick={submit} 
+                                                                    <button onClick={(event) => submitResponse(event,inquiry.inquiryKey)} 
                                                                         className={inputComplete ? styles.activeSubmitButton : styles.disabledSubmitButton}
                                                                         disabled={!inputComplete}>
                                                                         답변 등록

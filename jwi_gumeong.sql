@@ -292,6 +292,7 @@ CREATE TABLE `comment` (
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE,
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
+
 CREATE TABLE `like` (
 	`likeKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -300,8 +301,6 @@ CREATE TABLE `like` (
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE,
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
-
-DROP TABLE `like`;
 
 CREATE TABLE `manager` (
 	`managerKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
@@ -375,7 +374,7 @@ CREATE TABLE `inquiryResponse` (
 	`responseKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 답변 키',
 	`inquiryKey`	INT	NOT NULL	COMMENT '문의 키',
 	`adminKey`	INT	NOT NULL	COMMENT '어드민 키',
-	`Title`	VARCHAR(30)	NOT NULL	COMMENT '제목',
+	`title`	VARCHAR(30)	NOT NULL	COMMENT '제목',
 	`responseText`	TEXT	NOT NULL	COMMENT '답변 내용',
 	`image`	TEXT	COMMENT '이미지 URL',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
