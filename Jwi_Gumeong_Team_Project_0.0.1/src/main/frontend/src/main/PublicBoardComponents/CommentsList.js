@@ -64,7 +64,6 @@ const CommentsList = forwardRef(function CommentsList(
                                     <img className={styles.BcImg} src={big_comment} />
                                     <div className={styles.list}>
                                         <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
-                                        {reply.replyKey}
                                             <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{reply.createdAt}</a></div>
                                             <div>
                                                 <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(reply.replyKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
