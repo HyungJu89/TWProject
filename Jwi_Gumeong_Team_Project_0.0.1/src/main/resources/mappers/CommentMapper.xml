@@ -37,7 +37,8 @@
 	WHERE postKey = #{postKey} 
 </select>
 
-
+<!-- 댓글, 대댓글 출력 -->
+<!-- 게시글 key로 댓글, 대댓글을 가져오고 유저키를 닉네임으로 변환하여 출력 + 이 댓글이 내가 작성한 댓글, 대댓글 인지 까지도 출력 -->
 <select id="commentSelect" parameterType="map" resultMap="commentResultMap">
 	SELECT
 		comment.commentKey,
@@ -66,7 +67,7 @@
 					WHERE
 						uc.userKey = comment.userKey
 						AND uc.sessionId = #{sessionId}
-
+						
 				) THEN TRUE
 				ELSE FALSE
 				END AS myComment,

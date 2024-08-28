@@ -15,13 +15,22 @@
     align-items: center;
     cursor: pointer;
 }
-
-.title img {
-    cursor: pointer;
+.title .imgDiv{
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    background-color: white;
+    overflow: hidden;
     margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.title .imgDiv img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지가 컨테이너를 완전히 채우도록 조정 */
+    object-position: center; /* 이미지의 중앙을 기준으로 자름 */
 }
 
 /**/
@@ -119,7 +128,7 @@
 
 /* 댓글창 컴포넌트 */
 .commentDiv {
-    width: 698px;
+    width: 96%;
     border: 1px solid #F3F3F3;
     border-radius: 10px;
     padding: 14px;
@@ -281,12 +290,14 @@
 .replyDivText {
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     font-size: 16px;
     font-weight: 400;
     text-align: left;
     color: #999999;
     margin-top: 6px;
+    width: 100px;
 }
 .replyDivText img{
     margin-right: 2px;

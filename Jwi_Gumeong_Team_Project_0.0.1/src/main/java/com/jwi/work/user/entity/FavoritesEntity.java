@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,9 +18,10 @@ public class FavoritesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int favoritesKey;
-    
-	@Column(name = "userKey", nullable = true)
-	private int userKey;
+    // 넌 이제부터 유저키야 알았지?
+    @ManyToOne
+    @JoinColumn(name = "userKey", nullable = true)
+    private UserConnectionEntity userConnection;
 	
 	@Column(name = "channelKey", nullable = true)
 	private int channelKey;
@@ -37,16 +40,16 @@ public class FavoritesEntity {
 		this.favoritesKey = favoritesKey;
 	}
 
-	public int getUserKey() {
-		return userKey;
-	}
-
-	public void setUserKey(int userKey) {
-		this.userKey = userKey;
-	}
-
 	public int getChannelKey() {
 		return channelKey;
+	}
+
+	public UserConnectionEntity getUserConnection() {
+		return userConnection;
+	}
+
+	public void setUserConnection(UserConnectionEntity userConnection) {
+		this.userConnection = userConnection;
 	}
 
 	public void setChannelKey(int channelKey) {

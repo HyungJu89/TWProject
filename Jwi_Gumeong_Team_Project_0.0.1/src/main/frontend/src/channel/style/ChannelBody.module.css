@@ -30,13 +30,21 @@
 .channelIcon {
     height: 110px;
     width: 110px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: red;
 }
 
 .channelIcon img {
-    height: 110px;
-    width: 110px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     background-color: white;
-    border-radius: 50%;
 }
 
 .iconRight {
