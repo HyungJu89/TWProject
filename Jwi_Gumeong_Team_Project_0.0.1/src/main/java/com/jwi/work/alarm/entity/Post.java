@@ -26,7 +26,7 @@ public class Post {
     private int postKey;
     @ManyToOne
     @JoinColumn(name = "userKey", nullable = false)
-    private User user;
+    private UserAlarmEntity user;
     @ManyToOne
     @JoinColumn(name = "channelKey", nullable = false)
     private Channel channel;

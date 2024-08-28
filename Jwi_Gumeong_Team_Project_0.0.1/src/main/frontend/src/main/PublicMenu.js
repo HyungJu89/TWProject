@@ -25,7 +25,6 @@ function PublicMenu({ isLoggedIn, onLogout }) {
         }
     }, [dispatch,sessionInfo]); 
     let navigate = useNavigate();
-
     
     //추천 게시판 :: 개설된 채널 중 무작위 10개 가져오기
     const [randomBoard, setRandomBoard] = useState();
@@ -51,7 +50,7 @@ function PublicMenu({ isLoggedIn, onLogout }) {
                         <>
                             {randomBoard.info.map((item, i)=>
                             <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
-                                <img src={item.imageUrl} />
+                                <div className={styles.imgDiv}><img src={item.imageUrl} /></div>
                                 {item.name}
                             </div>
                             )}
@@ -66,17 +65,20 @@ function PublicMenu({ isLoggedIn, onLogout }) {
 function UserAfter({ onLogout }) {
     let navigate = useNavigate();
     const userState = useSelector((state) => state.userState);  
-    // let sessionIdJson = sessionStorage.getItem('sessionId');
-    // let sessionId = JSON.parse(sessionIdJson).sessionId;
+    
+    let sessionIdJson = sessionStorage.getItem('sessionId');
+    let sessionId = null;
+    if (sessionIdJson) {
+        sessionId = JSON.parse(sessionIdJson).sessionId
+    }
 
         //즐겨찾기 게시판  :: 무작위 7개 가져오기 더 많으면 페이징으로 넘겨야함 하는 중~
         const [favoritesList, setFavoritesList] = useState(); //즐겨찾기 key
         useEffect(() => {
             const favorites = async () => {
                 try {
-                    const {data} = await axios.get(`/myPage/favorites`,{params:{userKey : 1}});
+                    const {data} = await axios.get(`/myPage/favorites`,{params:{sessionId : sessionId}});
                     setFavoritesList(data);
-                    console.log(data);
                 } catch (error) {
                     console.error('Channel API Error:', error);
                 }
@@ -96,14 +98,12 @@ function UserAfter({ onLogout }) {
                         axios.get('/channel/findKey', { params: { channelKey: key } })
                     ));
                 setChannelList(channelInfo.map(channelInfo => channelInfo.data));
-                console.log(channelInfo.map(channelInfo => channelInfo.data));
             } catch (error) {
                 console.error('Channel API Error:', error);
                 }
             }
             fetchChannels();
             }, [favoritesList]);
-
 
     return (
         <div className={styles.fadein}>
@@ -125,8 +125,8 @@ function UserAfter({ onLogout }) {
                         {channelList &&
                         <>
                             {channelList.map((item, i)=>
-                            <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
-                                <img src={item[0].imageUrl} />
+                            <div onClick={()=>{navigate(`/channel/${item[0].id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
+                                <div className={styles.imgDiv}><img src={item[0].imageUrl} /></div>
                                 {item[0].name}
                             </div>
                             )}

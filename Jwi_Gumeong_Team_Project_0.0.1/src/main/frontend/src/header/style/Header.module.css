@@ -300,7 +300,7 @@ body{
 }
 
 /* 프로필 or 이미지 */
-.notificationItem img {
+.notificationItem .iconImg {
     width: 40px;
     height: 40px;
     gap: 0px;
@@ -312,7 +312,7 @@ body{
 .notificationItemContent {
     display: flex;
     flex-direction: column;
-    width: 258px;
+    width: 223px;
     height: 37px;
     gap: 4px;
     opacity: 0px;
@@ -325,6 +325,9 @@ body{
     height: 18px;
     text-align: left;
     color: #101010;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 /* 알림창 상세 내용 */
 .notificationItem .notificationItemContent .applyId {
@@ -333,6 +336,10 @@ body{
     height: 15px;
     text-align: left;
     color: #999999;
+}
+
+.deleteIcon {
+    width: 14px;
 }
 
 /* 알림 내용 마우스 올렸을 때 */

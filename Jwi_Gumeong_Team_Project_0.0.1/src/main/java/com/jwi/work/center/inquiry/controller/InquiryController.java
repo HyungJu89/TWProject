@@ -57,7 +57,6 @@ public class InquiryController {
     @PostMapping("/response")
     public Map<String, Object> selectResponse(@RequestParam("inquiryKey") int inquiryKey) {
     	InquiryResponse response = inquiryService.selectResponse(inquiryKey);
-    	
     	Map<String,Object> result = new HashMap<>();
     	
     	if(response != null) {
@@ -70,4 +69,3 @@ public class InquiryController {
     	return result;
     }
 }
-

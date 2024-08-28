@@ -176,14 +176,6 @@
     display: flex;
     justify-content: space-between;
 }
-
-.adminPageing{
-    margin-top: 15px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-}
-
 /* 문의 답변 */
 .userState,
 .userStateactivate,

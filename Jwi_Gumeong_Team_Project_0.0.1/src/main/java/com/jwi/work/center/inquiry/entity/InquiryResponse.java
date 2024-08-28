@@ -24,6 +24,12 @@ public class InquiryResponse {
 
     @Column(name = "inquiryKey", nullable = false)
     private Integer inquiryKey;
+    
+    @Column(name = "adminKey", nullable = false)
+    private Integer adminKey;
+    
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @Column(name = "responseText", nullable = false, columnDefinition = "TEXT")
     private String responseText;
@@ -51,4 +57,16 @@ public class InquiryResponse {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    
+    public InquiryResponse() {
+    }
+    
+	public InquiryResponse(Integer inquiryKey, Integer adminKey, String title, String responseText, String image) {
+		this.inquiryKey = inquiryKey;
+		this.adminKey = adminKey;
+		this.title = title;
+		this.responseText = responseText;
+		this.image = image;
+	}
+	
 }
