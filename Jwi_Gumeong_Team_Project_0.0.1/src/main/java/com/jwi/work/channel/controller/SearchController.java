@@ -1,5 +1,6 @@
 package com.jwi.work.channel.controller;
 
+import java.io.Console;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +47,13 @@ public class SearchController {
 		return searchService.searchRecommended(sessionId,page);
 	}
 
-	
+	@GetMapping("/favorites")
+	public SearchDto<List<PostDto>> searchFavorites(@RequestParam(value = "sessionId", defaultValue = "") String sessionId,@RequestParam(value = "page", defaultValue = "1") int page){
+
+		return searchService.searchFavorites(sessionId,page);
+	}
 	@GetMapping("/allTopic")
 	public SearchDto<List<PostDto>> searchAllTopic(@RequestParam(value = "sessionId", defaultValue = "") String sessionId,@RequestParam(value = "page", defaultValue = "1") int page){
-		
 		return searchService.searchAllTopic(sessionId,page);
 	}
 	

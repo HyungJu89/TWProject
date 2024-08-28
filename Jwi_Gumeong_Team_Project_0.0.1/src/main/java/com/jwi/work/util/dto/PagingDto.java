@@ -13,6 +13,8 @@ public class PagingDto {
 
 	private int pageLimit;
 	
+	private int totalPostCount;	
+	
 	private boolean pageUp = true;
 	
 	private boolean pagingBut = true;

@@ -30,8 +30,7 @@ public class SearchService {
 
 		// 검색 결과가 없을때 표시할 부분
 		if (channelCount == 0) {
-			// Count 가 0 일땐 검색이 안된것이니 false 로 설정
-			searchChannel.setSuccess(false);
+			searchChannel.setSuccess(true);
 			// searchChannel값을 바로 리턴시킨다.
 			return searchChannel;
 		}
@@ -63,7 +62,7 @@ public class SearchService {
 		int postCount = searchMapper.searchPostCount(search);
 
 		if (postCount == 0) {
-			searchPost.setSuccess(false);
+			searchPost.setSuccess(true);
 
 			return searchPost;
 		}
@@ -89,7 +88,7 @@ public class SearchService {
 		int postCount = searchMapper.searchAllTopicCount();
 		
 		if (postCount == 0) {
-			searchPost.setSuccess(false);
+			searchPost.setSuccess(true);
 
 			return searchPost;
 		}
@@ -105,15 +104,23 @@ public class SearchService {
 		return searchPost;
 	}
 	
-	public SearchDto<List<PostDto>> searchFavoritesPost(String sessionId,int page){
-		// 세션 아이디 에서 유저키 추출
+	public SearchDto<List<PostDto>> searchFavorites(String sessionId,int page){
+
 		final int LIMIT_PAGE = 10;
-		// 유저키로 내가 팔로우중인 채널 List추출
+
 		SearchDto<List<PostDto>> searchPost = new SearchDto<>();
-		// 추출된 채널 리스트를 바탕으로 post 출력
 		
-		// 
-		return null;
+		int postCount = searchMapper.searchFavoritesPostCount(sessionId);
+		if (postCount == 0) {
+			searchPost.setSuccess(true);
+			return searchPost;
+		}
+		searchPost.setSuccess(true);
+		searchPost.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
+		List<PostDto> posts = searchMapper.searchFavoritesPost(sessionId,searchPost.getPaging().getOffset(),searchPost.getPaging().getLimit());
+		searchPost.setSearch(posts);
+
+		return searchPost;
 	}
 	
 	public SearchDto<List<PostDto>> searchAllTopic(String sessionId,int page){
@@ -125,7 +132,7 @@ public class SearchService {
 		int postCount = searchMapper.searchAllTopicCount();
 		
 		if (postCount == 0) {
-			searchPost.setSuccess(false);
+			searchPost.setSuccess(true);
 
 			return searchPost;
 		}

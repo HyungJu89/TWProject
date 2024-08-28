@@ -88,38 +88,24 @@
     margin-bottom: 10px;
 }
 
-.leftDiv .Nav {
-    width: 786px;
-    height: 60px;
-    background: #FFFFFF;
-    display: flex;
-    font-size: 20px;
-    font-weight: 600;
-    overflow: hidden;
-}
 
-.leftDiv .Nav .topicdiv {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    margin-left: 30px;
-}
+/*게시글 없을때*/
+.nonPostList{
+display: flex;
+margin-top: 10px;
+height: 240px;
+width: 786px;
+background-color: #FFFFFF;
+color: #999999;
+font-family: Spoqa Han Sans Neo;
+font-size: 14px;
+font-weight: 600;
+line-height: 17.53px;
+text-align: center;
+align-items: center;
+justify-content: center;
 
-.leftDiv .Nav .topicdiv div {
-    margin-right: 30px;
-    position: relative;
 }
-
-.leftDiv .Nav .topicdiv .bar {
-    position: absolute;
-    left: 50%;
-    top: 41px;
-    transform: translate(-50%, -0%);
-    width: 24px;
-    height: 2px;
-    background-color: #FF8901;
-}
-
 /*애니메이션*/
 .fadein {
     opacity: 0.5; /* 초기 상태: 투명 */
