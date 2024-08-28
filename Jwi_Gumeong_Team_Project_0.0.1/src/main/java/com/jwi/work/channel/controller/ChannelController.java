@@ -3,7 +3,6 @@ package com.jwi.work.channel.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
-import com.jwi.work.channel.dto.channelDto.ChannelKeyDto;
 import com.jwi.work.channel.entity.ChannelEntity;
 import com.jwi.work.channel.service.ChannelService;
 import com.jwi.work.util.dto.AnswerDto;

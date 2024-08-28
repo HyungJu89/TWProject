@@ -136,12 +136,20 @@
 .rightDiv .recommendation .list .reChannel:hover{
     background: #F3F3F3;
 }
-.rightDiv .recommendation .list .reChannel img{
+.rightDiv .recommendation .list .reChannel .imgDiv{
     width: 40px;
     height: 40px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     margin-right: 10px;
     margin-left: 21px;
+}
+.rightDiv .recommendation .list .reChannel .imgDiv img{
+    width: 40px;
+    height: auto;
 }
 .dashed {
     border-bottom: 1px solid #F3F3F3;

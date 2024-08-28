@@ -3,6 +3,9 @@
     background-color: white;
     margin: 10px 0px;
     padding: 20px 30px;
+    overflow: auto;
+    height: 95%;
+    padding-bottom: 120px;
 }
 
 .title {

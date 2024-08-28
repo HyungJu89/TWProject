@@ -9,5 +9,5 @@ import com.jwi.work.user.entity.FavoritesEntity;
 
 @Repository
 public interface FavoritesRepository extends JpaRepository<FavoritesEntity, Integer> {
-	List<FavoritesEntity> findByUserKey(int userKey);
+	List<FavoritesEntity> findByUserConnectionSessionId(String sessionId);
 }

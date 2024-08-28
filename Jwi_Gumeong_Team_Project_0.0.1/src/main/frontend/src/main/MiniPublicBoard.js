@@ -3,20 +3,17 @@
 
 import axios from 'axios';
 import React, { useState, useRef, useEffect, useCallback} from 'react';
-import { useQuery } from 'react-query';
 import '../App.css';
 import styles from './style/MiniPublicBoard.module.css';
 import more from '../icon/24px/more.png';
 import heart_deactivation from '../icon/24px/heart-deactivation.png';
 import heart_activation from '../icon/24px/heart-activation.png';
 import comments from '../icon/24px/comments.png';
-import sharing from '../icon/24px/sharing.png';
-import expand_more from '../icon/24px/expand-more.png';
-import emoticon_deactivation from '../icon/24px/emoticon-deactivation.png';
-import big_comment from '../icon/20px/bigcomment.png';
 import { useSelector, useDispatch } from 'react-redux';
-import { openImgUiModal } from '../slice/mainSlice';
 import lodash from 'lodash';
+import ChannelTitle from './PublicBoardComponents/ChannelTitle.js';
+import Comments from './PublicBoardComponents/Comments.js';
+import MoreDelete from './PublicBoardComponents/MoreDelete.js';
 import { useNavigate } from 'react-router-dom';
 import { openImgUiModalFalse } from '../slice/mainSlice';
 import { clearPost } from '../slice/PostSlice.js';
@@ -103,9 +100,9 @@ function MiniPublicBoard() {
                 <ChannelTitle postChannel={postInfo.postChannel} />
             )}
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
-                <div className={styles.name}>{postInfo.nickName} <div className={styles.grayText}>· {postInfo.createdAt}</div></div>
-                <img onClick={() => { moreON == false ? setmoreON(true) : setmoreON(false) }} src={more} />
-                {moreON && <MoreDelete />} {/*신고, 삭제 모달*/}
+                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
+                <img ref={moreRef} onClick={() => { !moreON && setmoreON(true) }} src={more} />
+                {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'0px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
@@ -123,7 +120,7 @@ function MiniPublicBoard() {
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
-            {commentsON && <Comments />}
+            {commentsON && <Comments postKey={postInfo.postKey} setCommentCount={setCommentCount} />}
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }

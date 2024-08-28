@@ -2,46 +2,32 @@
 // ^워링 업애주는 친구
 import axios from 'axios';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import styles from './style/PublicBoard.module.css';
 import more from '../icon/24px/more.png';
 import heart_deactivation from '../icon/24px/heart-deactivation.png';
 import heart_activation from '../icon/24px/heart-activation.png';
 import comments from '../icon/24px/comments.png';
-import comments_20px from '../icon/20px/comments-20px.png';
-import sharing from '../icon/24px/sharing.png';
-import expand_more from '../icon/24px/expand-more.png';
-import emoticon_deactivation from '../icon/24px/emoticon-deactivation.png';
-import big_comment from '../icon/20px/bigcomment.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { openImgUiModal } from '../slice/mainSlice';
-import Emogi from '../Emogi/Emogi.js';
 import lodash from 'lodash';
-import { openModal } from '../slice/ReportModalSlice.js'
 import { changePost } from '../slice/PostSlice.js';
+import Comments from './PublicBoardComponents/Comments.js';
+import MoreDelete from './PublicBoardComponents/MoreDelete.js';
+import ChannelTitle from './PublicBoardComponents/ChannelTitle.js';
+import { useNavigate } from 'react-router-dom';
 import { reportInfo } from '../slice/ReportDtoSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function PublicBoard({ postInfo }) {
-    const [heart, setHeart] = useState(postInfo.like); //좋아요 누름 확인
-    const [likeCount, setLikeCount] = useState(postInfo.likeCount);
-
+    const [heart, setHeart] = useState(false); //좋아요 누름 확인
+    const [likeCount, setLikeCount] = useState(0);
     // 디바운스요 변수
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
     //이미지
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
-
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState('');
     const navigate = useNavigate();
-
-    const closeModal = () => {
-        setModalOpen(false);
-        navigate('/signIn');
-    };
 
     let state = useSelector((state) => { return state });
     let dispatch = useDispatch();
@@ -53,6 +39,9 @@ function PublicBoard({ postInfo }) {
             setImgBeing(JSON.parse(postInfo.image));
         }
         setCommentCount(postInfo.commentCount)
+        setHeart(postInfo.like)
+        setLikeCount(postInfo.likeCount)
+        setCommentsON(false)
     }, [postInfo])
 
     // 디바운스 함수 생성
@@ -66,9 +55,8 @@ function PublicBoard({ postInfo }) {
     const updateLike = async(newHeart) => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if(!sessionIdJson){
-            // 이건 버튼하나!~
-            setModalContent('로그인 되어 있지 않습니다.');
-            setModalOpen(true);
+            //setModalContent('로그인 되어 있지 않습니다.');
+            //setModalOpen(true);
             return;
         }
         let sessionId = JSON.parse(sessionIdJson).sessionId
@@ -107,6 +95,7 @@ function PublicBoard({ postInfo }) {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [moreON]);
+
     const imgOnclick = () => {
         const { image, ...newPostInfo } = postInfo;
         const updatePostInfo = { ...newPostInfo, image: imgBeing }

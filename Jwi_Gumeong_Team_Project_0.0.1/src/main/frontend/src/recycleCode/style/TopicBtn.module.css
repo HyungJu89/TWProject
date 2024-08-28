@@ -1,0 +1,31 @@
+.Nav {
+    width: 786px;
+    height: 60px;
+    background: #FFFFFF;
+    display: flex;
+    font-size: 20px;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+.Nav .topicdiv {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+.Nav .topicdiv div {
+    margin-right: 30px;
+    position: relative;
+}
+
+.Nav .topicdiv .bar {
+    position: absolute;
+    left: 50%;
+    top: 41px;
+    transform: translate(-50%, -0%);
+    width: 24px;
+    height: 2px;
+    background-color: #FF8901;
+}
