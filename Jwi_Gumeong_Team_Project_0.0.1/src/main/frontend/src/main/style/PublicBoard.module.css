@@ -203,14 +203,15 @@
 /* 댓글창 컴포넌트 - List */
 .list {
     margin-bottom: 20px;
+    max-width: 100%;
 }
 
 .listNav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 726px;
-    min-width: 696px;
+    max-width: 100%;
+    min-width: 404px;
     position: relative; /*현재 최지은의 가장 큰 적*/
     z-index: 1;
 }
