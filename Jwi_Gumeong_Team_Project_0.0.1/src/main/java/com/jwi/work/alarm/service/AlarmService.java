@@ -45,7 +45,6 @@ public class AlarmService {
         for (Alarm alarm : alarms) {
             switch (alarm.getReferenceType()) {
 	            case "post":
-	            case "comment":
 	                postRepository.findById(alarm.getReferenceKey()).ifPresent(post -> {
 	                    alarm.setContent(post.getContent());
 	                    alarm.setChannelImageUrl(post.getChannel().getImageUrl());

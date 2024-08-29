@@ -324,7 +324,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
             return (
                 <div className={styles.notificationBox} key={index}>
                     <div className={styles.notificationItem}>
-                    {!notification.read && <div className={styles.notificationDot}></div>} {/* 안 읽은 알림 */}
+                    <div className={`${styles.notificationDot} ${notification.read ? styles.noDot : ''}`}></div> {/* 안 읽은 알림 */}
                         <img className={styles.iconImg} src={icon} alt="icon" />  {/* 프로필 or 이미지 */}
                         <div className={styles.notificationItemContent} onClick={() => onRead(notification.alarmKey)}> {/* 내용 div onClick는 읽음처리 */}
                             <span className={styles.applyContent}>{content}</span> {/* 게시글 제목 */}
