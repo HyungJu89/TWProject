@@ -11,7 +11,8 @@ function Admin(){
     // csrf 인증문제 해결위해 헤더에 쿠키 저장기능은 ver2에서 진행하겠습니다.
     /**
      * TODO:Ver2
-     * 컴포넌트 별 
+     * 컴포넌트 별 나누기
+     * 재원이형 더미 기능 지우기
      * 
      */
     let location = useLocation();
