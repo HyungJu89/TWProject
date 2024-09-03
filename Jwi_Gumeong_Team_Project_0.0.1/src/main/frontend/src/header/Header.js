@@ -44,9 +44,9 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
     let navigate = useNavigate();
     let location = useLocation();
 
-    const closeModal = () => {
-        setModalOpen(false);
-    };
+    // const closeModal = () => {
+    //     setModalOpen(false);
+    // };
 
     useEffect(() => {
         {/* 최근검색어 미완성 */ }

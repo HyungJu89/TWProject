@@ -72,4 +72,8 @@
 	<update id="readUpdateAlarm" parameterType="int">
 		UPDATE `alarm` SET `read` = 1 WHERE `alarmKey` = #{notificationId}
 	</update>
+	
+	<update id="readAllUpdateAlarm" parameterType="int">
+		UPDATE `alarm` SET `read` = 1 WHERE `userKey` = #{userKey}
+ 	</update>
 </mapper>

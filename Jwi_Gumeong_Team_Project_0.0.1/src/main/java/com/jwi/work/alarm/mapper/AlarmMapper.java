@@ -22,5 +22,7 @@ public interface AlarmMapper {
 	
 	public int readUpdateAlarm(@Param("notificationId") int notificationId);
 	
+	public int readAllUpdateAlarm(@Param("userKey") int userKey);
+	
 	
 }

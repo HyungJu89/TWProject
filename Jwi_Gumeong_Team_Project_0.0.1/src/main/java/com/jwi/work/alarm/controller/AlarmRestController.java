@@ -66,4 +66,18 @@ public class AlarmRestController {
 		
 		return result;
 	}
+	
+	@PostMapping("/read/all")
+	public Map<String, String> updateAllAlarm(@RequestParam("userKey") int userKey) {
+		int num = alarmService.updateAllAlarm(userKey);
+		Map<String, String> result = new HashMap<>();
+		
+		if(num >= 1) {
+			result.put("result", "success");
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
 }

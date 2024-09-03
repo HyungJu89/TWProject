@@ -105,4 +105,8 @@ public class AlarmService {
     public int updateAlarm(int notificationId) {
     	return alarmMapper.readUpdateAlarm(notificationId);
     }
+    
+    public int updateAllAlarm(int userKey) {
+    	return alarmMapper.readAllUpdateAlarm(userKey);
+    }
 }
