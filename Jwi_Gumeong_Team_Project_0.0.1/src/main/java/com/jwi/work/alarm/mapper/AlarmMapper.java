@@ -24,5 +24,7 @@ public interface AlarmMapper {
 	
 	public int readAllUpdateAlarm(@Param("userKey") int userKey);
 	
+	public int deleteAllAlarm(@Param("userKey") int userKey);
+	
 	
 }

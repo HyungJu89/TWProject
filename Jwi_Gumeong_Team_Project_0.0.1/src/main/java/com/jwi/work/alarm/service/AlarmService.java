@@ -109,4 +109,8 @@ public class AlarmService {
     public int updateAllAlarm(int userKey) {
     	return alarmMapper.readAllUpdateAlarm(userKey);
     }
+    
+    public int deleteAllAlaram(int userKey) {
+    	return alarmMapper.deleteAllAlarm(userKey);
+    }
 }

@@ -76,4 +76,8 @@
 	<update id="readAllUpdateAlarm" parameterType="int">
 		UPDATE `alarm` SET `read` = 1 WHERE `userKey` = #{userKey}
  	</update>
+ 	
+ 	<delete id="deleteAllAlarm" parameterType="int">
+ 		DELETE FROM `alarm` WHERE `userKey` = #{userKey}
+ 	</delete>
 </mapper>

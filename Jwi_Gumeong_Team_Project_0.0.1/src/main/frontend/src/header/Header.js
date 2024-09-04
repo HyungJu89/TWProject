@@ -38,15 +38,9 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
     const [searchInput,setSearchInput] = useState('');
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
     let [adminLogin,setAdminLogin] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState('');
 
     let navigate = useNavigate();
     let location = useLocation();
-
-    // const closeModal = () => {
-    //     setModalOpen(false);
-    // };
 
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
@@ -116,6 +110,12 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     const [activeButton, setActiveButton] = useState(1); /* 현재 활성화된 버튼 상태 */
     const [showDropdown, setShowDropdown] = useState(false); /* more 아이콘 클릭 시 드롭다운 */
     const [notifications, setNotifications] = useState([]); // 알림 리스트
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
     // 알림 데이터 AXIOS
     useEffect(() => {
@@ -216,10 +216,10 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
             if (response.data.result === 'success') {
                 setNotifications(notifications.map(notification =>
                     notification.alarmKey === notificationId ? { ...notification, read: true } : notification));
-                } else {
-                    setModalContent('알람 읽기에 실패 하였습니다.\n잠시 후 다시 시도해 주세요 ');
-                    setModalOpen(true);
-                }
+            } else {
+                setModalContent('알람 읽기에 실패 하였습니다.\n잠시 후 다시 시도해 주세요 ');
+                setModalOpen(true);
+            }
         } catch (error) {
             console.log("알람 1개 읽음 에러: " + error.message);
         }
@@ -228,7 +228,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     // 모두 읽음
     const onAllRead = async () => {
         try {
-            await axios.post('/alarm/readAll', { userKey });
+            await axios.post('/alarm/read/all', null, { params: { userKey }});
             setNotifications(notifications.map(notification => ({ ...notification, read: true })));
         } catch (error) {
             console.log("모두 읽음 에러: " + error.message);
@@ -238,7 +238,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     // 모두 지우기
     const onAllDelete = async () => {
         try {
-            await axios.post('/alarm/deleteAll', { userKey });
+            await axios.post('/alarm/delete/all', null, { params: { userKey }});
             setNotifications([]);
         } catch (error) {
             console.log("전체 삭제 에러: " + error.message);
@@ -380,6 +380,9 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
             <div className={styles.notificationContent}>
                 {renderContent()}
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     );
 }

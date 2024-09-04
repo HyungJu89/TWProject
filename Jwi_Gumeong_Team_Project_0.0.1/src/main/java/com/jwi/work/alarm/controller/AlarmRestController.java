@@ -80,4 +80,18 @@ public class AlarmRestController {
 		
 		return result;
 	}
+	
+	@PostMapping("/delete/all")
+	public Map<String, String> deleteAllAlarm(@RequestParam("userKey") int userKey) {
+		int num = alarmService.deleteAllAlaram(userKey);
+		Map<String, String> result = new HashMap<>();
+		
+		if(num >= 1) {
+			result.put("result", "success");
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
 }
