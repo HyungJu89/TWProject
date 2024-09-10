@@ -463,7 +463,8 @@ function AdminMain() {
         if (categoryReports.length === 0) return null;
         return (
             <div className={styles.faqContentText}>
-                {displayName} 콘텐츠입니다 {categoryReports[0].reportUser.email} 등 {categoryReports.length}명 ( {categoryReports.length} )
+                {displayName} 콘텐츠입니다 {categoryReports[0].user.email} 등 {categoryReports.length}명 ( {categoryReports.length} )
+                {console.log(categoryReports[0])}
             </div>
         );
     };
@@ -766,17 +767,15 @@ function AdminMain() {
                                     // 제재 내역이 있을 시
                                     report.map((a,i)=>{
                                         return(
-                                            <div>
+                                            <div className={styles.reportItem}>
                                                     {
                                                         report[i].state === "unprocessed" ?
-                                                            <div>
-                                                                <br></br>
+                                                            <div className={styles.reportLine}>
                                                                 {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
-                                                                <div>신고내용 : {report[i].content.substr(0,80)}</div>
-                                                                <div>카테고리 : {report[i].category}</div>
-                                                                <div>신고받은 닉네임 : {report[i].reportUser.nickName}</div>
-                                                                <div>신고자 :{report[i].user.nickName}</div>
-                                                                <br></br>
+                                                                <div className={styles.reportContent}>신고내용 : {report[i].content.substr(0,80)}</div>
+                                                                <div className={styles.reportCategory}>카테고리 : {report[i].category}</div>
+                                                                <div className={styles.reportReportUser}>신고받은사람 : {report[i].reportUser.nickName} ( {report[i].reportUser.email} ) </div>
+                                                                <div className={styles.reportUser}>신고자 :{report[i].user.nickName} ( {report[i].user.email} ) </div>
                                                             </div>
                                                             :null
                                                     }
@@ -847,9 +846,10 @@ function AdminMain() {
                     {renderTabContent()}
                 </div>
 
+                {/* 유저탭일때 보여줄 내용 */}
                 {
                     tab === 0 ?
-                    <>
+                    <div>
                         <AdminPaging users={users} onItemsChange={handleItemsChange}/>
                         <div className={styles.userSearch}>
                             <div className={styles.userSearchList}>리스트</div>
@@ -871,7 +871,61 @@ function AdminMain() {
                                 <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
                             </div>
                         </div>
-                    </>
+                    </div>
+                    :null
+                }
+                {/* 질문 답변 탭일떄 보여줄 내용 */}
+                {
+                    tab === 2 ?
+                    <div>
+                        <div className={styles.userSearch}>
+                            <div className={styles.userSearchList}>리스트</div>
+                            <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
+                                {selectedOption3}
+                            </div>
+                            {
+                                dropdownOpen3 &&
+                                    <div className={styles.dropdown3}>
+                                        {["닉네임", "이메일", "닉네임+이메일"].map((option, index) => (
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
+                                                {option}
+                                            </div>
+                                        ))}
+                                    </div>
+                            }
+                            <div className={styles.inputDiv}>
+                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={()=>{}} />
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
+                            </div>
+                        </div>
+                    </div>
+                    :null
+                }
+                {/* 신고 내역 탭일때 보여줄 내용 */}
+                {
+                    tab === 4 ?
+                    <div>
+                        <div className={styles.userSearch}>
+                            <div className={styles.userSearchList}>리스트</div>
+                            <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
+                                {selectedOption3}
+                            </div>
+                            {
+                                dropdownOpen3 &&
+                                    <div className={styles.dropdown3}>
+                                        {["닉네임", "이메일", "닉네임+이메일"].map((option, index) => (
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
+                                                {option}
+                                            </div>
+                                        ))}
+                                    </div>
+                            }
+                            <div className={styles.inputDiv}>
+                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={()=>{}} />
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
+                            </div>
+                        </div>
+                    </div>
                     :null
                 }
 
