@@ -13,6 +13,7 @@ import chevron_right_b from '../icon/24px/chevron-right-b.png';
 import '../App.css';
 
 function Paging({ paging, postPage, setPostPage }) {
+
     let [chevron_left, setChevron_left] = useState(chevron_left_g);
     let [chevron_right, setChevron_right] = useState(chevron_right_g);
     // 한 블록당 리미트
@@ -62,7 +63,7 @@ function Paging({ paging, postPage, setPostPage }) {
                     onClick={blockDownOnClick} />
             }
             {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
-                <div key={i + startPage} className={styles.numText} onClick={() => { numberOnClick(startPage + i) }}>{startPage + i}</div>
+                <div key={i + startPage} className={styles.numText} onClick={() => { numberOnClick(startPage + i) }} style={startPage + i==postPage?{color : "#FF8901"}:{color : "#101010"}}>{startPage + i}</div>
             ))}
             {bockUp &&
                 <img
