@@ -305,17 +305,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     subContent = `고객센터에서 확인 가능합니다.`;
                     break;
                 case 'system':
-                    if (notification.reportedUserKey === userKey) {
-                        // 내가 제재를 당한 경우
-                        icon = report;
-                        content = `${notification.nickname}님은 정지 ${notification.date}일을 받았어요.`;
-                        subContent = `제재내용: '${notification.reason}'`;
-                    } else {
-                        // 내가 신고한 상대가 제재를 받은 경우
-                        icon = formulation;
-                        content = `당신의 선함으로 '${notification.nickname}'님이 제재를 받았어요!`;
-                        subContent = `신고내용: '${notification.content}' 대상자가 ${notification.date}일 정지를 받았습니다.`;
-                    }
+                    icon = notification.reportedUserKey === userKey ? report : formulation;
                     break;
                 default:
                     break;

@@ -15,6 +15,7 @@ import com.jwi.work.admin.util.JwtUtil;
 import com.jwi.work.alarm.entity.Report;
 import com.jwi.work.alarm.entity.UserAlarmEntity;
 import com.jwi.work.alarm.repository.ReportRepository;
+import com.jwi.work.alarm.service.AlarmService;
 import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.center.inquiry.entity.InquiryResponse;
 import com.jwi.work.center.inquiry.repository.InquiryRepository;
@@ -27,7 +28,6 @@ import com.jwi.work.user.dto.User;
 import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.util.FileManagerUtil;
 import com.jwi.work.util.NowDate;
-import com.jwi.work.util.PagingUtil;
 
 import lombok.AllArgsConstructor;
 
@@ -63,6 +63,8 @@ public class AdminService {
 	private NowDate dateCal;
 	@Autowired
     private FileManagerUtil fileManagerUtil;
+	@Autowired
+	private AlarmService alarmService;
 	
 	// 데이터베이스에 직접 insert 하는거보다 여기에서 인코딩 거치고 넣는게 더 나을듯?
 	public String loginJWT(Map<String,String> data) {
@@ -121,11 +123,13 @@ public class AdminService {
     	// 재원이형 여기서 알람리파지토리.save 하면됨!!!
     	// 비어있는경우 insert문 작동
     	
-    	for(Report reports :report) {
+    	for(Report reports : report) {
 		// 이게 신고게시글 신고한놈의 User.UserKey 부분
 //    		System.out.println(reports.getUser().getUserKey());
     		reports.setState("process");
     		reportRepository.save(reports);
+    		
+    		alarmService.createReportAlarm(reports.getUser().getUserKey(), reports.getReportUser().getUserKey(), reports.getCategory());
     	}
     	
 	    if (sanctions.isEmpty()) {

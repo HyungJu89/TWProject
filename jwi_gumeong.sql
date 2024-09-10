@@ -1,14 +1,13 @@
--- 2024-08-24 [최지은] V 0.1.16
--- 수정내용 : 대문자를 소문자로 바꾸는 힘!!!!!
-ALTER TABLE `inquiryresponse` RENAME COLUMN `Title` to `title`;
-select*from inquiryresponse;
+-- 2024-09-10 [안재원] V 0.1.16?
+-- 수정 내용 alarm 테이블 컬럼 하나 추가
+ALTER TABLE alarm ADD COLUMN referenceUserKey INT COMMENT '알림을 발생시킨 사용자 키';
 
 -- 2024-08-24 [조영민] V 0.1.15
 -- 수정내용 : report 테이블 category int -> varchar로 수정 report 인서트문 추가
 -- DB자체에서도 바꿔뒀으니 알터만 하면됨
 ALTER TABLE `report`
 MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
-select *from report;
+select * from alarm;
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
 values ('1','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
 
@@ -22,7 +21,9 @@ insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,c
 values ('4','2','post','4','오류/버그','엉덩이에서 총나옴 이거 어케 처리할껀데 진짜','unprocessed',now(),now());
 
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('4','2','post','4','욕설/혐오','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
+values ('8','2','post','4','욕설/혐오','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
+
+select *from user;
 
 -- 2024-08-23 [조영민] V 0.1.14
 -- 수정내용 : `state` 정지 상태  추가
@@ -91,7 +92,154 @@ CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
 select*from`user`;
-insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zddsaszxdasdf1@naver.com','12s4','f4fzcvx3r','비밀',0,null,'activate',NOW(),NOW());
+drop table user;
+insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zdasaszx@a.coaafaaassm','12s4','fdaadssdafsa','비밀',0,null,'activate',NOW(),NOW());
+-- 자동 생성된 INSERT 문들
+-- 자동 생성된 INSERT 문들
+INSERT INTO `user` (email, pw, nickName, gender, pwWrong, birthday, state, createdAt, updatedAt) VALUES 
+('user10@example.com', 'password10', 'nick10', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user11@example.com', 'password11', 'nick11', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user12@example.com', 'password12', 'nick12', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user13@example.com', 'password13', 'nick13', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user14@example.com', 'password14', 'nick14', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user15@example.com', 'password15', 'nick15', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user16@example.com', 'password16', 'nick16', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user17@example.com', 'password17', 'nick17', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user18@example.com', 'password18', 'nick18', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user19@example.com', 'password19', 'nick19', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user20@example.com', 'password20', 'nick20', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user21@example.com', 'password21', 'nick21', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user22@example.com', 'password22', 'nick22', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user23@example.com', 'password23', 'nick23', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user24@example.com', 'password24', 'nick24', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user25@example.com', 'password25', 'nick25', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user26@example.com', 'password26', 'nick26', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user27@example.com', 'password27', 'nick27', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user28@example.com', 'password28', 'nick28', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user29@example.com', 'password29', 'nick29', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user30@example.com', 'password30', 'nick30', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user31@example.com', 'password31', 'nick31', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user32@example.com', 'password32', 'nick32', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user33@example.com', 'password33', 'nick33', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user34@example.com', 'password34', 'nick34', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user35@example.com', 'password35', 'nick35', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user36@example.com', 'password36', 'nick36', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user37@example.com', 'password37', 'nick37', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user38@example.com', 'password38', 'nick38', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user39@example.com', 'password39', 'nick39', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user40@example.com', 'password40', 'nick40', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user41@example.com', 'password41', 'nick41', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user42@example.com', 'password42', 'nick42', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user43@example.com', 'password43', 'nick43', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user44@example.com', 'password44', 'nick44', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user45@example.com', 'password45', 'nick45', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user46@example.com', 'password46', 'nick46', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user47@example.com', 'password47', 'nick47', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user48@example.com', 'password48', 'nick48', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user49@example.com', 'password49', 'nick49', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user50@example.com', 'password50', 'nick50', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user51@example.com', 'password51', 'nick51', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user52@example.com', 'password52', 'nick52', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user53@example.com', 'password53', 'nick53', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user54@example.com', 'password54', 'nick54', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user55@example.com', 'password55', 'nick55', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user56@example.com', 'password56', 'nick56', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user57@example.com', 'password57', 'nick57', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user58@example.com', 'password58', 'nick58', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user59@example.com', 'password59', 'nick59', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user60@example.com', 'password60', 'nick60', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user61@example.com', 'password61', 'nick61', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user62@example.com', 'password62', 'nick62', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user63@example.com', 'password63', 'nick63', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user64@example.com', 'password64', 'nick64', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user65@example.com', 'password65', 'nick65', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user66@example.com', 'password66', 'nick66', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user67@example.com', 'password67', 'nick67', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user68@example.com', 'password68', 'nick68', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user69@example.com', 'password69', 'nick69', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user70@example.com', 'password70', 'nick70', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user71@example.com', 'password71', 'nick71', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user72@example.com', 'password72', 'nick72', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user73@example.com', 'password73', 'nick73', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user74@example.com', 'password74', 'nick74', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user75@example.com', 'password75', 'nick75', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user76@example.com', 'password76', 'nick76', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user77@example.com', 'password77', 'nick77', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user78@example.com', 'password78', 'nick78', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user79@example.com', 'password79', 'nick79', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user80@example.com', 'password80', 'nick80', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user81@example.com', 'password81', 'nick81', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user82@example.com', 'password82', 'nick82', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user83@example.com', 'password83', 'nick83', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user84@example.com', 'password84', 'nick84', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user85@example.com', 'password85', 'nick85', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user86@example.com', 'password86', 'nick86', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user87@example.com', 'password87', 'nick87', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user88@example.com', 'password88', 'nick88', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user89@example.com', 'password89', 'nick89', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user90@example.com', 'password90', 'nick90', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user91@example.com', 'password91', 'nick91', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user92@example.com', 'password92', 'nick92', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user93@example.com', 'password93', 'nick93', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user94@example.com', 'password94', 'nick94', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user95@example.com', 'password95', 'nick95', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user96@example.com', 'password96', 'nick96', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user97@example.com', 'password97', 'nick97', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user98@example.com', 'password98', 'nick98', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user99@example.com', 'password99', 'nick99', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user100@example.com', 'password100', 'nick100', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user101@example.com', 'password101', 'nick101', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user102@example.com', 'password102', 'nick102', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user103@example.com', 'password103', 'nick103', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user104@example.com', 'password104', 'nick104', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user105@example.com', 'password105', 'nick105', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user106@example.com', 'password106', 'nick106', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user107@example.com', 'password107', 'nick107', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user108@example.com', 'password108', 'nick108', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user109@example.com', 'password109', 'nick109', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user110@example.com', 'password110', 'nick110', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user111@example.com', 'password111', 'nick111', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user112@example.com', 'password112', 'nick112', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user113@example.com', 'password113', 'nick113', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user114@example.com', 'password114', 'nick114', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user115@example.com', 'password115', 'nick115', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user116@example.com', 'password116', 'nick116', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user117@example.com', 'password117', 'nick117', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user118@example.com', 'password118', 'nick118', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user119@example.com', 'password119', 'nick119', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user120@example.com', 'password120', 'nick120', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user121@example.com', 'password121', 'nick121', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user122@example.com', 'password122', 'nick122', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user123@example.com', 'password123', 'nick123', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user124@example.com', 'password124', 'nick124', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user125@example.com', 'password125', 'nick125', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user126@example.com', 'password126', 'nick126', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user127@example.com', 'password127', 'nick127', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user128@example.com', 'password128', 'nick128', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user129@example.com', 'password129', 'nick129', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user130@example.com', 'password130', 'nick130', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user131@example.com', 'password131', 'nick131', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user132@example.com', 'password132', 'nick132', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user133@example.com', 'password133', 'nick133', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user134@example.com', 'password134', 'nick134', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user135@example.com', 'password135', 'nick135', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user136@example.com', 'password136', 'nick136', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user137@example.com', 'password137', 'nick137', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user138@example.com', 'password138', 'nick138', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user139@example.com', 'password139', 'nick139', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user140@example.com', 'password140', 'nick140', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user141@example.com', 'password141', 'nick141', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user142@example.com', 'password142', 'nick142', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user143@example.com', 'password143', 'nick143', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user144@example.com', 'password144', 'nick144', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user145@example.com', 'password145', 'nick145', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user146@example.com', 'password146', 'nick146', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user147@example.com', 'password147', 'nick147', '여성', 2, NULL, 'activate', NOW(), NOW()),
+('user148@example.com', 'password148', 'nick148', '비밀', 0, NULL, 'activate', NOW(), NOW()),
+('user149@example.com', 'password149', 'nick149', '남성', 1, NULL, 'activate', NOW(), NOW()),
+('user150@example.com', 'password150', 'nick150', '여성', 2, NULL, 'activate', NOW(), NOW());
+
+
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -183,6 +331,7 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
+select *from report;
 CREATE TABLE admin (
     adminKey    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
     adminName    VARCHAR(30) COMMENT '어드민아이디',
@@ -311,6 +460,7 @@ CREATE TABLE `loginLog`(
 `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
+select*from userConnection;
 CREATE TABLE `userConnection` (
 `userKey`   INT  NOT NULL,
 `sessionId` VARCHAR(30) UNIQUE NULL,
