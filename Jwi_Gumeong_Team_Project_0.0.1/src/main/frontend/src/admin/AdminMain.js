@@ -21,7 +21,6 @@ function AdminMain() {
     const [tab, setTab] = useState(0);
     const userKey = useSelector((state) => state.session.userKey); // Redux에서 userKey 가져오기
     const [sanctions, setSanctions] = useState([]); // 제재 내역
-    // const userState = useSelector((state) => state.userState); // 로그인한 유저 정보??
     const [inquiries, setInquiries] = useState([]); // 문의 내역
     const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
@@ -595,78 +594,6 @@ function AdminMain() {
             case 1:
                 return (
                     <div className={styles.inqContainer}>
-                        <div className={styles.inyHeader}>
-                            <img src={inquireIcon} className={styles.inqIcon} alt="문의하기 아이콘" />
-                            <span>문의하기</span>
-                        </div>
-                        <div className={styles.inqDivider}></div>
-                        <div className={styles.inqForm}>
-                            <div className={styles.inqField}>
-                                <label>문의 종류</label>
-                                <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
-                                    {selectedOption}
-                                </div>
-                                {/* 문의 종류 선택 드롭다운 */}
-                                {dropdownOpen && (
-                                    <div className={styles.dropdown}>
-                                        {["시스템 관련", "본인인증", "오류/버그", "신고", "제안", "도용", "보안", "기타"].map((option, index) => (
-                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
-                                                {option}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                            {/* 내용 입력 칸 */}
-                            <div className={styles.inqField}>
-                                <label>제목: </label>
-                                <input 
-                                    type="text" 
-                                    name="title"
-                                    value={form.title} 
-                                    onChange={handleInputChange} 
-                                    placeholder="문의 제목을 입력하세요." 
-                                    className={styles.inqInput} 
-                                />
-                            </div>
-                            <div className={styles.inqField}>
-                                <textarea 
-                                    name="details"
-                                    value={form.details} 
-                                    onChange={handleInputChange}
-                                    className={styles.inqTextarea} 
-                                    placeholder="문의 내용을 입력하세요."
-                                ></textarea>
-                            </div>
-                            <div className={styles.inqField}>
-                                <div className={styles.imageBox}>
-                                    {/* 이미지 미리 보기 */}
-                                    {files.map((fileObj, index) => (
-                                        <div key={index} className={styles.uploadedFile}>
-                                            <img src={fileObj.preview} alt={fileObj.file.name} style={{maxWidth: "100px", maxHeight: "100px"}} />
-                                        </div>
-                                    ))}
-                                    {/* 이미지가 5개보다 적을 때 추가 버튼 보임  */}
-                                    {/* 이미지 넣을 때마다 한칸씩 오른쪽으로 */}
-                                    {files.length < 5 && (
-                                        <div className={styles.fileUpload} onClick={() => document.getElementById('file-upload').click()}>
-                                            <img src={addIcon} className={styles.uploadIcon} alt="파일 추가 버튼 아이콘" />
-                                            <input id="file-upload" type="file" accept="image/*" onChange={fileChange}
-                                                multiple style={{ display: 'none' }}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className={styles.submitButtonContainer}>
-                                {/* 문의 내용이 전부 입력이 안 되었을 때 버튼 비 활성화 */}
-                                <button onClick={submit} 
-                                    className={inputComplete ? styles.activeSubmitButton : styles.disabledSubmitButton}
-                                    disabled={!inputComplete}>
-                                    문의 넣기
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 );
             //문의 내역
@@ -810,42 +737,7 @@ function AdminMain() {
             // 제재 내역
             case 3:
                 return (
-                    <div className={styles.sanctionContainer}>
-                        <div className={styles.sanctionList}>
-                            {/* 내역이 없을 시 */}
-                            {sanctions.length === 0 ? (
-                                <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
-                            ) : (
-                                // 제재 내역이 있을 시
-                                sanctions.map((sanction, index) => (
-                                    <div key={index} className={styles.sanctionItem}>
-                                        <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
-                                        <div className={styles.sanctionDetails}>
-                                            <div className={styles.sanctionTitle}>{nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
-                                            <div className={styles.sanctionContent}>
-                                                <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
-                                                <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>
-                                            </div>
-                                        </div>
-                                        {index < sanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
-                                    </div>
-                                ))
-                            )}
-                        </div>
-
-                            
-                        {totalPages > 1 && (
-                            <div className={styles.pagination}>
-                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
-                                    <img src={btnLeft} alt="이전 페이지" />
-                                </button>
-                                {/* 현재 페이지 / 전체 페이지 */}
-                                <div className={styles.pageInfo}>{currentPage} / {totalPages}</div>
-                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className={styles.pageNextButton}>
-                                    <img src={btnRight} alt="다음 페이지" />
-                                </button>
-                            </div>
-                        )}
+                    <div className={styles.inqContainer}>
                     </div>
                 );
             case 4:
@@ -854,30 +746,30 @@ function AdminMain() {
                         <div className={styles.sanctionList}>
                             {/* 내역이 없을 시 */}
                             {
-                            report.length === 0 ? (
-                                <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
-                            ) : (
-                                // 제재 내역이 있을 시
-                                report.map((a,i)=>{
-                                    return(
-                                        <div>
-                                                {
-                                                    report[i].state === "unprocessed" ?
-                                                        <div>
-                                                            <br></br>
-                                                            {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
-                                                            <div>신고내용 : {report[i].content.substr(0,80)}</div>
-                                                            <div>카테고리 : {report[i].category}</div>
-                                                            <div>신고자 : {report[i].reportUser.nickName}</div>
-                                                            <div>신고받은 닉네임 :{report[i].user.nickName}</div>
-                                                            <br></br>
-                                                        </div>
-                                                        :null
-                                                }
-                                        </div>
-                                    )
-                                })    
-                            )
+                                report.length === 0 ? (
+                                    <div className={styles.noHistory}>신고 받은 내역이 없습니다.</div>
+                                ) : (
+                                    // 제재 내역이 있을 시
+                                    report.map((a,i)=>{
+                                        return(
+                                            <div>
+                                                    {
+                                                        report[i].state === "unprocessed" ?
+                                                            <div>
+                                                                <br></br>
+                                                                {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
+                                                                <div>신고내용 : {report[i].content.substr(0,80)}</div>
+                                                                <div>카테고리 : {report[i].category}</div>
+                                                                <div>신고받은 닉네임 : {report[i].reportUser.nickName}</div>
+                                                                <div>신고자 :{report[i].user.nickName}</div>
+                                                                <br></br>
+                                                            </div>
+                                                            :null
+                                                    }
+                                            </div>
+                                        )
+                                    })    
+                                )
                             }
                         </div>
                     </div>
@@ -887,7 +779,7 @@ function AdminMain() {
         }
     };
 
-    // 고객센터 전체 화면
+    // 어드민 전체 화면
     return (
         <div className={styles.pageContainer}>
             <div className={styles.serviceBanner}>
@@ -908,7 +800,6 @@ function AdminMain() {
                     <div className={styles.userStatedeactivateBtn} onClick={()=>{sortRunReport()}}>신고접수</div>
                     <div className={styles.userStatedelingBtn} onClick={()=>{sortRun("secession")}}>비활성화</div>
                     {/* 검색기능 만들면 여기다가 추가 하면될듯 */}
-                    {/* <input></input> */}
                 </div>
                 : null
             }
@@ -936,15 +827,22 @@ function AdminMain() {
                             onClick={() => setTab(4)}>
                             신고 내역
                         </div>
-                        {/* 여기에다가 정렬기능 만들면 좋을듯? */}
                     </div>
                 </div>
                 <div className={styles.serviceTabContent}>
                     {renderTabContent()}
                 </div>
+
                 {
-                    tab !== 1 ?
-                    <AdminPaging users={users} onItemsChange={handleItemsChange}/>
+                    tab === 0 ?
+                    <>
+                        <AdminPaging users={users} onItemsChange={handleItemsChange}/>
+                        <div className={styles.userSearch}>
+                            <div>리스트</div>
+                            <input></input>
+                            <div>검색버튼</div>
+                        </div>
+                    </>
                     :null
                 }
 
