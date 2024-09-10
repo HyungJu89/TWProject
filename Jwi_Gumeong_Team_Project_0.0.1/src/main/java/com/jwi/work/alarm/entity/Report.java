@@ -12,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import lombok.Data;
 
 @Entity
 @Table(name = "report")
@@ -24,11 +23,11 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "reportUserKey", nullable = false)
-    private User reportUser; // 신고당한 유저
+    private UserAlarmEntity reportUser; // 신고당한 유저
 
     @ManyToOne
     @JoinColumn(name = "userKey", nullable = false)
-    private User user; // 신고한 유저
+    private UserAlarmEntity user; // 신고한 유저
 
     @Column(name = "referenceType", nullable = false, length = 50)
     private String referenceType;
@@ -74,19 +73,19 @@ public class Report {
 		this.reportKey = reportKey;
 	}
 
-	public User getReportUser() {
+	public UserAlarmEntity getReportUser() {
 		return reportUser;
 	}
 
-	public void setReportUser(User reportUser) {
+	public void setReportUser(UserAlarmEntity reportUser) {
 		this.reportUser = reportUser;
 	}
 
-	public User getUser() {
+	public UserAlarmEntity getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserAlarmEntity user) {
 		this.user = user;
 	}
 

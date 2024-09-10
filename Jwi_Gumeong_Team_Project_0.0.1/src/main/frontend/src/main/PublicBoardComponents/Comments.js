@@ -186,7 +186,6 @@ function Comments({ postKey, setCommentCount }) {
             commentFocus.current.focus();
         }
     }, [commentStart]);
-
     return (
         <div>
             <div className={styles.dashed} />{/* 회색줄 */}
@@ -213,6 +212,9 @@ function Comments({ postKey, setCommentCount }) {
             {comments.success &&
                 <>
                     {comments.info.comment.map((comment, index) => {
+                        console.log('★')
+                        console.log(index);
+                        console.log(comments.info.comment.length-1);
                         return (
                             <div key={comment.commentKey}>
                                 <CommentsList

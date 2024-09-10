@@ -1,3 +1,8 @@
+-- 2024-08-24 [최지은] V 0.1.16
+-- 수정내용 : 대문자를 소문자로 바꾸는 힘!!!!!
+ALTER TABLE `inquiryresponse` RENAME COLUMN `Title` to `title`;
+select*from inquiryresponse;
+
 -- 2024-08-24 [조영민] V 0.1.15
 -- 수정내용 : report 테이블 category int -> varchar로 수정 report 인서트문 추가
 -- DB자체에서도 바꿔뒀으니 알터만 하면됨
@@ -306,7 +311,6 @@ CREATE TABLE `loginLog`(
 `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
-select*from userConnection;
 CREATE TABLE `userConnection` (
 `userKey`   INT  NOT NULL,
 `sessionId` VARCHAR(30) UNIQUE NULL,

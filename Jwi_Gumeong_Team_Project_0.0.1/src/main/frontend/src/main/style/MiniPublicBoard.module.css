@@ -1,11 +1,13 @@
+/* div{border-radius: 0px;} */
 .mainDiv {
     width: 440px;
     background-color: white;
-    margin: 10px 0px;
+    margin: 0px 0px;
     padding: 20px 30px;
     overflow: auto;
-    height: 95%;
-    padding-bottom: 120px;
+    overflow-x: hidden;
+    height: 94%;
+    background-color: #BBBBBB;
 }
 
 .title {

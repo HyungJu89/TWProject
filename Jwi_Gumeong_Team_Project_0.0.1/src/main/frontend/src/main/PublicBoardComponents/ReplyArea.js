@@ -63,7 +63,6 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLod
         try {
             const { data } = await axios.post(`/reply/create`, replyCreateDto)
             setCommentStart(commentStart+1); //댓글 작성시에만 포커스 되도록 하는 함수
-            console.log('리플에리플');
             if (!data.success) {
                 alert("댓글 생성이 안됨 ㅅㄱ")
             }

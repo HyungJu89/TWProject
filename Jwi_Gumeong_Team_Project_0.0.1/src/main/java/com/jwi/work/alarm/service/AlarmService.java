@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.jwi.work.alarm.entity.Alarm;
 import com.jwi.work.alarm.entity.Banned;
-import com.jwi.work.alarm.entity.User;
+import com.jwi.work.alarm.entity.UserAlarmEntity;
 import com.jwi.work.alarm.repository.AlarmRepository;
 import com.jwi.work.alarm.repository.BannedRepository;
 import com.jwi.work.alarm.repository.CommentRepository;
@@ -69,7 +69,7 @@ public class AlarmService {
 	            case "system":
 	                // 신고 처리 결과 알림
 	                reportRepository.findById(alarm.getReferenceKey()).ifPresent(report -> {
-	                    User reportUser = report.getReportUser();
+	                	UserAlarmEntity reportUser = report.getReportUser();
 	                    Banned banned = bannedRepository.findByUser(reportUser);
 	                    if (banned != null) {
 	                        alarm.setNickname(reportUser.getNickName());
@@ -86,5 +86,17 @@ public class AlarmService {
         }
 
         return alarms;
+    }
+    
+    public int deleteAlarm(int notificationId) {
+    	// 알람이 데이터 베이스에 있는지 확인
+    	if (alarmRepository.existsById(notificationId)) {
+    		// 있으면 삭제
+    		// deleteById 가 void 타입이므로 int로 선언해서 return이 불가능
+            alarmRepository.deleteById(notificationId);
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }
