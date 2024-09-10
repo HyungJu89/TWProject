@@ -16,14 +16,10 @@ import AdminPaging from './AdminPaging.js';
 import styles from './style/AdminMain.module.css';
 
 function AdminMain() {
-    
     const [tab, setTab] = useState(0);
     const userKey = useSelector((state) => state.session.userKey); // Redux에서 userKey 가져오기
-    const [sanctions, setSanctions] = useState([]); // 제재 내역
     const [inquiries, setInquiries] = useState([]); // 문의 내역
     const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
-    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-    const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
     const [dropdownOpen, setDropdownOpen] = useState(false); // 문의 종류 드롭다운
     const [dropdownOpen2, setDropdownOpen2] = useState(false); // 문의 종류 드롭다운2
     const [dropdownOpen3, setDropdownOpen3] = useState(false); // 검색 종류 드롭다운
@@ -32,19 +28,14 @@ function AdminMain() {
     const [selectedOption3, setSelectedOption3] = useState("닉네임"); // 문의 종류 최초 상태
     const [faqContent, setFaqContent] = useState(null); // 자주 묻는 질문 내용
     const [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
-    const [nickName, setNickName] = useState(null);
     const [searchUserInput,setSearchUserInput] = useState(''); // 유저 검색
-    // 문의 내용이 전부 있는지
-    const [inputComplete, setInputComplete] = useState(false);
-    // 알림 모달
-    const [modalOpen, setModalOpen] = useState(false);
+    const [inputComplete, setInputComplete] = useState(false); // 문의 내용이 전부 있는지
+    const [modalOpen, setModalOpen] = useState(false);  // 알림 모달
     const [modalContent, setModalContent] = useState('');
-    // 이미지 모달
-    const [imageModalOpen, setImageModalOpen] = useState(false);
+    const [imageModalOpen, setImageModalOpen] = useState(false);  // 이미지 모달
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [imageList, setImageList] = useState([]);
     const [closeButtonHovered, setCloseButtonHovered] = useState(false);
-    const cookieCheck = getCookie('frontCookie');
     const [users, setUsers] = useState([]);
     const [usersCopy, setUsersCopy] = useState([]);
     const [moreBtnOption,setMoreBtnOption] = useState(false);
@@ -53,13 +44,13 @@ function AdminMain() {
     const [update,setUpdate] = useState(false);
     const [report,setReport] = useState([]);
     const [currentItems, setCurrentItems] = useState([]);
-
+    const cookieCheck = getCookie('frontCookie');
+    
     const handleItemsChange = (items) => {
         setCurrentItems(items);
     };
 
     const handleEnter = (e) => {
-        console.log(e);
         if (e.key === "Enter" || e === "enter") {
             switch (selectedOption3) {
                 case "닉네임":
@@ -70,13 +61,9 @@ function AdminMain() {
                     break;
                 default:
                     break;
-            }    
+            }
         }
     };
-
-    const searchUser = (userData)=>{
-
-    }
 
     useEffect(() => {
         if(cookieCheck){
@@ -255,36 +242,8 @@ function AdminMain() {
             .catch(error => {
                 console.log("문의 내역 가져오기 실패: " + error.message);
             });
-        } else if (tab === 3) {
-            // 제재내역
-            axios.post('/sanction/list', null, {
-                params: { userKey, page: currentPage, limitPage: 10 }
-            })
-            .then(response => {
-                if (response.data.result === "success") {
-                    setSanctions(response.data.sanctionList); // 제재 내역 불러와서 저장
-                    setTotalPages(response.data.paging.pageCount); // 총 페이지 수 설정
-                } else {
-                    setSanctions([]);
-                }
-            })
-            .catch(error => {
-                console.log("제재내역 불러오기 오류: " + error.message);
-            });
-
-            axios.post('/sanction/user', null, {params: {userKey: userKey}})
-            .then(response => {
-                if(response.data.result === "success") {
-                    setNickName(response.data.nickName);
-                } else {
-                    setNickName("알수없음");
-                }
-            })
-            .catch(error => {
-                console.log("닉네임 불러오기 오류: " + error.message);
-            })
-        }
-    }, [tab, currentPage, userKey, update]);
+        } 
+    }, [tab, userKey, update]);
 
     // 문의 하기 내용
     const [files, setFiles] = useState([]); // 문의 넣을 때 이미지
@@ -293,13 +252,13 @@ function AdminMain() {
         category: '', // 문의 종류
         details: '' // 문의 내용
     });
-    // 문의 종류 선택
+
     const optionSelect = (option) => {
         setSelectedOption(option);
         setForm({ ...form, category: option });
         setDropdownOpen(false);
     };
-    // 문의 종류 선택
+
     const optionSelect2 = (option) => {
         setSelectedOption2(option);
         setForm({ ...form, category: option });
@@ -316,15 +275,6 @@ function AdminMain() {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
     };
-
-    // 제목, 내용, 종류에 전부 입력 했을 시 문의넣기 버튼 활성화
-    // useEffect(() => {
-    //     if (form.title && form.category && form.details ) {
-    //         setInputComplete(true);
-    //     } else {
-    //         setInputComplete(false);
-    //     }
-    // }, [form]);
 
     useEffect(() => {
         if (form.responseText) {
@@ -402,7 +352,6 @@ function AdminMain() {
     };
 
     const submitResponse = (event,inquiryKey) => {
-        console.log(inquiryKey);
         event.preventDefault();
         if (!inputComplete) return;
         // 위에서 설정한 데이터들을 하나에 저장
@@ -782,7 +731,7 @@ function AdminMain() {
                                     // 제재 내역이 있을 시
                                     report.map((a,i)=>{
                                         return(
-                                            <div className={styles.reportItem}>
+                                            <div className={styles.reportItem} key={i}>
                                                     {
                                                         report[i].state === "unprocessed" ?
                                                             <div className={styles.reportLine}>
