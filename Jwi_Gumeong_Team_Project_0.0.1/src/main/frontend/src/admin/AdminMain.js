@@ -1,22 +1,19 @@
-import React, {  useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
-import styles from './style/AdminMain.module.css';
-import AdminPaging from './AdminPaging.js';
-import serviceLogo from '../icon/img/service-Illustration.png';
-import reply from '../icon/img/reply-ing.png';
-import btnLeft from '../icon/btn/btn-left.png';
-import btnRight from '../icon/btn/btn-right.png';
-import inquireIcon from '../icon/32px/inquire.png';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getCookie } from '../cookies/Cookies.js';
 import search from '../icon/24px/search.png';
 import addIcon from '../icon/40px/add.png';
-import AlarmModal from '../modal/AlarmModal.js';
-import closeModalIcon from '../icon/btn/btn-image-Close.png';
-import closeModalIconHover from '../icon/btn/btn-image-Close-a.png';
 import leftIcon from '../icon/40px/chevron-left-w.png';
 import rightIcon from '../icon/40px/chevron-right-w.png';
 import removeIcon from '../icon/btn/bnt_img_x.png';
-import { getCookie } from '../cookies/Cookies.js';
+import closeModalIconHover from '../icon/btn/btn-image-Close-a.png';
+import closeModalIcon from '../icon/btn/btn-image-Close.png';
+import reply from '../icon/img/reply-ing.png';
+import serviceLogo from '../icon/img/service-Illustration.png';
+import AlarmModal from '../modal/AlarmModal.js';
+import AdminPaging from './AdminPaging.js';
+import styles from './style/AdminMain.module.css';
 
 function AdminMain() {
     
@@ -36,7 +33,7 @@ function AdminMain() {
     const [faqContent, setFaqContent] = useState(null); // 자주 묻는 질문 내용
     const [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
     const [nickName, setNickName] = useState(null);
-    const [searchInput,setSearchInput] = useState('');
+    const [searchUserInput,setSearchUserInput] = useState(''); // 유저 검색
     // 문의 내용이 전부 있는지
     const [inputComplete, setInputComplete] = useState(false);
     // 알림 모달
@@ -60,6 +57,26 @@ function AdminMain() {
     const handleItemsChange = (items) => {
         setCurrentItems(items);
     };
+
+    const handleEnter = (e) => {
+        console.log(e);
+        if (e.key === "Enter" || e === "enter") {
+            switch (selectedOption3) {
+                case "닉네임":
+                    setUsers(usersCopy.filter(userData => userData.nickName.includes(searchUserInput)));
+                    break;
+                case "이메일":
+                    setUsers(usersCopy.filter(userData => userData.email.includes(searchUserInput)));
+                    break;
+                default:
+                    break;
+            }    
+        }
+    };
+
+    const searchUser = (userData)=>{
+
+    }
 
     useEffect(() => {
         if(cookieCheck){
@@ -310,7 +327,6 @@ function AdminMain() {
     // }, [form]);
 
     useEffect(() => {
-        console.log(inputComplete);
         if (form.responseText) {
             setInputComplete(true);
         } else {
@@ -464,7 +480,6 @@ function AdminMain() {
         return (
             <div className={styles.faqContentText}>
                 {displayName} 콘텐츠입니다 {categoryReports[0].user.email} 등 {categoryReports.length}명 ( {categoryReports.length} )
-                {console.log(categoryReports[0])}
             </div>
         );
     };
@@ -859,7 +874,7 @@ function AdminMain() {
                             {
                                 dropdownOpen3 &&
                                     <div className={styles.dropdown3}>
-                                        {["닉네임", "이메일", "닉네임+이메일"].map((option, index) => (
+                                        {["닉네임", "이메일"].map((option, index) => (
                                             <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
                                                 {option}
                                             </div>
@@ -867,12 +882,12 @@ function AdminMain() {
                                     </div>
                             }
                             <div className={styles.inputDiv}>
-                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={()=>{}} />
-                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
+                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchUserInput(e.target.value)} onKeyDown={handleEnter}/>
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{handleEnter("enter")}}/>
                             </div>
                         </div>
                     </div>
-                    :null
+                    : null
                 }
                 {/* 질문 답변 탭일떄 보여줄 내용 */}
                 {
@@ -886,7 +901,7 @@ function AdminMain() {
                             {
                                 dropdownOpen3 &&
                                     <div className={styles.dropdown3}>
-                                        {["닉네임", "이메일", "닉네임+이메일"].map((option, index) => (
+                                        {["닉네임", "이메일"].map((option, index) => (
                                             <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
                                                 {option}
                                             </div>
@@ -899,7 +914,7 @@ function AdminMain() {
                             </div>
                         </div>
                     </div>
-                    :null
+                    : null
                 }
                 {/* 신고 내역 탭일때 보여줄 내용 */}
                 {
@@ -913,7 +928,7 @@ function AdminMain() {
                             {
                                 dropdownOpen3 &&
                                     <div className={styles.dropdown3}>
-                                        {["닉네임", "이메일", "닉네임+이메일"].map((option, index) => (
+                                        {["닉네임", "이메일"].map((option, index) => (
                                             <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
                                                 {option}
                                             </div>
