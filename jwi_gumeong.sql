@@ -1,6 +1,6 @@
 -- 2024-09-10 [안재원] V 0.1.16?
 -- 수정 내용 alarm 테이블 컬럼 하나 추가
-ALTER TABLE alarm ADD COLUMN referenceUserKey INT COMMENT '알림을 발생시킨 사용자 키';
+ALTER TABLE `alarm` ADD COLUMN `referenceUserKey` INT COMMENT '알림을 발생시킨 사용자 키';
 
 -- 2024-08-24 [조영민] V 0.1.15
 -- 수정내용 : report 테이블 category int -> varchar로 수정 report 인서트문 추가

@@ -94,7 +94,6 @@ public class AlarmService {
 	                break;
             }
         }
-
         return alarms;
     }
     
