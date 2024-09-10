@@ -497,7 +497,7 @@ function AdminMain() {
                                                 users.state !== "activate" && banData?.state === "activate" ?
                                                     <div className={styles.userOption}>
                                                         {/* 신고 테이블 조회해서 신고 수리내역 표기 */}
-                                                        <div className={styles.userOptionReport}>신고접수일 : 2024-08-17</div>
+                                                        <div className={styles.userOptionReport}>신고접수일 : {reportData.length !== 0 ? <>{ reportData[reportData?.length-1]?.createdAt.substr(0,10) }</> : <>-</>}</div>
                                                         {/* 신고 내역같은것도 여기다가 추가하면 좋을꺼같음 */}
 
                                                         {/* 여기에 제재 했을경우 3항 연산자 하면될꺼같고 */}
@@ -816,7 +816,7 @@ function AdminMain() {
                     <div>
                         <AdminPaging users={users} onItemsChange={handleItemsChange}/>
                         <div className={styles.userSearch}>
-                            <div className={styles.userSearchList}>리스트</div>
+                            <div className={styles.userSearchList}>유저검색</div>
                             <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
                                 {selectedOption3}
                             </div>
@@ -839,11 +839,12 @@ function AdminMain() {
                     : null
                 }
                 {/* 질문 답변 탭일떄 보여줄 내용 */}
+                {/* 페이징 처리 해야됨 */}
                 {
                     tab === 2 ?
                     <div>
                         <div className={styles.userSearch}>
-                            <div className={styles.userSearchList}>리스트</div>
+                            <div className={styles.userSearchList}>질문답변</div>
                             <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
                                 {selectedOption3}
                             </div>
@@ -866,11 +867,12 @@ function AdminMain() {
                     : null
                 }
                 {/* 신고 내역 탭일때 보여줄 내용 */}
+                {/* 페이징 처리 해야됨 */}
                 {
                     tab === 4 ?
                     <div>
                         <div className={styles.userSearch}>
-                            <div className={styles.userSearchList}>리스트</div>
+                            <div className={styles.userSearchList}>신고내역</div>
                             <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
                                 {selectedOption3}
                             </div>
