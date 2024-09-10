@@ -179,7 +179,7 @@ body{
 .notificationModal {
     position: absolute;
     width: 354px;
-    height: 528px;
+    height: 547px;
     top: 100%; /* 아이콘 바로 아래 위치 */
     right: 0; /* 부모 요소의 오른쪽 */
     margin-top: 10px;
@@ -250,9 +250,10 @@ body{
 /* 알림 내용 창 */
 .notificationModal .notificationContent {
     display: grid;
-    margin: 10px 20px 20px 20px;
+    margin: 10px 20px 10px 20px;
     width: 314px;
-    overflow-y: auto;
+    max-height: 395px;
+    overflow-y: overlay;
     overflow-x: hidden;
     row-gap :14px;
 }
@@ -290,13 +291,17 @@ body{
     border-radius: 0px;
 }
 
-
 /* 안 읽은 알림 */
 .notificationDot {
     width: 4px;
     height: 4px;
-    background-color:#FF8901;
+    background-color: #FF8901;
     border-radius: 50%;
+    visibility: visible; /* 기본값 */
+}
+
+.notificationItem .noDot {
+    visibility: hidden; /* 알림을 읽었을 때 숨기기 */
 }
 
 /* 프로필 or 이미지 */

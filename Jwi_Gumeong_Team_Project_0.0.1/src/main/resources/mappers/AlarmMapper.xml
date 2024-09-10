@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.alarm.mapper.AlarmMapper">
+
 <select id="getUserKey" parameterType="String" resultType="int">
 	SELECT userKey FROM userConnection WHERE sessionId = #{sessionId}
 </select>
@@ -70,7 +71,15 @@
 </select>
 
 
-
-
-
+	<update id="readUpdateAlarm" parameterType="int">
+		UPDATE `alarm` SET `read` = 1 WHERE `alarmKey` = #{notificationId}
+	</update>
+	
+	<update id="readAllUpdateAlarm" parameterType="int">
+		UPDATE `alarm` SET `read` = 1 WHERE `userKey` = #{userKey}
+ 	</update>
+ 	
+ 	<delete id="deleteAllAlarm" parameterType="int">
+ 		DELETE FROM `alarm` WHERE `userKey` = #{userKey}
+ 	</delete>
 </mapper>

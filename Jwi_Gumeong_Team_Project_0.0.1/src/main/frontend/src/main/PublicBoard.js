@@ -85,8 +85,8 @@ function PublicBoard({ postInfo }) {
         const newHeart = !heart;
         let sessionIdJson = sessionStorage.getItem('sessionId');
                 if(!sessionIdJson){
-            //setModalContent('로그인 되어 있지 않습니다.');
-            //setModalOpen(true);
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
             return;
         }
         setLikeCount((state) => newHeart ? state+1 : state-1 )
