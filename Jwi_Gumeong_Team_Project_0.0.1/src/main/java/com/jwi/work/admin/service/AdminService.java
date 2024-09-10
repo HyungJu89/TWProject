@@ -37,6 +37,13 @@ public class AdminService {
 	
 	// @Autowired << Bean 자동으로 돌려줌 ㅅㄱ
 	
+    /** 
+     * TODO : 
+     * 먼저 데이터 찾은다음에 있으면 전환 없으면 생성으로 하면 되려나? // 
+     * 로그 만들어야됨 / 로그 테이블 , JPA 엔티티는 만들었음
+     * 로그 다함 이제 페이징 처리 하고 다른걸로 넘어가면될듯 신고기능을 빨리 받아야지 연결할수있음.
+     **/
+	
 	// Admin쪽으로 POST 요청 들어오면 처리
 	@Autowired
 	private AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -79,36 +86,6 @@ public class AdminService {
 		return userMapper.getAllUser();
 	}
 	
-	// 페이징 관련 더미코드
-	
-//	public List<User> getPageingUsers(int page, int limitPage, PagingDto pagingDto){
-//		List<User> users = userMapper.getAllUser();
-//		if (page <= 0) {
-//            page = 1;
-//        }
-//		PagingDto pageing = pagingUtil.paging(page, users.size(), limitPage);
-//		List<User> pageingUsers = users.stream()
-//				.skip(pageing.getOffset())
-//                .limit(pageing.getLimit())
-//                .map(new User(
-//    				users.getUserKey(),
-//					users.getEmail(),
-//					users.getPwWrong(),
-//    				users.getNickName(),
-//    				users.getGender(),
-//    				users.getBirthday(),
-//                    users.getState(),
-//                    users.getCreatedAt(),
-//                    users.getUpdatedAt()
-//                ))
-//                .collect(Collectors.toList());
-//		return users;
-//	}
-	
-//	public List<Report> asdf(){
-//		
-//	}
-	
     public List<Inquiry> selectInquiry() {
     	// 재원이 형이 작성한 inquiryRepository(JPA) 문법에 따라 .findAll()을 호출
     	return inquiryRepository.findAll();
@@ -127,14 +104,6 @@ public class AdminService {
     public List<Report> selectReport(){
     	return reportRepository.findAll();
     }
-    
-    /** 
-     * TODO : 
-     * 먼저 데이터 찾은다음에 있으면 전환 없으면 생성으로 하면 되려나? // 
-     * 로그 만들어야됨 / 로그 테이블 , JPA 엔티티는 만들었음
-     * 로그 다함 이제 페이징 처리 하고 다른걸로 넘어가면될듯 신고기능을 빨리 받아야지 연결할수있음.
-     **/
-    
     // 유저 밴하는 기능
     public void banndUser(Map<String,String> userData) {
     	// JPA 연결되어있는 리파지토리에서 JPA 문법을 이용해 매핑처리해둔 findByUserKey를 호출후 찾은 경우
@@ -151,8 +120,9 @@ public class AdminService {
     	// .get("adminName", String.class)
     	// 재원이형 여기서 알람리파지토리.save 하면됨!!!
     	// 비어있는경우 insert문 작동
+    	
     	for(Report reports :report) {
-    		// 이게 신고게시글 신고한놈의 User.UserKey 부분
+		// 이게 신고게시글 신고한놈의 User.UserKey 부분
 //    		System.out.println(reports.getUser().getUserKey());
     		reports.setState("process");
     		reportRepository.save(reports);
@@ -240,7 +210,6 @@ public class AdminService {
 			String title = "임시";
 			// 어드민 키 아직 못받아와서 하드코딩 했음
 			InquiryResponse inquiryResponse = new InquiryResponse();
-			System.out.println(responseText);
 			inquiryResponse.setInquiryKey(inquiryKey);
 			inquiryResponse.setAdminKey(adminKey);
 			inquiryResponse.setTitle(title);
