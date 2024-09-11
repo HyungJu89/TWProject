@@ -1,49 +1,41 @@
-import React, {  useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
-import styles from './style/AdminMain.module.css';
-import AdminPaging from './AdminPaging.js';
-import serviceLogo from '../icon/img/service-Illustration.png';
-import reply from '../icon/img/reply-ing.png';
-import btnLeft from '../icon/btn/btn-left.png';
-import btnRight from '../icon/btn/btn-right.png';
-import inquireIcon from '../icon/32px/inquire.png';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getCookie } from '../cookies/Cookies.js';
+import search from '../icon/24px/search.png';
 import addIcon from '../icon/40px/add.png';
-import AlarmModal from '../modal/AlarmModal.js';
-import closeModalIcon from '../icon/btn/btn-image-Close.png';
-import closeModalIconHover from '../icon/btn/btn-image-Close-a.png';
 import leftIcon from '../icon/40px/chevron-left-w.png';
 import rightIcon from '../icon/40px/chevron-right-w.png';
 import removeIcon from '../icon/btn/bnt_img_x.png';
-import { getCookie } from '../cookies/Cookies.js';
+import closeModalIconHover from '../icon/btn/btn-image-Close-a.png';
+import closeModalIcon from '../icon/btn/btn-image-Close.png';
+import reply from '../icon/img/reply-ing.png';
+import serviceLogo from '../icon/img/service-Illustration.png';
+import AlarmModal from '../modal/AlarmModal.js';
+import AdminPaging from './AdminPaging.js';
+import styles from './style/AdminMain.module.css';
 
 function AdminMain() {
     const [tab, setTab] = useState(0);
     const userKey = useSelector((state) => state.session.userKey); // Redux에서 userKey 가져오기
-    const [sanctions, setSanctions] = useState([]); // 제재 내역
-    // const userState = useSelector((state) => state.userState); // 로그인한 유저 정보??
     const [inquiries, setInquiries] = useState([]); // 문의 내역
     const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
-    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-    const [totalPages, setTotalPages] = useState(1); // 전체 페이지 수
     const [dropdownOpen, setDropdownOpen] = useState(false); // 문의 종류 드롭다운
-    const [dropdownOpen2, setDropdownOpen2] = useState(false); // 문의 종류 드롭다운
+    const [dropdownOpen2, setDropdownOpen2] = useState(false); // 문의 종류 드롭다운2
+    const [dropdownOpen3, setDropdownOpen3] = useState(false); // 검색 종류 드롭다운
     const [selectedOption, setSelectedOption] = useState("선택하세요"); // 문의 종류 최초 상태
     const [selectedOption2, setSelectedOption2] = useState("선택하세요"); // 문의 종류 최초 상태
+    const [selectedOption3, setSelectedOption3] = useState("닉네임"); // 문의 종류 최초 상태
     const [faqContent, setFaqContent] = useState(null); // 자주 묻는 질문 내용
     const [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
-    const [nickName, setNickName] = useState(null);
-    // 문의 내용이 전부 있는지
-    const [inputComplete, setInputComplete] = useState(false);
-    // 알림 모달
-    const [modalOpen, setModalOpen] = useState(false);
+    const [searchUserInput,setSearchUserInput] = useState(''); // 유저 검색
+    const [inputComplete, setInputComplete] = useState(false); // 문의 내용이 전부 있는지
+    const [modalOpen, setModalOpen] = useState(false);  // 알림 모달
     const [modalContent, setModalContent] = useState('');
-    // 이미지 모달
-    const [imageModalOpen, setImageModalOpen] = useState(false);
+    const [imageModalOpen, setImageModalOpen] = useState(false);  // 이미지 모달
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [imageList, setImageList] = useState([]);
     const [closeButtonHovered, setCloseButtonHovered] = useState(false);
-    const cookieCheck = getCookie('frontCookie');
     const [users, setUsers] = useState([]);
     const [usersCopy, setUsersCopy] = useState([]);
     const [moreBtnOption,setMoreBtnOption] = useState(false);
@@ -52,10 +44,27 @@ function AdminMain() {
     const [update,setUpdate] = useState(false);
     const [report,setReport] = useState([]);
     const [currentItems, setCurrentItems] = useState([]);
-
+    const cookieCheck = getCookie('frontCookie');
+    
     const handleItemsChange = (items) => {
         setCurrentItems(items);
     };
+
+    const handleEnter = (e) => {
+        if (e.key === "Enter" || e === "enter") {
+            switch (selectedOption3) {
+                case "닉네임":
+                    setUsers(usersCopy.filter(userData => userData.nickName.includes(searchUserInput)));
+                    break;
+                case "이메일":
+                    setUsers(usersCopy.filter(userData => userData.email.includes(searchUserInput)));
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     useEffect(() => {
         if(cookieCheck){
             axios.get('/admin/report')
@@ -233,36 +242,8 @@ function AdminMain() {
             .catch(error => {
                 console.log("문의 내역 가져오기 실패: " + error.message);
             });
-        } else if (tab === 3) {
-            // 제재내역
-            axios.post('/sanction/list', null, {
-                params: { userKey, page: currentPage, limitPage: 10 }
-            })
-            .then(response => {
-                if (response.data.result === "success") {
-                    setSanctions(response.data.sanctionList); // 제재 내역 불러와서 저장
-                    setTotalPages(response.data.paging.pageCount); // 총 페이지 수 설정
-                } else {
-                    setSanctions([]);
-                }
-            })
-            .catch(error => {
-                console.log("제재내역 불러오기 오류: " + error.message);
-            });
-
-            axios.post('/sanction/user', null, {params: {userKey: userKey}})
-            .then(response => {
-                if(response.data.result === "success") {
-                    setNickName(response.data.nickName);
-                } else {
-                    setNickName("알수없음");
-                }
-            })
-            .catch(error => {
-                console.log("닉네임 불러오기 오류: " + error.message);
-            })
-        }
-    }, [tab, currentPage, userKey, update]);
+        } 
+    }, [tab, userKey, update]);
 
     // 문의 하기 내용
     const [files, setFiles] = useState([]); // 문의 넣을 때 이미지
@@ -271,17 +252,23 @@ function AdminMain() {
         category: '', // 문의 종류
         details: '' // 문의 내용
     });
-    // 문의 종류 선택
+
     const optionSelect = (option) => {
         setSelectedOption(option);
         setForm({ ...form, category: option });
         setDropdownOpen(false);
     };
-    // 문의 종류 선택
+
     const optionSelect2 = (option) => {
         setSelectedOption2(option);
         setForm({ ...form, category: option });
         setDropdownOpen2(false);
+    };
+
+    const optionSelect3 = (option) => {
+        setSelectedOption3(option);
+        setForm({ ...form, category: option });
+        setDropdownOpen3(false);
     };
 
     const handleInputChange = (e) => {
@@ -289,17 +276,7 @@ function AdminMain() {
         setForm({ ...form, [name]: value });
     };
 
-    // 제목, 내용, 종류에 전부 입력 했을 시 문의넣기 버튼 활성화
-    // useEffect(() => {
-    //     if (form.title && form.category && form.details ) {
-    //         setInputComplete(true);
-    //     } else {
-    //         setInputComplete(false);
-    //     }
-    // }, [form]);
-
     useEffect(() => {
-        console.log(inputComplete);
         if (form.responseText) {
             setInputComplete(true);
         } else {
@@ -375,7 +352,6 @@ function AdminMain() {
     };
 
     const submitResponse = (event,inquiryKey) => {
-        console.log(inquiryKey);
         event.preventDefault();
         if (!inputComplete) return;
         // 위에서 설정한 데이터들을 하나에 저장
@@ -452,7 +428,7 @@ function AdminMain() {
         if (categoryReports.length === 0) return null;
         return (
             <div className={styles.faqContentText}>
-                {displayName} 콘텐츠입니다 {categoryReports[0].reportUser.email} 등 {categoryReports.length}명 ( {categoryReports.length} )
+                {displayName} 콘텐츠입니다 {categoryReports[0].user.email} 등 {categoryReports.length}명 ( {categoryReports.length} )
             </div>
         );
     };
@@ -521,7 +497,9 @@ function AdminMain() {
                                                 users.state !== "activate" && banData?.state === "activate" ?
                                                     <div className={styles.userOption}>
                                                         {/* 신고 테이블 조회해서 신고 수리내역 표기 */}
-                                                        <div className={styles.userOptionReport}>신고접수일 : 2024-08-17</div>
+                                                        <div className={styles.userOptionReport}>신고접수일 : {reportData.length !== 0 ? <>{ reportData[reportData?.length-1]?.createdAt.substr(0,10) }</> : <>-</>}</div>
+                                                        {/* 신고 내역같은것도 여기다가 추가하면 좋을꺼같음 */}
+
                                                         {/* 여기에 제재 했을경우 3항 연산자 하면될꺼같고 */}
                                                         {/* banned 테이블 조회해서 날짜 표기 */}
                                                         <div className={styles.userOptionBlock}>제재일 : {banData?.reasonDate.substr(0,10)} ~ {banData?.endDate.substr(0,10)} / {banData?.date}일</div>
@@ -595,78 +573,6 @@ function AdminMain() {
             case 1:
                 return (
                     <div className={styles.inqContainer}>
-                        <div className={styles.inyHeader}>
-                            <img src={inquireIcon} className={styles.inqIcon} alt="문의하기 아이콘" />
-                            <span>문의하기</span>
-                        </div>
-                        <div className={styles.inqDivider}></div>
-                        <div className={styles.inqForm}>
-                            <div className={styles.inqField}>
-                                <label>문의 종류</label>
-                                <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
-                                    {selectedOption}
-                                </div>
-                                {/* 문의 종류 선택 드롭다운 */}
-                                {dropdownOpen && (
-                                    <div className={styles.dropdown}>
-                                        {["시스템 관련", "본인인증", "오류/버그", "신고", "제안", "도용", "보안", "기타"].map((option, index) => (
-                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
-                                                {option}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                            {/* 내용 입력 칸 */}
-                            <div className={styles.inqField}>
-                                <label>제목: </label>
-                                <input 
-                                    type="text" 
-                                    name="title"
-                                    value={form.title} 
-                                    onChange={handleInputChange} 
-                                    placeholder="문의 제목을 입력하세요." 
-                                    className={styles.inqInput} 
-                                />
-                            </div>
-                            <div className={styles.inqField}>
-                                <textarea 
-                                    name="details"
-                                    value={form.details} 
-                                    onChange={handleInputChange}
-                                    className={styles.inqTextarea} 
-                                    placeholder="문의 내용을 입력하세요."
-                                ></textarea>
-                            </div>
-                            <div className={styles.inqField}>
-                                <div className={styles.imageBox}>
-                                    {/* 이미지 미리 보기 */}
-                                    {files.map((fileObj, index) => (
-                                        <div key={index} className={styles.uploadedFile}>
-                                            <img src={fileObj.preview} alt={fileObj.file.name} style={{maxWidth: "100px", maxHeight: "100px"}} />
-                                        </div>
-                                    ))}
-                                    {/* 이미지가 5개보다 적을 때 추가 버튼 보임  */}
-                                    {/* 이미지 넣을 때마다 한칸씩 오른쪽으로 */}
-                                    {files.length < 5 && (
-                                        <div className={styles.fileUpload} onClick={() => document.getElementById('file-upload').click()}>
-                                            <img src={addIcon} className={styles.uploadIcon} alt="파일 추가 버튼 아이콘" />
-                                            <input id="file-upload" type="file" accept="image/*" onChange={fileChange}
-                                                multiple style={{ display: 'none' }}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className={styles.submitButtonContainer}>
-                                {/* 문의 내용이 전부 입력이 안 되었을 때 버튼 비 활성화 */}
-                                <button onClick={submit} 
-                                    className={inputComplete ? styles.activeSubmitButton : styles.disabledSubmitButton}
-                                    disabled={!inputComplete}>
-                                    문의 넣기
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 );
             //문의 내역
@@ -810,42 +716,7 @@ function AdminMain() {
             // 제재 내역
             case 3:
                 return (
-                    <div className={styles.sanctionContainer}>
-                        <div className={styles.sanctionList}>
-                            {/* 내역이 없을 시 */}
-                            {sanctions.length === 0 ? (
-                                <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
-                            ) : (
-                                // 제재 내역이 있을 시
-                                sanctions.map((sanction, index) => (
-                                    <div key={index} className={styles.sanctionItem}>
-                                        <img src={report} className={styles.sanctionIcon} alt="제재 아이콘"/>
-                                        <div className={styles.sanctionDetails}>
-                                            <div className={styles.sanctionTitle}>{nickName}님은 계정 정지 {sanction.date}일을 받았어요.</div>
-                                            <div className={styles.sanctionContent}>
-                                                <div className={styles.sanctionSubtitle}>신고내용: {sanction.reason}</div>
-                                                <div className={styles.sanctionDate}>~ {sanction.endDate} 까지</div>
-                                            </div>
-                                        </div>
-                                        {index < sanctions.length - 1 && <div className={styles.sanctionDivider}></div>}
-                                    </div>
-                                ))
-                            )}
-                        </div>
-
-                            
-                        {totalPages > 1 && (
-                            <div className={styles.pagination}>
-                                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className={styles.pagePreButton}>
-                                    <img src={btnLeft} alt="이전 페이지" />
-                                </button>
-                                {/* 현재 페이지 / 전체 페이지 */}
-                                <div className={styles.pageInfo}>{currentPage} / {totalPages}</div>
-                                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className={styles.pageNextButton}>
-                                    <img src={btnRight} alt="다음 페이지" />
-                                </button>
-                            </div>
-                        )}
+                    <div className={styles.inqContainer}>
                     </div>
                 );
             case 4:
@@ -854,30 +725,28 @@ function AdminMain() {
                         <div className={styles.sanctionList}>
                             {/* 내역이 없을 시 */}
                             {
-                            report.length === 0 ? (
-                                <div className={styles.noHistory}>제재 받은 내역이 없습니다.</div>
-                            ) : (
-                                // 제재 내역이 있을 시
-                                report.map((a,i)=>{
-                                    return(
-                                        <div>
-                                                {
-                                                    report[i].state === "unprocessed" ?
-                                                        <div>
-                                                            <br></br>
-                                                            {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
-                                                            <div>신고내용 : {report[i].content.substr(0,80)}</div>
-                                                            <div>카테고리 : {report[i].category}</div>
-                                                            <div>신고자 : {report[i].reportUser.nickName}</div>
-                                                            <div>신고받은 닉네임 :{report[i].user.nickName}</div>
-                                                            <br></br>
-                                                        </div>
-                                                        :null
-                                                }
-                                        </div>
-                                    )
-                                })    
-                            )
+                                report.length === 0 ? (
+                                    <div className={styles.noHistory}>신고 받은 내역이 없습니다.</div>
+                                ) : (
+                                    // 제재 내역이 있을 시
+                                    report.map((a,i)=>{
+                                        return(
+                                            <div className={styles.reportItem} key={i}>
+                                                    {
+                                                        report[i].state === "unprocessed" ?
+                                                            <div className={styles.reportLine}>
+                                                                {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
+                                                                <div className={styles.reportContent}>신고내용 : {report[i].content.substr(0,80)}</div>
+                                                                <div className={styles.reportCategory}>카테고리 : {report[i].category}</div>
+                                                                <div className={styles.reportReportUser}>신고받은사람 : {report[i].reportUser.nickName} ( {report[i].reportUser.email} ) </div>
+                                                                <div className={styles.reportUser}>신고자 :{report[i].user.nickName} ( {report[i].user.email} ) </div>
+                                                            </div>
+                                                            :null
+                                                    }
+                                            </div>
+                                        )
+                                    })    
+                                )
                             }
                         </div>
                     </div>
@@ -887,7 +756,7 @@ function AdminMain() {
         }
     };
 
-    // 고객센터 전체 화면
+    // 어드민 전체 화면
     return (
         <div className={styles.pageContainer}>
             <div className={styles.serviceBanner}>
@@ -908,7 +777,6 @@ function AdminMain() {
                     <div className={styles.userStatedeactivateBtn} onClick={()=>{sortRunReport()}}>신고접수</div>
                     <div className={styles.userStatedelingBtn} onClick={()=>{sortRun("secession")}}>비활성화</div>
                     {/* 검색기능 만들면 여기다가 추가 하면될듯 */}
-                    {/* <input></input> */}
                 </div>
                 : null
             }
@@ -936,15 +804,94 @@ function AdminMain() {
                             onClick={() => setTab(4)}>
                             신고 내역
                         </div>
-                        {/* 여기에다가 정렬기능 만들면 좋을듯? */}
                     </div>
                 </div>
                 <div className={styles.serviceTabContent}>
                     {renderTabContent()}
                 </div>
+
+                {/* 유저탭일때 보여줄 내용 */}
                 {
-                    tab !== 1 ?
-                    <AdminPaging users={users} onItemsChange={handleItemsChange}/>
+                    tab === 0 ?
+                    <div>
+                        <AdminPaging users={users} onItemsChange={handleItemsChange}/>
+                        <div className={styles.userSearch}>
+                            <div className={styles.userSearchList}>유저검색</div>
+                            <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
+                                {selectedOption3}
+                            </div>
+                            {
+                                dropdownOpen3 &&
+                                    <div className={styles.dropdown3}>
+                                        {["닉네임", "이메일"].map((option, index) => (
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
+                                                {option}
+                                            </div>
+                                        ))}
+                                    </div>
+                            }
+                            <div className={styles.inputDiv}>
+                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchUserInput(e.target.value)} onKeyDown={handleEnter}/>
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{handleEnter("enter")}}/>
+                            </div>
+                        </div>
+                    </div>
+                    : null
+                }
+                {/* 질문 답변 탭일떄 보여줄 내용 */}
+                {/* 페이징 처리 해야됨 */}
+                {
+                    tab === 2 ?
+                    <div>
+                        <div className={styles.userSearch}>
+                            <div className={styles.userSearchList}>질문답변</div>
+                            <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
+                                {selectedOption3}
+                            </div>
+                            {
+                                dropdownOpen3 &&
+                                    <div className={styles.dropdown3}>
+                                        {["닉네임", "이메일"].map((option, index) => (
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
+                                                {option}
+                                            </div>
+                                        ))}
+                                    </div>
+                            }
+                            <div className={styles.inputDiv}>
+                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={()=>{}} />
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
+                            </div>
+                        </div>
+                    </div>
+                    : null
+                }
+                {/* 신고 내역 탭일때 보여줄 내용 */}
+                {/* 페이징 처리 해야됨 */}
+                {
+                    tab === 4 ?
+                    <div>
+                        <div className={styles.userSearch}>
+                            <div className={styles.userSearchList}>신고내역</div>
+                            <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
+                                {selectedOption3}
+                            </div>
+                            {
+                                dropdownOpen3 &&
+                                    <div className={styles.dropdown3}>
+                                        {["닉네임", "이메일"].map((option, index) => (
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
+                                                {option}
+                                            </div>
+                                        ))}
+                                    </div>
+                            }
+                            <div className={styles.inputDiv}>
+                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={()=>{}} />
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
+                            </div>
+                        </div>
+                    </div>
                     :null
                 }
 

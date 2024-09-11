@@ -63,7 +63,7 @@ public class CommentService {
 		AlarmDto alarmDto = alarmMapper.getPostUserKey(createDto.getPostKey());
 		
 		int userKey = alarmMapper.getUserKey(createDto.getSessionId());
-		
+		alarmDto.setUserKey(userKey);
 		if(alarmDto.getPostUserKey() != userKey) {
 		alarmMapper.postAlarm(alarmDto);
 		}
