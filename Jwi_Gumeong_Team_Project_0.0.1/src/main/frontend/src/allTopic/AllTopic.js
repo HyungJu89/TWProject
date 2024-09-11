@@ -98,12 +98,15 @@ function AllTopic() {
         switch (topic) {
             case 0:
                 searchRecommendedPost()
+                setPostPage(1)
                 break;
             case 1:
                 searchFavoritesPost()
+                setPostPage(1)
                 break;
             case 2:
                 searchAllPost()
+                setPostPage(1)
                 break;
             default:
 
