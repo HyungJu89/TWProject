@@ -34,6 +34,7 @@ function PublicBoard({ postInfo }) {
     const closeModal = () => {
         setModalOpen(false);
         navigate('/signIn');
+        window.scrollTo(0, 0);
     };
 
     let state = useSelector((state) => { return state });
