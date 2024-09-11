@@ -10,7 +10,7 @@ ALTER TABLE `report`
 MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
 select *from report;
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('1','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
+values ('3','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
 
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
 values ('2','8','post','4','욕설/혐오','왜 처리 안함 ㅡㅡ','unprocessed',now(),now());
@@ -148,6 +148,7 @@ CREATE TABLE `comment` (
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE,
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
+
 CREATE TABLE `like` (
 	`likeKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -168,6 +169,9 @@ CREATE TABLE `manager` (
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE,
     FOREIGN KEY (`channelKey`) REFERENCES `channel`(`channelKey`) ON DELETE CASCADE
 );
+
+select * from report;
+select * from user;
 
 CREATE TABLE `report` (
 	`reportKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '신고키',
