@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jwi.work.alarm.mapper.AlarmMapper">
+
 <select id="getUserKey" parameterType="String" resultType="int">
 	SELECT userKey FROM userConnection WHERE sessionId = #{sessionId}
 </select>
@@ -9,17 +10,17 @@
 <!-- 게시글에 알람보내기 -->
 <insert id="postAlarm" parameterType="com.jwi.work.alarm.dto.AlarmDto">
  	INSERT INTO 
- 		alarm(userKey,referenceType,referenceKey) value (#{postUserKey},'post',#{postPostKey})
+ 		alarm(userKey,referenceType,referenceKey,referenceUserKey) value (#{postUserKey},'post',#{postPostKey},#{userKey})
 </insert>
 
 <insert id="commentAlarm" parameterType="com.jwi.work.alarm.dto.AlarmDto">
  	INSERT INTO 
- 		alarm(userKey,referenceType,referenceKey) value (#{commentUserKey},'comment',#{commentCommentKey})
+ 		alarm(userKey,referenceType,referenceKey,referenceUserKey) value (#{commentUserKey},'comment',#{commentCommentKey},#{userKey})
 </insert>
 
 <insert id="replyAlarm" parameterType="com.jwi.work.alarm.dto.AlarmDto">
- 	INSERT INTO 
- 		alarm(userKey,referenceType,referenceKey) value (#{replyUserKey},'reply',#{replyReplyKey})
+ 	INSERT INTO
+ 		alarm(userKey,referenceType,referenceKey,referenceUserKey) value (#{replyUserKey},'reply',#{replyReplyKey},#{userKey})
 </insert>
 
 
@@ -70,7 +71,15 @@
 </select>
 
 
-
-
-
+	<update id="readUpdateAlarm" parameterType="int">
+		UPDATE `alarm` SET `read` = 1 WHERE `alarmKey` = #{notificationId}
+	</update>
+	
+	<update id="readAllUpdateAlarm" parameterType="int">
+		UPDATE `alarm` SET `read` = 1 WHERE `userKey` = #{userKey}
+ 	</update>
+ 	
+ 	<delete id="deleteAllAlarm" parameterType="int">
+ 		DELETE FROM `alarm` WHERE `userKey` = #{userKey}
+ 	</delete>
 </mapper>

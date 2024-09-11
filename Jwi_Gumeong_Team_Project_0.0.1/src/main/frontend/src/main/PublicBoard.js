@@ -34,6 +34,7 @@ function PublicBoard({ postInfo }) {
     const closeModal = () => {
         setModalOpen(false);
         navigate('/signIn');
+        window.scrollTo(0, 0);
     };
 
     let state = useSelector((state) => { return state });
@@ -83,6 +84,12 @@ function PublicBoard({ postInfo }) {
 
     const likeOnClick = ()=>{
         const newHeart = !heart;
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+                if(!sessionIdJson){
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
+        }
         setLikeCount((state) => newHeart ? state+1 : state-1 )
         setHeart(newHeart)
         heartDebounce(newHeart);

@@ -66,11 +66,13 @@ function ReportModal() {
             // 서버로 데이터 전달
             const {data} = await axios.post(`/report/submit`,repotDto);
             // 성공적으로 업로드된 경우 추가적인 처리
+            console.log(data)
             if(!data.success){
                 // 버튼 하나짜리 알람창 필요합니다!
                 return 
             }
-            offModal()
+            dispatch(offModal())
+            // 신고가 완료되었습니다 모달 띄우기
         } catch (error) {
             console.error('업로드 실패:', error);
         }

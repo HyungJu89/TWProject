@@ -27,11 +27,12 @@ public class ReplyService {
 		
 		
 		int userKey = alarmMapper.getUserKey(createDto.getSessionId());
-		
 		if(createDto.getReplyreplyKey() == 0) {
 			
 		AlarmDto alarmDto = alarmMapper.getCommentUserKey(createDto.getCommentKey());
-
+		
+		alarmDto.setUserKey(userKey);
+		
 			if(userKey != alarmDto.getPostUserKey()) {
 				alarmMapper.postAlarm(alarmDto);
 			}
@@ -45,8 +46,8 @@ public class ReplyService {
 		} else {
 
 		AlarmDto alarmDto = alarmMapper.getReplyUserKey(createDto.getReplyreplyKey());
+		alarmDto.setUserKey(userKey);
 		
-
 		if(userKey != alarmDto.getPostUserKey()) {
 			alarmMapper.postAlarm(alarmDto);
 		}

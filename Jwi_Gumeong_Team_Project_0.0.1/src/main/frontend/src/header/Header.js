@@ -38,15 +38,9 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
     const [searchInput,setSearchInput] = useState('');
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
     let [adminLogin,setAdminLogin] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState('');
 
     let navigate = useNavigate();
     let location = useLocation();
-
-    const closeModal = () => {
-        setModalOpen(false);
-    };
 
     useEffect(() => {
         {/* 최근검색어 미완성 */ }
@@ -116,6 +110,12 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     const [activeButton, setActiveButton] = useState(1); /* 현재 활성화된 버튼 상태 */
     const [showDropdown, setShowDropdown] = useState(false); /* more 아이콘 클릭 시 드롭다운 */
     const [notifications, setNotifications] = useState([]); // 알림 리스트
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
     // 알림 데이터 AXIOS
     useEffect(() => {
@@ -212,10 +212,14 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     // 알림 읽음
     const onRead = async (notificationId) => {
         try {
-            await axios.post('/alarm/read', { notificationId });
-            setNotifications(notifications.map(notification =>
-                notification.alarmKey === notificationId ? { ...notification, read: true } : notification
-            ));
+            const response = await axios.post('/alarm/read', null, { params: { notificationId }});
+            if (response.data.result === 'success') {
+                setNotifications(notifications.map(notification =>
+                    notification.alarmKey === notificationId ? { ...notification, read: true } : notification));
+            } else {
+                setModalContent('알람 읽기에 실패 하였습니다.\n잠시 후 다시 시도해 주세요 ');
+                setModalOpen(true);
+            }
         } catch (error) {
             console.log("알람 1개 읽음 에러: " + error.message);
         }
@@ -224,7 +228,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     // 모두 읽음
     const onAllRead = async () => {
         try {
-            await axios.post('/alarm/readAll', { userKey });
+            await axios.post('/alarm/read/all', null, { params: { userKey }});
             setNotifications(notifications.map(notification => ({ ...notification, read: true })));
         } catch (error) {
             console.log("모두 읽음 에러: " + error.message);
@@ -234,7 +238,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     // 모두 지우기
     const onAllDelete = async () => {
         try {
-            await axios.post('/alarm/deleteAll', { userKey });
+            await axios.post('/alarm/delete/all', null, { params: { userKey }});
             setNotifications([]);
         } catch (error) {
             console.log("전체 삭제 에러: " + error.message);
@@ -301,17 +305,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     subContent = `고객센터에서 확인 가능합니다.`;
                     break;
                 case 'system':
-                    if (notification.reportedUserKey === userKey) {
-                        // 내가 제재를 당한 경우
-                        icon = report;
-                        content = `${notification.nickname}님은 정지 ${notification.date}일을 받았어요.`;
-                        subContent = `제재내용: '${notification.reason}'`;
-                    } else {
-                        // 내가 신고한 상대가 제재를 받은 경우
-                        icon = formulation;
-                        content = `당신의 선함으로 '${notification.nickname}'님이 제재를 받았어요!`;
-                        subContent = `신고내용: '${notification.content}' 대상자가 ${notification.date}일 정지를 받았습니다.`;
-                    }
+                    icon = notification.reportedUserKey === userKey ? report : formulation;
                     break;
                 default:
                     break;
@@ -320,7 +314,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
             return (
                 <div className={styles.notificationBox} key={index}>
                     <div className={styles.notificationItem}>
-                    {!notification.read && <div className={styles.notificationDot}></div>} {/* 안 읽은 알림 */}
+                    <div className={`${styles.notificationDot} ${notification.read ? styles.noDot : ''}`}></div> {/* 안 읽은 알림 */}
                         <img className={styles.iconImg} src={icon} alt="icon" />  {/* 프로필 or 이미지 */}
                         <div className={styles.notificationItemContent} onClick={() => onRead(notification.alarmKey)}> {/* 내용 div onClick는 읽음처리 */}
                             <span className={styles.applyContent}>{content}</span> {/* 게시글 제목 */}
@@ -376,6 +370,9 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
             <div className={styles.notificationContent}>
                 {renderContent()}
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     );
 }

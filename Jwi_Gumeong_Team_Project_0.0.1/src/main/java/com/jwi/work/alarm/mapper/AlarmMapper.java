@@ -20,5 +20,11 @@ public interface AlarmMapper {
 
 	public AlarmDto getReplyUserKey(@Param("replyKey") int replyKey);
 	
+	public int readUpdateAlarm(@Param("notificationId") int notificationId);
+	
+	public int readAllUpdateAlarm(@Param("userKey") int userKey);
+	
+	public int deleteAllAlarm(@Param("userKey") int userKey);
+	
 	
 }
