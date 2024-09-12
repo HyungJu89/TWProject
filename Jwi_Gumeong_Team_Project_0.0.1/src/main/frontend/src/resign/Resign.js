@@ -21,10 +21,10 @@ function Resign({ onLogout }) {
 
     useEffect(() => {
         // 유저 키가 없으면 리턴
-        // if (!userKey) {
-        //     navigate('/signin'); // userKey가 없으면 로그인 페이지로 돌아가랏!!
-        //     return;
-        // }
+        if (!userKey) {
+            navigate('/signin'); // userKey가 없으면 로그인 페이지로 돌아가랏!!
+            return;
+        }
         axios.post('/user/email', null, { params: { userKey: userKey } })
         .then(response => {
             if (response.data.result === "success") {

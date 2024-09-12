@@ -1,6 +1,7 @@
 package com.jwi.work.alarm.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,9 @@ import com.jwi.work.alarm.repository.InquiryAlarmRepository;
 import com.jwi.work.alarm.repository.PostRepository;
 import com.jwi.work.alarm.repository.ReplyRepository;
 import com.jwi.work.alarm.repository.ReportRepository;
+import com.jwi.work.user.entity.UserEntity;
 import com.jwi.work.user.mapper.UserMapper;
+import com.jwi.work.user.repository.UserRepository;
 
 @Service
 public class AlarmService {
@@ -39,6 +42,8 @@ public class AlarmService {
     private BannedRepository bannedRepository;
 	@Autowired
 	private UserMapper userMapper;
+	@Autowired
+	private UserRepository userRepository;
 
     // TODO 내가 제재 당한 알림 추가
     
@@ -49,11 +54,17 @@ public class AlarmService {
             switch (alarm.getReferenceType()) {
 	            case "post":
 	            	postRepository.findById(alarm.getReferenceKey()).ifPresent(post -> {
+	            		Optional<UserEntity> commenterOpt = userRepository.findById(alarm.getReferenceUserKey());
 	                    // 게시글 작성자의 정보 가져오기
 	                    alarm.setContent(post.getContent());
 	                    alarm.setChannelImageUrl(post.getChannel().getImageUrl());
-	                    alarm.setNickname(post.getUser().getNickName());
+	                    if (commenterOpt.isPresent()) {
+	                        UserEntity commenter = commenterOpt.get();
+	                        alarm.setNickname(commenter.getNickName());  // 댓글을 단 사용자의 닉네임
+	                    }
 	                });
+	            	break;
+	            case "comment":
 	            	break;
 	            case "like":
 	                // 좋아요 알림
@@ -75,13 +86,13 @@ public class AlarmService {
 	            case "system":
 	            	// 신고 처리 결과 알림
                     reportRepository.findById(alarm.getReferenceKey()).ifPresent(report -> {
-                        UserAlarmEntity reportUser = report.getReportUser();  // 신고당한 유저(B)
-                        UserAlarmEntity reportingUser = report.getUser();  // 신고한 유저(A)
+                        UserAlarmEntity reportUser = report.getReportUser();  // 신고당한 유저
+                        UserAlarmEntity reportingUser = report.getUser();  // 신고한 유저
                         Banned banned = bannedRepository.findByUser(reportUser);
 
                         if (banned != null) {
                             // 신고 처리 후 제재를 받은 유저의 정보
-                            alarm.setNickname(reportUser.getNickName()); // 제재 받은 유저 (B)
+                            alarm.setNickname(reportUser.getNickName()); // 제재 받은 유저
                             alarm.setDate(banned.getDate()); // 제재 기간
                             alarm.setReason(banned.getReason()); // 제재 이유
                             // 신고자 (A)에게 알림을 보냄

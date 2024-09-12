@@ -288,11 +288,12 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
 
             switch (notification.referenceType) {
                 case 'post':
-                case 'comment':
                     icon = notification.channelImageUrl || formulation;
                     // 글자수가 20 넘어가면 뒷부분은 ... 으로 변경 css에서 처리했음
                     content = notification.content;
                     subContent = `${notification.nickname}님이 댓글을 달았어요.`;
+                    break;
+                case 'comment':
                     break;
                 case 'like':
                     icon = notification.channelImageUrl || n_heart_activation;

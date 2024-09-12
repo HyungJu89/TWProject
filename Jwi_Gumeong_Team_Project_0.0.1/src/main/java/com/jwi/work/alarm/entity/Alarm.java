@@ -23,7 +23,7 @@ public class Alarm {
 	private int alarmKey;
 	@Column(name = "userKey", nullable = false)
 	private int userKey;
-	@Column(name = "refernceUserKey", nullable = false)
+	@Column(name = "referenceUserKey", nullable = true)
 	private int referenceUserKey;
 	@Column(name = "referenceType", nullable = false, length = 50)
 	private String referenceType;
@@ -35,6 +35,7 @@ public class Alarm {
     private LocalDateTime createdAt;  
     @Column(name = "updatedAt", nullable = false)
     private LocalDateTime updatedAt;
+    
     @Transient
     private String subContent; 
     @Transient
