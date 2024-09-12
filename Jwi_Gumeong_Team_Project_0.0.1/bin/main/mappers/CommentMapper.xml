@@ -122,5 +122,10 @@
 		sessionId = #{sessionId}
 </insert>
 
+	<update id="commentDeleteByUser" parameterType="com.jwi.work.channel.dto.bodyDto.DelectByUser">
+		UPDATE comment SET state = 'delete' , comment = '삭제된 댓글입니다.' WHERE commentKey = #{referenceKey} AND userKey = (SELECT userKey FROM userConnection WHERE sessionId = #{sessionId})
+	</update>
+
+
 
 </mapper>
