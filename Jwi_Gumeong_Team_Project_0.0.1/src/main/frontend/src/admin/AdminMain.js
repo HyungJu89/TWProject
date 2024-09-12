@@ -19,6 +19,7 @@ function AdminMain() {
     const [tab, setTab] = useState(0);
     const userKey = useSelector((state) => state.session.userKey); // Redux에서 userKey 가져오기
     const [inquiries, setInquiries] = useState([]); // 문의 내역
+    const [inquirieCopy, setInquiriesCopy] = useState([]); // 문의 내역 카피
     const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
     const [dropdownOpen, setDropdownOpen] = useState(false); // 문의 종류 드롭다운
     const [dropdownOpen2, setDropdownOpen2] = useState(false); // 문의 종류 드롭다운2
@@ -216,6 +217,7 @@ function AdminMain() {
             .then(response => {
                 if (response.data) {
                     setInquiries(response.data);
+                    setInquiriesCopy(response.data);
                     // 문의 답변
                     response.data.forEach(inquiry => {
                         axios.post('/inquiry/response', null, {
@@ -592,7 +594,12 @@ function AdminMain() {
                                     month: 'long', 
                                     day: 'numeric' 
                                 }).format(new Date(response.createdAt)) : '-'; // 날짜가 없으면 - 로 표시
-
+                                let userInData = usersCopy.find(data => parseInt(data.userKey) === inquiries[idx].userKey);
+                                // 검색기능 만들기 생각하고있는것
+                                // 내용 검색같은 경우엔 inquiries.filter 로 내용 넣어서 표기하면 될꺼같고 
+                                // 유저 이메일,닉네임 같은 경우엔 값을 받아와서 userKey만 뽑고 그걸 filter로 찾아야할듯?
+                                // 찾고 나서 inquiries << 여기에 데이터 변경하는거 꼭 필요할듯
+                                // 처리 완료된거랑 안된거랑 둘다 보이는거 나누는것도 좋을듯
                                 return (
                                     <div key={idx} className={styles.inquiryItem}>
                                         {/* 클릭한 내역 내용 오픈 */}
@@ -606,7 +613,8 @@ function AdminMain() {
                                                             <div className={styles.inquiryResponse}>답변완료</div>
                                                         )}
                                                     </div>
-                                                    <div className={styles.inquirySubtitle}>답변 받은 날짜: {formattedDate}</div>
+                                                    <div className={styles.inquirySubtitle}>유저이메일: {userInData.email} / 유저닉네임: {userInData.nickName}</div>
+                                                    <div className={styles.inquirySubtitle}>답변 날짜: {formattedDate}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -851,7 +859,7 @@ function AdminMain() {
                             {
                                 dropdownOpen3 &&
                                     <div className={styles.dropdown3}>
-                                        {["닉네임", "이메일"].map((option, index) => (
+                                        {["닉네임", "이메일", "제목"].map((option, index) => (
                                             <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
                                                 {option}
                                             </div>
