@@ -16,7 +16,7 @@ import { openImgUiModalFalse } from '../../slice/mainSlice';
 import { clearPost } from '../../slice/PostSlice.js';
 import AlarmModal from '../../modal/AlarmModal.js';
 
-function Comments({ postKey, setCommentCount }) {
+function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
     // 컴포넌트 로드용 함수
     const [commentLode, setCommentLode] = useState(true);
@@ -183,7 +183,7 @@ function Comments({ postKey, setCommentCount }) {
         if (commentFocus.current && commentNew) {
             commentFocus.current.scrollIntoView({
                 behavior: 'smooth', //부드럽게 움직이기
-                block: 'end'  // 중앙
+                block: 'center'  // 중앙
             });
             setCommentNew(false);
             commentFocus.current.focus();
@@ -218,9 +218,6 @@ function Comments({ postKey, setCommentCount }) {
             {comments.success &&
                 <>
                     {comments.info.comment.map((comment, index) => {
-                        console.log(index);
-                        console.log(comments.info.comment.length-1);
-                        console.log('----');
                         return (
                             <div key={comment.commentKey}>
                                 <CommentsList
@@ -235,6 +232,7 @@ function Comments({ postKey, setCommentCount }) {
                                     ref={index === comments.info.comment.length-1 ? commentFocus : null}
                                     setCommentStart={setCommentStart}
                                     commentStart={commentStart}
+                                    PublicBoardImgmodal={PublicBoardImgmodal ? PublicBoardImgmodal : null}
                                 />
                             </div>
                         );
