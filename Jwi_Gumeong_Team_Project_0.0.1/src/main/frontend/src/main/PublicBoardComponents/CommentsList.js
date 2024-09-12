@@ -43,7 +43,7 @@ const CommentsList = forwardRef(function CommentsList(
             setReplyNew(false);
             replyFocus.current.focus();
         }
-    }, [replyNew]);
+    }, [commentStart]);
     
     return (
         <>
@@ -78,9 +78,6 @@ const CommentsList = forwardRef(function CommentsList(
             {comment.replys[0].replyKey != 0 && (
                 <>
                     {comment.replys.map((reply, replyIndex) => {
-                        console.log(replyIndex);
-                        console.log(comment.replys.length-1);
-                        console.log('----');
                         return (
                             <div key={reply.replyKey}>
                                 <div className={styles.bigComments}>
@@ -105,7 +102,16 @@ const CommentsList = forwardRef(function CommentsList(
                                     </div>
                                 </div>
                                 {(replyInputState == 'reply' && replyInputIndex == reply.replyKey) &&
-                                    <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} onClear={onClear} setCommentStart={setCommentStart} commentStart={commentStart} />
+                                    <ReplyArea 
+                                        postKey={postKey} 
+                                        commentKey={comment.commentKey} 
+                                        replyKey={reply.replyKey} 
+                                        replyNickName={reply.nickName} 
+                                        setCommentLode={setCommentLode} 
+                                        onClear={onClear} 
+                                        setCommentStart={setCommentStart} 
+                                        commentStart={commentStart}
+                                        setReplyNew={setReplyNew} />
                                 }
                             </div>
                         )

@@ -51,7 +51,6 @@ function Comments({ postKey, setCommentCount }) {
     const commentFocus = useRef(null);
     const [commentStart, setCommentStart] = useState(0);
     const [commentNew, setCommentNew] = useState(false);
-    const [replyNew, setReplyNew] = useState(false);
 
     const [replyInputState, setReplyInputState] = useState('');
     const [replyInputIndex, setReplyInputIndex] = useState(0);
@@ -184,7 +183,7 @@ function Comments({ postKey, setCommentCount }) {
         if (commentFocus.current && commentNew) {
             commentFocus.current.scrollIntoView({
                 behavior: 'smooth', //부드럽게 움직이기
-                block: 'center'  // 중앙
+                block: 'end'  // 중앙
             });
             setCommentNew(false);
             commentFocus.current.focus();
@@ -219,9 +218,9 @@ function Comments({ postKey, setCommentCount }) {
             {comments.success &&
                 <>
                     {comments.info.comment.map((comment, index) => {
-                        // console.log(index);
-                        // console.log(comments.info.comment.length-1);
-                        // console.log('----');
+                        console.log(index);
+                        console.log(comments.info.comment.length-1);
+                        console.log('----');
                         return (
                             <div key={comment.commentKey}>
                                 <CommentsList
