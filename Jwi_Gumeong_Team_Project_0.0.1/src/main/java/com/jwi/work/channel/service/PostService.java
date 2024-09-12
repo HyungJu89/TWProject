@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jwi.work.channel.dto.bodyDto.DelectByUser;
 import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
 import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
@@ -138,10 +139,24 @@ public class PostService {
 
 		return answer;
 	}
+	
+	public AnswerDto<String> postDeleteByUser(DelectByUser postDelete){
+
+		AnswerDto<String> anwer = new AnswerDto<>();
+		try {
+			postMapper.postDeleteByUser(postDelete);
+			anwer.setSuccess(true);
+		}catch (Exception e) {
+			anwer.setSuccess(false);
+		}
+		return anwer;
+		
+	}
 
 	public AnswerDto<String> postDelete(PostDeleteDto postDelete) {
 		PostInfoDto post = new PostInfoDto();
 		
+	
 		AnswerDto<String> anwer = new AnswerDto<>();
 		// postKey로 개시글 조회
 		post = postMapper.postInfo(postDelete.getPostKey());
