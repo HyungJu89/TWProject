@@ -63,7 +63,6 @@ function Search({ search }) {
         const fetchData = async () => {
             const channelListData = await searchChannel(search, channelPage);
             setChannelList(channelListData)
-            console.log(channelListData)
         };
 
         fetchData();
@@ -74,7 +73,6 @@ function Search({ search }) {
         const fetchData = async () => {
             const postListData = await searchPost(search, postPage);
             setPostList(postListData)
-            console.log(postListData)
         };
         fetchData();
 
@@ -99,7 +97,7 @@ function Search({ search }) {
                             <div className={style.creactChannelText} onClick={() => navigate(`/channelManagement`)}>토픽 게시판 만들기</div>
                         </div>
                     </div>
-                    {channelList.success ?
+                    {channelList.success && channelList.search ?
                         <div className={style.searchChannelList}>                    {/*검색된 게시판 포문 돌려야함 1번 돌아가는대 8번*/}
                             {channelList.search.map((channelInfo, index) =>
                                 <div key={index}>
@@ -109,7 +107,7 @@ function Search({ search }) {
                             )}
                         </div>
                         : <div className={style.nonPostText}>만들어진 토픽 게시판이 없어요</div>}
-                    {(channelList.success && channelList.paging.pagingBut) &&
+                    {(channelList.success && channelList.paging) &&
                         <div className={style.pageing}>
                             <div className={style.pageBtn}>
                                 <img src={btnLeft} style={style.btnLeft} onClick={pageDown} /> {channelPage}/{channelList.paging.pageCount} <img src={btnRight} style={style.btnRight} onClick={pageUp} />
@@ -122,12 +120,12 @@ function Search({ search }) {
                         검색어와 관련된 토픽
                     </div>
                 </div>
-                {postList.success &&
-                    <>
+                {(postList.success && postList.search) ?
+                    <div>
                         {postList.search.map((postInfo, index) =>
                             <PublicBoard key={index} postInfo={postInfo} />
                         )}
-                    </>
+                    </div> : <div className={style.nullPublicBoard}>검색어와 관련된 토픽이 없어요</div>
                 }
             </div>
         </div>
