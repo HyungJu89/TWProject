@@ -5,7 +5,7 @@
 /* eslint-disable */
 // ^워링 업애주는 친구 (< 아하 좋은 친구네요~)
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './style/Header.module.css';
 import {Link, useNavigate, useLocation} from 'react-router-dom';
 import axios from 'axios';
@@ -36,10 +36,14 @@ import AlarmModal from '../modal/AlarmModal.js';
 function Header({onClickSearch, onLogout, isLoggedIn}) {
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
+    const [searchInputs,setSearchInputs] = useState('');
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
 
     let navigate = useNavigate();
     let location = useLocation();
+
+    let popModalRef = useRef(null);
+    let popinputRef = useRef(null);
 
     const handleEnter = (e) => {
         if (e.key === "Enter" || e === "enter") {
@@ -48,20 +52,33 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
     };
 
     useEffect(() => {
-        {/* 최근검색어 미완성 */ }
+        {/* 최근검색어 로컬스토리지 생성문 */ }
         let justSearchLocal = localStorage.getItem('search')
         justSearchLocal = JSON.parse(justSearchLocal)
-        justSearchLocal != null ? null : localStorage.setItem('search', JSON.stringify([])
-            , [])
+        justSearchLocal != null ? null : localStorage.setItem('search', JSON.stringify([]), [])
     })
 
+    useEffect(()=>{
+        const popRefSearchEvent = (e) =>{
+            if(justSearchOn && !popModalRef.current.contains(e.target) && !popinputRef.current.contains(e.target)){
+                setJustSearchOn(false);
+            }
+        };
+        document.addEventListener('mousedown',popRefSearchEvent);
+        return ()=>{ document.removeEventListener('mousedown',popRefSearchEvent); };
+    },[justSearchOn])
+
+
+    // 어드민 경로로 접속시 헤더 삭제
     if(location.pathname.indexOf('/admin') === 0 ){
         return(
             <></>
         )
     }
 
+    // 아이콘 클릭 or 엔터키 입력시만 작동
     const onClickPointer = () => {
+        setSearchInputs(searchInput)
         onClickSearch(searchInput)
     }
 
@@ -70,10 +87,10 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
             <div className={styles.basicNav}>
                 <div className={styles.divWidth}><Link to="/"><img src={Logo} /></Link></div>
                 <div className={styles.inputDiv}>
-                    <input onClick={() => { setJustSearchOn(true) }} onBlur={()=>{setJustSearchOn(false)}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} onKeyDown={handleEnter} />
+                    <input ref={popinputRef} onClick={() => { setJustSearchOn(prev => !prev);}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} onKeyDown={handleEnter} />
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
-                {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}
+                {justSearchOn == true ? <JustSearch searchTerm={searchInputs} popModalRef={popModalRef} onClickSearch={onClickSearch}/> : null} {/* 최근 검색 모달*/}
                     {/* 여기부분 어드민 쿠키 체킹후 수정하면 될듯? */}
                     {isLoggedIn ? (
                         <div className={styles.icon}>
@@ -382,29 +399,81 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
     );
 }
 
-function JustSearch() { /* 최근 검색어 모달창 */
-    useEffect(() => {
-        {/* 최근검색어 미완성 */ }
-        let justSearchLocal = localStorage.getItem('search') //최근검색어 로컬스토리지 생성
-        justSearchLocal = JSON.parse(justSearchLocal) // JSON 오브젝트 저장
-        // justSearchLocal.push('props...방금 검색한거 여기 추가') 
-        justSearchLocal = new Set(justSearchLocal) // 중복검사
-        justSearchLocal = Array.from(justSearchLocal) // 다시 array 변환
-        localStorage.setItem('search', JSON.stringify(justSearchLocal))
-    }, [])
+// 무한으로 남게? 쿠키제거 안할시까지? (OK)
+// X버튼 누르거나 쿠키제거 하기 전까지 저장
 
-    let [임시, set임시] = useState(true) //나중에... 최근 검색어 on/off로 바꿔야함
+// 이렇게하면 비 로그인이랑 똑같이 저장이 되긴함.
+// 최근검색 "" << 공백만 아닐때만 작동되게 하는게 괜찮을지도?
+// 10개까지 하고 최신검색어가 최상위로 나오게?
+
+// 전부 다 하긴했는데 10개 이후에 저장되는 방식을 좀 수정하는것도 괜찮을꺼같다.
+
+function JustSearch({ searchTerm,popModalRef,onClickSearch }) { 
+    /* 최근 검색어 모달창 */
+    let [recentSearchData, setRecentSearchData] = useState([]);
+
+    // 로컬 스토리지에서 최근 검색어 가져오기
+    useEffect(() => {
+        let justSearchLocal = localStorage.getItem('search');
+        if (justSearchLocal) {
+            // JSON 객체로 변환
+            justSearchLocal = JSON.parse(justSearchLocal);
+            // 상태에 저장
+            setRecentSearchData(justSearchLocal);
+        }
+    }, []);
+
+    // 검색어가 추가될 때 로컬 스토리지 업데이트 (중복 제외 + 최대 10개)
+    useEffect(() => {
+        if (searchTerm) {
+            // 검색어 길이 제한 체크
+            if (searchTerm.length > 40) {
+                console.log(`검색어가 너무 깁니다. 최대 40자까지 가능합니다.`);
+                return;
+            }
+
+            let updatedSearches = [...recentSearchData, searchTerm];  // 기존 검색어 + 새로운 검색어
+            updatedSearches = Array.from(new Set(updatedSearches));   // 중복 제거
+
+            // 최대 10개 초과 시
+            if (updatedSearches.length > 10) {  
+                // 최신 검색어 10개만 유지
+                updatedSearches = updatedSearches.slice(-10);
+            }
+
+            setRecentSearchData(updatedSearches);
+            localStorage.setItem('search', JSON.stringify(updatedSearches));
+        }
+    }, [searchTerm]);
+
+    // 검색어 삭제 함수
+    const deleteTerm = (term) => {
+        let updatedSearches = recentSearchData.filter(item => item !== term);  // 해당 검색어 제외
+        setRecentSearchData(updatedSearches);
+        localStorage.setItem('search', JSON.stringify(updatedSearches));  // 로컬 스토리지에 저장
+    };
+
     return (
-    <div className={styles.JustSearchBase}><h4>최근검색어</h4>
-            {임시 === true ?
-                <div className={styles.mainDiv}>
-                    <div className={styles.list}>
-                    {/* 서치 icon */} <div><img src={searching} /> 
-                    {/* 글내용 */}    <p>1saf</p> 
-                    {/* 삭제 icon */} <img style={{height:'14px', cursor : 'pointer'}} src={deletion} /></div>
-                    </div></div>
-                : <p>최근 검색 내역이 없어요.</p>}
-    </div>
+        <div className={styles.JustSearchBase} ref={popModalRef}>
+            <h4>최근검색어</h4>
+                {
+                    recentSearchData.length !== 0 ?
+                        <div className={styles.mainDiv}>
+                            {
+                                recentSearchData?.slice().reverse().map((term, i) => (
+                                    <div className={styles.list} key={i}>
+                                        <div>
+                                            {/* 서치 icon */} <img src={searching} />
+                                            {/* 글내용 */} <p onClick={()=>{onClickSearch(term)}}>{term}</p>
+                                            {/* 삭제 icon */} <img style={{height:'14px', cursor : 'pointer'}} src={deletion} onClick={()=>{deleteTerm(term)}}/>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        : <p>최근 검색 내역이 없어요.</p>
+                }
+        </div>
     )
 }
 export default Header;
