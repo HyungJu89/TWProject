@@ -25,3 +25,14 @@
     text-align: left;
 }
 
+.createChannelLine{
+    display: flex;
+}
+
+.createHelpIcon{
+    margin: auto;
+    margin-left: 4px;
+    padding: 2px;
+    height: 16px;
+    width: 16px;
+}

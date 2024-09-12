@@ -70,33 +70,34 @@ function ChannelManagement() {
                         </>
                     }
                 </div>
-{v2ComingSoon && 
-<>
-                <div className={style.container}>{/* 관리자 신청 */}
-                    <div className={style.createChannelTitle} onClick={() => tapClick(2)}>
-                        <img src={enroll} alt="관리자 신청" />
-                        <div className={style.createChannelTitleText}>채널 관리자 신청하기</div>
-                    </div>
-                    {openTap === 2 &&
+                {
+                    v2ComingSoon && 
                         <>
-                            <div className={styleManagement.dashed} />{/* 회색줄 */}
-                            <ApplyManager openModal={openModal} />
+                            <div className={style.container}>{/* 관리자 신청 */}
+                                <div className={style.createChannelTitle} onClick={() => tapClick(2)}>
+                                    <img src={enroll} alt="관리자 신청" />
+                                    <div className={style.createChannelTitleText}>채널 관리자 신청하기</div>
+                                </div>
+                                {openTap === 2 &&
+                                    <>
+                                        <div className={styleManagement.dashed} />{/* 회색줄 */}
+                                        <ApplyManager openModal={openModal} />
+                                    </>
+                                }
+                            </div>
+                            <div className={style.container}>{/* 관리자 포기 */}
+                                <div className={style.createChannelTitle} onClick={() => tapClick(3)}> 
+                                    <img src={give_up} alt="관리자 포기" />
+                                    <div className={style.createChannelTitleText}>채널 관리자 포기하기</div>
+                                </div>
+                                {openTap === 3 &&
+                                    <>
+                                        <div className={styleManagement.dashed} />{/* 회색줄 */}
+                                        <GiveUpManager openModal={openModal} />
+                                    </>
+                                }
+                            </div>
                         </>
-                    }
-                </div>
-                <div className={style.container}>{/* 관리자 포기 */}
-                    <div className={style.createChannelTitle} onClick={() => tapClick(3)}> 
-                        <img src={give_up} alt="관리자 포기" />
-                        <div className={style.createChannelTitleText}>채널 관리자 포기하기</div>
-                    </div>
-                    {openTap === 3 &&
-                        <>
-                            <div className={styleManagement.dashed} />{/* 회색줄 */}
-                            <GiveUpManager openModal={openModal} />
-                        </>
-                    }
-</div>
-</>
                 }
             </div>
             {modalOpen && 
