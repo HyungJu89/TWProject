@@ -18,6 +18,8 @@ import ChannelTitle from './PublicBoardComponents/ChannelTitle.js';
 import { useNavigate } from 'react-router-dom';
 import { reportInfo } from '../slice/ReportDtoSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
+import { formatDistanceToNow } from 'date-fns'; // 아래와 같이 사용되는 날짜 라이브러리
+import { ko } from 'date-fns/locale'; // 한국어 설정
 
 function PublicBoard({ postInfo }) {
     const [heart, setHeart] = useState(false); //좋아요 누름 확인
@@ -116,13 +118,22 @@ function PublicBoard({ postInfo }) {
         dispatch(changePost(updatePostInfo))
         dispatch(openImgUiModal())
     }
+
+    //날짜 세팅
+    function timeSetting(createdAt){
+        return formatDistanceToNow(new Date(createdAt), { addSuffix: true, locale: ko });
+        //formatDistanceToNow : 특정 시간을 기준으로 현재까지의 시간을 계산
+        //addSuffix : ~전 ~후 같은 접미사
+    }
+
     return (
         <div className={styles.mainDiv}>
             {postInfo.postChannel && (
                 <ChannelTitle postChannel={postInfo.postChannel} />
             )}
+            {console.log(postInfo)}
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
-                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
+                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· {timeSetting(postInfo.createdAt)}</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true) }} src={more} />
                 {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-82px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
             </div>

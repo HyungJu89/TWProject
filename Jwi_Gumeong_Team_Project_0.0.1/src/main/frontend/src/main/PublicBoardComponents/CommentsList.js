@@ -9,6 +9,8 @@ import ReplyArea from './ReplyArea.js';
 import more from '../../icon/24px/more.png';
 import comments_20px from '../../icon/20px/comments-20px.png';
 import big_comment from '../../icon/20px/bigcomment.png';
+import { formatDistanceToNow } from 'date-fns'; // 아래와 같이 사용되는 날짜 라이브러리
+import { ko } from 'date-fns/locale'; // 한국어 설정
 
 //댓글 포커스용 ref 받는 코드(forwardRef)
 const CommentsList = forwardRef(function CommentsList(
@@ -44,13 +46,20 @@ const CommentsList = forwardRef(function CommentsList(
             replyFocus.current.focus();
         }
     }, [commentStart]);
+
+    //날짜 세팅
+    function timeSetting(createdAt){
+        return formatDistanceToNow(new Date(createdAt), { addSuffix: true, locale: ko });
+        //formatDistanceToNow : 특정 시간을 기준으로 현재까지의 시간을 계산
+        //addSuffix : ~전 ~후 같은 접미사
+    }
     
     return (
         <>
             <div>{/* 댓글 */}
                 <div className={styles.list} style={{ marginBottom: '0px' }}  ref={ref}>
                     <div className={styles.listNav}>
-                        <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{comment.createdAt}</a></div>
+                        <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{timeSetting(comment.createdAt)}</a></div>
                         <div>
                             <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(comment.commentKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                             {commentMoreON &&
@@ -93,7 +102,7 @@ const CommentsList = forwardRef(function CommentsList(
                                     <img className={styles.BcImg} src={big_comment} />
                                     <div className={styles.list}  ref={replyIndex === comment.replys.length-1 ? replyFocus : null}>
                                         <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
-                                            <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{reply.createdAt}</a></div>
+                                            <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{timeSetting(reply.createdAt)}</a></div>
                                             <div>
                                                 <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(reply.replyKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                                                 {commentMoreON &&
