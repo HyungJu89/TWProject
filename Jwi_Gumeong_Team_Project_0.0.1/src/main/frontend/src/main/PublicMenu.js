@@ -122,7 +122,8 @@ function UserAfter({ onLogout }) {
                 <div className={styles.Bookmark}>즐겨찾기<img src={edit} /></div>
                 <div className={styles.recommendation} style={{ marginTop: '0px', paddingTop: '20px' }}>{/* 즐찾 */}
                     <div className={styles.list} style={{ marginTop: '0px' }}>
-                        {channelList &&
+                        {console.log(channelList[0])}
+                        {channelList[0] ?
                         <>
                             {channelList.map((item, i)=>
                             <div onClick={()=>{navigate(`/channel/${item[0].id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
@@ -130,7 +131,8 @@ function UserAfter({ onLogout }) {
                                 {item[0].name}
                             </div>
                             )}
-                        </>
+                        </> :
+                        <div className={styles.none}>즐겨찾기가 없습니다.</div>
                         } 
                     </div>
                 </div>
