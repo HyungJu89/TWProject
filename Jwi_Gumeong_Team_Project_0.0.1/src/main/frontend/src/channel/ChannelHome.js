@@ -61,7 +61,6 @@ function ChannelHome() {
                 }
             });
             setPostList(data);
-            console.log(data)
         } catch (error) {
             console.error('Channel API Error:', error);
             throw new Error('Failed to fetch channel data');
@@ -71,8 +70,6 @@ function ChannelHome() {
     const handleCheckChannel = async (channelId) => {
         try {
             const channel = await channelGet(channelId); // 비동기 호출
-            console.log(channel.info);
-            
             if (!channel.success) {
                 setModalContent('생성되지 않은 게시판입니다.');
                 setModalOpen(true);

@@ -31,6 +31,19 @@ const CommentsList = forwardRef(function CommentsList(
         };
     }, [commentMoreON]);
 
+    const replyFocus = useRef(null);
+    const [replyNew, setReplyNew] = useState(false);
+    //대댓글 작성후 화면 포커스
+    useEffect(() => {
+        if (replyFocus.current && replyNew) {
+            replyFocus.current.scrollIntoView({
+                behavior: 'smooth', //부드럽게 움직이기
+                block: 'center'  // 중앙
+            });
+            setReplyNew(false);
+            replyFocus.current.focus();
+        }
+    }, [replyNew]);
     
     return (
         <>
@@ -50,7 +63,14 @@ const CommentsList = forwardRef(function CommentsList(
                         <div className={styles.replyDivText} style={{ marginBottom: '20px' }}><img src={comments_20px} />답글달기</div>
                     </div>
                     {(replyInputState == 'comment' && replyInputIndex == comment.commentKey) &&
-                        <ReplyArea postKey={postKey} commentKey={comment.commentKey} setCommentLode={setCommentLode} onClear={onClear}  setCommentStart={setCommentStart} commentStart={commentStart}/>
+                        <ReplyArea 
+                            postKey={postKey} 
+                            commentKey={comment.commentKey} 
+                            setCommentLode={setCommentLode} 
+                            onClear={onClear}  
+                            setCommentStart={setCommentStart} 
+                            commentStart={commentStart}
+                            setReplyNew={setReplyNew}/>
                     }
                 </div>
             </div>
@@ -58,11 +78,14 @@ const CommentsList = forwardRef(function CommentsList(
             {comment.replys[0].replyKey != 0 && (
                 <>
                     {comment.replys.map((reply, replyIndex) => {
+                        console.log(replyIndex);
+                        console.log(comment.replys.length-1);
+                        console.log('----');
                         return (
                             <div key={reply.replyKey}>
                                 <div className={styles.bigComments}>
                                     <img className={styles.BcImg} src={big_comment} />
-                                    <div className={styles.list}>
+                                    <div className={styles.list}  ref={replyIndex === comment.replys.length-1 ? replyFocus : null}>
                                         <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
                                             <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{reply.createdAt}</a></div>
                                             <div>
