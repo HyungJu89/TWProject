@@ -275,6 +275,7 @@
 		ORDER BY
 			<!-- 좋아요 순으로 내림차순하고 좋아요가 똑같을땐 생성시간으로 내림차순 -->
 		 	IFNULL(todayLikeSummary.todayLikeCount, 0) DESC,
+		 	IFNULL(commentSummary.totalCommentCount, 0) DESC,
         	post.createdAt DESC
 		LIMIT	
 			<!-- 페이징처리 -->

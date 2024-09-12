@@ -38,7 +38,6 @@ function AllTopic() {
                 }
             });
             setPostList(data)
-            console.log(data)
             return data;
         } catch (error) {
             console.error('Channel API Error:', error);
@@ -62,7 +61,6 @@ function AllTopic() {
                 }
             });
             setPostList(data)
-            console.log(data)
             return data;
         } catch (error) {
             console.error('Channel API Error:', error);

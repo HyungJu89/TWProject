@@ -31,7 +31,6 @@ function Search({ search }) {
                     page: channelPage
                 }
             });
-            console.log(data)
             return data;
         } catch (error) {
             console.error('Channel API Error:', error);
@@ -64,7 +63,6 @@ function Search({ search }) {
         const fetchData = async () => {
             const channelListData = await searchChannel(search, channelPage);
             setChannelList(channelListData)
-            console.log(channelListData)
         };
 
         fetchData();
