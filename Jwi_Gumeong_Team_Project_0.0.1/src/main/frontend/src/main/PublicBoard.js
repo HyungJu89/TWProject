@@ -50,6 +50,9 @@ function PublicBoard({ postInfo }) {
         setHeart(postInfo.like)
         setLikeCount(postInfo.likeCount)
         setCommentsON(false)
+        console.log(postInfo.like)
+        console.log(postInfo.likeCount)
+        console.log(postInfo)
     }, [postInfo])
 
     // 디바운스 함수 생성
