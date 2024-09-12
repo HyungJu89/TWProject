@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.jwi.work.alarm.dto.AlarmDto;
 import com.jwi.work.alarm.mapper.AlarmMapper;
+import com.jwi.work.channel.dto.bodyDto.DelectByUser;
 import com.jwi.work.channel.dto.bodyDto.ReplyCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ReplyDeleteDto;
 import com.jwi.work.channel.mapper.ReplyMapper;
@@ -68,6 +69,20 @@ public class ReplyService {
 		answer.setSuccess(true);
 		
 		return answer;
+	}
+	
+	
+	public AnswerDto<String> replyDeleteByUser(DelectByUser replyDelete){
+		
+		AnswerDto<String> anwer = new AnswerDto<>();
+		try {
+			replyMapper.replyDeleteByUser(replyDelete);
+			anwer.setSuccess(true);
+		}catch (Exception e) {
+			anwer.setSuccess(false);
+		}
+		return anwer;
+		
 	}
 	
 	public AnswerDto<String> replyDelete(ReplyDeleteDto deleteDto){
