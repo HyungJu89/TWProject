@@ -412,7 +412,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
 function JustSearch({ searchTerm, popModalRef, onClickSearch, recentSearchData, setRecentSearchData }) { 
     /* 최근 검색어 모달창 */
     let justSearchLocal;
-
+    let asdf = [];
     // 로컬 스토리지에서 최근 검색어 가져오기
     useEffect(() => {
         justSearchLocal = localStorage.getItem('search');
@@ -428,9 +428,12 @@ function JustSearch({ searchTerm, popModalRef, onClickSearch, recentSearchData, 
     // 넣을만한 조건
     useEffect(() => {
         if (searchTerm) {
+            const maxLength = 40;
+            const maxSlice = 10;
+
             // 검색어 길이 제한 체크
-            if (searchTerm.length > 40) {
-                console.log(`검색어가 너무 깁니다. 최대 40자까지 가능합니다.`);
+            if (searchTerm.length > maxLength) {
+                console.log(`검색어가 너무 깁니다. 최대 ${maxLength}자까지 가능합니다.`);
                 return;
             }
 
@@ -438,9 +441,9 @@ function JustSearch({ searchTerm, popModalRef, onClickSearch, recentSearchData, 
             updatedSearches = Array.from(new Set(updatedSearches));   // 중복 제거
 
             // 최대 10개 초과 시
-            if (updatedSearches.length > 10) {  
+            if (updatedSearches.length > maxSlice) {  
                 // 최신 검색어 10개만 유지
-                updatedSearches = updatedSearches.slice(-10);
+                updatedSearches = updatedSearches.slice(-maxSlice);
             }
             
             setRecentSearchData(updatedSearches);
@@ -455,7 +458,10 @@ function JustSearch({ searchTerm, popModalRef, onClickSearch, recentSearchData, 
         setRecentSearchData(updatedSearches);
         localStorage.setItem('search', JSON.stringify(updatedSearches));  // 로컬 스토리지에 저장
     };
-
+    // const ver2 = ()=>{
+    //     setRecentSearchData([]);
+    //     localStorage.setItem('search', JSON.stringify(recentSearchData));
+    // }
     return (
         <div className={styles.JustSearchBase} ref={popModalRef}>
             <h4>최근검색어</h4>
@@ -473,6 +479,7 @@ function JustSearch({ searchTerm, popModalRef, onClickSearch, recentSearchData, 
                                     </div>
                                 ))
                             }
+                            {/* <div onClick={()=>{ver2}}>조민성</div> */}
                         </div>
                         : <p>최근 검색 내역이 없어요.</p>
                 }
