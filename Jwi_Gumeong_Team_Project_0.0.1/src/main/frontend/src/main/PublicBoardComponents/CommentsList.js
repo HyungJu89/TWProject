@@ -98,8 +98,16 @@ const CommentsList = forwardRef(function CommentsList(
                                                 <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(reply.replyKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                                                 {commentMoreON &&
                                                 nowRef === reply.replyKey ?
-                                                <div ref={modalRef}><MoreDeleteMini nickName={reply.nickName} referenceType={'reply'} referenceKey={reply.replyKey} myContent={reply.myReply} right={'-20px'} top={'30px'}/></div>:null} {/*신고, 삭제 모달*/}
-                                            </div>
+                                                <div ref={modalRef}>
+                                                <MoreDeleteMini 
+                                                    nickName={comment.nickName} 
+                                                    referenceType={'comment'} 
+                                                    referenceKey={comment.commentKey} 
+                                                    myContent={comment.myComment} 
+                                                    right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'} 
+                                                    top={'30px'}/>
+                                                </div> 
+                                                : null} {/*신고, 삭제 모달*/}                                            </div>
                                         </div>
                                         {reply.replyNickName &&
                                             <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
