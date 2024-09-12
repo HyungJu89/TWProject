@@ -201,6 +201,12 @@
 }
 
 /* 댓글창 컴포넌트 - List */
+.mainArea_bodart{
+    border-radius: 0px;
+    border-bottom: 1px solid #F3F3F3;
+    margin-top: 20px;
+}
+
 .list {
     margin-bottom: 20px;
     max-width: 100%;

@@ -219,7 +219,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                 <>
                     {comments.info.comment.map((comment, index) => {
                         return (
-                            <div key={comment.commentKey}>
+                            <div className={index === comments.info.comment.length-1 ? null : styles.mainArea_bodart} style={{marginTop:'20px'}} key={comment.commentKey}>
                                 <CommentsList
                                     index={index}
                                     postKey={postKey}
