@@ -12,7 +12,7 @@ import big_comment from '../../icon/20px/bigcomment.png';
 
 //댓글 포커스용 ref 받는 코드(forwardRef)
 const CommentsList = forwardRef(function CommentsList(
-{ index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex, setCommentStart, commentStart }, ref) {
+{ index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex, setCommentStart, commentStart, PublicBoardImgmodal }, ref) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off   
     const [nowRef, setNowRef] = useState(0) ; //모달(Ref)지정용 함수 = 현재 누른 댓글의 key를 비교해서 동일한 모달만 오픈
     const modalRef = useRef(null);
@@ -31,6 +31,19 @@ const CommentsList = forwardRef(function CommentsList(
         };
     }, [commentMoreON]);
 
+    const replyFocus = useRef(null);
+    const [replyNew, setReplyNew] = useState(false);
+    //대댓글 작성후 화면 포커스
+    useEffect(() => {
+        if (replyFocus.current && replyNew) {
+            replyFocus.current.scrollIntoView({
+                behavior: 'smooth', //부드럽게 움직이기
+                block: 'center'  // 중앙
+            });
+            setReplyNew(false);
+            replyFocus.current.focus();
+        }
+    }, [commentStart]);
     
     return (
         <>
@@ -42,7 +55,16 @@ const CommentsList = forwardRef(function CommentsList(
                             <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(comment.commentKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                             {commentMoreON &&
                             nowRef === comment.commentKey ?
-                            <div ref={modalRef}><MoreDeleteMini nickName={comment.nickName} referenceType={'comment'} referenceKey={comment.commentKey} myContent={comment.myComment} /></div> : null} {/*신고, 삭제 모달*/}
+                                <div ref={modalRef}>
+                                    <MoreDeleteMini 
+                                        nickName={comment.nickName} 
+                                        referenceType={'comment'} 
+                                        referenceKey={comment.commentKey} 
+                                        myContent={comment.myComment} 
+                                        right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'} 
+                                        top={'30px'}/>
+                                </div> 
+                                : null} {/*신고, 삭제 모달*/}
                         </div>
                     </div>
                     <div className={styles.listContent}>{comment.comment}</div>
@@ -50,7 +72,14 @@ const CommentsList = forwardRef(function CommentsList(
                         <div className={styles.replyDivText} style={{ marginBottom: '20px' }}><img src={comments_20px} />답글달기</div>
                     </div>
                     {(replyInputState == 'comment' && replyInputIndex == comment.commentKey) &&
-                        <ReplyArea postKey={postKey} commentKey={comment.commentKey} setCommentLode={setCommentLode} onClear={onClear}  setCommentStart={setCommentStart} commentStart={commentStart}/>
+                        <ReplyArea 
+                            postKey={postKey} 
+                            commentKey={comment.commentKey} 
+                            setCommentLode={setCommentLode} 
+                            onClear={onClear}  
+                            setCommentStart={setCommentStart} 
+                            commentStart={commentStart}
+                            setReplyNew={setReplyNew}/>
                     }
                 </div>
             </div>
@@ -62,15 +91,23 @@ const CommentsList = forwardRef(function CommentsList(
                             <div key={reply.replyKey}>
                                 <div className={styles.bigComments}>
                                     <img className={styles.BcImg} src={big_comment} />
-                                    <div className={styles.list}>
+                                    <div className={styles.list}  ref={replyIndex === comment.replys.length-1 ? replyFocus : null}>
                                         <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
                                             <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{reply.createdAt}</a></div>
                                             <div>
                                                 <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(reply.replyKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                                                 {commentMoreON &&
                                                 nowRef === reply.replyKey ?
-                                                <div ref={modalRef}><MoreDeleteMini nickName={reply.nickName} referenceType={'reply'} referenceKey={reply.replyKey} myContent={reply.myReply} /></div>:null} {/*신고, 삭제 모달*/}
-                                            </div>
+                                                <div ref={modalRef}>
+                                                <MoreDeleteMini 
+                                                    nickName={comment.nickName} 
+                                                    referenceType={'comment'} 
+                                                    referenceKey={comment.commentKey} 
+                                                    myContent={comment.myComment} 
+                                                    right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'} 
+                                                    top={'30px'}/>
+                                                </div> 
+                                                : null} {/*신고, 삭제 모달*/}                                            </div>
                                         </div>
                                         {reply.replyNickName &&
                                             <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
@@ -82,7 +119,16 @@ const CommentsList = forwardRef(function CommentsList(
                                     </div>
                                 </div>
                                 {(replyInputState == 'reply' && replyInputIndex == reply.replyKey) &&
-                                    <ReplyArea postKey={postKey} commentKey={comment.commentKey} replyKey={reply.replyKey} replyNickName={reply.nickName} setCommentLode={setCommentLode} onClear={onClear} setCommentStart={setCommentStart} commentStart={commentStart} />
+                                    <ReplyArea 
+                                        postKey={postKey} 
+                                        commentKey={comment.commentKey} 
+                                        replyKey={reply.replyKey} 
+                                        replyNickName={reply.nickName} 
+                                        setCommentLode={setCommentLode} 
+                                        onClear={onClear} 
+                                        setCommentStart={setCommentStart} 
+                                        commentStart={commentStart}
+                                        setReplyNew={setReplyNew} />
                                 }
                             </div>
                         )

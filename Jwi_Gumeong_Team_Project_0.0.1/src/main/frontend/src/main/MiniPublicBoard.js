@@ -26,6 +26,7 @@ function MiniPublicBoard() {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const navigate = useNavigate();
+    const PublicBoardImgmodal = ('open'); //이미지 팝업 상태에 따른 신고,삭제 모달 위치 변환용
 
     const closeModal = () => {
         setModalOpen(false);
@@ -102,7 +103,7 @@ function MiniPublicBoard() {
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
                 <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true) }} src={more} />
-                {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'0px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
+                {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-0px'} top={'30px'} myContent={postInfo.myPost} />}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
@@ -120,7 +121,7 @@ function MiniPublicBoard() {
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
-            {commentsON && <Comments postKey={postInfo.postKey} setCommentCount={setCommentCount} />}
+            {commentsON && <Comments postKey={postInfo.postKey} setCommentCount={setCommentCount} PublicBoardImgmodal={PublicBoardImgmodal} />}
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }

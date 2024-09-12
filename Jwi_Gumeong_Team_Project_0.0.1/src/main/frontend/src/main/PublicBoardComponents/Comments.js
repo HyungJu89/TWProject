@@ -16,7 +16,7 @@ import { openImgUiModalFalse } from '../../slice/mainSlice';
 import { clearPost } from '../../slice/PostSlice.js';
 import AlarmModal from '../../modal/AlarmModal.js';
 
-function Comments({ postKey, setCommentCount }) {
+function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     let [emogiAddText, setEmogiAddText] = useState('')// 텍스트
     // 컴포넌트 로드용 함수
     const [commentLode, setCommentLode] = useState(true);
@@ -50,6 +50,7 @@ function Comments({ postKey, setCommentCount }) {
     //댓글 포커스
     const commentFocus = useRef(null);
     const [commentStart, setCommentStart] = useState(0);
+    const [commentNew, setCommentNew] = useState(false);
 
     const [replyInputState, setReplyInputState] = useState('');
     const [replyInputIndex, setReplyInputIndex] = useState(0);
@@ -128,6 +129,7 @@ function Comments({ postKey, setCommentCount }) {
         try {
             const { data } = await axios.post(`/comment/create`, commentCreate)
             setCommentStart(commentStart+1); //댓글 작성시에만 포커스 되도록 하는 함수
+            setCommentNew(true);
             if (!data.success) {
                 alert("오류가남")
             }
@@ -178,11 +180,12 @@ function Comments({ postKey, setCommentCount }) {
 
     //댓글 작성후 화면 포커스
     useEffect(() => {
-        if (commentFocus.current) {
+        if (commentFocus.current && commentNew) {
             commentFocus.current.scrollIntoView({
                 behavior: 'smooth', //부드럽게 움직이기
                 block: 'center'  // 중앙
             });
+            setCommentNew(false);
             commentFocus.current.focus();
         }
     }, [commentStart]);
@@ -206,14 +209,17 @@ function Comments({ postKey, setCommentCount }) {
                 <div className={styles.commentNav}>
                     <img onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
                     {EmojiOn && <Emogi setEmogiAdd={setEmogiAdd} />}
-                    <div style={{ color: commentTextColor }}>{commentLength}/{commentsLimit}<button style={{ backgroundColor: commentButtonColor }} onClick={createComment}>등록</button></div>
+                    <div style={{ color: commentTextColor }}>
+                        {commentLength}/{commentsLimit}
+                        <button style={{ backgroundColor: commentButtonColor }} onClick={createComment}>등록</button>{/*기본 댓글 등록*/}
+                    </div>
                 </div>
             </div>
             {comments.success &&
                 <>
                     {comments.info.comment.map((comment, index) => {
                         return (
-                            <div key={comment.commentKey}>
+                            <div className={index === comments.info.comment.length-1 ? null : styles.mainArea_bodart} style={{marginTop:'20px'}} key={comment.commentKey}>
                                 <CommentsList
                                     index={index}
                                     postKey={postKey}
@@ -226,6 +232,7 @@ function Comments({ postKey, setCommentCount }) {
                                     ref={index === comments.info.comment.length-1 ? commentFocus : null}
                                     setCommentStart={setCommentStart}
                                     commentStart={commentStart}
+                                    PublicBoardImgmodal={PublicBoardImgmodal ? PublicBoardImgmodal : null}
                                 />
                             </div>
                         );

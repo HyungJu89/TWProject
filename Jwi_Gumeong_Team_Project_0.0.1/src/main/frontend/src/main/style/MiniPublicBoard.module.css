@@ -4,7 +4,7 @@
     background-color: white;
     margin: 0px 0px;
     padding: 20px 30px;
-    overflow: auto;
+    overflow: scroll;
     overflow-x: hidden;
     height: 94%;
 }
