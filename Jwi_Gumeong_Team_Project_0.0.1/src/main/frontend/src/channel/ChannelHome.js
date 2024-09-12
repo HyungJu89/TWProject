@@ -21,7 +21,6 @@ function ChannelHome() {
     const [channelInfo,setChannelInfo] = useState();
     const [postList,setPostList] = useState([]);
     const [postPage,setPostPage] = useState(1);
-    
     //세션화용 코드,state
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);
@@ -129,7 +128,7 @@ function ChannelHome() {
                             {postList.success && 
                                 <>
                                     {postList.search.map((postInfo, index) =>
-                                        <PublicBoard key={index} postInfo={postInfo} />
+                                        <PublicBoard key={index} postInfo={postInfo}/>
                                     )}
                                 </>
                             }

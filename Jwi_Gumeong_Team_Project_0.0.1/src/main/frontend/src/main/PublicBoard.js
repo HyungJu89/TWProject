@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { reportInfo } from '../slice/ReportDtoSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
 
-function PublicBoard({ postInfo }) {
+function PublicBoard({ postInfo}) {
     const [heart, setHeart] = useState(false); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(0);
     // 디바운스요 변수
@@ -124,7 +124,7 @@ function PublicBoard({ postInfo }) {
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
                 <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true) }} src={more} />
-                {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-82px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
+                {moreON && <MoreDelete state = {postInfo.state} modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-82px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
