@@ -65,7 +65,7 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
             <div className={styles.basicNav}>
                 <div className={styles.divWidth}><Link to="/"><img src={Logo} /></Link></div>
                 <div className={styles.inputDiv}>
-                    <input onClick={() => { setJustSearchOn(true) }} onBlur={()=>{setJustSearchOn(false)}}placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} />
+                    <input onClick={() => { setJustSearchOn(true) }} onBlur={()=>{setJustSearchOn(false)}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} />
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
                 {justSearchOn == true ? <JustSearch /> : null} {/* 최근 검색 모달*/}

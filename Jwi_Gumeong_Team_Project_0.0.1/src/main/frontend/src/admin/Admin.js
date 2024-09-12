@@ -52,8 +52,8 @@ function Admin(){
         - 질문 답변 관련해서 검색기능 넣거나 
           회원정보에서도 이친구 질문한거 있는지 확인해도 좋을듯?
         - 질문 답변에서 답변 제목,누가 질문했는지 확인하는거 넣기
-     * 
-     */
+        - 현재 밴 처리이후에 신고내역을 감추는방식이긴한데 신고내역 로그도 남기는것도 괜찮을듯?
+    **/
     let location = useLocation();
     let navigate = useNavigate();
     let [onOff, setOnOff] = useState(false);
