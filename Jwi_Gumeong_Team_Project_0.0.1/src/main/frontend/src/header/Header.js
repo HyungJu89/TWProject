@@ -37,6 +37,7 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
     const [searchInputs,setSearchInputs] = useState('');
+    let [recentSearchData, setRecentSearchData] = useState([]);
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
 
     let navigate = useNavigate();
@@ -90,7 +91,7 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
                     <input ref={popinputRef} onClick={() => { setJustSearchOn(prev => !prev);}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} onKeyDown={handleEnter} />
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
-                {justSearchOn == true ? <JustSearch searchTerm={searchInputs} popModalRef={popModalRef} onClickSearch={onClickSearch}/> : null} {/* 최근 검색 모달*/}
+                {justSearchOn == true ? <JustSearch searchTerm={searchInputs} popModalRef={popModalRef} onClickSearch={onClickSearch} recentSearchData={recentSearchData} setRecentSearchData={setRecentSearchData}/> : null} {/* 최근 검색 모달*/}
                     {/* 여기부분 어드민 쿠키 체킹후 수정하면 될듯? */}
                     {isLoggedIn ? (
                         <div className={styles.icon}>
@@ -408,13 +409,13 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
 
 // 전부 다 하긴했는데 10개 이후에 저장되는 방식을 좀 수정하는것도 괜찮을꺼같다.
 
-function JustSearch({ searchTerm,popModalRef,onClickSearch }) { 
+function JustSearch({ searchTerm, popModalRef, onClickSearch, recentSearchData, setRecentSearchData }) { 
     /* 최근 검색어 모달창 */
-    let [recentSearchData, setRecentSearchData] = useState([]);
+    let justSearchLocal;
 
     // 로컬 스토리지에서 최근 검색어 가져오기
     useEffect(() => {
-        let justSearchLocal = localStorage.getItem('search');
+        justSearchLocal = localStorage.getItem('search');
         if (justSearchLocal) {
             // JSON 객체로 변환
             justSearchLocal = JSON.parse(justSearchLocal);
@@ -424,6 +425,7 @@ function JustSearch({ searchTerm,popModalRef,onClickSearch }) {
     }, []);
 
     // 검색어가 추가될 때 로컬 스토리지 업데이트 (중복 제외 + 최대 10개)
+    // 넣을만한 조건
     useEffect(() => {
         if (searchTerm) {
             // 검색어 길이 제한 체크
@@ -440,11 +442,12 @@ function JustSearch({ searchTerm,popModalRef,onClickSearch }) {
                 // 최신 검색어 10개만 유지
                 updatedSearches = updatedSearches.slice(-10);
             }
-
+            
             setRecentSearchData(updatedSearches);
             localStorage.setItem('search', JSON.stringify(updatedSearches));
         }
-    }, [searchTerm]);
+
+    }, [searchTerm,justSearchLocal]);
 
     // 검색어 삭제 함수
     const deleteTerm = (term) => {
