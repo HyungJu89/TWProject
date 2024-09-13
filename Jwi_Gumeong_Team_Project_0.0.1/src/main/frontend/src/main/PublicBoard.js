@@ -39,9 +39,6 @@ function PublicBoard({ postInfo }) {
         window.scrollTo(0, 0);
     };
 
-    let state = useSelector((state) => { return state });
-    let dispatch = useDispatch();
-
     const [commentCount, setCommentCount] = useState(0);
 
     useEffect(() => {

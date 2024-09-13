@@ -157,7 +157,7 @@ function Main({ onLogout, isLoggedIn }) {
                             {hotBoardList && hotBoardList.success &&
                                 <>{hotBoardList.info.length > 0 ?
                                     hotBoardList.info.map((item, i) =>
-                                        <div onClick={() => { navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.channel}>
+                                        <div onClick={() => { navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.channel} key={i}>
                                             <div className={styles.imgDiv}><img src={item.imageUrl} /></div>
                                             <div className={styles.text}>{item.name}</div></div>
                                     ) : <div className={styles.nulltext}>아직 인기 게시판이 갱신되지 않았어요 :3</div>}</>}
