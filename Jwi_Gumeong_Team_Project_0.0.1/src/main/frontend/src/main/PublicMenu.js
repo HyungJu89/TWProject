@@ -72,7 +72,7 @@ function UserAfter({ onLogout }) {
         sessionId = JSON.parse(sessionIdJson).sessionId
     }
 
-        //즐겨찾기 게시판  :: 무작위 7개 가져오기 더 많으면 페이징으로 넘겨야함 하는 중~
+        //즐겨찾기 게시판(1) :: 유저 정보 기준으로 연동된 즐겨찾기 가져오기
         const [favoritesList, setFavoritesList] = useState(); //즐겨찾기 key
         useEffect(() => {
             const favorites = async () => {
@@ -92,12 +92,18 @@ function UserAfter({ onLogout }) {
             const fetchChannels = async () => {
             try {
                 //favoritesList에서 구한 channelKey만 골라서 배열저장
-                const channelKeys = favoritesList.map(item => item.channelKey); 
-                const channelInfo = await Promise.all( //비동기 통신이 완료 될 때 까지 기다림
+                const channelKeys = (favoritesList && Array.isArray(favoritesList)) 
+                ? favoritesList.map(item => item.channelKey) 
+                : [];  
+
+                if (channelKeys.length > 0) {
+                const channelInfo =
+                    await Promise.all( //비동기 통신이 완료 될 때 까지 기다림
                     channelKeys.map(key =>
                         axios.get('/channel/findKey', { params: { channelKey: key } })
                     ));
-                setChannelList(channelInfo.map(channelInfo => channelInfo.data));
+                    setChannelList(channelInfo.map(channelInfo => channelInfo.data));
+                };
             } catch (error) {
                 console.error('Channel API Error:', error);
                 }
