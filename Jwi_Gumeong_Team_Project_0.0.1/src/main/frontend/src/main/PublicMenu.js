@@ -64,6 +64,7 @@ function PublicMenu({ isLoggedIn, onLogout }) {
 
 function UserAfter({ onLogout }) {
     let navigate = useNavigate();
+    const [pagingNow, setPagingNow] = useState(0);
     const userState = useSelector((state) => state.userState);  
     
     let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -105,6 +106,9 @@ function UserAfter({ onLogout }) {
             fetchChannels();
             }, [favoritesList]);
 
+        //즐겨찾기 게시판(3) :: 페이징
+        const nowChannelList = channelList.slice(pagingNow, 7);
+
     return (
         <div className={styles.fadein}>
             <div className={styles.userAfter} style={{ borderRadius: '20px 20px 0px 0px' }}>
@@ -120,12 +124,11 @@ function UserAfter({ onLogout }) {
             <div className={styles.dashed} />{/* 회색줄 */}
             <div className={styles.userAfter} style={{ borderRadius: '00px 00px 20px 20px' }}>
                 <div className={styles.Bookmark}>즐겨찾기<img src={edit} /></div>
-                <div className={styles.recommendation} style={{ marginTop: '0px', paddingTop: '20px' }}>{/* 즐찾 */}
+                <div className={styles.recommendation} style={{ marginTop: '0px', paddingTop: '20px', paddingBottom:'0px' }}>{/* 즐찾 */}
                     <div className={styles.list} style={{ marginTop: '0px' }}>
-                        {console.log(channelList[0])}
-                        {channelList[0] ?
+                        {nowChannelList.length ?
                         <>
-                            {channelList.map((item, i)=>
+                            {nowChannelList.map((item, i)=>
                             <div onClick={()=>{navigate(`/channel/${item[0].id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
                                 <div className={styles.imgDiv}><img src={item[0].imageUrl} /></div>
                                 {item[0].name}
@@ -136,11 +139,14 @@ function UserAfter({ onLogout }) {
                         } 
                     </div>
                 </div>
-                <div className={styles.bottom}>
+                {channelList.length >7?
+                    <div className={styles.bottom}>
                     <img src={btn_left} />
-                    1/5
+                    {pagingNow+1}/{channelList.length % 7}
                     <img src={btn_right} />
-                </div>
+                    </div>
+                    : null
+                }   
             </div>
         </div>
     )
