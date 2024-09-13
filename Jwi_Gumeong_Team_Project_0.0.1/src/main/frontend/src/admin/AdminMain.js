@@ -13,6 +13,8 @@ import reply from '../icon/img/reply-ing.png';
 import serviceLogo from '../icon/img/service-Illustration.png';
 import AlarmModal from '../modal/AlarmModal.js';
 import AdminPaging from './AdminPaging.js';
+import AdminPagingInquiry from './AdminPagingInquiry.js';
+import AdminPagingReport from './AdminPagingReport.js';
 import styles from './style/AdminMain.module.css';
 
 function AdminMain() {
@@ -44,11 +46,21 @@ function AdminMain() {
     const [revertBtn,setRevertBtn] = useState(false);
     const [update,setUpdate] = useState(false);
     const [report,setReport] = useState([]);
-    const [currentItems, setCurrentItems] = useState([]);
+    const [pagingUsers, setPagingUsers] = useState([]);
+    const [pagingInquiry, setPagingInquiry] = useState([]);
+    const [pagingReport, setPagingReport] = useState([]);
     const cookieCheck = getCookie('frontCookie');
     
     const handleItemsChange = (items) => {
-        setCurrentItems(items);
+        setPagingUsers(items);
+    };
+
+    const handleItemsChangeInquiry = (items) => {
+        setPagingInquiry(items);
+    };
+
+    const handleItemsChangeReport = (items) => {
+        setPagingReport(items);
     };
 
     const handleEnter = (e) => {
@@ -245,7 +257,7 @@ function AdminMain() {
                 console.log("문의 내역 가져오기 실패: " + error.message);
             });
         } 
-    }, [tab, userKey, update]);
+    }, [tab, update]);
 
     // 문의 하기 내용
     const [files, setFiles] = useState([]); // 문의 넣을 때 이미지
@@ -443,7 +455,7 @@ function AdminMain() {
                 return (
                     <div className={styles.faqContainer}>
                         {/* 이거 순번체킹 말고 key값 받아와서 체킹하는걸로 해야할듯? */}
-                        {currentItems.map((users, idx) => {
+                        {pagingUsers.map((users, idx) => {
                             let banData = banned.find(ban => ban.userKey === parseInt(users.userKey));
                             let reportData = report.filter(repot => repot.reportUser.userKey === parseInt(users.userKey));
                             let reportDataCategory = (categorys) =>{
@@ -585,7 +597,7 @@ function AdminMain() {
                         {inquiries.length === 0 ? (
                             <div className={styles.noHistory}>문의 내역이 없습니다.</div>
                         ) : (
-                            inquiries.map((inquiry, idx) => {
+                            pagingInquiry.map((inquiry, idx) => {
                                 // const response = inquiryResponses.find(responseData => responseData.inquiryKey === inquiry.inquiryKey );
                                 const response = inquiryResponses[inquiry.inquiryKey];
                                 // 날짜 형식 변경 2024년 O월 O일
@@ -733,25 +745,23 @@ function AdminMain() {
                         <div className={styles.sanctionList}>
                             {/* 내역이 없을 시 */}
                             {
-                                report.length === 0 ? (
+                                pagingReport.length === 0 ? (
                                     <div className={styles.noHistory}>신고 받은 내역이 없습니다.</div>
                                 ) : (
                                     // 제재 내역이 있을 시
-                                    report.map((a,i)=>{
+                                    pagingReport.map((a,i)=>{
                                         return(
-                                            <div className={styles.reportItem} key={i}>
-                                                    {
-                                                        report[i].state === "unprocessed" ?
-                                                            <div className={styles.reportLine}>
-                                                                {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
-                                                                <div className={styles.reportContent}>신고내용 : {report[i].content.substr(0,80)}</div>
-                                                                <div className={styles.reportCategory}>카테고리 : {report[i].category}</div>
-                                                                <div className={styles.reportReportUser}>신고받은사람 : {report[i].reportUser.nickName} ( {report[i].reportUser.email} ) </div>
-                                                                <div className={styles.reportUser}>신고자 :{report[i].user.nickName} ( {report[i].user.email} ) </div>
-                                                            </div>
-                                                            :null
-                                                    }
-                                            </div>
+                                            pagingReport[i].state === "unprocessed" ?
+                                                <div className={styles.reportItem} key={i}>
+                                                    <div className={styles.reportLine}>
+                                                        {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
+                                                        <div className={styles.reportContent}>신고내용 : {pagingReport[i].content.substr(0,80)}</div>
+                                                        <div className={styles.reportCategory}>카테고리 : {pagingReport[i].category}</div>
+                                                        <div className={styles.reportReportUser}>신고받은사람 : {pagingReport[i].reportUser.nickName} ( {pagingReport[i].reportUser.email} ) </div>
+                                                        <div className={styles.reportUser}>신고자 :{pagingReport[i].user.nickName} ( {pagingReport[i].user.email} ) </div>
+                                                    </div>
+                                                </div>
+                                            :null
                                         )
                                     })    
                                 )
@@ -851,6 +861,7 @@ function AdminMain() {
                 {
                     tab === 2 ?
                     <div>
+                        <AdminPagingInquiry inquiry={inquiries} onItemsChange={handleItemsChangeInquiry}/>
                         <div className={styles.userSearch}>
                             <div className={styles.userSearchList}>질문답변</div>
                             <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
@@ -879,6 +890,7 @@ function AdminMain() {
                 {
                     tab === 4 ?
                     <div>
+                        <AdminPagingReport report={report} onItemsChange={handleItemsChangeReport}/>
                         <div className={styles.userSearch}>
                             <div className={styles.userSearchList}>신고내역</div>
                             <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
