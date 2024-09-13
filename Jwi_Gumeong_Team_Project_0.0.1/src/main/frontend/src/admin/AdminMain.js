@@ -12,7 +12,7 @@ import closeModalIcon from '../icon/btn/btn-image-Close.png';
 import reply from '../icon/img/reply-ing.png';
 import serviceLogo from '../icon/img/service-Illustration.png';
 import AlarmModal from '../modal/AlarmModal.js';
-import AdminPaging from './AdminPaging.js';
+import AdminPagingUser from './AdminPagingUser.js';
 import AdminPagingInquiry from './AdminPagingInquiry.js';
 import AdminPagingReport from './AdminPagingReport.js';
 import styles from './style/AdminMain.module.css';
@@ -25,13 +25,18 @@ function AdminMain() {
     const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
     const [dropdownOpen, setDropdownOpen] = useState(false); // 문의 종류 드롭다운
     const [dropdownOpen2, setDropdownOpen2] = useState(false); // 문의 종류 드롭다운2
-    const [dropdownOpen3, setDropdownOpen3] = useState(false); // 검색 종류 드롭다운
+    const [dropdownOpen3, setDropdownOpen3] = useState(false); // 검색 종류 드롭다운3
+    const [dropdownOpen4, setDropdownOpen4] = useState(false); // 검색 종류 드롭다운4
+    const [dropdownOpen5, setDropdownOpen5] = useState(false); // 검색 종류 드롭다운5
     const [selectedOption, setSelectedOption] = useState("선택하세요"); // 문의 종류 최초 상태
     const [selectedOption2, setSelectedOption2] = useState("선택하세요"); // 문의 종류 최초 상태
-    const [selectedOption3, setSelectedOption3] = useState("닉네임"); // 문의 종류 최초 상태
+    const [selectedOption3, setSelectedOption3] = useState("닉네임"); // 유저 검색 최초 상태
+    const [selectedOption4, setSelectedOption4] = useState("닉네임"); // 문의 검색 최초 상태
+    const [selectedOption5, setSelectedOption5] = useState("닉네임"); // 신고 검색 최초 상태
     const [faqContent, setFaqContent] = useState(null); // 자주 묻는 질문 내용
     const [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
     const [searchUserInput,setSearchUserInput] = useState(''); // 유저 검색
+    const [searchInqInput,setSearchInqInput] = useState(''); // 질문 검색
     const [inputComplete, setInputComplete] = useState(false); // 문의 내용이 전부 있는지
     const [modalOpen, setModalOpen] = useState(false);  // 알림 모달
     const [modalContent, setModalContent] = useState('');
@@ -63,6 +68,7 @@ function AdminMain() {
         setPagingReport(items);
     };
 
+    // 엔터키 클릭시 유저 검색 후 set하는 로직
     const handleEnter = (e) => {
         if (e.key === "Enter" || e === "enter") {
             switch (selectedOption3) {
@@ -70,7 +76,50 @@ function AdminMain() {
                     setUsers(usersCopy.filter(userData => userData.nickName.includes(searchUserInput)));
                     break;
                 case "이메일":
-                    setUsers(usersCopy.filter(userData => userData.email.includes(searchUserInput)));
+                    setUsers(usersCopy.filter(userData => userData.email.includes(searchInqInput)));
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    // 스위치 케이스문으로 입력받은 닉네임 or 이메일 or 제목별로 조정
+    // 입력받은 값을 onChange state에 저장 후 엔터키다운 or 검색버튼 클릭시 작동되게끔 구성
+    // 유저 정보를 찾기 위해 파인드 사용하여 배열참조
+
+    const handleEnterInq = (e) => {
+        if (e.key === "Enter" || e === "enter") {
+            switch (selectedOption4) {
+                case "닉네임":
+                    if(searchInqInput === ""){
+                        setInquiries(inquirieCopy);
+                    } else {
+                        setInquiries(inquirieCopy.filter(inqData => inqData.userKey === parseInt(usersCopy.find(userData => userData.nickName.includes(searchInqInput))?.userKey)));
+                    }
+                    break;
+                case "이메일":
+                    if(searchInqInput === ""){
+                        setInquiries(inquirieCopy);
+                    } else {
+                        let filteredUsers = usersCopy.filter(userData => userData.email.includes(searchInqInput));
+                        // if(usersCopy.filter(userData => userData.email.includes(searchInqInput)).length === 1){
+                        //     setInquiries(inquirieCopy.filter(inqData => inqData.userKey === parseInt(usersCopy.find(userData => userData.email.includes(searchInqInput))?.userKey)));
+                        // } else if(usersCopy.filter(userData => userData.email.includes(searchInqInput)).length === 0){
+                        //     alert('no have item');
+                        // } else {
+                        // }
+                        if (filteredUsers.length === 1) {
+                            setInquiries(inquirieCopy.filter(inqData => inqData.userKey === parseInt(filteredUsers[0].userKey)));
+                        } else if (filteredUsers.length === 0) {
+                            alert('검색 결과가 없습니다.');
+                        } else {
+                            let userKeys = filteredUsers.map(userData => parseInt(userData.userKey));
+                            setInquiries(inquirieCopy.filter(inqData => userKeys.includes(inqData.userKey)));
+                        }
+                    }
+                    break;
+                case "제목":
                     break;
                 default:
                     break;
@@ -283,6 +332,18 @@ function AdminMain() {
         setSelectedOption3(option);
         setForm({ ...form, category: option });
         setDropdownOpen3(false);
+    };
+
+    const optionSelect4 = (option) => {
+        setSelectedOption4(option);
+        setForm({ ...form, category: option });
+        setDropdownOpen4(false);
+    };
+
+    const optionSelect5 = (option) => {
+        setSelectedOption5(option);
+        setForm({ ...form, category: option });
+        setDropdownOpen5(false);
     };
 
     const handleInputChange = (e) => {
@@ -606,7 +667,7 @@ function AdminMain() {
                                     month: 'long', 
                                     day: 'numeric' 
                                 }).format(new Date(response.createdAt)) : '-'; // 날짜가 없으면 - 로 표시
-                                let userInData = usersCopy.find(data => parseInt(data.userKey) === inquiries[idx].userKey);
+                                let userInData = usersCopy.find(data => parseInt(data.userKey) === inquiries[idx]?.userKey);
                                 // 검색기능 만들기 생각하고있는것
                                 // 내용 검색같은 경우엔 inquiries.filter 로 내용 넣어서 표기하면 될꺼같고 
                                 // 유저 이메일,닉네임 같은 경우엔 값을 받아와서 userKey만 뽑고 그걸 filter로 찾아야할듯?
@@ -625,7 +686,7 @@ function AdminMain() {
                                                             <div className={styles.inquiryResponse}>답변완료</div>
                                                         )}
                                                     </div>
-                                                    <div className={styles.inquirySubtitle}>유저이메일: {userInData.email} / 유저닉네임: {userInData.nickName}</div>
+                                                    <div className={styles.inquirySubtitle}>유저이메일: {userInData?.email} / 유저닉네임: {userInData?.nickName}</div>
                                                     <div className={styles.inquirySubtitle}>답변 날짜: {formattedDate}</div>
                                                 </div>
                                             </div>
@@ -832,7 +893,7 @@ function AdminMain() {
                 {
                     tab === 0 ?
                     <div>
-                        <AdminPaging users={users} onItemsChange={handleItemsChange}/>
+                        <AdminPagingUser users={users} onItemsChange={handleItemsChange}/>
                         <div className={styles.userSearch}>
                             <div className={styles.userSearchList}>유저검색</div>
                             <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
@@ -849,7 +910,7 @@ function AdminMain() {
                                     </div>
                             }
                             <div className={styles.inputDiv}>
-                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchUserInput(e.target.value)} onKeyDown={handleEnter}/>
+                                <input placeholder='검색어를 입력하세요' onChange={(e)=>setSearchUserInput(e.target.value)} onKeyDown={handleEnter}/>
                                 <img style={{cursor: 'pointer'}} src={search} onClick={()=>{handleEnter("enter")}}/>
                             </div>
                         </div>
@@ -864,22 +925,22 @@ function AdminMain() {
                         <AdminPagingInquiry inquiry={inquiries} onItemsChange={handleItemsChangeInquiry}/>
                         <div className={styles.userSearch}>
                             <div className={styles.userSearchList}>질문답변</div>
-                            <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
-                                {selectedOption3}
+                            <div onClick={() => setDropdownOpen4(!dropdownOpen4)} className={styles.inqSelect}>
+                                {selectedOption4}
                             </div>
                             {
-                                dropdownOpen3 &&
+                                dropdownOpen4 &&
                                     <div className={styles.dropdown3}>
                                         {["닉네임", "이메일", "제목"].map((option, index) => (
-                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect4(option)}>
                                                 {option}
                                             </div>
                                         ))}
                                     </div>
                             }
                             <div className={styles.inputDiv}>
-                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={()=>{}} />
-                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
+                                <input placeholder='검색어를 입력하세요' onChange={(e)=>{setSearchInqInput(e.target.value)}} onKeyDown={handleEnterInq}/>
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{handleEnterInq("enter")}}/>
                             </div>
                         </div>
                     </div>
@@ -893,14 +954,14 @@ function AdminMain() {
                         <AdminPagingReport report={report} onItemsChange={handleItemsChangeReport}/>
                         <div className={styles.userSearch}>
                             <div className={styles.userSearchList}>신고내역</div>
-                            <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
-                                {selectedOption3}
+                            <div onClick={() => setDropdownOpen5(!dropdownOpen5)} className={styles.inqSelect}>
+                                {selectedOption5}
                             </div>
                             {
-                                dropdownOpen3 &&
+                                dropdownOpen5 &&
                                     <div className={styles.dropdown3}>
                                         {["닉네임", "이메일"].map((option, index) => (
-                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect5(option)}>
                                                 {option}
                                             </div>
                                         ))}
