@@ -4,7 +4,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useChannel } from '../recycleCode/ApiQuery.js';
 import styles from './style/PublicMenu.module.css';
 import '../App.css';
 import edit from '../icon/20px/edit.png';
@@ -13,7 +12,6 @@ import btn_left from '../icon/btn/btn-left.png';
 import btn_right from '../icon/btn/btn-right.png';
 import { getUserInfo } from '../slice/loginSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSessionId, setUserKey, logout, setLoggedIn, fetchUserKey } from '../slice/sessionSlice.js';
 
 function PublicMenu({ isLoggedIn, onLogout }) {
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
@@ -65,6 +63,7 @@ function PublicMenu({ isLoggedIn, onLogout }) {
 function UserAfter({ onLogout }) {
     let navigate = useNavigate();
     const [pagingNow, setPagingNow] = useState(0);
+    const [pagingMax, setPagingMax] = useState(7);
     const userState = useSelector((state) => state.userState);  
     
     let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -107,7 +106,17 @@ function UserAfter({ onLogout }) {
             }, [favoritesList]);
 
         //즐겨찾기 게시판(3) :: 페이징
-        const nowChannelList = channelList.slice(pagingNow, 7);
+        const nowChannelList = channelList.slice(pagingNow, pagingMax);
+        const result = channelList.length / 7;
+        const maxPaging = result !== Math.floor(result) ? Math.floor(result) + 1 : result;
+        function BtnRightPaging(){
+            setPagingNow(pagingNow+7)
+            setPagingMax(pagingMax+7)
+        }
+        function BtnLeftPaging(){
+            setPagingNow(pagingNow-7)
+            setPagingMax(pagingMax-7)
+        }
 
     return (
         <div className={styles.fadein}>
@@ -141,9 +150,13 @@ function UserAfter({ onLogout }) {
                 </div>
                 {channelList.length >7?
                     <div className={styles.bottom}>
-                    <img src={btn_left} />
-                    {pagingNow+1}/{channelList.length % 7}
-                    <img src={btn_right} />
+                    {pagingNow/7+1 === 1 ?  <div className={styles.div48}/> :
+                        <img src={btn_left}  onClick={BtnLeftPaging}/>
+                    }
+                        {pagingNow === 0 ? 1 : pagingNow/7+1}/{maxPaging}
+                    {pagingNow/7+1 === maxPaging ? <div className={styles.div48}/> : 
+                        <img src={btn_right} onClick={BtnRightPaging}/>
+                    }
                     </div>
                     : null
                 }   
