@@ -4,10 +4,18 @@ import InfoEdit from './InfoEdit.js';
 import MyPosts from './MyPosts.js';
 import FavoritesManagement from './FavoritesManagement.js';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 //마이페이지(로그인 검증)
 function MyPage() {
     let [topic, settopic] = useState('정보 수정');
+    const location = useLocation();
+    const { pageState } = location.state || {};
+    useEffect(()=>{
+        (pageState &&
+            settopic(pageState)
+        );
+    },[]);
 
     return (
         <div className={styles.MyPage}>

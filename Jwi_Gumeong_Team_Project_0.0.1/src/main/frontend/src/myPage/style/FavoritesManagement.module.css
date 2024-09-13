@@ -50,9 +50,9 @@
     /* background-color: #E5E5E5; */
 }
 .formGroup .bookMark img{
-  width: 20px;
-  height: 20px;
-  margin-right: 2px;
+    width: 20px;
+    height: 20px;
+    margin-right: 2px;
 }
 
 .formGroup .bookMark .text{
@@ -79,4 +79,25 @@
 }
 .PagingNum img{
     cursor: pointer;
+}
+
+.bottom{
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 318px;
+    height: 48px;
+    margin-top: 20px;
+    margin: auto;
+}
+
+.none{
+    text-align: center;
+    color: #999999;
+}
+
+.div48{
+    width: 48px;
 }

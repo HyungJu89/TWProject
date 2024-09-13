@@ -134,11 +134,11 @@ function UserAfter({ onLogout }) {
                     </div>
                     <button onClick={() => { onLogout() }} >로그아웃</button>
                 </div>
-                <button onClick={() => { navigate('/myPage') }} className={styles.myPage}>마이페이지</button>
+                <button onClick={() => { navigate('/myPage'); window.scrollTo(0, 0); }} className={styles.myPage}>마이페이지</button>
             </div>
             <div className={styles.dashed} />{/* 회색줄 */}
             <div className={styles.userAfter} style={{ borderRadius: '00px 00px 20px 20px' }}>
-                <div className={styles.Bookmark}>즐겨찾기<img src={edit} /></div>
+                <div className={styles.Bookmark}>즐겨찾기<img src={edit} onClick={() => { navigate('/myPage', { state: { pageState: '즐겨찾기 관리' } }); window.scrollTo(0, 0); }}/></div>
                 <div className={styles.recommendation} style={{ marginTop: '0px', paddingTop: '20px', paddingBottom:'0px' }}>{/* 즐찾 */}
                     <div className={styles.list} style={{ marginTop: '0px' }}>
                         {nowChannelList.length ?

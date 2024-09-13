@@ -135,10 +135,7 @@ function Search({ search }) {
 function SearchChannel({ channelInfo }) {
 
     let navigate = useNavigate();
-
-    
     const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
-
 
     return (
         <>
