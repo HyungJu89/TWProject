@@ -108,28 +108,10 @@ function AllTopic() {
                 break;
         }
 
-    }, [postPage]);
+    }, [topic,postPage]);
 
     useEffect(() => {
-        setPostList([]);
-        switch (topic) {
-            case 0:
-                searchRecommendedPost()
-                setPostPage(1)
-                break;
-            case 1:
-                searchFavoritesPost()
-                setPostPage(1)
-                break;
-            case 2:
-                searchAllPost()
-                setPostPage(1)
-                break;
-            default:
-
-                break;
-        }
-
+        setPostPage(1)
     }, [topic]);
 
 
