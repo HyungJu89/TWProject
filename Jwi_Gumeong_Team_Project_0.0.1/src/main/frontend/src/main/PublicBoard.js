@@ -18,7 +18,7 @@ import ChannelTitle from './PublicBoardComponents/ChannelTitle.js';
 import { useNavigate } from 'react-router-dom';
 import { reportInfo } from '../slice/ReportDtoSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
-
+import {dateTime} from '../recycleCode/dateTime.js'
 function PublicBoard({ postInfo}) {
     const [heart, setHeart] = useState(false); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(0);
@@ -29,6 +29,7 @@ function PublicBoard({ postInfo}) {
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
+    const [postUpdateTime, setPostUpdateTime] = useState(null);
     const navigate = useNavigate();
 
     const closeModal = () => {
@@ -39,7 +40,6 @@ function PublicBoard({ postInfo}) {
 
     let state = useSelector((state) => { return state });
     let dispatch = useDispatch();
-
     const [commentCount, setCommentCount] = useState(0);
 
     useEffect(() => {
@@ -50,6 +50,8 @@ function PublicBoard({ postInfo}) {
         setHeart(postInfo.like)
         setLikeCount(postInfo.likeCount)
         setCommentsON(false)
+        const time = dateTime(postInfo.createdAt)
+        setPostUpdateTime(time)
     }, [postInfo])
 
     // 디바운스 함수 생성
@@ -122,7 +124,7 @@ function PublicBoard({ postInfo}) {
                 <ChannelTitle postChannel={postInfo.postChannel} />
             )}
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
-                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
+                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· {postUpdateTime}</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true) }} src={more} />
                 {moreON && <MoreDelete state = {postInfo.state} modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-82px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
             </div>
