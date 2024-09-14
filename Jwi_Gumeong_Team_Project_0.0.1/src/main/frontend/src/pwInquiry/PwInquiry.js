@@ -60,11 +60,6 @@ function EmailAvailable({ setEmailCerti, setEmail, email }) {
     // 이메일 비밀번호 유효성 검사
     const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
 
-    useEffect(() => {
-        setModalOpen(true);
-        setModalContent('비밀번호 찾기를 위해 이메일 인증이 필요합니다.');
-    }, []);
-
     const closeModal = () => {
         setModalOpen(false);
     };
