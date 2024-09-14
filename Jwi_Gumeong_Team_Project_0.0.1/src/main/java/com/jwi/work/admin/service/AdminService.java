@@ -129,7 +129,6 @@ public class AdminService {
     		reports.setState("process");
     		reportRepository.save(reports);
     		
-    		alarmService.createReportAlarm(reports.getUser().getUserKey(), reports.getReportUser().getUserKey(), reports.getCategory());
     	}
     	
 	    if (sanctions.isEmpty()) {

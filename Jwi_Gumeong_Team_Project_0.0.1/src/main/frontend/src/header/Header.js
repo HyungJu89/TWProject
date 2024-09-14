@@ -281,7 +281,6 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
 
         return filteredNotifications &&
             filteredNotifications.map((notification, index) => {
-                console.log(notification);
             let icon = '';
             let content = '';
             let subContent = '';
@@ -294,11 +293,15 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     subContent = `${notification.nickname}님이 댓글을 달았어요.`;
                     break;
                 case 'comment':
+                    icon = notification.channelImageUrl || formulation;
+                    // 글자수가 20 넘어가면 뒷부분은 ... 으로 변경 css에서 처리했음
+                    content = notification.content;
+                    subContent = `${notification.nickname}님이 대댓글을 달았어요.`;
                     break;
                 case 'like':
                     icon = notification.channelImageUrl || n_heart_activation;
                     content = notification.content;
-                    subContent = `해당글이 ♥10개를 받았어요.`; // 좋아요 알림 예시
+                    subContent = `해당글이 ♥${notification.likeCount}개를 받았어요.`; // 좋아요 알림 예시
                     break;
                 case 'inquiry':
                     icon = reply;  // 문의 답변
