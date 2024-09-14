@@ -96,6 +96,25 @@ function AllTopic() {
         switch (topic) {
             case 0:
                 searchRecommendedPost()
+                break;
+            case 1:
+                searchFavoritesPost()
+                break;
+            case 2:
+                searchAllPost()
+                break;
+            default:
+
+                break;
+        }
+
+    }, [postPage]);
+
+    useEffect(() => {
+        setPostList([]);
+        switch (topic) {
+            case 0:
+                searchRecommendedPost()
                 setPostPage(1)
                 break;
             case 1:
@@ -111,7 +130,7 @@ function AllTopic() {
                 break;
         }
 
-    }, [topic, postPage]);
+    }, [topic]);
 
 
 
