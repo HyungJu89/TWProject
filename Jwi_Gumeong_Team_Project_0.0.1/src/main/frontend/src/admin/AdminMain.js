@@ -95,7 +95,15 @@ function AdminMain() {
                     if(searchInqInput === ""){
                         setInquiries(inquirieCopy);
                     } else {
-                        setInquiries(inquirieCopy.filter(inqData => inqData.userKey === parseInt(usersCopy.find(userData => userData.nickName.includes(searchInqInput))?.userKey)));
+                        let filteredUsers = usersCopy.filter(userData => userData.nickName.includes(searchInqInput));
+                        if (filteredUsers.length === 1) {
+                            setInquiries(inquirieCopy.filter(inqData => inqData.userKey === parseInt(filteredUsers[0].userKey)));
+                        } else if (filteredUsers.length === 0) {
+                            alert('검색 결과가 없습니다.');
+                        } else {
+                            let userKeys = filteredUsers.map(userData => parseInt(userData.userKey));
+                            setInquiries(inquirieCopy.filter(inqData => userKeys.includes(inqData.userKey)));
+                        }
                     }
                     break;
                 case "이메일":
@@ -103,12 +111,6 @@ function AdminMain() {
                         setInquiries(inquirieCopy);
                     } else {
                         let filteredUsers = usersCopy.filter(userData => userData.email.includes(searchInqInput));
-                        // if(usersCopy.filter(userData => userData.email.includes(searchInqInput)).length === 1){
-                        //     setInquiries(inquirieCopy.filter(inqData => inqData.userKey === parseInt(usersCopy.find(userData => userData.email.includes(searchInqInput))?.userKey)));
-                        // } else if(usersCopy.filter(userData => userData.email.includes(searchInqInput)).length === 0){
-                        //     alert('no have item');
-                        // } else {
-                        // }
                         if (filteredUsers.length === 1) {
                             setInquiries(inquirieCopy.filter(inqData => inqData.userKey === parseInt(filteredUsers[0].userKey)));
                         } else if (filteredUsers.length === 0) {
@@ -120,6 +122,11 @@ function AdminMain() {
                     }
                     break;
                 case "제목":
+                    if(searchInqInput === ""){
+                        setInquiries(inquirieCopy);
+                    } else {
+                        setInquiries(inquirieCopy.filter(inqData => inqData.title.includes(searchInqInput)));
+                    }
                     break;
                 default:
                     break;
