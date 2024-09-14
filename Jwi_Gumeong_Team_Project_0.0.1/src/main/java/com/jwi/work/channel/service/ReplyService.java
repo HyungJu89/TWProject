@@ -38,7 +38,7 @@ public class ReplyService {
 				alarmMapper.postAlarm(alarmDto);
 			}
 			
-			if(userKey != alarmDto.getCommentUserKey()) {
+			if(userKey != alarmDto.getCommentUserKey()&& alarmDto.getPostUserKey() != alarmDto.getCommentUserKey()) {
 				alarmMapper.commentAlarm(alarmDto);
 			}
 	
@@ -53,11 +53,11 @@ public class ReplyService {
 			alarmMapper.postAlarm(alarmDto);
 		}
 		
-		if(userKey != alarmDto.getCommentUserKey()) {
+		if(userKey != alarmDto.getCommentUserKey() && alarmDto.getPostUserKey() != alarmDto.getCommentUserKey()) {
 			alarmMapper.commentAlarm(alarmDto);
 		}
 		
-		if(userKey != alarmDto.getReplyUserKey()) {
+		if(userKey != alarmDto.getReplyUserKey() &&  alarmDto.getPostUserKey() != alarmDto.getReplyUserKey() && alarmDto.getReplyUserKey() != alarmDto.getCommentUserKey()) {
 			alarmMapper.replyAlarm(alarmDto);
 		}
 
