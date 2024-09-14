@@ -9,7 +9,7 @@ import ReplyArea from './ReplyArea.js';
 import more from '../../icon/24px/more.png';
 import comments_20px from '../../icon/20px/comments-20px.png';
 import big_comment from '../../icon/20px/bigcomment.png';
-
+import {dateTime} from '../../recycleCode/dateTime.js'
 //댓글 포커스용 ref 받는 코드(forwardRef)
 const CommentsList = forwardRef(function CommentsList(
 { index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex, setCommentStart, commentStart }, ref) {
@@ -19,6 +19,7 @@ const CommentsList = forwardRef(function CommentsList(
     const modalRef = useRef(null);
     const moreRef = useRef(null);
     const [replyMoreON, setReplyMoreON] = useState(false); //삭제,수정,신고 모달 on/off    
+    const [commentUpdateTime, setCommentUpdateTime] = useState(null);
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
             if (commentMoreON &&
@@ -33,13 +34,15 @@ const CommentsList = forwardRef(function CommentsList(
 
     useEffect(()=>{
         setCommentColor(comment.state != "common" ? '#999999' : '#101010')
+        const time = dateTime(comment.createdAt);
+        setCommentUpdateTime(time)
     },[comment])
     return (
         <>
             <div>{/* 댓글 */}
                 <div className={styles.list} style={{ marginBottom: '0px' }}  ref={ref}>
                     <div className={styles.listNav}>
-                        <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{comment.createdAt}</a></div>
+                        <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{commentUpdateTime}</a></div>
                         <div>
                             <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(comment.commentKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                             {commentMoreON &&
@@ -61,8 +64,11 @@ const CommentsList = forwardRef(function CommentsList(
                 <>
                     {comment.replys.map((reply, replyIndex) => {
                         const [replyColor,setReplyColor] = useState(reply.state != "common" ? '#999999' : '#101010');
+                        const [replyUpdateTime, setReplyUpdateTime] = useState(null);
                         useEffect(()=>{
                             setReplyColor(reply.state != "common" ? '#999999' : '#101010')
+                            const time = dateTime(reply.createdAt);
+                            setReplyUpdateTime(time);
                         },[reply])
                         return (
                             <div key={reply.replyKey}>
@@ -70,7 +76,7 @@ const CommentsList = forwardRef(function CommentsList(
                                     <img className={styles.BcImg} src={big_comment} />
                                     <div className={styles.list}>
                                         <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
-                                            <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{reply.createdAt}</a></div>
+                                            <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{replyUpdateTime}</a></div>
                                             <div>
                                                 <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(reply.replyKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
                                                 {commentMoreON &&
