@@ -79,8 +79,9 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
 
     // 아이콘 클릭 or 엔터키 입력시만 작동
     const onClickPointer = () => {
-        setSearchInputs(searchInput)
-        onClickSearch(searchInput)
+        setSearchInputs(searchInput);
+        onClickSearch(searchInput);
+        setJustSearchOn(true);
     }
 
     return (
@@ -88,10 +89,11 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
             <div className={styles.basicNav}>
                 <div className={styles.divWidth}><Link to="/"><img src={Logo} /></Link></div>
                 <div className={styles.inputDiv}>
-                    <input ref={popinputRef} onClick={() => { setJustSearchOn(prev => !prev);}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} onKeyDown={handleEnter} />
+                    <input ref={popinputRef} onClick={() => { setJustSearchOn(prev => !prev);}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} onKeyDown={handleEnter} value={searchInput} />
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
-                {justSearchOn == true ? <JustSearch searchTerm={searchInputs} popModalRef={popModalRef} onClickSearch={onClickSearch} recentSearchData={recentSearchData} setRecentSearchData={setRecentSearchData}/> : null} {/* 최근 검색 모달*/}
+                {/* 최근검색어 모달창 */}
+                {justSearchOn == true ? <JustSearch searchTerm={searchInputs} setSearchInputs={setSearchInputs} popModalRef={popModalRef} onClickSearch={onClickSearch} recentSearchData={recentSearchData} setRecentSearchData={setRecentSearchData}/> : null}
                     {/* 여기부분 어드민 쿠키 체킹후 수정하면 될듯? */}
                     {isLoggedIn ? (
                         <div className={styles.icon}>
@@ -409,7 +411,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
 
 // 전부 다 하긴했는데 10개 이후에 저장되는 방식을 좀 수정하는것도 괜찮을꺼같다.
 
-function JustSearch({ searchTerm, popModalRef, onClickSearch, recentSearchData, setRecentSearchData }) { 
+function JustSearch({ searchTerm,setSearchInputs,popModalRef, onClickSearch, recentSearchData, setRecentSearchData }) { 
     /* 최근 검색어 모달창 */
     let justSearchLocal;
     let asdf = [];
@@ -428,8 +430,8 @@ function JustSearch({ searchTerm, popModalRef, onClickSearch, recentSearchData, 
     // 넣을만한 조건
     useEffect(() => {
         if (searchTerm) {
-            const maxLength = 40;
-            const maxSlice = 10;
+            const maxLength = 40; // 최대 길이
+            const maxSlice = 10; // 최대 개수
 
             // 검색어 길이 제한 체크
             if (searchTerm.length > maxLength) {
@@ -448,8 +450,8 @@ function JustSearch({ searchTerm, popModalRef, onClickSearch, recentSearchData, 
             
             setRecentSearchData(updatedSearches);
             localStorage.setItem('search', JSON.stringify(updatedSearches));
+            setSearchInputs(''); // 검색어받은걸 초기화시켜서 if문 작동안되게 전환
         }
-
     }, [searchTerm,justSearchLocal]);
 
     // 검색어 삭제 함수
