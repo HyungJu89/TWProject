@@ -37,6 +37,7 @@ function AdminMain() {
     const [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
     const [searchUserInput,setSearchUserInput] = useState(''); // 유저 검색
     const [searchInqInput,setSearchInqInput] = useState(''); // 질문 검색
+    const [searchReportInput,setSearchReportInput] = useState(''); // 질문 검색
     const [inputComplete, setInputComplete] = useState(false); // 문의 내용이 전부 있는지
     const [modalOpen, setModalOpen] = useState(false);  // 알림 모달
     const [modalContent, setModalContent] = useState('');
@@ -51,6 +52,7 @@ function AdminMain() {
     const [revertBtn,setRevertBtn] = useState(false);
     const [update,setUpdate] = useState(false);
     const [report,setReport] = useState([]);
+    const [reportCopy,setReportCopy] = useState([]);
     const [pagingUsers, setPagingUsers] = useState([]);
     const [pagingInquiry, setPagingInquiry] = useState([]);
     const [pagingReport, setPagingReport] = useState([]);
@@ -134,12 +136,36 @@ function AdminMain() {
         }
     };
 
+    const handleEnterReport = (e) => {
+        if (e.key === "Enter" || e === "enter") {
+            switch (selectedOption5) {
+                case "닉네임":
+                    if(searchReportInput === ""){
+                        setReport(reportCopy);
+                    } else {
+                        setReport(reportCopy.filter(reportData => reportData.reportUser.nickName.includes(searchReportInput)));
+                    }
+                    break;
+                case "이메일":
+                    if(searchReportInput === ""){
+                        setReport(reportCopy);
+                    } else {
+                        setReport(reportCopy.filter(reportData => reportData.reportUser.email.includes(searchReportInput)));
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     useEffect(() => {
         if(cookieCheck){
             axios.get('/admin/report')
             .then(response => {
                 if (response.data) {
                     setReport(response.data);
+                    setReportCopy(response.data);
                 } else {
                     console.log("유저 리스트 불러오기 실패");
                 }
@@ -975,8 +1001,8 @@ function AdminMain() {
                                     </div>
                             }
                             <div className={styles.inputDiv}>
-                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={()=>{}} />
-                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
+                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={(e)=>{setSearchReportInput(e.target.value)}} onKeyDown={handleEnterReport}/>
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{handleEnterReport("enter")}}/>
                             </div>
                         </div>
                     </div>
