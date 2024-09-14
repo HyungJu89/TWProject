@@ -77,14 +77,15 @@ function UserAfter({ onLogout }) {
         useEffect(() => {
             const favorites = async () => {
                 try {
-                    const {data} = await axios.get(`/myPage/favorites`,{params:{sessionId : sessionId}});
+                    const {data} = (sessionId && await axios.get(`/myPage/favorites`,{params:{sessionId : sessionId}}))
                     setFavoritesList(data);
                 } catch (error) {
-                    console.error('Channel API Error:', error);
+                    // console.error('Channel API Error:', error);
+                    //오류가 이상하게 떠서 주석 처리함
                 }
             };
             favorites();
-        }, []);
+        },[sessionId]);
         
         //즐겨찾기 게시판(2)  :: 채널 정보 가져오기
         const [channelList, setChannelList] = useState([]); //즐겨찾기에서 찾은key를 기반으로 채널 정보 가져오기
