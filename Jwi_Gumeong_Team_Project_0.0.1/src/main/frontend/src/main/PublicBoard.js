@@ -22,6 +22,7 @@ import { formatDistanceToNow } from 'date-fns'; // 아래와 같이 사용되는
 import { ko } from 'date-fns/locale'; // 한국어 설정
 
 function PublicBoard({ postInfo }) {
+    let disPatch = useDispatch();
     const [heart, setHeart] = useState(false); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(0);
     // 디바운스요 변수
@@ -112,8 +113,8 @@ function PublicBoard({ postInfo }) {
     const imgOnclick = () => {
         const { image, ...newPostInfo } = postInfo;
         const updatePostInfo = { ...newPostInfo, image: imgBeing }
-        dispatch(changePost(updatePostInfo))
-        dispatch(openImgUiModal())
+        disPatch(changePost(updatePostInfo))
+        disPatch(openImgUiModal())
     }
 
     //날짜 세팅
