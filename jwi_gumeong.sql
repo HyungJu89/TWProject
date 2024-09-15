@@ -9,7 +9,7 @@ ALTER TABLE `report`
 MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
 select * from alarm;
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('3','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
+values ('200','342','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
 
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
 values ('2','8','post','4','욕설/혐오','왜 처리 안함 ㅡㅡ','unprocessed',now(),now());
@@ -378,6 +378,15 @@ CREATE TABLE `inquiry` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
+
+select *from inquiry;
+
+INSERT INTO `inquiry` (`userKey`, `title`, `category`, `details`, `image`)
+VALUES 
+(342, '문의 제목 1', '카테고리 1', '문의 내용 1', '이미지 URL 1'),
+(342, '문의 제목 2', '카테고리 2', '문의 내용 2', '이미지 URL 2'),
+(342, '문의 제목 3', '카테고리 3', '문의 내용 3', '이미지 URL 3'),
+(342, '문의 제목 ㅋㅋㅋㅋ', '카테고리 2ㅋㅋㅋㅋㅋㅋㅋㅋㅋ00', '문의ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ 내용 200', '이미지 URL 200');
 
 CREATE TABLE `inquiryResponse` (
 	`responseKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 답변 키',
