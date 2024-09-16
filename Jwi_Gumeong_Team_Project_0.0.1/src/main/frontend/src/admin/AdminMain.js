@@ -57,7 +57,11 @@ function AdminMain() {
     const [pagingInquiry, setPagingInquiry] = useState([]);
     const [pagingReport, setPagingReport] = useState([]);
     const cookieCheck = getCookie('frontCookie');
-    
+
+    // 문의답변 답변부분에서 데이터 형식에 따라 받아오는 방식을 수정해야될꺼같음
+    // 일단 데이터를 불러온 다음에 키가 있으면 그거에 따라 데이터 바인딩?? 하면될듯
+    // 근데 수정해야할 부분이 좀 많음.
+
     const handleItemsChange = (items) => {
         setPagingUsers(items);
     };
