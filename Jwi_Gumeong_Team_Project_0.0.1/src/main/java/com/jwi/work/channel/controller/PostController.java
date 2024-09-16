@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jwi.work.channel.dto.bodyDto.DelectByUser;
 import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
 import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
@@ -46,10 +47,17 @@ public class PostController {
 		
 	}
 	
+	@PostMapping("/deleteByUser")
+	public AnswerDto<String> postDeleteByUser(@RequestBody DelectByUser postDelete){
+		return postService.postDeleteByUser(postDelete);
+	}
+	
 	@PostMapping("/delete")
 	public AnswerDto<String> postDelete(@RequestBody PostDeleteDto deleteDto	){
 		return postService.postDelete(deleteDto);
 	}
+	
+	
 	
 	@PostMapping("/like")
 	public void postLike(@RequestBody PostLikeDto likeDto) {

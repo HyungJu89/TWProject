@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { openImgUiModalFalse } from '../slice/mainSlice';
 import { clearPost } from '../slice/PostSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
+import {dateTime} from '../recycleCode/dateTime.js'
 
 function MiniPublicBoard() {
     let postInfo = useSelector((state)=>{ return state.postInfo })
@@ -25,6 +26,7 @@ function MiniPublicBoard() {
     const [likeCount, setLikeCount] = useState(postInfo.likeCount);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
+    const [postUpdateTime, setPostUpdateTime] = useState(null);
     const navigate = useNavigate();
     const PublicBoardImgmodal = ('open'); //이미지 팝업 상태에 따른 신고,삭제 모달 위치 변환용
 
@@ -40,6 +42,8 @@ function MiniPublicBoard() {
 
     useEffect(() => {
         setCommentCount(postInfo.commentCount)
+        const time = dateTime(postInfo.createdAt);
+        setPostUpdateTime(time)
     }, [postInfo])
 
     // 디바운스 함수 생성
@@ -101,7 +105,7 @@ function MiniPublicBoard() {
                 <ChannelTitle postChannel={postInfo.postChannel} />
             )}
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
-                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
+                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· {postUpdateTime}</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true) }} src={more} />
                 {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-0px'} top={'30px'} myContent={postInfo.myPost} />}
             </div>

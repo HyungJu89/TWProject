@@ -21,7 +21,6 @@ function ChannelHome() {
     const [channelInfo,setChannelInfo] = useState();
     const [postList,setPostList] = useState([]);
     const [postPage,setPostPage] = useState(1);
-    
     //세션화용 코드,state
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);
@@ -123,12 +122,14 @@ function ChannelHome() {
                     <div className={style.listLeft}>
                         <PostCreate channelKey={channelInfo.channelKey} />
                         <div className={style.postList}>
-                            {postList.success && 
+                            {postList.success ?
                                 <>
                                     {postList.search.map((postInfo, index) =>
-                                        <PublicBoard key={index} postInfo={postInfo} />
+                                        <PublicBoard key={index} postInfo={postInfo}/>
                                     )}
-                                </>
+                                </> : 
+                                    <div className={style.nonPostList}>생성된 게시글이 없습니다.</div>
+                                
                             }
                         </div>
                         <div className={style.bottomPaging}>

@@ -116,6 +116,10 @@
 		SELECT userKey,image FROM post WHERE postKey = #{postKey}
 	</select>
 	
+	<update id="postDeleteByUser" parameterType="com.jwi.work.channel.dto.bodyDto.DelectByUser">
+		UPDATE post SET state = 'delete' WHERE postKey = #{referenceKey} AND userKey = (SELECT userKey FROM userConnection WHERE sessionId = #{sessionId})
+	</update>
+	
 	<delete id="postDelete" parameterType="int">
 		DELETE FROM post WHERE postKey = #{postKey}
 	</delete>

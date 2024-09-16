@@ -131,7 +131,7 @@ function PostCreact({channelKey}) {
                         <div key={index} className={style.imageContainer}>
                             <img src={preview} alt={`preview ${index}`} className={style.imagePreview} />
                                 <div onClick={() => imageDelete(index)} className={style.deleteButton}>
-                                    <img src = {closeIcon} alt='삭제'/>
+                                    <img src = {closeIcon}  className={style.deleteButtonImg} alt='삭제'/>
                                 </div>
                         </div>
                     ))

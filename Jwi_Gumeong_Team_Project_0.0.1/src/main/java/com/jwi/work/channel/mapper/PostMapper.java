@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.jwi.work.channel.dto.bodyDto.DelectByUser;
 import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.dto.sqlDto.ImageInfoDto;
@@ -40,6 +41,9 @@ public interface PostMapper {
 	
 	// 게시글 키로 게시글 하나 출력 
 	public PostInfoDto postInfo(@Param("postKey")int postKey);
+	
+	// 유저가 게시글을 삭제
+	public void postDeleteByUser(DelectByUser postDelete);
 	
 	// 게시글 삭제
 	public void postDelete(@Param("postKey")int postKey); 

@@ -17,10 +17,11 @@ const CommentsList = forwardRef(function CommentsList(
 { index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex, setCommentStart, commentStart, PublicBoardImgmodal }, ref) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off   
     const [nowRef, setNowRef] = useState(0) ; //모달(Ref)지정용 함수 = 현재 누른 댓글의 key를 비교해서 동일한 모달만 오픈
+    const [commentColor,setCommentColor] = useState(comment.state != "common" ? '#999999' : '#101010');
     const modalRef = useRef(null);
     const moreRef = useRef(null);
-
     const [replyMoreON, setReplyMoreON] = useState(false); //삭제,수정,신고 모달 on/off    
+    const [commentUpdateTime, setCommentUpdateTime] = useState(null);
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
             if (commentMoreON &&
@@ -54,6 +55,11 @@ const CommentsList = forwardRef(function CommentsList(
         //addSuffix : ~전 ~후 같은 접미사
     }
     
+    // useEffect(()=>{
+    //     setCommentColor(comment.state != "common" ? '#999999' : '#101010')
+    //     const time = dateTime(comment.createdAt);
+    //     setCommentUpdateTime(time)
+    // },[comment])
     return (
         <>
             <div>{/* 댓글 */}
@@ -65,7 +71,9 @@ const CommentsList = forwardRef(function CommentsList(
                             {commentMoreON &&
                             nowRef === comment.commentKey ?
                                 <div ref={modalRef}>
-                                    <MoreDeleteMini 
+                                    <MoreDeleteMini
+                                        setCommentLode = {setCommentLode} 
+                                        state = {comment.state} 
                                         nickName={comment.nickName} 
                                         referenceType={'comment'} 
                                         referenceKey={comment.commentKey} 
@@ -76,7 +84,7 @@ const CommentsList = forwardRef(function CommentsList(
                                 : null} {/*신고, 삭제 모달*/}
                         </div>
                     </div>
-                    <div className={styles.listContent}>{comment.comment}</div>
+                    <div className={styles.listContent} style={{color : commentColor }}>{comment.comment}</div>
                     <div className={styles.replyDiv} onClick={() => (replyInputState == 'comment' && replyInputIndex == comment.commentKey) ? onClear() : replyOnclick('comment', comment.commentKey)}>
                         <div className={styles.replyDivText} style={{ marginBottom: '20px' }}><img src={comments_20px} />답글달기</div>
                     </div>
@@ -96,6 +104,13 @@ const CommentsList = forwardRef(function CommentsList(
             {comment.replys[0].replyKey != 0 && (
                 <>
                     {comment.replys.map((reply, replyIndex) => {
+                        const [replyColor,setReplyColor] = useState(reply.state != "common" ? '#999999' : '#101010');
+                        const [replyUpdateTime, setReplyUpdateTime] = useState(null);
+                        useEffect(()=>{
+                            setReplyColor(reply.state != "common" ? '#999999' : '#101010')
+                            const time = dateTime(reply.createdAt);
+                            setReplyUpdateTime(time);
+                        },[reply])
                         return (
                             <div key={reply.replyKey}>
                                 <div className={styles.bigComments}>
@@ -109,6 +124,8 @@ const CommentsList = forwardRef(function CommentsList(
                                                 nowRef === reply.replyKey ?
                                                 <div ref={modalRef}>
                                                 <MoreDeleteMini 
+                                                    setCommentLode = {setCommentLode}
+                                                    state = {reply.state}
                                                     nickName={comment.nickName} 
                                                     referenceType={'comment'} 
                                                     referenceKey={comment.commentKey} 
@@ -116,12 +133,13 @@ const CommentsList = forwardRef(function CommentsList(
                                                     right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'} 
                                                     top={'30px'}/>
                                                 </div> 
-                                                : null} {/*신고, 삭제 모달*/}                                            </div>
+                                                : null} {/*신고, 삭제 모달*/}                                            
+                                            </div>
                                         </div>
                                         {reply.replyNickName &&
                                             <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
                                         }
-                                        <a className={styles.listContent}>{reply.reply}</a>
+                                        <a className={styles.listContent} style={{color : replyColor}}>{reply.reply}</a>
                                         <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == reply.replyKey) ? onClear() : replyOnclick('reply', reply.replyKey)}>
                                             <div className={styles.replyDivText}><img src={comments_20px} />답글달기</div>
                                         </div>
