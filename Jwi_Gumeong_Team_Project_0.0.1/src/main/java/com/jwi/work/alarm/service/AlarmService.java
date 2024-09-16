@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.jwi.work.alarm.entity.Alarm;
 import com.jwi.work.alarm.entity.Channel;
 import com.jwi.work.alarm.entity.Comment;
+import com.jwi.work.alarm.entity.InquiryAlarm;
 import com.jwi.work.alarm.entity.Post;
 import com.jwi.work.alarm.mapper.AlarmMapper;
 import com.jwi.work.alarm.repository.AlarmRepository;
@@ -19,6 +20,7 @@ import com.jwi.work.alarm.repository.LikeRepository;
 import com.jwi.work.alarm.repository.PostRepository;
 import com.jwi.work.alarm.repository.ReplyRepository;
 import com.jwi.work.alarm.repository.ReportRepository;
+import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.user.entity.UserEntity;
 import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.user.repository.UserRepository;
@@ -69,6 +71,7 @@ public class AlarmService {
 	                break;
 	            case "inquiry":
 	                // 문의 답변 알림
+	            	inquiryNotification(alarm);
 	                break;
 	            case "system":
 	            	// 신고 처리 결과 알림
@@ -134,18 +137,63 @@ public class AlarmService {
             Post post = postOpt.get();
             long likeCount = likeRepository.countByPost(post);  // 해당 게시글의 좋아요 수
 
-            // 좋아요 개수가 10, 50, 100일 때 알림을 전송
-            if (likeCount == 10 || likeCount == 50 || likeCount == 100) {
-                alarm.setContent(post.getContent());  // 알림에 게시글 내용을 저장
+            // 10개, 50개, 100개 각각 한 번씩만 알림을 보내기 위해 이전 알림 확인
+            boolean isNotifiedAt10 = alarmRepository.existsByUserKeyAndReferenceKeyAndReferenceTypeAndLikeCount(
+                post.getUser().getUserKey(), post.getPostKey(), "like", 10);
+            boolean isNotifiedAt50 = alarmRepository.existsByUserKeyAndReferenceKeyAndReferenceTypeAndLikeCount(
+                post.getUser().getUserKey(), post.getPostKey(), "like", 50);
+            boolean isNotifiedAt100 = alarmRepository.existsByUserKeyAndReferenceKeyAndReferenceTypeAndLikeCount(
+                post.getUser().getUserKey(), post.getPostKey(), "like", 100);
 
-                // Post에서 Channel 객체를 가져와 channelImageUrl에 설정
-                Channel channel = post.getChannel();
-                if (channel != null && channel.getImageUrl() != null) {
-                    alarm.setChannelImageUrl(channel.getImageUrl());
-                }
-
-                alarmRepository.save(alarm);
+            // 10개 이상일 때 알림을 한 번만 보냄
+            if (likeCount >= 10 && !isNotifiedAt10) {
+                sendLikeNotification(alarm, post, 10);
             }
+
+            // 50개 이상일 때 알림을 한 번만 보냄
+            if (likeCount >= 50 && !isNotifiedAt50) {
+                sendLikeNotification(alarm, post, 50);
+            }
+
+            // 100개 이상일 때 알림을 한 번만 보냄
+            if (likeCount >= 100 && !isNotifiedAt100) {
+                sendLikeNotification(alarm, post, 100);
+            }
+        }
+    }
+
+    // 좋아요 알림 전송 메서드
+    private void sendLikeNotification(Alarm alarm, Post post, int likeThreshold) {
+    	// Post에서 Channel 객체를 가져와 channelImageUrl에 설정
+        Channel channel = post.getChannel();
+        if (channel != null && channel.getImageUrl() != null) {
+            alarm.setChannelImageUrl(channel.getImageUrl());
+        }
+        // 게시글 내용을 content에 저장
+        alarm.setContent(post.getContent());
+        // 좋아요 수 저장
+        alarm.setSubContent(String.valueOf(likeThreshold));  // subContent에 likeThreshold 저장
+        // 알림을 DB에 저장
+        alarmRepository.save(alarm);
+    }
+    
+    // Inquiry 알림
+    private void inquiryNotification(Alarm alarm) {
+    	Optional<InquiryAlarm> inquiryOpt = inquiryRepository.findById(alarm.getReferenceKey());
+        
+        if (inquiryOpt.isPresent()) {
+            InquiryAlarm inquiry = inquiryOpt.get();
+            
+            // 해당 문의를 한 유저에게 알림 생성
+            int userKey = inquiry.getUser().getUserKey();
+            
+            // 알람 생성
+            Alarm inquiryAlarm = new Alarm();
+            inquiryAlarm.setUserKey(userKey);  // 알림을 받을 유저
+            inquiryAlarm.setReferenceType("inquiry");  // 알림 타입을 "inquiry"로 설정
+            inquiryAlarm.setReferenceKey(alarm.getReferenceKey());  // 문의 ID를 참조키로 설정
+            inquiryAlarm.setRead(0);  // 알림을 읽지 않은 상태로 설정
+            alarmRepository.save(inquiryAlarm);
         }
     }
     

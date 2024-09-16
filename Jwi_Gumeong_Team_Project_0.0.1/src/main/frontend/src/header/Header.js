@@ -301,7 +301,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                 case 'like':
                     icon = notification.channelImageUrl || n_heart_activation;
                     content = notification.content;
-                    subContent = `해당글이 ♥${notification.likeCount}개를 받았어요.`; // 좋아요 알림 예시
+                    subContent = `해당글이 ♥${notification.subContent}개를 받았어요.`; // 좋아요 알림 
                     break;
                 case 'inquiry':
                     icon = reply;  // 문의 답변

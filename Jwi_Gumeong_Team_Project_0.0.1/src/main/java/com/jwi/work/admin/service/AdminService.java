@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jwi.work.admin.util.JwtUtil;
+import com.jwi.work.alarm.entity.Alarm;
 import com.jwi.work.alarm.entity.Report;
 import com.jwi.work.alarm.entity.UserAlarmEntity;
 import com.jwi.work.alarm.repository.ReportRepository;
@@ -219,7 +220,7 @@ public class AdminService {
 			inquiryResponse.setResponseText(responseText);
 			inquiryResponse.setImage(String.join(",", fileUrls));
 			inquiryResponseRepository.save(inquiryResponse);
-
+			
 			return "success";
 
 		} catch (Exception e) {
