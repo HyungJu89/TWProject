@@ -21,7 +21,6 @@ const CommentsList = forwardRef(function CommentsList(
     const modalRef = useRef(null);
     const moreRef = useRef(null);
     const [replyMoreON, setReplyMoreON] = useState(false); //삭제,수정,신고 모달 on/off    
-    const [commentUpdateTime, setCommentUpdateTime] = useState(null);
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
             if (commentMoreON &&
@@ -55,11 +54,9 @@ const CommentsList = forwardRef(function CommentsList(
         //addSuffix : ~전 ~후 같은 접미사
     }
     
-    // useEffect(()=>{
-    //     setCommentColor(comment.state != "common" ? '#999999' : '#101010')
-    //     const time = dateTime(comment.createdAt);
-    //     setCommentUpdateTime(time)
-    // },[comment])
+    useEffect(()=>{
+        setCommentColor(comment.state != "common" ? '#999999' : '#101010')
+    },[comment])
     return (
         <>
             <div>{/* 댓글 */}
@@ -105,11 +102,8 @@ const CommentsList = forwardRef(function CommentsList(
                 <>
                     {comment.replys.map((reply, replyIndex) => {
                         const [replyColor,setReplyColor] = useState(reply.state != "common" ? '#999999' : '#101010');
-                        const [replyUpdateTime, setReplyUpdateTime] = useState(null);
                         useEffect(()=>{
                             setReplyColor(reply.state != "common" ? '#999999' : '#101010')
-                            const time = dateTime(reply.createdAt);
-                            setReplyUpdateTime(time);
                         },[reply])
                         return (
                             <div key={reply.replyKey}>

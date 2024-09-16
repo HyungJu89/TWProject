@@ -26,7 +26,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
 import axios from 'axios';
 function App() {
-    let state = useSelector((state) => state.imgUiModal)
+    let reportState = useSelector((state) => state.reportModal)
+    let imgState = useSelector((state) => state.imgUiModal)
     //---------------------------------- 검색 부분
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -72,8 +73,8 @@ function App() {
             {/* Suspense 의 기능은 컴포넌트가 불러오는 도중일때 fallback 에 등록한 Div 및 컴포넌트를 보여줌 */}
             <Suspense fallback={<div>로딩중임</div>}>
                 <Header onClickSearch={onClickSearch} onLogout={onLogout} isLoggedIn = {isLoggedIn}/> {/* 상단 공통 부분 디자인 */}
-                {state.reportModal && <Report />}
-                {state.popUp && <ImgUi/>}{/*이미지 팝업*/}
+                {reportState && <Report />}{/*신고하기 팝업*/}
+                {imgState.popUp && <ImgUi/>}{/*이미지 팝업*/}
                 <Routes>
                     <Route path='/' element={<Main onLogout={onLogout} isLoggedIn = {isLoggedIn}/>}/> {/* 메인(홈) 접속 페이지 */}
                     <Route path='/allTopic' element={<AllTopic/>}/> {/* 전체 채널 */}

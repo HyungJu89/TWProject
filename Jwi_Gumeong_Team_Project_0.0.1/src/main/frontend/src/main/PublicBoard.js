@@ -16,9 +16,7 @@ import Comments from './PublicBoardComponents/Comments.js';
 import MoreDelete from './PublicBoardComponents/MoreDelete.js';
 import ChannelTitle from './PublicBoardComponents/ChannelTitle.js';
 import { useNavigate } from 'react-router-dom';
-import { reportInfo } from '../slice/ReportDtoSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
-import {dateTime} from '../recycleCode/dateTime.js'
 import { formatDistanceToNow } from 'date-fns'; // 아래와 같이 사용되는 날짜 라이브러리
 import { ko } from 'date-fns/locale'; // 한국어 설정
 
@@ -33,7 +31,6 @@ function PublicBoard({ postInfo }) {
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-    const [postUpdateTime, setPostUpdateTime] = useState(null);
     const navigate = useNavigate();
 
     const closeModal = () => {
@@ -52,8 +49,6 @@ function PublicBoard({ postInfo }) {
         setHeart(postInfo.like)
         setLikeCount(postInfo.likeCount)
         setCommentsON(false)
-        const time = dateTime(postInfo.createdAt)
-        setPostUpdateTime(time)
     }, [postInfo])
 
     // 디바운스 함수 생성
