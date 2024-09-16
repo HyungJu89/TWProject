@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.jwi.work.alarm.entity.Channel;
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
-import com.jwi.work.channel.dto.channelDto.ChannelKeyDto;
 import com.jwi.work.channel.entity.ChannelEntity;
 import com.jwi.work.channel.mapper.ChannelMapper;
 import com.jwi.work.channel.repository.ChannelRepository;

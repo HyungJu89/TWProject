@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jwi.work.channel.dto.bodyDto.CommentCreateDto;
 import com.jwi.work.channel.dto.bodyDto.CommentDeleteDto;
-import com.jwi.work.channel.dto.bodyDto.DelectByUser;
+import com.jwi.work.channel.dto.bodyDto.DeleteByUser;
 import com.jwi.work.channel.dto.commentDto.CommentListDto;
 import com.jwi.work.channel.service.CommentService;
 import com.jwi.work.util.dto.AnswerDto;
@@ -37,7 +37,7 @@ public class CommentController {
 		return commentService.commentCreate(createDto);
 	}
 	@PostMapping("/deleteByUser")
-	public AnswerDto<String> commentDeleteByUser(@RequestBody DelectByUser commentDelete){
+	public AnswerDto<String> commentDeleteByUser(@RequestBody DeleteByUser commentDelete){
 		return commentService.commentDeleteByUser(commentDelete);
 	}
 	

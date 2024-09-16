@@ -7,7 +7,7 @@ import com.jwi.work.alarm.dto.AlarmDto;
 import com.jwi.work.alarm.mapper.AlarmMapper;
 import com.jwi.work.channel.dto.bodyDto.CommentCreateDto;
 import com.jwi.work.channel.dto.bodyDto.CommentDeleteDto;
-import com.jwi.work.channel.dto.bodyDto.DelectByUser;
+import com.jwi.work.channel.dto.bodyDto.DeleteByUser;
 import com.jwi.work.channel.dto.commentDto.CommentListDto;
 import com.jwi.work.channel.mapper.CommentMapper;
 import com.jwi.work.util.dto.AnswerDto;
@@ -75,7 +75,7 @@ public class CommentService {
 		return answer;
 		
 	}
-	public AnswerDto<String> commentDeleteByUser(DelectByUser commentDelete){
+	public AnswerDto<String> commentDeleteByUser(DeleteByUser commentDelete){
 		
 		System.out.println("도착");
 		AnswerDto<String> anwer = new AnswerDto<>();
