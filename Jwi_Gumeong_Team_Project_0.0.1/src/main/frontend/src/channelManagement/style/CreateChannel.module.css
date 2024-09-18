@@ -41,8 +41,8 @@
 }
 
 .createHelpModal{
-    width: 289px;
-    height: 95px;
+    width: 400px;
+    height: 85px;
     z-index: 20;
     border-radius: 10px;
     border: 1px solid #F3F3F3;
@@ -56,29 +56,22 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    padding: 15px 5px;
 }
 
 .createHelpModalTitle{
-    padding-top: 16px;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 500;
-    line-height: 13.77px;
-    letter-spacing: 0.0075em;
     color: #000000;
 }
 
 .createHelpModalImg{
-    padding-top: 9px;
-    padding-bottom: 4px;
-    width: 259px;
-    height: 24px;
+    width: auto;
+    height: 45px;
 }
 
 .createHelpModalText{
-    padding-bottom: 16px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
-    line-height: 13.77px;
-    letter-spacing: 0.0075em;
     color: #999999;
 }
