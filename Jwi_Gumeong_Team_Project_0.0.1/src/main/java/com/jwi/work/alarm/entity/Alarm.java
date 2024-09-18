@@ -35,6 +35,8 @@ public class Alarm {
     private LocalDateTime createdAt;  
     @Column(name = "updatedAt", nullable = false)
     private LocalDateTime updatedAt;
+    @Column(name = "likeCount", nullable = true)    
+    private Integer likeCount;
     
     @Transient
     private String subContent; 
