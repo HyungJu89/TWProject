@@ -96,6 +96,7 @@ function FavoritesManagement() {
                             {nowChannelList.map((channelInfo, index) =>
                                 <div key={index}>
                                     <SearchChannel channelInfo={channelInfo[0]} formatUnit={formatUnit}/>
+                                    {console.log(channelInfo[0])}
                                 </div>
                             )}
                         </div>
@@ -132,10 +133,8 @@ function SearchChannel({ channelInfo, formatUnit }) {
                     <div className={styles.follower}>
                         <div className={styles.markText}>팔로워</div>
                         <div className={styles.markCount}> {formatUnit(channelInfo.followerCount)}</div>{/*팔로워*/}
-                        {/*
                         <div className={styles.markText}>즐겨찾기</div>
                         <div className={styles.markCount}>{formatUnit(favoriteCount)}</div>
-                        */}
                     </div>
                 </div>
                 <div className={styles.bookMark}>
