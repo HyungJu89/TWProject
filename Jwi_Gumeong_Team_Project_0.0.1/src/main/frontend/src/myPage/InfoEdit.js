@@ -25,6 +25,8 @@ function InfoEdit() {
     const [showPasswordCheck, setShowPasswordCheck] = useState(false); //비밀번호 보임,안보임 state
     const [LoginCheck, setLoginCheck] = useState(false);
     const navigate = useNavigate();
+    var jsonSessionInfo = sessionStorage.getItem('sessionId');
+    var sessionInfo = JSON.parse(jsonSessionInfo);   
     //닉네임 유효성 검사
     const nickNameRegEx = /^[A-Za-z0-9\uAC00-\uD7A3]{2,8}$/;
     //비밀번호 유효성 검사
@@ -100,11 +102,13 @@ function InfoEdit() {
             setNickNameWarning('닉네임 형식이 맞지 않습니다.(2~8자 + 올바른조합)');
             setNickNameCheck(false);
         }
+        // 여기에서 한번에 보내는거 말고 경우를 3개로 늘려야할꺼같음.
         else if (nickNameChecks(nickName)) {
             try {
                 const userData = {
                     pw: password,
-                    nickName: nickName
+                    nickName: nickName,
+                    sessionId: sessionInfo.sessionId
                 };
                 const userResponse = await axios.post('/myPage/loginRetry', userData); 
                 if(userResponse.data.check){
