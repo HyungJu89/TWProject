@@ -25,3 +25,60 @@
     text-align: left;
 }
 
+.createChannelLine{
+    display: flex;
+    position: relative;
+}
+
+.createHelpIcon{
+    cursor: pointer;
+    position: relative;
+    margin: auto;
+    margin-left: 4px;
+    padding: 2px;
+    height: 16px;
+    width: 16px;
+}
+
+.createHelpModal{
+    width: 289px;
+    height: 95px;
+    z-index: 20;
+    border-radius: 10px;
+    border: 1px solid #F3F3F3;
+    bottom: 22px;
+    left: 184px;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 3.9px 0px #00000080;
+    text-align: center;
+    align-items: center;
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.createHelpModalTitle{
+    padding-top: 16px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 13.77px;
+    letter-spacing: 0.0075em;
+    color: #000000;
+}
+
+.createHelpModalImg{
+    padding-top: 9px;
+    padding-bottom: 4px;
+    width: 259px;
+    height: 24px;
+}
+
+.createHelpModalText{
+    padding-bottom: 16px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 13.77px;
+    letter-spacing: 0.0075em;
+    color: #999999;
+}

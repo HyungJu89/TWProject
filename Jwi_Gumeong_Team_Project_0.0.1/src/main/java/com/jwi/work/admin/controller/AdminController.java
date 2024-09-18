@@ -51,6 +51,7 @@ public class AdminController {
 	
 	// 모든 유저 정보 찾기
 	// 페이징처리 안함 2024-08-20 기준
+	// 페이징 처리 함 (프론트에서)
 	@GetMapping("/findAllUser")
 	public List<User> findUser() {
 		return adminService.findAllUsers();
@@ -58,6 +59,7 @@ public class AdminController {
 	
 	// 모든 문의 찾기
 	// 페이징처리 안함 2024-08-20 기준
+	// 페이징 처리 함 (프론트에서)
 	@GetMapping("/findInquiryAll")
 	public List<Inquiry> findInquiry(){
 		return adminService.selectInquiry();

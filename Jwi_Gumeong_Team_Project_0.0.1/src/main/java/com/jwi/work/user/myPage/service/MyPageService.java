@@ -56,7 +56,7 @@ public class MyPageService {
     		if(loginTest(userInfo)) {
     			userCheck.setCheck(true);
     			userCheck.setWarningMessage("");
-    		}else {
+    		} else {
     			userCheck.setCheck(false);
     			userCheck.setWarningMessage("비밀번호가 일치하지 않습니다.");
     		}

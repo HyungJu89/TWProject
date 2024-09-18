@@ -37,6 +37,7 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
     const [searchInputs,setSearchInputs] = useState('');
+    let [recentSearchData, setRecentSearchData] = useState([]);
     const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
 
     let navigate = useNavigate();
@@ -78,8 +79,9 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
 
     // 아이콘 클릭 or 엔터키 입력시만 작동
     const onClickPointer = () => {
-        setSearchInputs(searchInput)
-        onClickSearch(searchInput)
+        setSearchInputs(searchInput);
+        onClickSearch(searchInput);
+        setJustSearchOn(true);
     }
 
     return (
@@ -87,10 +89,11 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
             <div className={styles.basicNav}>
                 <div className={styles.divWidth}><Link to="/"><img src={Logo} /></Link></div>
                 <div className={styles.inputDiv}>
-                    <input ref={popinputRef} onClick={() => { setJustSearchOn(prev => !prev);}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} onKeyDown={handleEnter} />
+                    <input ref={popinputRef} onClick={() => { setJustSearchOn(prev => !prev);}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchInput(e.target.value)} onKeyDown={handleEnter} value={searchInput} />
                     <img style={{cursor: 'pointer'}} src={search} onClick={onClickPointer}/>
                 </div>
-                {justSearchOn == true ? <JustSearch searchTerm={searchInputs} popModalRef={popModalRef} onClickSearch={onClickSearch}/> : null} {/* 최근 검색 모달*/}
+                {/* 최근검색어 모달창 */}
+                {justSearchOn == true ? <JustSearch searchTerm={searchInputs} setSearchInputs={setSearchInputs} popModalRef={popModalRef} onClickSearch={onClickSearch} recentSearchData={recentSearchData} setRecentSearchData={setRecentSearchData}/> : null}
                     {/* 여기부분 어드민 쿠키 체킹후 수정하면 될듯? */}
                     {isLoggedIn ? (
                         <div className={styles.icon}>
@@ -412,13 +415,13 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
 
 // 전부 다 하긴했는데 10개 이후에 저장되는 방식을 좀 수정하는것도 괜찮을꺼같다.
 
-function JustSearch({ searchTerm,popModalRef,onClickSearch }) { 
+function JustSearch({ searchTerm,setSearchInputs,popModalRef, onClickSearch, recentSearchData, setRecentSearchData }) { 
     /* 최근 검색어 모달창 */
-    let [recentSearchData, setRecentSearchData] = useState([]);
-
+    let justSearchLocal;
+    let asdf = [];
     // 로컬 스토리지에서 최근 검색어 가져오기
     useEffect(() => {
-        let justSearchLocal = localStorage.getItem('search');
+        justSearchLocal = localStorage.getItem('search');
         if (justSearchLocal) {
             // JSON 객체로 변환
             justSearchLocal = JSON.parse(justSearchLocal);
@@ -428,11 +431,15 @@ function JustSearch({ searchTerm,popModalRef,onClickSearch }) {
     }, []);
 
     // 검색어가 추가될 때 로컬 스토리지 업데이트 (중복 제외 + 최대 10개)
+    // 넣을만한 조건
     useEffect(() => {
         if (searchTerm) {
+            const maxLength = 40; // 최대 길이
+            const maxSlice = 10; // 최대 개수
+
             // 검색어 길이 제한 체크
-            if (searchTerm.length > 40) {
-                console.log(`검색어가 너무 깁니다. 최대 40자까지 가능합니다.`);
+            if (searchTerm.length > maxLength) {
+                console.log(`검색어가 너무 깁니다. 최대 ${maxLength}자까지 가능합니다.`);
                 return;
             }
 
@@ -440,15 +447,16 @@ function JustSearch({ searchTerm,popModalRef,onClickSearch }) {
             updatedSearches = Array.from(new Set(updatedSearches));   // 중복 제거
 
             // 최대 10개 초과 시
-            if (updatedSearches.length > 10) {  
+            if (updatedSearches.length > maxSlice) {  
                 // 최신 검색어 10개만 유지
-                updatedSearches = updatedSearches.slice(-10);
+                updatedSearches = updatedSearches.slice(-maxSlice);
             }
-
+            
             setRecentSearchData(updatedSearches);
             localStorage.setItem('search', JSON.stringify(updatedSearches));
+            setSearchInputs(''); // 검색어받은걸 초기화시켜서 if문 작동안되게 전환
         }
-    }, [searchTerm]);
+    }, [searchTerm,justSearchLocal]);
 
     // 검색어 삭제 함수
     const deleteTerm = (term) => {
@@ -456,7 +464,10 @@ function JustSearch({ searchTerm,popModalRef,onClickSearch }) {
         setRecentSearchData(updatedSearches);
         localStorage.setItem('search', JSON.stringify(updatedSearches));  // 로컬 스토리지에 저장
     };
-
+    // const ver2 = ()=>{
+    //     setRecentSearchData([]);
+    //     localStorage.setItem('search', JSON.stringify(recentSearchData));
+    // }
     return (
         <div className={styles.JustSearchBase} ref={popModalRef}>
             <h4>최근검색어</h4>
@@ -474,6 +485,7 @@ function JustSearch({ searchTerm,popModalRef,onClickSearch }) {
                                     </div>
                                 ))
                             }
+                            {/* <div onClick={()=>{ver2}}>조민성</div> */}
                         </div>
                         : <p>최근 검색 내역이 없어요.</p>
                 }
