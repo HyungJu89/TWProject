@@ -10,6 +10,8 @@ import PublicBoard from '../main/PublicBoard.js'
 import { formatUnit } from '../recycleCode/FormatUnit.js';
 import Paging from '../Paging/Paging.js'
 
+import AlarmModal from '../modal/AlarmModal.js';
+
 function Search({ search }) {
 
     let navigate = useNavigate();
@@ -18,6 +20,8 @@ function Search({ search }) {
     const [postList, setPostList] = useState([]);
     const [channelPage, setChannePage] = useState(1);
     const [postPage, setPostPage] = useState(1);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
     //get 요청을 할때 params 로 데이터를 실어서 보낼수 있다.
     const searchChannel = async (search, channelPage) => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -62,6 +66,22 @@ function Search({ search }) {
         }
     };
 
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate('/signIn');
+    };
+
+    const createChannelOnClick = () =>{
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if (!sessionIdJson) {
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
+        }
+
+        navigate(`/channelManagement`)
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const channelListData = await searchChannel(search, channelPage);
@@ -95,9 +115,9 @@ function Search({ search }) {
                     <div className={style.searchBodyTop}>
                         {/*상단 제목*/}
                         <div className={style.searchTitle}>토픽 게시판</div>
-                        <div className={style.creactChannel}>
-                            <img className={style.creactChannelIcon} src={OpenChannel} />
-                            <div className={style.creactChannelText} onClick={() => navigate(`/channelManagement`)}>토픽 게시판 만들기</div>
+                        <div className={style.createChannel}>
+                            <img className={style.createChannelIcon} src={OpenChannel} />
+                            <div className={style.createChannelText} onClick={createChannelOnClick}>토픽 게시판 만들기</div>
                         </div>
                     </div>
                     {channelList.success && channelList.search ?
@@ -134,6 +154,9 @@ function Search({ search }) {
                         <Paging paging={postList.paging} postPage={postPage} setPostPage={setPostPage} />
                 }
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     )
 }
