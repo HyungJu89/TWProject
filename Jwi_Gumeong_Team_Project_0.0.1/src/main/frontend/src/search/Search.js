@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import PublicBoard from '../main/PublicBoard.js'
 import { formatUnit } from '../recycleCode/FormatUnit.js';
+import Paging from '../Paging/Paging.js'
+
 function Search({ search }) {
 
     let navigate = useNavigate();
@@ -52,6 +54,7 @@ function Search({ search }) {
                     page: channelPage
                 }
             });
+            console.log(data)
             return data;
         } catch (error) {
             console.error('Channel API Error:', error);
@@ -126,6 +129,9 @@ function Search({ search }) {
                             <PublicBoard key={index} postInfo={postInfo} />
                         )}
                     </div> : <div className={style.nullPublicBoard}>검색어와 관련된 토픽이 없어요</div>
+                }
+                {(postList.success && postList.paging?.pageCount > 1) &&
+                        <Paging paging={postList.paging} postPage={postPage} setPostPage={setPostPage} />
                 }
             </div>
         </div>
