@@ -201,6 +201,10 @@ public class AlarmService {
         alarm.setDate(alarm.getDate());
     }
 
+    // 안 읽은 알람
+    public int unreadAlarms(int userKey) {
+        return alarmRepository.countByUserKeyAndRead(userKey, 0);
+    }
     
     public int deleteAlarm(int notificationId) {
     	// 알람이 데이터 베이스에 있는지 확인

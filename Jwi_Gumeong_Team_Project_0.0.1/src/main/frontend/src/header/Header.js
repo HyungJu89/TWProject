@@ -113,6 +113,26 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
 function Icon({navigate, userKey}) { /* 로그인 시 노출되는 알림 아이콘 UI */
     let [img, setImg] = useState(notification_deactivation); /*알림 hover 이팩트 변환용*/
     let [showNotifications, setShowNotifications] = useState(false); /* 알림 모달 표시 여부 */
+    let [unreadCount, setUnreadCount] = useState(0); // 알림 개수
+
+    // 알림 개수 가져오기
+    useEffect(() => {
+        const fetchUnreadCount = async () => {
+            try {
+                const response = await axios.post('/alarm/count/unread', null, { params: { userKey } });
+                if (response.data.result === "success") {
+                    setUnreadCount(response.data.unreadCount);
+                }
+            } catch (error) {
+                console.log("Error fetching unread alarms count: ", error);
+            }
+        };
+        fetchUnreadCount(); // 컴포넌트 마운트 시 호출
+
+        const intervalId = setInterval(fetchUnreadCount, 30000); // 30초마다 호출
+
+        return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+    }, [userKey]);
 
     return (
         <div className={styles.iconContainer}>
@@ -124,7 +144,9 @@ function Icon({navigate, userKey}) { /* 로그인 시 노출되는 알림 아이
                 onMouseLeave={() => setImg(notification_deactivation)}
                 onClick={() => setShowNotifications(!showNotifications)}>
                 <img src={img} alt="Notification" />
-                <div className={styles.redNotRead}>16</div>
+                {unreadCount > 0 && ( // 안 읽은 알림이 1개 이상일 때만 보이기
+                    <div className={styles.redNotRead}>{unreadCount}</div>
+                )}
             </div>
             {showNotifications && <NotificationModal userKey={userKey} />}
         </div>
