@@ -16,7 +16,6 @@
 .modalContent {
     background-color: #FFFFFF;
     width: 390px;
-    min-height: 375px;
     padding: 20px;
     position: relative;
 }
@@ -28,18 +27,21 @@
     text-align: center;
     color: #101010;
     width: 388px;
-    min-height: 293px;
     font-size: 15px;
     font-weight: 500;
+    
+    margin-bottom: 20px;
 }
 
 .dashed {
     /*회색줄*/
-    margin-top: 20px;
+    margin-top: 10px;
     border-bottom: 1px solid #F3F3F3;
     border-radius: 0px;
     margin: 20px 0px;
 }
+
+
 
 .reportTitle{
     height: 112px;
@@ -47,8 +49,8 @@
     display: flex;
     justify-content: space-between;
 }
-.reportTitle div{
-    width: 100px;
+.reportTitleLeft{
+    width: 24px;
 }
 .reportTitleMid{
     display: flex;
@@ -58,51 +60,124 @@
     right: 0px;
 }
 
+.reportTitleImg{
+    height: 47px;
+    
+    margin-bottom: 12px;
+}
+.reportTitleText{
+    height: 25px;
+    margin-bottom: 10px;
+    font-family: Spoqa Han Sans Neo;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 25.04px;
+    letter-spacing: 0.0075em;
+    text-align: center;
+    color: #101010;
+
+}
+.reportTitleExplanation{
+    margin-top: 10px;
+height: 18px;
+color: #101010;
+font-family: Spoqa Han Sans Neo;
+font-size: 14px;
+font-weight: 600;
+line-height: 17.53px;
+letter-spacing: 0.0075em;
+text-align: center;
+margin: 0px;
+color: #101010;
+
+}
+
 .reportTitleCloseBtn {
     display: flex;
+    width: 24px;
     justify-content: end;
 }
 
+.reportTitleCloseBtn img{
+    height: 24px;
+    width: 24px;
+}
+
+.contentDivBox{
+    min-height: 150px;
+}
+
+.reportUserName {
+    height: 23px;
+    font-family: Spoqa Han Sans Neo;
+font-size: 18px;
+font-weight: 600;
+line-height: 22.54px;
+letter-spacing: 0.0075em;
+text-align: center;
+color: #101010;
+margin-bottom: 10px;
+
+}
 .inqField {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    gap: 5px;
-    width: 100%;
+    height: 19px;
+    margin-bottom: 10px;
 }
 
+
+
 .inqField label {
-    font-weight: 500;
-    font-size: 16px;
+    font-family: Spoqa Han Sans Neo;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 18.78px;
+    letter-spacing: 0.0075em;
     color: #101010;
+    margin-right: 10px;
 }
 
 /* 문의 내용 선택 창 */
 .inqSelect {
-    padding: 10px;
-    font-weight: 500;
-    font-size: 16px;
-    color: #FF8901;
-    width: 106px;
-    text-align: center;
-    cursor: pointer;
+width: 106px;
+}
+
+.inqSelectOption{
+
+font-weight: 600;
+font-size: 15px;
+color: #FF8901;
+text-align: center;
+cursor: pointer;
+font-family: Spoqa Han Sans Neo;
+line-height: 18.78px;
+letter-spacing: 0.0075em;
 }
 
 .dropdown {
+    
+    margin-top: 10px;
+    font-weight: 600;
     position: absolute;
-    width: 106px;
+    width: 78px;
+    height: 260px;
     border: 1px solid #F3F3F3;
     background-color: white;
-    transform: translateX(58%) translateY(55%);
     border-radius: 7px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 14px;
-    padding: 10px 0px 10px 0px;
     box-shadow: 0px 2px 3.9px 0px #00000080;
+    font-family: Spoqa Han Sans Neo;
+    font-size: 12px;
+    line-height: 15.02px;
+    text-align: center;
+    padding: 14px;
+
 
 }
 
@@ -111,13 +186,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 106px;
     height: 31px;
+    width: 106px;
 }
 
 .dropdownItem:hover {
-    width: 106px;
     background-color: #F3F3F3;
+    width: 106px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -130,9 +205,39 @@
 }
 
 
+.reportContent{
+    box-sizing: border-box;
+    width: 348px;
+    min-height: 19px;
+    max-height: 154px;
+    border-radius: 10px;
+    border: 1px solid var(--E5E5E5, #E5E5E5);
+    padding: 20px;
+    outline: none;
+    resize: none;
+}
 
+.reportContent::placeholder{
+    font-family: Spoqa Han Sans Neo;
+    font-size: 15px;
+    font-weight: 550;
+    line-height: 18.78px;
+    letter-spacing: 0.0075em;
+    text-align: left;
+    height: 19px;
+    color : #999999;
+}
 
+.contentLengthDiv{
+    height: 19px;
+    font-family: Spoqa Han Sans Neo;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 18.78px;
+    letter-spacing: 0.0075em;
+    text-align: right;
 
+}
 
 .footer {
     display: flex;
@@ -141,9 +246,17 @@
 }
 
 .okBtn {
-    color: #ffffff;
-    width: 190px;
+    width: 100%;
     height: 60px;
     border-radius: 10px;
+}
+
+.reportBtnText{
+    font-family: Spoqa Han Sans Neo;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20.03px;
+    text-align: center;
+    color: #ffffff;
 }
 
