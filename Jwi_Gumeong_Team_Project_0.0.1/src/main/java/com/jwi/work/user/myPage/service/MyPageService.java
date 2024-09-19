@@ -26,6 +26,7 @@ public class MyPageService {
 	//이메일 테스트
 	public boolean emailTest(User user) {
 		User newUser = signInService.getUserInfo(user.getSessionId());
+		System.out.println(newUser+"뭐야 널임?");
 		if (newUser.getUserKey() == null) {
 			return false;
 		}else {
@@ -37,26 +38,28 @@ public class MyPageService {
 	public CheckDto loginRetry(User user) {
     	//반환하기위한 객체 생성
     	CheckDto userCheck = new CheckDto();
-    	//함수 매개변수 입력용 객체
     	User userInfo = new User();
-    	System.out.println(user);
+    	userInfo.setSessionId(user.getSessionId());
+    	//함수 매개변수 입력용 객체
     	if(user.getEmail() !=null) {
     		userInfo.setEmail(user.getEmail());
     	}
     	// 패스워드 입력 안할시에 널처리
-    	if(user.getPw().equals("")) {
-    		user.setPw(null); 
-    	}
-    	if(user.getNickName().equals("")) {
-    		user.setNickName(null);
-    	}
-    	userInfo.setPw(user.getPw());
-    	userInfo.setNickName(user.getNickName());
-    	userInfo.setSessionId(user.getSessionId());
     	if(emailTest(userInfo)) {
+        	if(user.getPw().equals("")) {
+        		user.setPw(null); 
+        	}
+        	
+//        	if(user.getNickName().equals("")) {
+//        		user.setNickName(null);
+//        	}
+//        	
+//        	userInfo.setNickName(user.getNickName());
+        	userInfo.setPw(user.getPw());
+        	System.out.println(userInfo.getNickName());
     		if(userInfo.getPw().equals(null)) {
     			// 비밀번호 변경이 아닐경우에 처리해야할 로직
-    			System.out.println("패스워드 널임");
+    			System.out.println("패스워드 널임"+user);
     		} else {
     			// 비밀번호 변경일 경우에 처리해야할 로직 여기에
     			if(!userInfo.getNickName().equals(null)) {

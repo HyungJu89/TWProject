@@ -54,6 +54,7 @@ function LoginChecks(props) {
                 if(userResponse.data.check){
                     props.setOriPassword(password);
                     props.setLoginCheck(true);
+                    console.log(loginCheck+"로그인체크");
                 } else if(!userResponse.data.check){
                     setLoginWarn(userResponse.data.warningMessage);
                 }
