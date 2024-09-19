@@ -335,6 +335,8 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     break;
                 case 'system':
                     icon = notification.reportedUserKey === userKey ? report : formulation;
+                    content = `당신의 선함으로 ${notification.nickname}님이 제재를 받았어요!`;
+                    subContent = `신고내용 : ${notification.reason}, 대상자가 ${notification.date}일 정지를 받았습니다.`;
                     break;
                 default:
                     break;

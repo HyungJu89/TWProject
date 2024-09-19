@@ -13,16 +13,11 @@ import com.jwi.work.alarm.entity.InquiryAlarm;
 import com.jwi.work.alarm.entity.Post;
 import com.jwi.work.alarm.mapper.AlarmMapper;
 import com.jwi.work.alarm.repository.AlarmRepository;
-import com.jwi.work.alarm.repository.BannedRepository;
 import com.jwi.work.alarm.repository.CommentRepository;
 import com.jwi.work.alarm.repository.InquiryAlarmRepository;
 import com.jwi.work.alarm.repository.LikeRepository;
 import com.jwi.work.alarm.repository.PostRepository;
-import com.jwi.work.alarm.repository.ReplyRepository;
-import com.jwi.work.alarm.repository.ReportRepository;
-import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.user.entity.UserEntity;
-import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.user.repository.UserRepository;
 
 @Service
@@ -37,15 +32,7 @@ public class AlarmService {
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
-    private ReplyRepository replyRepository; // 댓글,대댓글 머지 후 자세하게
-    @Autowired
     private InquiryAlarmRepository inquiryRepository;
-    @Autowired
-    private ReportRepository reportRepository;
-    @Autowired
-    private BannedRepository bannedRepository;
-	@Autowired
-	private UserMapper userMapper;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -75,6 +62,7 @@ public class AlarmService {
 	                break;
 	            case "system":
 	            	// 신고 처리 결과 알림
+	            	systemNotification(alarm);
                     break;
 	            default:
 	                break;
@@ -196,6 +184,23 @@ public class AlarmService {
             alarmRepository.save(inquiryAlarm);
         }
     }
+    
+    // 신고 처리 결과 알림
+    private void systemNotification(Alarm alarm) {
+        // 신고한 유저의 알림
+        if (alarm.getReferenceUserKey() > 0) {
+            Optional<UserEntity> reportedUserOpt = userRepository.findById(alarm.getReferenceUserKey());
+            if (reportedUserOpt.isPresent()) {
+                UserEntity reportedUser = reportedUserOpt.get();
+                alarm.setNickname(reportedUser.getNickName());  // 제재 받은 유저의 닉네임
+            }
+        }
+
+        // 제재 사유 및 일수를 저장
+        alarm.setReason(alarm.getReason());
+        alarm.setDate(alarm.getDate());
+    }
+
     
     public int deleteAlarm(int notificationId) {
     	// 알람이 데이터 베이스에 있는지 확인
