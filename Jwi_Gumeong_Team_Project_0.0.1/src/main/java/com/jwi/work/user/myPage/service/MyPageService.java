@@ -72,6 +72,13 @@ public class MyPageService {
 		return favoritesRepository.findByUserConnectionSessionId(sessionId);
 		
 	}
+	
+	//즐겨찾기 카운트 :: 변수된 채널 키 기반으로 검색
+	public int favoritesCount(int channelKey){
+	    List<FavoritesEntity> favorites = favoritesRepository.findBychannelKey(channelKey);
+	    return favorites.size();
+	}
+	
 //	//정보수정 처리 로직
 //	public CheckDto edit(User user) {
 //    	//반환하기위한 객체 생성

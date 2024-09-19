@@ -10,4 +10,6 @@ import com.jwi.work.user.entity.FavoritesEntity;
 @Repository
 public interface FavoritesRepository extends JpaRepository<FavoritesEntity, Integer> {
 	List<FavoritesEntity> findByUserConnectionSessionId(String sessionId);
+
+	List<FavoritesEntity> findBychannelKey(int channelKey);
 }

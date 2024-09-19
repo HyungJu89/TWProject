@@ -76,7 +76,7 @@ function FavoritesManagement() {
             fetchChannels();
             }, [favoritesList]);
 
-                    //즐겨찾기 게시판(3) :: 페이징
+        //즐겨찾기 게시판(3) :: 페이징
         const nowChannelList = channelList.slice(pagingNow, pagingMax);
         const result = channelList.length / 7;
         const maxPaging = result !== Math.floor(result) ? Math.floor(result) + 1 : result;
@@ -96,7 +96,6 @@ function FavoritesManagement() {
                             {nowChannelList.map((channelInfo, index) =>
                                 <div key={index}>
                                     <SearchChannel channelInfo={channelInfo[0]} formatUnit={formatUnit}/>
-                                    {console.log(channelInfo[0])}
                                 </div>
                             )}
                         </div>
@@ -121,6 +120,19 @@ function SearchChannel({ channelInfo, formatUnit }) {
     let navigate = useNavigate();
     const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
 
+        //즐겨찾기 게시판(4) :: 즐겨찾기 카운팅
+        useEffect(() => {
+            const count = async () => {
+                try {
+                    const {data} = await axios.get(`/myPage/favoritesCount`,{params:{channelKey : channelInfo.channelKey}});
+                    setFavoriteCount(data);
+                } catch (error) {
+                    console.error('Channel API Error:', error);
+                }
+            };
+            count();
+        }, []);
+
     return (
         <>
             <div className={styles.formGroup}>
@@ -131,9 +143,9 @@ function SearchChannel({ channelInfo, formatUnit }) {
                 <div className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
                     <div className={styles.channelName}>{channelInfo.name}</div>{/*채널명*/}
                     <div className={styles.follower}>
-                        <div className={styles.markText}>팔로워</div>
+                        <div className={styles.markText}>팔로워&nbsp;</div>
                         <div className={styles.markCount}> {formatUnit(channelInfo.followerCount)}</div>{/*팔로워*/}
-                        <div className={styles.markText}>즐겨찾기</div>
+                        <div className={styles.markText}>즐겨찾기&nbsp;</div>
                         <div className={styles.markCount}>{formatUnit(favoriteCount)}</div>
                     </div>
                 </div>
