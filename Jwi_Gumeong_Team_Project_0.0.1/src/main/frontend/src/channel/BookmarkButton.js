@@ -11,8 +11,6 @@ import axios from 'axios';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function BookmarkButton({channelInfo,setFavoriteCount}) {
-    // console.log(channelInfo);
-    // console.log(channelInfo.favorite+'안녕하세요');
     const [bookmarkOn, setBookMarkOn] = useState(channelInfo.favorite);
     const [bookmarkImg, setBookmarkImg] = useState(bookmarkActivation);
     const navigate = useNavigate();
@@ -64,7 +62,7 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
     }
 
     return (
-        <div>
+        <div style={{cursor:'pointer'}}>
             {bookmarkOn ? <BookMarkTrue setBookMarkOn={setBookMarkOn} bookMarkOnclick={bookMarkOnclick}/> 
             : <BookMarkNone setBookmarkImg={setBookmarkImg} bookmarkImg={bookmarkImg} setBookMarkOn={setBookMarkOn} bookMarkOnclick={bookMarkOnclick}/> }
             {modalOpen && 

@@ -143,9 +143,9 @@ function SearchChannel({favoritesList, channelInfo, formatUnit }) {
             favoriteCount: favoriteCount,
             favorite: false
         };
-        // if (favoritesList.some(item => item.channelKey === channelInfo.channelKey)) {
-        //     channel.favorite = true;
-        // }
+        if (favoritesList.some(item => item.channelKey === channelInfo.channelKey)) {
+            channel.favorite = true;
+        }
 
     return (
         <>
