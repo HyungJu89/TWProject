@@ -15,7 +15,8 @@
 
 .modalContent {
     background-color: #FFFFFF;
-    width: 400px;
+    width: 390px;
+    min-height: 375px;
     padding: 20px;
     position: relative;
 }
@@ -26,25 +27,42 @@
     align-items: center;
     text-align: center;
     color: #101010;
-    height: 130px;
+    width: 388px;
+    min-height: 293px;
     font-size: 15px;
     font-weight: 500;
 }
 
+.dashed {
+    /*회색줄*/
+    margin-top: 20px;
+    border-bottom: 1px solid #F3F3F3;
+    border-radius: 0px;
+    margin: 20px 0px;
+}
+
 .reportTitle{
+    height: 112px;
+    width: 388px;
     display: flex;
     justify-content: space-between;
 }
 .reportTitle div{
     width: 100px;
 }
-.reportTitleText{
+.reportTitleMid{
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     right: 0px;
 }
+
+.reportTitleCloseBtn {
+    display: flex;
+    justify-content: end;
+}
+
 .inqField {
     display: flex;
     justify-content: center;
@@ -107,12 +125,12 @@
     border-radius: 0px;
 }
 
-
-
-.reportTitleCloseBtn {
-    display: flex;
-    justify-content: end;
+.reportAlarmText{
+    color: #dfaa6f;
 }
+
+
+
 
 
 
@@ -123,17 +141,9 @@
 }
 
 .okBtn {
-    background-color: #FF8901;
     color: #ffffff;
     width: 190px;
     height: 60px;
     border-radius: 10px;
 }
 
-.closeBtn {
-    background-color: #BBBBBB;
-    color: #ffffff;
-    width: 190px;
-    height: 60px;
-    border-radius: 10px;
-}

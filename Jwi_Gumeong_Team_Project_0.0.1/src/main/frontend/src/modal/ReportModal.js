@@ -3,7 +3,7 @@ import styles from './style/ReportModal.module.css';
 import {openModal, offModal} from '../slice/ReportModalSlice.js'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-
+import reportPopImg from '../icon/img/report-pop-img.png'
 // 알림 모달
 function ReportModal() {
     let reportDto = useSelector((state)=>{ return state.reportDto })
@@ -28,11 +28,14 @@ function ReportModal() {
     const contentLength = 200;
     // 상태 content 색깔
     const [contentColor, setContentColor] = useState('#BBBBBB');
+    // 신고하기 활성화 여부
+    const [optionClicked,setOptionClicked] = useState(false);
     // 문의하기 종류 선택 모달
     const optionSelect = (option) => {
         setSelectedOption(option); // 드롭다운에서 선택한 옵션을 상태로 설정
         setDropdownOpen(false); // 드롭다운 닫기
-        setReportAlarm(false);
+        setOptionClicked(true); // 옵션 선택 여부
+        setReportAlarm(false); // 옵션을 선택하지않고 신고하기 누를때
     };
 
     const onInputContent = (e) =>{
@@ -50,7 +53,7 @@ function ReportModal() {
         } 
         let sessionId = JSON.parse(sessionIdJson).sessionId
 
-        if(selectedOption == "선택하세요"){
+        if(!optionClicked){
             return setReportAlarm(true);
         }
 
@@ -87,8 +90,9 @@ function ReportModal() {
             <div className={styles.modalContent}>
                 <div className={styles.body}>
                     <div className={styles.reportTitle}>
-                        <div /><div className={styles.reportTitleText}>신고하기</div><div className={styles.reportTitleCloseBtn} onClick={()=>dispatch(offModal())}>x버튼</div>
+                        <div /><div className={styles.reportTitleMid}><img src={reportPopImg}/>신고하기</div><div className={styles.reportTitleCloseBtn} onClick={()=>dispatch(offModal())}>x버튼</div>
                     </div>
+                    <div className={styles.dashed}/>
                     <div className={styles.reportUserName}>{reportDto.nickName}</div>
                     <div className={styles.inqField}>
                         <label>문의 종류</label>
@@ -116,10 +120,7 @@ function ReportModal() {
                     </div>
                 </div>
                 <div className={styles.footer}>
-                    <button className={styles.closeBtn} onClick={()=>dispatch(offModal())}>
-                        취소
-                    </button>
-                    <button className={styles.okBtn} onClick={()=>reportSubmit()}>
+                    <button className={styles.okBtn} style={{backgroundColor : optionClicked ? "#FF8901": "#BBBBBB"}} onClick={()=>reportSubmit()}>
                         신고하기
                     </button>
                 </div>

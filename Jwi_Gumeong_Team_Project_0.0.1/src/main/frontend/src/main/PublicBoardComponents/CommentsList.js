@@ -8,7 +8,7 @@ import MoreDeleteMini from './MoreDeleteMini.js';
 import ReplyArea from './ReplyArea.js';
 import more from '../../icon/24px/more.png';
 import comments_20px from '../../icon/20px/comments-20px.png';
-import big_comment from '../../icon/20px/bigcomment.png';
+import replyImg from '../../icon/20px/reply.png';
 import { formatDistanceToNow } from 'date-fns'; // 아래와 같이 사용되는 날짜 라이브러리
 import { ko } from 'date-fns/locale'; // 한국어 설정
 
@@ -108,7 +108,7 @@ const CommentsList = forwardRef(function CommentsList(
                         return (
                             <div key={reply.replyKey}>
                                 <div className={styles.bigComments}>
-                                    <img className={styles.BcImg} src={big_comment} />
+                                    <img className={styles.BcImg} src={replyImg} />
                                     <div className={styles.list}  ref={replyIndex === comment.replys.length-1 ? replyFocus : null}>
                                         <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
                                             <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{timeSetting(reply.createdAt)}</a></div>

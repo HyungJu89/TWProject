@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './style/FavoritesManagement.module.css';
 import List from '../icon/24px/List.png';
-import Star from '../icon/20px/bookmark-deactivation.png';
+import Star from '../icon/20px/favorites-deactivation.png';
 import btn_left from '../icon/btn/btn-left.png';
 import btn_right from '../icon/btn/btn-right.png';
 import { useNavigate } from 'react-router-dom';
