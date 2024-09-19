@@ -125,8 +125,6 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
                         <div className={style.follower}>
                             <div className={style.markText}>팔로워</div>
                             <div className={style.markCount}> {formatUnit(channelApi.followerCount)}</div>
-                            <div className={style.markText}>즐겨찾기</div>
-                            <div className={style.markCount}> 10000만</div>
                         </div>
                     </div>
                 </div>
