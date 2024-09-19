@@ -11,6 +11,8 @@ import axios from 'axios';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function BookmarkButton({channelInfo,setFavoriteCount}) {
+    // console.log(channelInfo);
+    // console.log(channelInfo.favorite+'안녕하세요');
     const [bookmarkOn, setBookMarkOn] = useState(channelInfo.favorite);
     const [bookmarkImg, setBookmarkImg] = useState(bookmarkActivation);
     const navigate = useNavigate();

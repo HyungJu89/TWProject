@@ -95,7 +95,7 @@ function FavoritesManagement() {
                         <div>
                             {nowChannelList.map((channelInfo, index) =>
                                 <div key={index}>
-                                    <SearchChannel channelInfo={channelInfo[0]} formatUnit={formatUnit}/>
+                                    <SearchChannel favoritesList={favoritesList} channelInfo={channelInfo[0]} formatUnit={formatUnit}/>
                                 </div>
                             )}
                         </div>
@@ -116,7 +116,7 @@ function FavoritesManagement() {
     )
 }
 
-function SearchChannel({ channelInfo, formatUnit }) {
+function SearchChannel({favoritesList, channelInfo, formatUnit }) {
     let navigate = useNavigate();
     const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
 
@@ -132,6 +132,20 @@ function SearchChannel({ channelInfo, formatUnit }) {
             };
             count();
         }, []);
+
+        //BookmarkButton 컴포넌트 전달을 위한 데이터 바인딩
+        const channel = {
+            channelKey: channelInfo.channelKey,
+            id: channelInfo.id,
+            name: channelInfo.name,
+            imageUrl: channelInfo.imageUrl,
+            followerCount: channelInfo.followerCount,
+            favoriteCount: favoriteCount,
+            favorite: false
+        };
+        // if (favoritesList.some(item => item.channelKey === channelInfo.channelKey)) {
+        //     channel.favorite = true;
+        // }
 
     return (
         <>
@@ -150,7 +164,7 @@ function SearchChannel({ channelInfo, formatUnit }) {
                     </div>
                 </div>
                 <div className={styles.bookMark}>
-                    <BookmarkButton channelInfo={channelInfo} setFavoriteCount={setFavoriteCount} />
+                    <BookmarkButton channelInfo={channel} setFavoriteCount={setFavoriteCount} />
                 </div>
             </div>
             <hr className={styles.horizontalLine} />
