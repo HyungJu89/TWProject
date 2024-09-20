@@ -6,6 +6,8 @@
     align-items: center;
     min-width: 1194px;
     margin: auto;
+    position: relative;
+    z-index: -2;
 }
 
 .backgroundImage {

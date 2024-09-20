@@ -20,6 +20,11 @@
     width: 378px;
 }
 
+.postList{
+    position: relative;
+    z-index: -2;
+}
+
 .nonPostList{
     display: flex;
     margin-top: 10px;
