@@ -42,7 +42,6 @@ function LoginChecks(props) {
 
 
     const checkUser = async () => {
-        // console.log(count);
         if (email !== '' && password !== '') {
             try {
                 const userData = {
@@ -54,7 +53,6 @@ function LoginChecks(props) {
                 if(userResponse.data.check){
                     props.setOriPassword(password);
                     props.setLoginCheck(true);
-                    console.log(loginCheck+"로그인체크");
                 } else if(!userResponse.data.check){
                     setLoginWarn(userResponse.data.warningMessage);
                 }
@@ -102,9 +100,13 @@ function LoginChecks(props) {
                 }
                 <button onClick={
                     () => {
-                        if (email == '') { alert('이메일을 입력해주세요!'); }
-                        else if (password == '') { alert('비밀번호를 입력해주세요!'); }
-                        else {checkUser();}
+                        if (email == "") {
+                          alert("이메일을 입력해주세요!");
+                        } else if (password == "") {
+                          alert("비밀번호를 입력해주세요!");
+                        } else {
+                          checkUser();
+                        }
                         // if(이메일과 비밀번호가 적혀있으면){대충 엑시오스 요청해서 데이터베이스랑 데이터대조 후 로그인진행}
                         // 과거의 김형주 죽이고 싶다.
                     }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>다음</button>

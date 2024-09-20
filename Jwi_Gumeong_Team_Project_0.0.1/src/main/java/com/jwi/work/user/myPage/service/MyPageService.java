@@ -26,10 +26,9 @@ public class MyPageService {
 	//이메일 테스트
 	public boolean emailTest(User user) {
 		User newUser = signInService.getUserInfo(user.getSessionId());
-		System.out.println(newUser+"뭐야 널임?");
 		if (newUser.getUserKey() == null) {
 			return false;
-		}else {
+		} else {
 			return true;
 		}
 	}
@@ -46,36 +45,32 @@ public class MyPageService {
     	}
     	// 패스워드 입력 안할시에 널처리
     	if(emailTest(userInfo)) {
-        	if(user.getPw().equals("")) {
-        		user.setPw(null); 
-        	}
-        	
-//        	if(user.getNickName().equals("")) {
-//        		user.setNickName(null);
-//        	}
-//        	
-//        	userInfo.setNickName(user.getNickName());
-        	userInfo.setPw(user.getPw());
-        	System.out.println(userInfo.getNickName());
-    		if(userInfo.getPw().equals(null)) {
-    			// 비밀번호 변경이 아닐경우에 처리해야할 로직
-    			System.out.println("패스워드 널임"+user);
-    		} else {
-    			// 비밀번호 변경일 경우에 처리해야할 로직 여기에
-    			if(!userInfo.getNickName().equals(null)) {
-    				// 닉네임 변경로직
-    				System.out.println("닉네임 널 아님");
-    			}
-    			System.out.println("패스워드 처리로직했씀");
-    			// 비밀번호 변경로직
-    		}
-    		User newUser = signInService.getUserInfo(user.getSessionId());
-    		System.out.println(newUser);
-    	}else {
+    		userCheck.setCheck(true);
+    	} else {
         	userCheck.setCheck(false);
         	userCheck.setWarningMessage("현재 입력하신 이메일은 로그인하신 이메일과 일치하지 않습니다.");
     	}
     	return userCheck;
+	}
+	
+	// 정보수정 전체 로직
+	public CheckDto userEdit(User user) {
+		// 반환하기위한 객체 생성
+		CheckDto userCheck = new CheckDto();
+		User userInfo = new User();
+		userInfo.setSessionId(user.getSessionId());
+		// 함수 매개변수 입력용 객체
+		if(user.getEmail() != null) {
+			userInfo.setEmail(user.getEmail());
+		}
+		// 이메일 테스트 통과 못하면 false반환
+		if(emailTest(userInfo)) {
+			userCheck.setCheck(true);
+		} else {
+			userCheck.setCheck(false);
+			userCheck.setWarningMessage("현재 입력하신 이메일은 로그인하신 이메일과 일치하지 않습니다.");
+		}
+		return userCheck;
 	}
 	
 	//즐겨찾기 :: 현재 로그인된 유저키 기반으로 데이터 검색
@@ -84,29 +79,4 @@ public class MyPageService {
 		
 	}
 	
-//	public boolean loginTest(User user) {
-//		if(userMapper.loginCheck(user) == 1) {
-//			return true;
-//		}
-//		else {
-//			return false;
-//		}		
-//	}
-//	
-//	//정보수정 처리 로직
-//	public CheckDto edit(User user) {
-//    	//반환하기위한 객체 생성
-//    	CheckDto userCheck = new CheckDto();
-//    	//함수 매개변수 입력용 객체
-//    	User userInfo = new User();
-//    	if(user.getPw() != null) {    		
-//    		userInfo.setPw(user.getPw());
-//    	}
-//    	if(user.getNickName() != null) {	
-//    		if (userMapper.nickNameTest(user.getNickName()) == 1) {
-//    			userCheck.setCheck(false);
-//    			userCheck.setWarningMessage("이미 존재하는 닉네임 입니다.");
-//    		}
-//    	}
-//	}
 }

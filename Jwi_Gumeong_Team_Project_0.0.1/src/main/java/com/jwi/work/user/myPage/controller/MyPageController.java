@@ -24,14 +24,12 @@ public class MyPageController {
 	//로그인체크
 	@PostMapping("/loginRetry")
 	public CheckDto loginRetry(@RequestBody User userData) {
-		System.out.println(userData);
 		return myPageService.loginRetry(userData);
 	}
 	
 	//로그인체크
 	@PostMapping("/edit")
 	public CheckDto edit(@RequestBody User userData) {
-		System.out.println(userData);
 		return myPageService.loginRetry(userData);
 	}
 	
