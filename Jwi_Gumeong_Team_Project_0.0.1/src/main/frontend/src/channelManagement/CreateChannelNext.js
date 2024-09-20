@@ -119,7 +119,9 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
             <div className={style.announcementTitle}>개설 할 채널 확인</div> {/*채널 공지사항 부분 Text */}
             <div className={style.announcementArea}>
                 <div className={style.formGroup}>
+                    <div className={style.imgDiv}>
                     <img src={channelApi.channelImageUrl} alt="채널 이미지" />
+                    </div>
                     <div className={style.streammerInfo}>
                         <div className={style.channelName}>{channelApi.channelName}</div>
                         <div className={style.follower}>
