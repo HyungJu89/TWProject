@@ -25,11 +25,15 @@ function PostCreact({channelKey}) {
     // 이미지 어레이
     const [selectedImage, setSelectedImage] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpenKeepURL, setModalOpenKeepURL] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [postCreateButtonColor,setPostCreateButtonColor] = useState('#FF8901');
     const closeModal = () => {
         setModalOpen(false);
         navigate('/signIn');
+    };
+    const closeModalKeepURL = () => {
+        setModalOpenKeepURL(false);
     };
 
     // text 의 상태 저장시켜줌, 길이가 300이 넘어갈때 글자 색 변경
@@ -84,7 +88,7 @@ function PostCreact({channelKey}) {
         let sessionId = JSON.parse(sessionIdJson).sessionId
         if(content.length < 3){
             setModalContent('내용이 너무 짧아요.');
-            setModalOpen(true);
+            setModalOpenKeepURL(true);
             return;
         }
 
@@ -106,7 +110,7 @@ function PostCreact({channelKey}) {
                 }
             });
             // 성공적으로 업로드된 경우 추가적인 처리
-            window.location.reload();
+            window.location.reload();  // 페이지 새로고침
         } catch (error) {
             console.error('업로드 실패:', error);
             setModalContent('서버에 이상이 생겨 업로드를 실패하였습니다. 다시 시도해주세요.');
@@ -114,9 +118,13 @@ function PostCreact({channelKey}) {
         }
     }
 
+    window.onload = function() {
+        window.scrollTo(0, 0);  // 페이지 로드 후 스크롤 위치를 (0, 0)으로 설정
+    };
+
     return (
         <div className={style.postCreact}>{/*게시글 작성 box*/}
-            {!hasContent && <span className={style.placeholderContentTop}>내용을 입력하세요.<br /><p className={style.placeholderContentBottom}>비매너 행위는 하지마세요.</p><br /><p className={style.placeholderContentBottom}>* 욕설, 광고(도배), 악의적인 글, 친목, 성희롱(음란물) 등</p></span>
+            {!hasContent && <span className={style.placeholderContentTop}>내용을 입력하세요.(3자 이상)<br /><p className={style.placeholderContentBottom}>비매너 행위는 하지마세요.</p><br /><p className={style.placeholderContentBottom}>* 욕설, 광고(도배), 악의적인 글, 친목, 성희롱(음란물) 등</p></span>
             }
             <div
                 contentEditable="true"
@@ -156,6 +164,9 @@ function PostCreact({channelKey}) {
 
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
+            {modalOpenKeepURL && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModalKeepURL} />
             }
         </div>
     )
