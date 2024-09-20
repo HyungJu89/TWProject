@@ -26,10 +26,10 @@ public class MyPageService {
 	//이메일 테스트
 	public boolean emailTest(User user) {
 		User newUser = signInService.getUserInfo(user.getSessionId());
-		if (newUser.getUserKey() == null) {
-			return false;
-		} else {
+		if (newUser.getEmail().equals(user.getEmail())) {
 			return true;
+		} else {
+			return false;
 		}
 	}
 	

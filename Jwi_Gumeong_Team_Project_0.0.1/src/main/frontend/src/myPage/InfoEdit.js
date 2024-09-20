@@ -19,7 +19,8 @@ function InfoEdit() {
     const [password, setPassword] = useState('');//비밀번호 입력값 저장용
     const [passwordCheck, setpasswordCheck] = useState('');//비밀번호 재확인 입력값 저장용
     const [passwordWarning2, setpasswordWarning2] = useState('');
-    const [samePassword, setSamePassword] = useState(false);//대조 유효검사 후 true,false값 저장용
+    const [samePassword, setSamePassword] = useState(false); // 대조 유효검사 후 true,false값 저장용
+    const [allCheck, setAllCheck] = useState(false); // 대조 유효검사 후 true,false값 저장용
     const [isButtonActive, setIsButtonActive] = useState(false);
     const [showPassword, setShowPassword] = useState(false); //비밀번호 보임,안보임 state
     const [showPasswordCheck, setShowPasswordCheck] = useState(false); //비밀번호 보임,안보임 state
@@ -37,48 +38,119 @@ function InfoEdit() {
     const letterRegEx = /[A-Za-z]/;
     const bigLetterRegEx = /[A-Z]/;
 
+    useEffect(() => {
+        // 초기값 false 선언
+        setIsButtonActive(false);
+        // 비밀번호 체크 실행
+        PasswordCheck(password);
+        // 닉네임 체크 실행
+        let nickNameBoolean = nickNameChecks(nickName);
+        // 비밀번호 체크 || 닉네임 체크가 true 일때 실행
+        if (pwCheck || nickNameBoolean) {
+            // 패스워드 체크에서 지정된 pwCheck 에 따라 버튼활성화
+            if(pwCheck){
+                setpasswordWarning2('사용 가능한 비밀번호 입니다.');
+                if(nicknameWarning === '사용 가능한 닉네임 입니다.' || nickName.length === 0){
+                    setIsButtonActive(true);
+                }
+                setSamePassword(true);
+            } else {
+                setIsButtonActive(false);
+            }
+            // 닉네임 boolean에서 지정된 닉네임체크 에 따라 버튼활성화
+            if(nickNameBoolean){
+                setIsButtonActive(true);
+                if(!pwCheck && password.length !== 0){
+                    setIsButtonActive(false);
+                }
+            } else if(!nickNameBoolean && nickName.length === 1){
+                setIsButtonActive(false);
+            }
+        }
+    }, [password, passwordCheck, nickName, pwCheck]);
+
     //비밀번호 유효성 검사로직
     const PasswordCheck = (password) => {
         setpasswordWarning2('');
         setPwCheck(true);
-        if (!passwordRegEx.test(password)) {
-            setpasswordWarning2('비밀번호의 형식이 맞지 않습니다.(8자~20자)');
+        if (password.length === 0 && passwordCheck.length === 0) {
             setPwCheck(false);
+            return;
         }
-        if (!numberRegEx.test(password)) {
-            setpasswordWarning2('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.');
+        if (password.length === 0 && passwordCheck.length !== 0) {
+            setpasswordWarning2('비밀번호를 입력해주세요.');
             setPwCheck(false);
+            return;
         }
-        if (!specialCharRegEx.test(password)) {
-            setpasswordWarning2('비밀번호는 적어도 하나의 특수 문자를 포함해야 합니다.');
+        
+        if (passwordCheck.length === 0 && password.length !== 0) {
+            setpasswordWarning2('비밀번호 재확인을 입력해주세요.');
             setPwCheck(false);
+            return;
         }
-        if (!letterRegEx.test(password)) {
-            setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
-            setPwCheck(false);
+
+        if(nickName.length !== 0){
+            if(password.length === 0 && passwordCheck.length === 0){
+                setPwCheck(false);
+            }
         }
-        if (!bigLetterRegEx.test(password)) {
-            setpasswordWarning2('비밀번호에는 대문자가 하나 이상 포함되어야 합니다.');
-            setPwCheck(false);
-        }
-        if (oriPassword == password){
-            setpasswordWarning2('이미 사용한 비밀번호는 사용하실 수 없습니다.');
-            setPwCheck(false);
-        }
-        if(!samePassword){
-            setpasswordWarning2('비밀번호가 일치하지 않습니다.');
-            setPwCheck(false);
+
+        if(password.length !== 0 || passwordCheck.length !== 0){
+            if (!passwordRegEx.test(password)) {
+                setpasswordWarning2('비밀번호의 형식이 맞지 않습니다.(8자~20자)');
+                setPwCheck(false);
+            }
+            if (!numberRegEx.test(password)) {
+                setpasswordWarning2('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.');
+                setPwCheck(false);
+            }
+            if (!specialCharRegEx.test(password)) {
+                setpasswordWarning2('비밀번호는 적어도 하나의 특수 문자를 포함해야 합니다.');
+                setPwCheck(false);
+            }
+            if (!letterRegEx.test(password)) {
+                setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
+                setPwCheck(false);
+            }
+            if (!bigLetterRegEx.test(password)) {
+                setpasswordWarning2('비밀번호에는 대문자가 하나 이상 포함되어야 합니다.');
+                setPwCheck(false);
+            }
+            if (oriPassword == password){
+                setpasswordWarning2('이미 사용한 비밀번호는 사용하실 수 없습니다.');
+                setPwCheck(false);
+            }
+            if (password !== passwordCheck){
+                setpasswordWarning2('비밀번호가 일치하지 않습니다.');
+                setPwCheck(false);
+            }
         }
     };
+    
+    //닉네임 유효성 검사로직
+    const nickNameChecks = (nickName) => {
+        setNickNameWarning('');
+        setNickNameCheck(false);
+        if(nickName.length >= 2){
+            if (nickNameRegEx.test(nickName)) {
+                setNickNameCheck(true);
+                return true;
+            }
+            setNickNameWarning('닉네임 형식이 맞지 않습니다.(2~8자 + 올바른조합)');
+            return false;
+        } else {
+            setNickNameWarning('닉네임 형식이 맞지 않습니다.(2~8자 + 올바른조합)');
+            if(nickName.length === 0){
+                setNickNameWarning('');
+            }
+            return false;
+        }
+    }
 
     const handleNickname = (e) => {
         if (e.target.value.length == 0 || e.target.value.length <= 8) {
             setNickname(e.target.value);
             setUserInput(e.target.value.length);
-            setIsButtonActive(true);
-            if (e.target.value.length == 0) {
-                setIsButtonActive(false);
-            }
         }
         if (e.target.value.length >= 9) {
             alert('닉네임은 8자 이하만 사용가능 합니다!');
@@ -104,32 +176,20 @@ function InfoEdit() {
         setpasswordCheck(e.target.value);
     };
 
-    //닉네임 유효성 검사로직
-    const nickNameChecks = (nickName) => {
-        if (nickNameRegEx.test(nickName)) {
-            setNickNameWarning('');
-            setNickNameCheck(true);
-            return true;
-        } else {
-            setNickNameWarning('닉네임 형식이 맞지 않습니다.(2~8자 + 올바른조합)');
-            setNickNameCheck(false);
-            return false;
-        }
-    }
-
     const changeUserInfo = async () => {
-        if (!nickNameCheck|| password !== '') {
-            console.log(password)
-            console.log(nickName)
-            if(nickName !== ''){
-                // 닉네임 유효성 검사 테스트
-                nickNameChecks(nickName);
-            }
-            if(password !== ''){
-                //패스워드 유효성 검사 테스트
-                PasswordCheck(password);
-            }
-        }
+        // 클릭시 체킹
+        // if (nickNameCheck || pwCheck) {
+        //     if(nickName !== ''){
+        //         // 닉네임 유효성 검사 테스트
+        //         nickNameChecks(nickName);
+        //     }
+        //     if(password !== ''){
+        //         //패스워드 유효성 검사 테스트
+        //         PasswordCheck(password);
+        //     }
+        // } else {
+        //     console.log("한개라도 입력하셈");
+        // }
         
         // 여기에서 한번에 보내는거 말고 경우를 3개로 늘려야할꺼같음.
         if (nickNameCheck) {
@@ -161,25 +221,6 @@ function InfoEdit() {
     const onResign = () => {
         navigate("/resign");
     }
-
-    useEffect(() => {
-        if(nickName !== ''){
-            setIsButtonActive(true);
-            setNickNameWarning('');
-        } else if(nickName == '') {
-            setIsButtonActive(false);
-        }
-    }, [nickName])
-
-    useEffect(() => {
-        if (passwordCheck == password) {
-            setIsButtonActive(true);
-            setSamePassword(true);
-        } else {
-            setIsButtonActive(false);
-            setSamePassword(false);
-        }
-    }, [password, passwordCheck]);
 
     return (
         <>
@@ -228,10 +269,10 @@ function InfoEdit() {
                     />
                     <img src={showPasswordCheck ? show : hide} className={styles.icon} onClick={toggleShowPasswordCheck} />
                 </div>
-                <div className={`${styles.passwordCheck} ${isButtonActive ? styles.active : ''}`}>{passwordWarning2 == '' ? '' : passwordWarning2}</div>
+                <div className={`${styles.passwordCheck} ${pwCheck ? styles.active : ''}`}>{samePassword && passwordWarning2 == '' ? '' : passwordWarning2}</div>
             </div>
             <button
-                className={`${styles.loginButton} ${isButtonActive && samePassword ? styles.active : ''}`} 
+                className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`} 
                 onClick={()=>{
                     changeUserInfo();
                 }}>
