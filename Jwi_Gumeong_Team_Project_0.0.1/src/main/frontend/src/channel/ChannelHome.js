@@ -105,7 +105,7 @@ function ChannelHome() {
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
     // 추후에 에러 페이지 만들기
     if (isLoadingChannel || channelInfo == null) {
-        return <Loading/>;
+        return  <Loading/>;
     }
 
     if (isErrorChannel || !channelApi) {
@@ -114,7 +114,6 @@ function ChannelHome() {
 
     return (
         <div>
-            <Loading/>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
                 <MainBanner channelId={channelId} route={'channel'} />
                 <ChannelBody channelInfo={channelInfo}/>
