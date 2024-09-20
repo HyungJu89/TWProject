@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 import PostCreate from './PostCreate.js';
 import { useChannel } from '../recycleCode/ApiQuery.js';
 import MainBanner from './MainBanner.js';
-import PublicBoard from '../main/PublicBoard.js'
+import Loading from '../loading/Loading.js';
+import PublicBoard from '../main/PublicBoard.js';
 import ChannelBody from './ChannelBody.js';
 import PublicMenu from '../main/PublicMenu.js'
 import { channelGet } from '../recycleCode/ChannelAxios.js';
@@ -104,7 +105,7 @@ function ChannelHome() {
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
     // 추후에 에러 페이지 만들기
     if (isLoadingChannel || channelInfo == null) {
-        return <div>채널 홈 로딩중</div>;
+        return <Loading/>;
     }
 
     if (isErrorChannel || !channelApi) {
@@ -113,6 +114,7 @@ function ChannelHome() {
 
     return (
         <div>
+            <Loading/>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
                 <MainBanner channelId={channelId} route={'channel'} />
                 <ChannelBody channelInfo={channelInfo}/>
