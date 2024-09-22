@@ -100,17 +100,10 @@ function ChannelHome() {
     }, [channelInfo, postPage]);
 
     //------------------------------------------------------------------------------
-    // 첫 번째 쿼리: 채널 정보를 가져오기.
-    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
-    // 추후에 에러 페이지 만들기
-    if (isLoadingChannel || channelInfo == null) {
+
+    if (channelInfo == null) {
         return <div>채널 홈 로딩중</div>;
     }
-
-    if (isErrorChannel || !channelApi) {
-        return <div>에러남</div>;
-    }
-
     return (
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
