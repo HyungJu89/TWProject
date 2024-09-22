@@ -98,13 +98,7 @@ const CommentsList = forwardRef(function CommentsList(
                 </div>
             </div>
             {/*대댓글*/}
-            {comment.replys[0].replyKey != 0 && (
-                <>
-                    {comment.replys.map((reply, replyIndex) => {
-                        const [replyColor,setReplyColor] = useState(reply.state != "common" ? '#999999' : '#101010');
-                        useEffect(()=>{
-                            setReplyColor(reply.state != "common" ? '#999999' : '#101010')
-                        },[reply])
+                    {comment.replys[0].replyKey != 0 && comment.replys.map((reply, replyIndex) => {
                         return (
                             <div key={reply.replyKey}>
                                 <div className={styles.bigComments}>
@@ -133,7 +127,7 @@ const CommentsList = forwardRef(function CommentsList(
                                         {reply.replyNickName &&
                                             <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
                                         }
-                                        <a className={styles.listContent} style={{color : replyColor}}>{reply.reply}</a>
+                                        <a className={styles.listContent} style={{color : reply.state != "common" ? '#999999' : '#101010'}}>{reply.reply}</a>
                                         <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == reply.replyKey) ? onClear() : replyOnclick('reply', reply.replyKey)}>
                                             <div className={styles.replyDivText}><img src={comments_20px} />답글달기</div>
                                         </div>
@@ -153,7 +147,7 @@ const CommentsList = forwardRef(function CommentsList(
                                 }
                             </div>
                         )
-                    })}</>)}
+                    })}
         </>
     )
 });
