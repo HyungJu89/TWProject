@@ -108,6 +108,9 @@ function Search({ search }) {
     const pageDown = () => {
         setChannePage(prevState => (prevState - 1) >= 1 ? prevState - 1 : prevState = 1)
     }
+
+    let id = sessionStorage.getItem('sessionId');
+
     return (
         <div className={style.searchMain}>
             <div>
@@ -115,10 +118,10 @@ function Search({ search }) {
                     <div className={style.searchBodyTop}>
                         {/*상단 제목*/}
                         <div className={style.searchTitle}>토픽 게시판</div>
-                        <div className={style.createChannel}>
+                        {id && <div className={style.createChannel}>
                             <img className={style.createChannelIcon} src={OpenChannel} />
                             <div className={style.createChannelText} onClick={createChannelOnClick}>토픽 게시판 만들기</div>
-                        </div>
+                        </div>}
                     </div>
                     {channelList.success && channelList.search ?
                         <div className={style.searchChannelList}>                    {/*검색된 게시판 포문 돌려야함 1번 돌아가는대 8번*/}
