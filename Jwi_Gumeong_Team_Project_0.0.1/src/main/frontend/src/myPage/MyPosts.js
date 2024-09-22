@@ -20,7 +20,7 @@ function MyPosts() {
     const [onClose, setOnClose] = useState(null);
 
 
-    const searchRecommendedPost = async () => {
+    const myPostSelect = async () => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         let sessionId = null;
         if (sessionIdJson) {
@@ -37,7 +37,7 @@ function MyPosts() {
             return data;
         } catch (error) {
             console.error('Channel API Error:', error);
-            throw new Error('Failed to fetch channel data');
+            throw new Error('Failed to fetch post data');
         }
     };
 
@@ -63,7 +63,7 @@ function MyPosts() {
             return openModal('로그인 되어있지않습니다. ', () => navigate(-1));
         }
         setPostList([]);
-        searchRecommendedPost()
+        myPostSelect()
 
     }, [postPage]);
 
