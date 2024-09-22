@@ -26,6 +26,7 @@ public class MyPageService {
 	//이메일 테스트
 	public boolean emailTest(User user) {
 		User newUser = signInService.getUserInfo(user.getSessionId());
+		System.out.println(newUser);
 		if (newUser.getEmail().equals(user.getEmail())) {
 			return true;
 		} else {
