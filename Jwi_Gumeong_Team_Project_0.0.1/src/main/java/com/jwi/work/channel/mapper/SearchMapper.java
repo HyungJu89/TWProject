@@ -33,4 +33,11 @@ public int searchAllTopicCount();
 
 public List<PostDto> searchAllTopic(@Param("sessionId") String sessionId,@Param("offset") int offset,@Param("limit") int limit);
 
+//내 게시글 숫자
+public int myPostCount (@Param("sessionId")String sessionId);
+
+
+// 내 게시글 리스트
+public List<PostDto> postMyPost(@Param("sessionId")String sessionId,@Param("offset") int offset,@Param("limit") int limit);
+
 }
