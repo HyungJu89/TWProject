@@ -66,7 +66,6 @@ public class ChannelService {
 
 	public AnswerDto<ChannelDto> channelGet(String sessionId,String channelId) {
 		AnswerDto<ChannelDto> answer = new AnswerDto<ChannelDto>();
-		System.out.println(channelMapper.channelGet(sessionId,channelId));
 		try {
 			if(channelMapper.channelCheck(channelId) == 1) {
 				answer.setInfo(channelMapper.channelGet(sessionId,channelId));
