@@ -20,7 +20,6 @@ function MoreDeleteMini({ setCommentLode,state,nickName, referenceType, referenc
     const dispatch = useDispatch()
 
     const reportOnClick = () => {
-        console.log('gd');
         dispatch(
             reportInfo({
                 nickName: nickName,
@@ -32,18 +31,21 @@ function MoreDeleteMini({ setCommentLode,state,nickName, referenceType, referenc
     }
 
     const delectOnClick = () => {
-        console.log('gd');
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if(!sessionIdJson){
             setModalContent('로그인 되어 있지 않습니다.');
             setModalOpen(true);
             return;
         }
+        
+
         if(state != "common"){
             setModalContent('삭제된 댓글입니다..');
             setModalOpen(true); 
             return; 
         }
+        
+        
         delectByUser(referenceType,referenceKey)
         setCommentLode((state) => state ? false : true)
     }

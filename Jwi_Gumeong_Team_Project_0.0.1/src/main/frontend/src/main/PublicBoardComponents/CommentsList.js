@@ -114,10 +114,10 @@ const CommentsList = forwardRef(function CommentsList(
                                                 <MoreDeleteMini 
                                                     setCommentLode = {setCommentLode}
                                                     state = {reply.state}
-                                                    nickName={comment.nickName} 
-                                                    referenceType={'comment'} 
-                                                    referenceKey={comment.commentKey} 
-                                                    myContent={comment.myComment} 
+                                                    nickName={reply.nickName} 
+                                                    referenceType={'reply'} 
+                                                    referenceKey={reply.replyKey} 
+                                                    myContent={reply.myReply} 
                                                     right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'} 
                                                     top={'30px'}/>
                                                 </div> 

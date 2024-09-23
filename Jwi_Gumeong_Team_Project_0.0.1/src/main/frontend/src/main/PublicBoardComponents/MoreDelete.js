@@ -39,7 +39,7 @@ function MoreDelete({ state, nickName, referenceType, referenceKey, modalRef, ri
                 return
             }
             delectByUser(referenceType,referenceKey)
-            window.location.reload();
+            setCommentLode((state) => state ? false : true)
         }
 
 

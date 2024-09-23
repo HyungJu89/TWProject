@@ -33,6 +33,7 @@ export const delectByUser = async (referenceType,referenceKey) => {
 try {
     // axios.post로 API 요청
     const { data } = await axios.post(apiUrl, delectByUserDto);
+    console.log(data)
     return data;
 } catch (error) {
     console.error(`Error deleting ${referenceType}:`, error);
