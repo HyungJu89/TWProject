@@ -4,9 +4,13 @@ import styles from './style/TopicBtn.module.css'
 function TopicBtn({ topic, settopic }) {
 
     const [loginCheck,setLoginChanck] = useState(false);
+    console.log(loginCheck);
 
 useEffect(()=>{
-    setLoginChanck(sessionStorage.getItem('sessionId') != null)
+    const timer = setTimeout(() => {
+        setLoginChanck(sessionStorage.getItem('sessionId') != null)
+    }, 1000);
+    return () => clearTimeout(timer);
 },[])
 
     return (
