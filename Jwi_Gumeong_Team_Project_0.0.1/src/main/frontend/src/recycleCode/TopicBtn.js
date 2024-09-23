@@ -4,7 +4,6 @@ import styles from './style/TopicBtn.module.css'
 function TopicBtn({ topic, settopic }) {
 
     const [loginCheck,setLoginChanck] = useState(false);
-    console.log(loginCheck);
 
 useEffect(()=>{
     const timer = setTimeout(() => {
