@@ -19,6 +19,7 @@ function LoginChecks(props) {
     
     const handleEnter = (e) => {
         if (e.key === "Enter") {
+            checkUser();
         }
     };
 

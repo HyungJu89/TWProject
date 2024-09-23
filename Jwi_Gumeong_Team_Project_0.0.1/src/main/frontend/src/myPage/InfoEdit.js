@@ -67,6 +67,9 @@ function InfoEdit() {
                 if(!pwCheck && password.length !== 0){
                     setIsButtonActive(false);
                 }
+                if(!pwCheck && passwordCheck.length !== 0){
+                    setIsButtonActive(false);
+                }
             } else if(!nickNameBoolean && nickName.length === 1){
                 setIsButtonActive(false);
             }
@@ -86,7 +89,7 @@ function InfoEdit() {
             setPwCheck(false);
             return;
         }
-        
+
         if (passwordCheck.length === 0 && password.length !== 0) {
             setpasswordWarning2('비밀번호 재확인을 입력해주세요.');
             setPwCheck(false);
@@ -205,9 +208,7 @@ function InfoEdit() {
                 };
                 const userResponse = await axios.post('/myPage/edit', userData); 
                 if(userResponse.data.check){
-                    console.log("에리아")
                     alert("오 나이스");
-                    navigate(-1);
                 } else if(!userResponse.data.check){
 
                 }
@@ -217,8 +218,7 @@ function InfoEdit() {
         } 
         if (pwCheck){
             console.log("ㅋㅋ성공")
-        }
-
+        } 
         if (pwCheck && nickNameCheck){
             console.log("둘다성공 ㅋㅋ")
         }
@@ -243,6 +243,7 @@ function InfoEdit() {
                         placeholder="변경 할 닉네임을 입력하세요."
                         value={nickName}
                         onChange={handleNickname}
+                        onKeyDown={handleEnter}
                     />
                     {
                         userInput !== 0 ? <div className={styles.icon} style={{ color: '#999999' }}>{'('}{userInput}/8{')'}</div> : ''
@@ -258,6 +259,7 @@ function InfoEdit() {
                         placeholder="비밀번호를 입력하세요"
                         value={password}
                         onChange={handlePasswordChange}
+                        onKeyDown={handleEnter}
                         style={{ marginBottom: '30px' }}
                     />
                     <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} />
@@ -272,6 +274,7 @@ function InfoEdit() {
                         placeholder="비밀번호를 한번 더 입력하세요."
                         value={passwordCheck}
                         onChange={handlepasswordCheckChange}
+                        onKeyDown={handleEnter}
                     />
                     <img src={showPasswordCheck ? show : hide} className={styles.icon} onClick={toggleShowPasswordCheck} />
                 </div>

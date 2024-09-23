@@ -64,14 +64,32 @@ public class MyPageService {
     	return userCheck;
 	}
 	
+	/**** TODO ****
+	 * 	1. 로그만들어서 언제 바꿨는지 남겨놔야함
+	 *  2. 남겨서 어따쓰냐? n일 전 비밀번호 변경되었음 정보가 나오면 좋음
+	 *	3. 비밀번호 변경 후 이메일로 변경되었다고 쏘기도 가능
+	 **** 닉네임 변경 이력?
+	 *	1. 자주 바뀌게 하면 안되서 최소 한달 후 바꿀 수 있게? 를 위한 장치
+	 *	ㅇㅈㅇ : 로그로 그 사람 접속로그 비번변경 로그 닉네임 변경로그 넣어주면 좋을듯
+	 *	ㅊㅈㅇ : 나중에 마이페이지에서 접속로그 보여줘도 좋겠다
+	 */
+	
 	// 정보수정 전체 로직
 	public CheckDto userEdit(User user) {
 		// 반환하기위한 객체 생성
 		CheckDto userCheck = new CheckDto();
 		User newUser = signInService.getUserInfo(user.getSessionId());
-		// 이메일 테스트 통과 못하면 false반환
+		user.setEmail(newUser.getEmail());
+		// 비밀번호 수정문
+		if(user.getPw() == "") {
+			user.setPw(null);
+		}
 		System.out.println(user);
-		System.out.println(newUser);
+		if(user.getPw() != null) {
+			userMapper.updatePw(user);
+		}
+		System.out.println(user);
+		
 		userCheck.setCheck(true);
 		return userCheck;
 	}
