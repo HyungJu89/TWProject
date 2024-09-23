@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { getUserInfo } from '../slice/loginSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 
-
 //정보수정 페이지
 function InfoEdit() {
     const [nickName, setNickname] = useState('');
@@ -37,6 +36,11 @@ function InfoEdit() {
     const specialCharRegEx = /[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]/;
     const letterRegEx = /[A-Za-z]/;
     const bigLetterRegEx = /[A-Z]/;
+
+    const handleEnter = (e) => {
+        if (e.key === "Enter") {
+        }
+    };
 
     useEffect(() => {
         // 초기값 false 선언
@@ -146,7 +150,7 @@ function InfoEdit() {
             return false;
         }
     }
-
+    // 닉네임 바꾸는 로직
     const handleNickname = (e) => {
         if (e.target.value.length == 0 || e.target.value.length <= 8) {
             setNickname(e.target.value);
@@ -201,7 +205,9 @@ function InfoEdit() {
                 };
                 const userResponse = await axios.post('/myPage/edit', userData); 
                 if(userResponse.data.check){
-
+                    console.log("에리아")
+                    alert("오 나이스");
+                    navigate(-1);
                 } else if(!userResponse.data.check){
 
                 }

@@ -17,6 +17,11 @@ function LoginChecks(props) {
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);    
     
+    const handleEnter = (e) => {
+        if (e.key === "Enter") {
+        }
+    };
+
     const handleEmailChange = (e) => {
         const value = e.target.value.replace(/\s/g, '');
         setEmail(value);
@@ -79,6 +84,7 @@ function LoginChecks(props) {
                             placeholder="이메일을 입력하세요"
                             value={email}
                             onChange={handleEmailChange}
+                            onKeyDown={handleEnter}
                         />
                     </div>
                 </div>
@@ -91,6 +97,7 @@ function LoginChecks(props) {
                             placeholder="비밀번호를 입력하세요"
                             value={password}
                             onChange={handlePasswordChange}
+                            onKeyDown={handleEnter}
                         />
                         <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} />
                     </div>

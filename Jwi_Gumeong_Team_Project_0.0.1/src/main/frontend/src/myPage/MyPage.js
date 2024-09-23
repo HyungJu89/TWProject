@@ -3,7 +3,7 @@ import styles from './style/MyPage.module.css';
 import InfoEdit from './InfoEdit.js';
 import MyPosts from './MyPosts.js';
 import FavoritesManagement from './FavoritesManagement.js';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 //마이페이지(로그인 검증)
@@ -11,19 +11,36 @@ function MyPage() {
     let [topic, settopic] = useState('정보 수정');
     const location = useLocation();
     const { pageState } = location.state || {};
+    let navigate = useNavigate();
+    // let [loginSession,setLoginSession] = useState(false);
+    // var jsonSessionInfo = sessionStorage?.getItem('sessionId');
+    // var sessionInfo = JSON.parse(jsonSessionInfo);
     useEffect(()=>{
         (pageState &&
             settopic(pageState)
         );
     },[]);
+    // useEffect(()=>{
+    //     // 세션여부 체크 ? << 이거 처리 넣어서 null 값일떄 undefined 반환되게했음.
+    //     if(sessionInfo?.sessionId === undefined){
+    //         // 컴포넌트 표기를 위한 true false state문
+    //         setLoginSession(false);
+    //         navigate('/');
+    //     } else {
+    //         setLoginSession(true);
+    //     }
+    //     // sessionInfo,loginSession 이 바뀔떄마다 실행
+    // },[sessionInfo,loginSession])
 
     return (
-        <div className={styles.MyPage}>
-            <TopicBtn topic={topic} settopic={settopic} />
-            {topic === '정보 수정' && <InfoEdit/>}
-            {topic === '내가 쓴 글' && <MyPosts />}
-            {topic === '즐겨찾기 관리' && <FavoritesManagement />}
-        </div>
+        // loginSession === true ?
+            <div className={styles.MyPage}>
+                <TopicBtn topic={topic} settopic={settopic} />
+                {topic === '정보 수정' && <InfoEdit/>}
+                {topic === '내가 쓴 글' && <MyPosts />}
+                {topic === '즐겨찾기 관리' && <FavoritesManagement />}
+            </div>
+        // : null
     );
 }
 

@@ -30,7 +30,7 @@ public class MyPageController {
 	//로그인체크
 	@PostMapping("/edit")
 	public CheckDto edit(@RequestBody User userData) {
-		return myPageService.loginRetry(userData);
+		return myPageService.userEdit(userData);
 	}
 	
 	//즐겨찾기 관리

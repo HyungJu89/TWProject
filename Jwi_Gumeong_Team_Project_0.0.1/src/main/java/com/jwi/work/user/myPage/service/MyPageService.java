@@ -26,9 +26,14 @@ public class MyPageService {
 	//이메일 테스트
 	public boolean emailTest(User user) {
 		User newUser = signInService.getUserInfo(user.getSessionId());
-		System.out.println(newUser);
+		// 이메일 유효성 검사
 		if (newUser.getEmail().equals(user.getEmail())) {
-			return true;
+			// 이메일 + 패스워드 유효성 검사
+			if(userMapper.loginCheck(user) == 1) {
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
@@ -44,12 +49,17 @@ public class MyPageService {
     	if(user.getEmail() !=null) {
     		userInfo.setEmail(user.getEmail());
     	}
+    	
+    	if(user.getPw() !=null) {
+    		userInfo.setPw(user.getPw());
+    	}
+    	
     	// 패스워드 입력 안할시에 널처리
     	if(emailTest(userInfo)) {
     		userCheck.setCheck(true);
     	} else {
         	userCheck.setCheck(false);
-        	userCheck.setWarningMessage("현재 입력하신 이메일은 로그인하신 이메일과 일치하지 않습니다.");
+        	userCheck.setWarningMessage("현재 입력하신 이메일은 로그인하신 이메일과 일치하지 않거나 비밀번호가 다릅니다.");
     	}
     	return userCheck;
 	}
@@ -58,19 +68,11 @@ public class MyPageService {
 	public CheckDto userEdit(User user) {
 		// 반환하기위한 객체 생성
 		CheckDto userCheck = new CheckDto();
-		User userInfo = new User();
-		userInfo.setSessionId(user.getSessionId());
-		// 함수 매개변수 입력용 객체
-		if(user.getEmail() != null) {
-			userInfo.setEmail(user.getEmail());
-		}
+		User newUser = signInService.getUserInfo(user.getSessionId());
 		// 이메일 테스트 통과 못하면 false반환
-		if(emailTest(userInfo)) {
-			userCheck.setCheck(true);
-		} else {
-			userCheck.setCheck(false);
-			userCheck.setWarningMessage("현재 입력하신 이메일은 로그인하신 이메일과 일치하지 않습니다.");
-		}
+		System.out.println(user);
+		System.out.println(newUser);
+		userCheck.setCheck(true);
 		return userCheck;
 	}
 	
