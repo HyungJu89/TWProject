@@ -1,3 +1,13 @@
+-- 2024-09-23 [안재원] V 0.1.17?
+-- 수정 내용 : 좋아요 알람 로그 테이블 추가 (중복방지)
+CREATE TABLE likeAlarmLog (
+    logKey INT PRIMARY KEY AUTO_INCREMENT,
+    postKey INT NOT NULL COMMENT '게시글 키',
+    threshold INT NOT NULL COMMENT '좋아요 임계값 (10, 50, 100)',
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_log (postKey, threshold)
+);
+
 -- 2024-09-10 [안재원] V 0.1.16?
 -- 수정 내용 alarm 테이블 컬럼 하나 추가
 ALTER TABLE `alarm` ADD COLUMN `referenceUserKey` INT COMMENT '알림을 발생시킨 사용자 키';
@@ -9,7 +19,7 @@ ALTER TABLE `report`
 MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
 select * from `alarm`;
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('3','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
+values ('1','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
 
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
 values ('2','8','post','4','욕설/혐오','왜 처리 안함 ㅡㅡ','unprocessed',now(),now());
@@ -91,7 +101,7 @@ alter table `user` add `pwWrong` int default 0;
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-select*from`user`;
+select*from`alarm`;
 drop table user;
 insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zdasaszx@a.coaafaaassm','12s4','fdaadssdafsa','비밀',0,null,'activate',NOW(),NOW());
 -- 자동 생성된 INSERT 문들
@@ -296,7 +306,6 @@ CREATE TABLE `comment` (
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE,
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
-
 CREATE TABLE `like` (
 	`likeKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL,
@@ -306,7 +315,9 @@ CREATE TABLE `like` (
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
 
-DROP TABLE `like`;
+select * from `alarm`;
+
+insert into `like` (`userKey`, `postKey`, `createdAt`) values(2, 29, now());
 
 CREATE TABLE `manager` (
 	`managerKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
@@ -317,9 +328,6 @@ CREATE TABLE `manager` (
 	FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE,
     FOREIGN KEY (`channelKey`) REFERENCES `channel`(`channelKey`) ON DELETE CASCADE
 );
-
-select * from report;
-select * from user;
 
 CREATE TABLE `report` (
 	`reportKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '신고키',
@@ -335,7 +343,7 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
-select *from report;
+select *from alarm;
 CREATE TABLE admin (
     adminKey    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
     adminName    VARCHAR(30) COMMENT '어드민아이디',
@@ -360,6 +368,7 @@ CREATE TABLE `alarm` (
 	`userKey`	INT	NOT NULL	COMMENT '유저키',
 	`referenceType`	VARCHAR(50)	NOT NULL	COMMENT '알람종류 "inquiry","post","comment","system","like" 테이블 이름으로  시스템 메세지는 system 으로',
 	`referenceKey`	INT	NULL	COMMENT '참조 키',
+    `referenceUserKey` INT COMMENT '알림을 발생시킨 사용자 키',
 	`read`	TINYINT	NOT NULL	DEFAULT 0	COMMENT 'read유무',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -220,7 +220,38 @@ public class PostService {
 			postMapper.likeDown(likeDto);
 		}
 		
+		// 알림 추가 로직
+	    int likeCount = postMapper.getLikeCount(likeDto.getPostKey()); // 현재 포스트의 좋아요 개수를 가져옴
+	    PostInfoDto postInfo = postMapper.postInfo(likeDto.getPostKey()); // 해당 포스트의 정보를 가져옴
+	    int postUserKey = postInfo.getUserKey(); // 해당 게시글의 작성자 userKey
+
+	    // 좋아요가 10, 50, 100을 넘었을 때만 알림을 추가
+	    addLikeAlarm(likeCount, postUserKey, likeDto.getPostKey());
 		
+		
+	}
+	
+	private void addLikeAlarm(int likeCount, int postUserKey, int postKey) {
+	    if (likeCount >= 10 && likeCount < 50) {
+	        // 좋아요 10개 넘었을 때 알림 추가
+	        insertLikeAlarmIfNotExists(postUserKey, "like_10", postKey, 10);
+	    } else if (likeCount >= 50 && likeCount < 100) {
+	        // 좋아요 50개 넘었을 때 알림 추가
+	        insertLikeAlarmIfNotExists(postUserKey, "like_50", postKey, 50);
+	    } else if (likeCount >= 100) {
+	        // 좋아요 100개 넘었을 때 알림 추가
+	        insertLikeAlarmIfNotExists(postUserKey, "like_100", postKey, 100);
+	    }
+	}
+
+	private void insertLikeAlarmIfNotExists(int userKey, String referenceType, int postKey, int threshold) {
+	    // likeAlarmLog에 임계값에 대한 기록이 있는지 확인
+	    int logCount = postMapper.checkLikeAlarmLogExists(postKey, threshold);
+	    if (logCount == 0) {
+	        // 로그에 없으면 기록하고, 알림 삽입
+	        postMapper.insertLikeAlarmLog(postKey, threshold);
+	        postMapper.insertAlarm(userKey, referenceType, postKey);
+	    }
 	}
 	
 //	public AnswerDto<String> postUpdate(int postKey,int userKey,String content,List<MultipartFile>files) {

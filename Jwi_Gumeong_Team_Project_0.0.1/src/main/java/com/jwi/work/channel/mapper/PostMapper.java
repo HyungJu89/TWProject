@@ -57,5 +57,21 @@ public interface PostMapper {
 	// Like down
 	public void  likeDown(PostLikeDto likeDto);
 	
+	// 로그 확인
+	public int checkLikeAlarmLogExists(@Param("postKey") int postKey
+			, @Param("threshold") int threshold);
+	
+	// 로그 삽입
+	public void insertLikeAlarmLog(@Param("postKey") int postKey
+			, @Param("threshold") int threshold); 
+	
+	// 게시물의 좋아요 개수 가져오기
+	public int getLikeCount(@Param("postKey") int postKey); 
+	
+	// 알림 추가
+	public void insertAlarm(@Param("userKey") int userKey
+			, @Param("referenceType") String referenceType
+			, @Param("referenceKey") int referenceKey);
+	
 //	public void postUpdate(@Param("postKey")int postKey,@Param("content")String content,@Param("image")String image);
 }

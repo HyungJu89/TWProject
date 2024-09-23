@@ -34,11 +34,11 @@ import { getCookie } from '../cookies/Cookies.js';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function Header({onClickSearch, onLogout, isLoggedIn}) {
+    const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
     const [searchInputs,setSearchInputs] = useState('');
     let [recentSearchData, setRecentSearchData] = useState([]);
-    const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
 
     let navigate = useNavigate();
     let location = useLocation();
@@ -118,18 +118,20 @@ function Icon({navigate, userKey}) { /* 로그인 시 노출되는 알림 아이
     // 알림 개수 가져오기
     useEffect(() => {
         const fetchUnreadCount = async () => {
-            try {
-                const response = await axios.post('/alarm/count/unread', null, { params: { userKey } });
-                if (response.data.result === "success") {
-                    setUnreadCount(response.data.unreadCount);
+            if (userKey !== null) {
+                try {
+                    const response = await axios.post('/alarm/count/unread', null, { params: { userKey } });
+                    if (response.data.result === "success") {
+                        setUnreadCount(response.data.unreadCount);
+                    }
+                } catch (error) {
+                    console.log("알림 개수 가져오기 에러: ", error);
                 }
-            } catch (error) {
-                console.log("Error fetching unread alarms count: ", error);
             }
         };
         fetchUnreadCount(); // 컴포넌트 마운트 시 호출
 
-        const intervalId = setInterval(fetchUnreadCount, 30000); // 30초마다 호출
+        const intervalId = setInterval(fetchUnreadCount, 10000); // 30초마다 호출
 
         return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
     }, [userKey]);
@@ -345,7 +347,9 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     content = notification.content;
                     subContent = `${notification.nickname}님이 대댓글을 달았어요.`;
                     break;
-                case 'like':
+                case 'like_10':
+                case 'like_50':
+                case 'like_100':
                     icon = notification.channelImageUrl || n_heart_activation;
                     content = notification.content;
                     subContent = `해당글이 ♥${notification.subContent}개를 받았어요.`; // 좋아요 알림 
