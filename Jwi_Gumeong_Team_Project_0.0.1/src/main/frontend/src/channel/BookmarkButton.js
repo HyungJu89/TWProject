@@ -1,7 +1,7 @@
-import bookmarkActivation from '../icon/20px/bookmark-activation.png';
-import bookmarkActivationW from '../icon/20px/bookmark-activation-w.png';
-import bookmarkDeactivation from '../icon/20px/bookmark-deactivation.png';
-import Star from '../icon/20px/bookmark-deactivation.png'; 
+import bookmarkActivation from '../icon/20px/favorites-activation.png';
+import bookmarkActivationW from '../icon/20px/favorites-activation-w.png';
+import bookmarkDeactivation from '../icon/20px/favorites-deactivation.png';
+import Star from '../icon/20px/favorites-deactivation.png'; 
 import style from './style/BookmarkButton.module.css'
 import '../App.css'
 import { useEffect, useState, useCallback } from 'react';

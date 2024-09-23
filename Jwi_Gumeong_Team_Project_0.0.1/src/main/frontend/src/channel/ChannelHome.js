@@ -79,7 +79,7 @@ function ChannelHome() {
             setChannelInfo(channel.info);
             fetchData(channel.info.channelKey, postPage);
 
-        } catch (error) {
+        } catch (error) { 
             console.error('채널 확인 중 오류 발생:', error);
             setModalContent('채널 확인 중 오류가 발생했습니다.');
             setModalOpen(true);
@@ -106,12 +106,9 @@ function ChannelHome() {
     // 추후에 에러 페이지 만들기
     if (isLoadingChannel || channelInfo == null) {
         return  <Loading/>;
+    // if (channelInfo == null) {
+    //     return <div>채널 홈 로딩중</div>;
     }
-
-    if (isErrorChannel || !channelApi) {
-        return <div>에러남</div>;
-    }
-
     return (
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}

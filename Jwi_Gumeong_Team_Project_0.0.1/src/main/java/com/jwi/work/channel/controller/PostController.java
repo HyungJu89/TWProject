@@ -34,6 +34,12 @@ public class PostController {
 		return postService.postSelect(sessionId,channelKey,page);
 	}
 	
+	//내가 쓴글
+	@GetMapping("/myPost")
+	public SearchDto<List<PostDto>> postMyPost(@RequestParam("sessionId") String sessionId,@RequestParam("page")int page){
+		return postService.postMyPost(sessionId,page);
+	}
+	
 	
 	@PostMapping("/create")
 	public AnswerDto<String> postCreate(
@@ -63,6 +69,8 @@ public class PostController {
 	public void postLike(@RequestBody PostLikeDto likeDto) {
 		postService.postLike(likeDto);
 	}
+	
+	
 	
 	/*
 	 * @PostMapping("/update") public AnswerDto<String> postUpdate(
