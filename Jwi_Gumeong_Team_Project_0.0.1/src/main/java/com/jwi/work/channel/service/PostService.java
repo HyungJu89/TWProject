@@ -20,6 +20,7 @@ import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.dto.sqlDto.ImageInfoDto;
 import com.jwi.work.channel.dto.sqlDto.PostInfoDto;
 import com.jwi.work.channel.mapper.PostMapper;
+import com.jwi.work.channel.mapper.SearchMapper;
 import com.jwi.work.util.FileManagerUtil;
 import com.jwi.work.util.PagingUtil;
 import com.jwi.work.util.dto.AnswerDto;
@@ -30,6 +31,9 @@ public class PostService {
 
 	@Autowired
 	private PostMapper postMapper;
+	
+	@Autowired
+	private SearchMapper searchMapper;
 
 	@Autowired
 	private FileManagerUtil fileManagerUtil;
@@ -66,6 +70,39 @@ public class PostService {
 
 		return postSelect;
 	}
+	
+	
+	public SearchDto<List<PostDto>> postMyPost(String sessionId,int page){
+		// 한페이지에 나올 개시글 숫자
+		final int LIMIT_PAGE = 10;
+
+		SearchDto<List<PostDto>> postSelect = new SearchDto<>();
+
+		// 게시글 숫자
+		int postCount = searchMapper.myPostCount(sessionId);
+
+		// 게시글이 없을때 바로 리턴시켜줌
+		if (postCount == 0) {
+			postSelect.setSuccess(false);
+
+			return postSelect;
+		}
+		
+		// 게시글이 있기떄문에 true로 변경
+		postSelect.setSuccess(true);
+
+		// 게시글 페이징 처장
+		postSelect.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
+		
+		// 게시글 불러오기, 채널키로 해당 채널에 있는 게시글들을 불러오고 LIMIT로 게시글을 몇개 가져올껀지 지정
+			List<PostDto> posts = searchMapper.postMyPost(sessionId,postSelect.getPaging().getOffset(),postSelect.getPaging().getLimit());
+			
+			// return 해줘야할 객체에 담아줌
+			postSelect.setSearch(posts);
+
+		return postSelect;
+	}
+	
 	
 	
 	public AnswerDto<String> postCreate(int channelKey, String sessionId, String content, List<MultipartFile> files) {

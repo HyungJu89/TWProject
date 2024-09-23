@@ -119,14 +119,14 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
             <div className={style.announcementTitle}>개설 할 채널 확인</div> {/*채널 공지사항 부분 Text */}
             <div className={style.announcementArea}>
                 <div className={style.formGroup}>
+                    <div className={style.imgDiv}>
                     <img src={channelApi.channelImageUrl} alt="채널 이미지" />
+                    </div>
                     <div className={style.streammerInfo}>
                         <div className={style.channelName}>{channelApi.channelName}</div>
                         <div className={style.follower}>
                             <div className={style.markText}>팔로워</div>
                             <div className={style.markCount}> {formatUnit(channelApi.followerCount)}</div>
-                            <div className={style.markText}>즐겨찾기</div>
-                            <div className={style.markCount}> 10000만</div>
                         </div>
                     </div>
                 </div>

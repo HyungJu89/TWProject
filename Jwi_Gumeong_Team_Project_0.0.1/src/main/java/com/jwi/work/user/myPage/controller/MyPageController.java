@@ -36,8 +36,13 @@ public class MyPageController {
 	//즐겨찾기 관리
 	@GetMapping("/favorites")
 	public List<FavoritesEntity> userFavoritesList(@RequestParam("sessionId") String sessionId) {
-		System.out.println(sessionId);
 		return myPageService.favoritesList(sessionId);
+		
+	}
+	//채널별 즐겨찾기 카운트
+	@GetMapping("/favoritesCount")
+	public int favoritesCount(@RequestParam("channelKey") int channelKey) {
+		return myPageService.favoritesCount(channelKey);
 		
 	}
 	

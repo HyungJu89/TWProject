@@ -124,7 +124,7 @@ function PublicBoard({ postInfo }) {
     }
 
     return (
-        <div className={styles.mainDiv}>
+        <div className={('fadein', styles.mainDiv)}>
             {postInfo.postChannel && (
                 <ChannelTitle postChannel={postInfo.postChannel} />
             )}

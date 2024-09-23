@@ -8,7 +8,7 @@ import MoreDeleteMini from './MoreDeleteMini.js';
 import ReplyArea from './ReplyArea.js';
 import more from '../../icon/24px/more.png';
 import comments_20px from '../../icon/20px/comments-20px.png';
-import big_comment from '../../icon/20px/bigcomment.png';
+import replyImg from '../../icon/20px/reply.png';
 import { formatDistanceToNow } from 'date-fns'; // 아래와 같이 사용되는 날짜 라이브러리
 import { ko } from 'date-fns/locale'; // 한국어 설정
 
@@ -98,17 +98,11 @@ const CommentsList = forwardRef(function CommentsList(
                 </div>
             </div>
             {/*대댓글*/}
-            {comment.replys[0].replyKey != 0 && (
-                <>
-                    {comment.replys.map((reply, replyIndex) => {
-                        const [replyColor,setReplyColor] = useState(reply.state != "common" ? '#999999' : '#101010');
-                        useEffect(()=>{
-                            setReplyColor(reply.state != "common" ? '#999999' : '#101010')
-                        },[reply])
+                    {comment.replys[0].replyKey != 0 && comment.replys.map((reply, replyIndex) => {
                         return (
                             <div key={reply.replyKey}>
                                 <div className={styles.bigComments}>
-                                    <img className={styles.BcImg} src={big_comment} />
+                                    <img className={styles.BcImg} src={replyImg} />
                                     <div className={styles.list}  ref={replyIndex === comment.replys.length-1 ? replyFocus : null}>
                                         <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
                                             <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{timeSetting(reply.createdAt)}</a></div>
@@ -133,7 +127,7 @@ const CommentsList = forwardRef(function CommentsList(
                                         {reply.replyNickName &&
                                             <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
                                         }
-                                        <a className={styles.listContent} style={{color : replyColor}}>{reply.reply}</a>
+                                        <a className={styles.listContent} style={{color : reply.state != "common" ? '#999999' : '#101010'}}>{reply.reply}</a>
                                         <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == reply.replyKey) ? onClear() : replyOnclick('reply', reply.replyKey)}>
                                             <div className={styles.replyDivText}><img src={comments_20px} />답글달기</div>
                                         </div>
@@ -153,7 +147,7 @@ const CommentsList = forwardRef(function CommentsList(
                                 }
                             </div>
                         )
-                    })}</>)}
+                    })}
         </>
     )
 });

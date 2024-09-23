@@ -75,6 +75,12 @@
 	</select>
 	
 	<select id="searchPostList" parameterType="map" resultMap="postResultMap">
+	WITH userKeyCTE AS (
+	    	SELECT userKey 
+    		FROM userConnection 
+    		WHERE sessionId = #{sessionId}
+		)
+
 		SELECT 
 		<!-- select 하나하나 해준이유 = 유저key가 못빠져오게하려고 -->
 			post.postKey AS postKey,
@@ -100,26 +106,15 @@
             			1 
             		FROM 
             			`like` l
-            		JOIN
-            			userConnection uc ON l.userKey = uc.userKey
             		WHERE 
             			l.postKey = post.postKey 
-            			AND uc.sessionId = #{sessionId}
+            			AND l.userKey =  (SELECT userKey FROM userKeyCTE)
             	) THEN TRUE
             	ELSE FALSE
         	END AS isLike,
         	
 			CASE
-				WHEN EXISTS(
-					SELECT
-						1
-					FROM
-						`userConnection` uc
-					WHERE
-						uc.userKey = post.userKey
-						AND uc.sessionId = #{sessionId}
-
-				) THEN TRUE
+				WHEN post.userKey = (SELECT userKey FROM userKeyCTE) THEN TRUE
 				ELSE FALSE
 				END AS myPost
 				
@@ -168,6 +163,7 @@
 		LIMIT	
 			<!-- 페이징처리 -->
 			#{offset},#{limit}
+
 	</select>
 	 
 	
@@ -177,19 +173,26 @@
 	
 	<!-- 좋아요 순으로 정렬된 게시글 -->
 		<select id="searchRecommended" parameterType="map"  resultMap="postResultMap">
+	WITH userKeyCTE AS (
+	    	SELECT userKey 
+    		FROM userConnection 
+    		WHERE sessionId = #{sessionId}
+		)
+
 		SELECT 
+		<!-- select 하나하나 해준이유 = 유저key가 못빠져오게하려고 -->
 			post.postKey AS postKey,
 			post.content AS P_content,
 			post.image AS P_image,
 			post.state AS P_state,
 			post.createdAt AS P_createdAt,
 			post.updatedAt AS P_updatedAt,
-			
+						<!-- if null 은 오류 방지를 위해 null일때 0을 대신출력 -->
 			IFNULL(commentSummary.totalCommentCount, 0) AS  P_commentCount,
 			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
 			user.nickName AS P_nickName,
 			
-			
+					<!-- AS 는 왼쪽에 있는 칼럼의 이름을 오른쪽껄로 바꾸겠다 -->
 			channel.channelKey AS channelKey,
 			channel.id AS PC_id,
 			channel.imageUrl AS PC_imageUrl,
@@ -201,28 +204,17 @@
             			1 
             		FROM 
             			`like` l
-            		JOIN
-            			userConnection uc ON l.userKey = uc.userKey
             		WHERE 
             			l.postKey = post.postKey 
-            			AND uc.sessionId = #{sessionId}
+            			AND l.userKey =  (SELECT userKey FROM userKeyCTE)
             	) THEN TRUE
             	ELSE FALSE
         	END AS isLike,
         	
 			CASE
-				WHEN EXISTS(
-					SELECT
-						1
-					FROM
-						`userConnection` uc
-					WHERE
-						uc.userKey = post.userKey
-						AND uc.sessionId = #{sessionId}
-
-				) THEN TRUE
-			ELSE FALSE
-		END AS myPost
+				WHEN post.userKey = (SELECT userKey FROM userKeyCTE) THEN TRUE
+				ELSE FALSE
+				END AS myPost
         	
 		FROM 
 			post 
@@ -289,17 +281,19 @@
 			post 
 		JOIN
 		<!-- favorites 테이블에 channelKey 값과 일치하는 행만 결과에 포함해준다. -->
-			favorites ON post.channelKey = favorites.channelKey
-		JOIN
-		<!-- userConnection 테이블에서 sessionId 의 값과 userKey 값이 일치하는 행만 결과에 포함해준다. -->
-			userConnection ON favorites.userKey = userConnection.userKey AND userConnection.sessionId = #{sessionId}
+			favorites ON post.channelKey = favorites.channelKey AND favorites.userKey = (SELECT userKey FROM userConnection WHERE sessionId=#{sessionId})
 		WHERE 
 			post.state = 'common'
-			AND userConnection.sessionId = #{sessionId}
 	</select>
 
 <!-- 팔로우한 게시판의 게시글 출력--> 
 	<select id="searchFavoritesPost" parameterType="map"  resultMap="postResultMap">
+		WITH userKeyCTE AS (
+	    	SELECT userKey 
+    		FROM userConnection 
+    		WHERE sessionId = #{sessionId}
+		)
+
 		SELECT 
 			post.postKey AS postKey,
 			post.content AS P_content,
@@ -324,37 +318,24 @@
             			1 
             		FROM 
             			`like` l
-            		JOIN
-            			userConnection uc ON l.userKey = uc.userKey
             		WHERE 
             			l.postKey = post.postKey 
-            			AND uc.sessionId = #{sessionId}
+            			AND l.userKey =  (SELECT userKey FROM userKeyCTE)
             	) THEN TRUE
             	ELSE FALSE
         	END AS isLike,
         	
 			CASE
-				WHEN EXISTS(
-					SELECT
-						1
-					FROM
-						`userConnection` uc
-					WHERE
-						uc.userKey = post.userKey
-						AND uc.sessionId = #{sessionId}
-
-				) THEN TRUE
+				WHEN post.userKey = (SELECT userKey FROM userKeyCTE) THEN TRUE
 				ELSE FALSE
 				END AS myPost
+
 
 		FROM 
 			post 
 		JOIN
 		<!-- favorites 테이블에 channelKey 값과 일치하는 행만 결과에 포함해준다. -->
-			favorites ON post.channelKey = favorites.channelKey
-		JOIN
-		<!-- userConnection 테이블에서 sessionId 의 값과 userKey 값이 일치하는 행만 결과에 포함해준다. -->
-			userConnection ON favorites.userKey = userConnection.userKey AND userConnection.sessionId = #{sessionId}
+			favorites ON post.channelKey = favorites.channelKey AND favorites.userKey = (SELECT userKey FROM userKeyCTE)
 		LEFT JOIN
 			user ON post.userKey = user.userKey
 		LEFT JOIN
@@ -409,6 +390,13 @@
 	
 	
 			<select id="searchAllTopic" parameterType="map" resultMap="postResultMap">
+	WITH userKeyCTE AS (
+	    	SELECT userKey 
+    		FROM userConnection 
+    		WHERE sessionId = #{sessionId}
+		)
+
+
 		SELECT 	
 			post.postKey AS postKey,
 			post.content AS P_content,
@@ -433,26 +421,15 @@
             			1 
             		FROM 
             			`like` l
-            		JOIN
-            			userConnection uc ON l.userKey = uc.userKey
             		WHERE 
             			l.postKey = post.postKey 
-            			AND uc.sessionId = #{sessionId}
+            			AND l.userKey =  (SELECT userKey FROM userKeyCTE)
             	) THEN TRUE
             	ELSE FALSE
         	END AS isLike,
         	
 			CASE
-				WHEN EXISTS(
-					SELECT
-						1
-					FROM
-						`userConnection` uc
-					WHERE
-						uc.userKey = post.userKey
-						AND uc.sessionId = #{sessionId}
-
-				) THEN TRUE
+				WHEN post.userKey = (SELECT userKey FROM userKeyCTE) THEN TRUE
 				ELSE FALSE
 				END AS myPost
 
@@ -494,6 +471,92 @@
 			post.state = 'common'
 		ORDER BY
 			post.createdAt DESC
+		LIMIT	
+			#{offset},#{limit}
+	</select>
+	
+	
+		<select id="myPostCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM post WHERE userKey = (SELECT userKey FROM userConnection WHERE sessionId = #{sessionId}) AND post.state = 'common'
+	</select> 
+	
+	
+		<select id="postMyPost" parameterType="map"  resultMap="postResultMap">
+	WITH userKeyCTE AS (
+    	SELECT userKey 
+    	FROM userConnection 
+    	WHERE sessionId = #{sessionId}
+)
+		SELECT 
+			post.postKey AS postKey,
+			post.content AS P_content,
+			post.image AS P_image,
+			post.state AS P_state,
+			post.createdAt AS P_createdAt,
+			post.updatedAt AS P_updatedAt,
+			
+			IFNULL(commentSummary.totalCommentCount, 0) AS  P_commentCount,
+			IFNULL(likeSummary.likeCount, 0) AS P_likeCount,
+			user.nickName AS P_nickName,
+			
+			
+			channel.channelKey AS channelKey,
+			channel.id AS PC_id,
+			channel.imageUrl AS PC_imageUrl,
+			channel.name AS PC_name,
+			
+        	CASE 
+            	WHEN EXISTS(
+            		SELECT  
+            			1 
+            		FROM 
+            			`like` l
+            		WHERE 
+            			l.postKey = post.postKey 
+            			AND l.userKey =  (SELECT userKey FROM userKeyCTE)
+            	) THEN TRUE
+            	ELSE FALSE
+        	END AS isLike,
+        	
+			CASE
+				WHEN post.userKey = (SELECT userKey FROM userKeyCTE) THEN TRUE
+				ELSE FALSE
+				END AS myPost
+		FROM 
+			post 
+		LEFT JOIN
+		<!-- channel 테이블에 channelKey 값이 일치하는 행을 결과에 추가해준다 -->
+			channel ON post.channelKey = channel.channelKey
+
+		LEFT JOIN
+			(SELECT
+				`like`.postKey,
+				COUNT(`like`.postKey) AS likeCount
+			FROM
+				`like`
+			GROUP BY
+				`like`.postKey
+			) AS likeSummary ON post.postKey = likeSummary.postKey
+		LEFT JOIN
+			user ON post.userKey = user.userKey
+		LEFT JOIN
+			<!-- 서브쿼리 : 댓글 숫자를 뽑기위해 필요 -->
+			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
+			<!-- 서브 쿼리로 그룹화 시킨 값중 post.postKey 와 동일한 postKey를 가진 행을 결과에 추가해준다 -->
+   	     	(SELECT 
+        		comment.postKey, 
+        		COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0) AS totalCommentCount
+     		FROM 
+        		comment
+     		LEFT JOIN 
+        		reply ON comment.commentKey = reply.commentKey
+     		GROUP BY 
+        		comment.postKey
+        ) AS commentSummary ON post.postKey = commentSummary.postKey
+		WHERE 
+			post.userKey = (SELECT userKey FROM userKeyCTE)  AND post.state = 'common'
+		ORDER BY
+        	post.createdAt DESC
 		LIMIT	
 			#{offset},#{limit}
 	</select>
