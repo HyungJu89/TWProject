@@ -199,28 +199,39 @@ function InfoEdit() {
         // }
         
         // 여기에서 한번에 보내는거 말고 경우를 3개로 늘려야할꺼같음.
-        if (nickNameCheck) {
+        if(isButtonActive){
             try {
+                console.log("닉네임체크 여부 : " + nickNameCheck + " 패스워드 체크 여부 " +pwCheck);
+                let userResponse = {};
                 const userData = {
                     pw: password,
                     nickName: nickName,
                     sessionId: sessionInfo.sessionId
                 };
-                const userResponse = await axios.post('/myPage/edit', userData); 
+                if (nickNameCheck) {
+                    userResponse = await axios.post('/myPage/editNickName', userData); 
+                    console.log('닉네임');
+                }
+                if (pwCheck){
+                    userResponse = await axios.post('/myPage/editPw', userData); 
+                    console.log('패스워드');
+                }
+                if (nickNameCheck && pwCheck){
+                    userResponse = await axios.post('/myPage/editAll', userData); 
+                    console.log('둘다');
+                }
                 if(userResponse.data.check){
-                    alert("오 나이스");
+                    // alert("ㅋㅋ 바뀜ㄴ다");
+                    alert(userResponse.data.warningMessage);
+                    navigate("/");
+                    //여기에 네비게이트 넣으면 됨
                 } else if(!userResponse.data.check){
 
                 }
+                console.log(userResponse);
             } catch (error) {
                 console.error('Channel API Error:', error);
             }
-        } 
-        if (pwCheck){
-            console.log("ㅋㅋ성공")
-        } 
-        if (pwCheck && nickNameCheck){
-            console.log("둘다성공 ㅋㅋ")
         }
     }
 

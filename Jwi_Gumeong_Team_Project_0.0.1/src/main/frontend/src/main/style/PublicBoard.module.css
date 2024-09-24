@@ -89,10 +89,16 @@
     position: relative;
     width: 726px;
     display: flex;
+    word-wrap: break-word;
 }
 
 .contentArea .text {
     width: 529px;
+    max-width: 726px;
+    margin-right: 20px;
+}
+.contentArea .text2 {
+    max-width: 726px;
     margin-right: 20px;
 }
 
@@ -252,6 +258,7 @@
 .listContent {
     font-weight: 400;
     color: #101010;
+    word-break: break-all;
 }
 .replyNickNameBlue{
     color: #35559E;

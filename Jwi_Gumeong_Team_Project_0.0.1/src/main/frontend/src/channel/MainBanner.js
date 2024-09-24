@@ -101,7 +101,7 @@ function MainBanner({ channelId, route,
                                                             return <img src={art} />;
                                                         case '음악/노래':
                                                             return <img src={music} />;
-                                                        case '먹방':
+                                                        case '먹방/쿡방':
                                                             return <img src={food} />;
                                                         case '과학/기술':
                                                             return <img src={skill} />;

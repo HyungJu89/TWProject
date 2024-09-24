@@ -21,9 +21,10 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     // 컴포넌트 로드용 함수
     const [commentLode, setCommentLode] = useState(true);
     let [comments, setComments] = useState([]);
-    const textareaRef = useRef(null); //
+    const textareaRef = useRef(null); //댓글달기 영역
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
+    const [modalOpenKeepURL, setModalOpenKeepURL] = useState(false);
     const navigate = useNavigate();
     let disPatch = useDispatch();
 
@@ -33,6 +34,10 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
         disPatch(openImgUiModalFalse())
         navigate('/signIn');
         window.scrollTo(0, 0);
+    };
+
+    const closeModalKeepURL = () => {
+        setModalOpenKeepURL(false);
     };
 
     //댓글 길이 제한
@@ -55,29 +60,6 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     const [replyInputState, setReplyInputState] = useState('');
     const [replyInputIndex, setReplyInputIndex] = useState(0);
 
-    // 이모지 삽입 함수
-    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
-    let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
-    const insertEmogiAtCursor = (emoji) => {
-        const textarea = textareaRef.current;
-        if (!textarea) return;
-        const start = textarea.selectionStart;//선택된 텍스트의 시작 위치 또는 커서의 위치
-        const end = textarea.selectionEnd;//선택된 텍스트의 마지막
-        const value = textarea.value;// textarea의 현재 값을 가져옴
-        // 현재 커서 위치 기준으로 텍스트를 나누고 이모지 삽입
-        const newValue = value.slice(0, start) + emoji + value.slice(end);
-        // 텍스트를 업데이트하고 커서를 이모지 뒤에 위치시킴
-        textarea.value = newValue;
-        textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
-        // 커서 위치 유지
-        textarea.focus();
-    };
-    useEffect(() => { //이모지 함수 실행
-        if (emogiAdd) {
-            insertEmogiAtCursor(emogiAdd);
-            setEmogiAdd(''); // 이모지 추가 후 초기화
-        }
-    }, [emogiAdd]);
     const handleInput = (e) => {//스크롤 늘어나게
         const textarea = textareaRef.current;
 
@@ -94,24 +76,32 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
 
     //모달함수
     let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off   
+    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     const modalRef = useRef(null);
     const moreRef = useRef(null);
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
             if (moreON &&
-                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target)) { setmoreON(false); } //신고, 삭제 닫음
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
+                { setmoreON(false); } //신고, 삭제 닫음
+            if (EmojiOn &&
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
+                { setEmojiOn(false); } //신고, 삭제 닫음
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => { //클린업
-            document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [moreON]);
+    }, [moreON, EmojiOn]);
 
 
     //댓글 작성 
     const createComment = async () => {
         if (commentsLimit < commentLength) {
-            return alert('너무 김');
+            setModalContent('내용이 너무 짧아요.');
+            setModalOpenKeepURL(true);
+            return;
+            // return alert('너무 김');
         }
         // 추가로 로직필요하면 여기에
         let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -207,8 +197,8 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                     onInput={handleInput}
                 />
                 <div className={styles.commentNav}>
-                    <img onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
-                    {EmojiOn && <Emogi setEmogiAdd={setEmogiAdd} />}
+                    <img ref={moreRef} onClick={() => { !EmojiOn && setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
+                    {EmojiOn && <Emogi  now={'comments'} modalRef={modalRef} textareaRef={textareaRef} setComment={setComment} />}
                     <div style={{ color: commentTextColor }}>
                         {commentLength}/{commentsLimit}
                         <button style={{ backgroundColor: commentButtonColor }} onClick={createComment}>등록</button>{/*기본 댓글 등록*/}
@@ -239,7 +229,13 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                     })}
                 </>
             }
-                
+            {/* 너무 힘들어서 그냥 등록 버튼을 막아버리고 결심 */}
+                {/* {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
+                {modalOpenKeepURL && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModalKeepURL} />
+            } */}
         </div>
     )
 }

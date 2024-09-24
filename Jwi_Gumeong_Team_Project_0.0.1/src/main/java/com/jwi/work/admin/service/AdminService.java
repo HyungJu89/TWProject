@@ -134,7 +134,6 @@ public class AdminService {
             Sanction savedSanction = sanctionRepository.save(sanction);
             bannedKey = savedSanction.getBannedKey();
             sanctionLog.setBannedKey(bannedKey);
-            
         // 비어있지 않는경우 update 문 작동
 	    } else {
 	    	System.out.println(" 이미 밴 되어있는 유저입니다 업데이트문으로 바꿈" + userData);

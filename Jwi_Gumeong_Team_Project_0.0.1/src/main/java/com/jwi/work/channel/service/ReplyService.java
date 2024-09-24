@@ -75,6 +75,7 @@ public class ReplyService {
 	public AnswerDto<String> replyDeleteByUser(DeleteByUser replyDelete){
 		
 		AnswerDto<String> anwer = new AnswerDto<>();
+
 		try {
 			replyMapper.replyDeleteByUser(replyDelete);
 			anwer.setSuccess(true);

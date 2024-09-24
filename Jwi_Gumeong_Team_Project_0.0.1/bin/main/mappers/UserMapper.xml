@@ -109,4 +109,8 @@
 	<update id="resignUser" parameterType="int">
 		UPDATE `user` SET `state` = 'secession', updatedAt = now() WHERE userKey = #{userKey}
 	</update>
+	<!-- 닉네임 업데이트 -->
+	<update id="updateNickName" parameterType="com.jwi.work.user.dto.User">
+    	UPDATE `user` SET `nickName` = #{nickName} WHERE `email` = #{email}
+    </update>
 </mapper>

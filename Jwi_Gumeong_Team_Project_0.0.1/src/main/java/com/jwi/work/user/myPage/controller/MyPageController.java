@@ -27,10 +27,22 @@ public class MyPageController {
 		return myPageService.loginRetry(userData);
 	}
 	
-	//로그인체크
-	@PostMapping("/edit")
-	public CheckDto edit(@RequestBody User userData) {
-		return myPageService.userEdit(userData);
+	//비밀번호 수정
+	@PostMapping("/editPw")
+	public CheckDto editPw(@RequestBody User userData) {
+		return myPageService.userEditPw(userData);
+	}
+	
+	//닉네임 수정
+	@PostMapping("/editNickName")
+	public CheckDto editNickName(@RequestBody User userData) {
+		return myPageService.userEditNickName(userData);
+	}
+	
+	//전체 수정
+	@PostMapping("/editAll")
+	public CheckDto editAll(@RequestBody User userData) {
+		return myPageService.userEditAll(userData);
 	}
 	
 	//즐겨찾기 관리

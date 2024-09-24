@@ -154,7 +154,7 @@ function SearchChannel({favoritesList, channelInfo, formatUnit }) {
                 <div className={styles.title}> {/* 클릭시 URL 이동 */}
                     <img src={channelInfo.imageUrl} />
                 </div>
-                <div className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
+                <div onClick={() => {  navigate(`/channel/${channelInfo.id}`); window.scrollTo(0, 0) }}  className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
                     <div className={styles.channelName}>{channelInfo.name}</div>{/*채널명*/}
                     <div className={styles.follower}>
                         <div className={styles.markText}>팔로워&nbsp;</div>

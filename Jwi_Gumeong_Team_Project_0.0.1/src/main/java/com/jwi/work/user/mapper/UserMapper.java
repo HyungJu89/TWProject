@@ -70,6 +70,7 @@ public interface UserMapper{
 		public void updatePw(User user);
 		
 		// 닉네임 변경
+		public void updateNickName(User user);
 		
 		// 유저 닉네임 찾아오기
 		public String getNickName(int userKey);

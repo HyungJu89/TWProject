@@ -481,7 +481,7 @@ function AdminMain() {
         .then(response => {
             if(response.data.result === "success") {
                 // 성공 시 접수 성공 모달 띄우기
-                setModalContent("문의답변 등록에 성공적으로 접수되었습니다.");
+                setModalContent("문의답변이 등록되었습니다.");
                 setModalOpen(true);
                 // 모달 닫으면 적었던 내용 초기화
                 setForm({
