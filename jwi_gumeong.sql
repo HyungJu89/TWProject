@@ -1,4 +1,4 @@
--- 2024-09-23 [안재원] V 0.1.17?
+-- 2024-09-23 [안재원] V 0.1.17
 -- 수정 내용 : 좋아요 알람 로그 테이블 추가 (중복방지)
 CREATE TABLE likeAlarmLog (
     logKey INT PRIMARY KEY AUTO_INCREMENT,
@@ -8,7 +8,7 @@ CREATE TABLE likeAlarmLog (
     UNIQUE KEY unique_log (postKey, threshold)
 );
 
--- 2024-09-10 [안재원] V 0.1.16?
+-- 2024-09-10 [안재원] V 0.1.16
 -- 수정 내용 alarm 테이블 컬럼 하나 추가
 ALTER TABLE `alarm` ADD COLUMN `referenceUserKey` INT COMMENT '알림을 발생시킨 사용자 키';
 
