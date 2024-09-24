@@ -20,6 +20,14 @@ function Main({ onLogout, isLoggedIn }) {
     const [postList, setPostList] = useState([]);
     const [partnersLive, setPartnersLive] = useState([]);
     const [hotBoardList, setHotBoardList] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+
+    const closeModal = () => {
+        setModalOpen(false);
+        navigate('/signIn');
+        window.scrollTo(0, 0);
+    };
 
     //추천순
     const searchRecommendedPost = async () => {
@@ -181,6 +189,9 @@ function Main({ onLogout, isLoggedIn }) {
                 </div>
                 <PublicMenu isLoggedIn={isLoggedIn} onLogout={onLogout} />
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     );
 }

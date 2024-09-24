@@ -239,9 +239,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                     })}
                 </>
             }
-                {modalOpen && 
-                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
-            }
+                
         </div>
     )
 }
