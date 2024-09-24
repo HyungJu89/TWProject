@@ -9,7 +9,7 @@ import { useQuery } from 'react-query';
 import { useState } from 'react';
 import {formatUnit} from '../recycleCode/FormatUnit.js';
 
-function ChannelBody({channelInfo}) {
+function ChannelBody({channelInfo,setFavoritesCountHome,favoritesCountHome}) {
 
     const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
 
@@ -29,7 +29,7 @@ function ChannelBody({channelInfo}) {
                                 <div className={style.announcement}><img src={announcement} />[필수!]우리 토픽의 공지사항</div>
                             </div>
                             <div  className={style.bookmark}>
-                                <BookmarkButton channelInfo={channelInfo} setFavoriteCount={setFavoriteCount}/>
+                                <BookmarkButton channelInfo={channelInfo} setFavoriteCount={setFavoriteCount} setFavoritesCountHome={setFavoritesCountHome} favoritesCountHome={favoritesCountHome}/>
                             </div>
                         </div>
                     </div>
