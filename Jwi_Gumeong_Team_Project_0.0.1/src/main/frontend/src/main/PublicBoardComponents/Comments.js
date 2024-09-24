@@ -190,7 +190,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                 />
                 <div className={styles.commentNav}>
                     <img ref={moreRef} onClick={() => { !EmojiOn && setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
-                    {EmojiOn && <div ref={modalRef}><Emogi textareaRef={textareaRef} comment={comment} setComment={setComment} /></div>}
+                    {EmojiOn && <Emogi  now={'comments'} modalRef={modalRef} textareaRef={textareaRef} setComment={setComment} />}
                     <div style={{ color: commentTextColor }}>
                         {commentLength}/{commentsLimit}
                         <button style={{ backgroundColor: commentButtonColor }} onClick={createComment}>등록</button>{/*기본 댓글 등록*/}

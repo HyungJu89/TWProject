@@ -3,6 +3,7 @@ import style from './style/PostCreate.module.css';
 import emotIcon from '../icon/24px/emoticon-activation.png';
 import imageIcon from '../icon/24px/photo.png'
 import closeIcon from '../icon/btn/btn-image-Close.png'
+import Emogi from '../Emogi/Emogi.js';
 import '../App.css'
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -93,7 +94,6 @@ function PostCreact({channelKey}) {
         }
 
         // JSP 에서 FORM 과 비슷함
-
         const formData = new FormData();
         formData.append('content',content);
         // 로그인 기능 완성되면 유저 키값이 들어가도록 변경
@@ -122,6 +122,26 @@ function PostCreact({channelKey}) {
         window.scrollTo(0, 0);  // 페이지 로드 후 스크롤 위치를 (0, 0)으로 설정
     };
 
+        //모달함수
+        let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
+        const modalRef = useRef(null);
+        const moreRef = useRef(null);
+        useEffect(() => {//영역외 클릭시 모달 닫히는 코드
+            const handleClickOutside = (event) => {
+                if (EmojiOn &&
+                    !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
+                    { setEmojiOn(false); } //신고, 삭제 닫음
+            };
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => { //클린업
+            document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }, [EmojiOn]);
+
+        useEffect(() => {
+            EmojiOn && (contentRef.current.innerText=content);
+        }, [content]);
+
     return (
         <div className={style.postCreact}>{/*게시글 작성 box*/}
             {!hasContent && <span className={style.placeholderContentTop}>내용을 입력하세요.(3자 이상)<br /><p className={style.placeholderContentBottom}>비매너 행위는 제재의 대상이 됩니다.</p><br /><p className={style.placeholderContentBottom}>* 욕설, 광고(도배), 악의적인 글, 친목, 성희롱(음란물) 등</p></span>
@@ -132,6 +152,7 @@ function PostCreact({channelKey}) {
                 ref={contentRef}
                 onInput={handleInput}
                 onBlur={() => setContent(contentRef.current.innerText)}
+                // value={comment}
             />
             <div style={{display : 'flex'}}>
                 {selectedImage.length > 0 && (
@@ -148,7 +169,15 @@ function PostCreact({channelKey}) {
 
             <div className={style.dashed} />{/* 회색줄 */}
             <div className={style.postCreactIconBox}> {/*게시글 작성 하단 아이콘*/}
-                <div className={style.emotIcon}><img src={emotIcon} alt='이모티콘'/></div>{/*이모티콘 아이콘*/}
+                <div className={style.emotIcon}>
+                    <img ref={moreRef} onClick={() => { !EmojiOn && setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emotIcon} art='이모티콘' />
+                    {EmojiOn && 
+                    // <div ref={modalRef}>
+                        <Emogi now={'post'} textareaRef={contentRef} modalRef={modalRef} content={content} setContent={setContent} />
+                        // </div>
+                        }
+                </div>{/*이모티콘 아이콘*/}
+
                 <div className={style.imageIcon}><img src={imageIcon} alt='이미지' onClick={imageFileClick} /></div>{/*이미지 아이콘*/}
                 <input 
                     type='file' 
