@@ -121,11 +121,11 @@ function ChannelHome() {
                         <PostCreate channelKey={channelInfo.channelKey} />
                         <div className={style.postList}>
                             {postList.success ?
-                                <>
+                                <div className={("fadein")}>
                                     {postList.search.map((postInfo, index) =>
                                         <PublicBoard key={index} postInfo={postInfo}/>
                                     )}
-                                </> : 
+                                </div> : 
                                     <div className={style.nonPostList}>생성된 게시글이 없습니다.</div>
                                 
                             }
@@ -139,7 +139,7 @@ function ChannelHome() {
                     <div className={style.listRight}>
                         <div className={style.sideBar}>
                              {/* 이부분 */}
-                            <PublicMenu isLoggedIn = {isLoggedIn} onLogout={handleLogout}/>
+                            <PublicMenu  isLoggedIn = {isLoggedIn} onLogout={handleLogout}/>
                         </div>
                     </div>
                 </div>
