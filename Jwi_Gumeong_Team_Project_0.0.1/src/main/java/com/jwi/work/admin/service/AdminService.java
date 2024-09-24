@@ -124,23 +124,6 @@ public class AdminService {
     	// 재원이형 여기서 알람리파지토리.save 하면됨!!!
     	// 비어있는경우 insert문 작동
     	
-    	for(Report reports : report) {
-		// 이게 신고게시글 신고한놈의 User.UserKey 부분
-//    		System.out.println(reports.getUser().getUserKey());
-    		reports.setState("process");
-    		reportRepository.save(reports);
-    		
-    		// 신고한 유저에게 알림 추가
-            Alarm reportUserAlarm = new Alarm();
-            reportUserAlarm.setUserKey(reports.getUser().getUserKey()); // 신고한 유저
-            reportUserAlarm.setReferenceType("system");
-            reportUserAlarm.setReferenceKey(reports.getReportKey());  // 신고 참조
-            reportUserAlarm.setReferenceUserKey(reports.getReportUser().getUserKey()); // 제재 받은 유저 키
-            reportUserAlarm.setReason(userData.get("reason")); // 신고 사유
-            alarmRepository.save(reportUserAlarm);
-    		
-    	}
-    	
 	    if (sanctions.isEmpty()) {
 	    	//유저 비활성화로 전환 (밴)
 	    	sanction.setReasonDate(dateCal.nowDate());
@@ -164,6 +147,22 @@ public class AdminService {
 	            sanctionRepository.save(sanctionR);
 	    	}
 	    }
+	    
+	    for(Report reports : report) {
+			// 이게 신고게시글 신고한놈의 User.UserKey 부분
+//	    		System.out.println(reports.getUser().getUserKey());
+    		reports.setState("process");
+    		reportRepository.save(reports);
+    		
+    		// 신고한 유저에게 알림 추가
+            Alarm reportUserAlarm = new Alarm();
+            reportUserAlarm.setUserKey(reports.getUser().getUserKey()); // 신고한 유저
+            reportUserAlarm.setReferenceType("system");
+            reportUserAlarm.setReferenceKey(bannedKey);  // 신고 참조
+            reportUserAlarm.setReferenceUserKey(reports.getReportUser().getUserKey()); // 제재 받은 유저 키
+            reportUserAlarm.setReason(reports.getCategory()); // 신고 사유
+            alarmRepository.save(reportUserAlarm);
+    	}
 	    // 중요한점 JPA에선 .save << 이 함수가 update / insert 다 사용할수있음.
 	    // 얘가 똑똑해서 알아서 구분함
 	    userMapper.updateDeAct(Integer.parseInt(userData.get("userKey")));

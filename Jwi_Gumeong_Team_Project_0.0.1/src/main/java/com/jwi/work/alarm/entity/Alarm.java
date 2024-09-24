@@ -29,7 +29,7 @@ public class Alarm {
 	private String referenceType;
 	@Column(name = "referenceKey", nullable = false)
 	private int referenceKey;
-	@Column(name = "read", nullable = false)
+	@Column(name = "`read`", nullable = false)
 	private int read;
 	@Column(name = "createdAt", nullable = false)
     private LocalDateTime createdAt;  
@@ -62,5 +62,7 @@ public class Alarm {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    
 	
 }

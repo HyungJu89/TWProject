@@ -7,20 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.alarm.entity.Alarm;
+import com.jwi.work.alarm.entity.Banned;
 import com.jwi.work.alarm.entity.Channel;
 import com.jwi.work.alarm.entity.Comment;
 import com.jwi.work.alarm.entity.InquiryAlarm;
 import com.jwi.work.alarm.entity.Post;
 import com.jwi.work.alarm.mapper.AlarmMapper;
 import com.jwi.work.alarm.repository.AlarmRepository;
+import com.jwi.work.alarm.repository.BannedRepository;
 import com.jwi.work.alarm.repository.CommentRepository;
 import com.jwi.work.alarm.repository.InquiryAlarmRepository;
-import com.jwi.work.alarm.repository.LikeRepository;
 import com.jwi.work.alarm.repository.PostRepository;
+import com.jwi.work.center.sanction.entity.Sanction;
 import com.jwi.work.user.entity.UserEntity;
 import com.jwi.work.user.repository.UserRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class AlarmService {
@@ -37,6 +37,8 @@ public class AlarmService {
     private InquiryAlarmRepository inquiryRepository;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private BannedRepository bannedRepository;
 
     public List<Alarm> selectAlarm(int userKey) {
         List<Alarm> alarms = alarmRepository.findByUserKey(userKey);
@@ -168,12 +170,16 @@ public class AlarmService {
             if (reportedUserOpt.isPresent()) {
                 UserEntity reportedUser = reportedUserOpt.get();
                 alarm.setNickname(reportedUser.getNickName());  // 제재 받은 유저의 닉네임
+                // 제재 사유 및 일수를 저장
+                Optional<Banned> bannedOpt = bannedRepository.findById(alarm.getReferenceKey());
+                if (bannedOpt.isPresent()) {
+                	
+                	Banned banned = bannedOpt.get();
+                    alarm.setReason(banned.getReason());   // 제재 사유 저장
+                    alarm.setDate(banned.getDate());       // 제재 일수 저장
+                }
             }
         }
-
-        // 제재 사유 및 일수를 저장
-        alarm.setReason(alarm.getReason());
-        alarm.setDate(alarm.getDate());
     }
 
     // 안 읽은 알람
