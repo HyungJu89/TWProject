@@ -12,7 +12,8 @@ public interface AlarmRepository extends JpaRepository<Alarm, Integer>{
 
 	public List<Alarm> findByUserKey(int userKey);
 	
-	// 좋아요 알림을 보냈는지 확인 하는 매소드
-	boolean existsByUserKeyAndReferenceKeyAndReferenceTypeAndLikeCount(int userKey, int referenceKey, String referenceType, int likeCount);
-
+	boolean existsByReferenceKeyAndReferenceTypeAndUserKey(int referenceKey, String referenceType, int userKey);
+	
+	// 안 읽은 알람 개수를 반환 메소드
+    public int countByUserKeyAndRead(int userKey, int read);
 }

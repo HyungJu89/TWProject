@@ -160,5 +160,44 @@
 		SELECT UC.userKey FROM userConnection AS UC WHERE UC.sessionId = #{sessionId}
 		)
 	</delete>
+	
+	<!-- 게시물의 좋아요 개수 가져오기 -->
+	<select id="getLikeCount" parameterType="int" resultType="int">
+	    SELECT COUNT(*)
+	    FROM `like`
+	    WHERE postKey = #{postKey}
+	</select>
+	
+	<!-- 알림이 이미 발생했는지 확인 -->
+	<select id="checkLikeAlarmLogExists" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM `likeAlarmLog`
+	    WHERE `postKey` = #{postKey}
+	    AND `threshold` = #{threshold}
+	</select>
+
+	<!-- 알림 fhrm 추가 -->
+	<insert id="insertLikeAlarmLog" parameterType="map">
+	    INSERT INTO `likeAlarmLog`(
+	    	`postKey`
+	    	, `threshold`)
+	    VALUES (
+	    	#{postKey}
+	    	, #{threshold})
+	</insert>
+	
+	<!-- 알림 테이블에 새로운 알림 삽입 -->
+	<insert id="insertAlarm" parameterType="map">
+	    INSERT INTO alarm (
+	    	`userKey`
+	    	, `referenceType`
+	    	, `referenceKey`
+	    	, `read`
+	    ) VALUES (
+	    	#{userKey}
+	    	, #{referenceType}
+	    	, #{referenceKey}
+	    	, 0)
+	</insert>
 
 </mapper>
