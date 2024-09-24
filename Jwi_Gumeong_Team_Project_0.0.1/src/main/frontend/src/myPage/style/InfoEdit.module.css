@@ -121,3 +121,12 @@
     background-color: #FF8901;
     /* 활성화된 배경색 */
 }
+
+.resignButton {
+    color: #999999;
+    cursor: pointer;
+    text-align: right;
+    font-size: 16px;
+    margin-top: 60px;
+    font-weight: 500;
+}

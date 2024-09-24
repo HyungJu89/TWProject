@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './style/AdminPaging.module.css';
 
-function AdminPaging({ users, onItemsChange }) {
+function AdminPagingUser({ users, onItemsChange }) {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
     const itemsPerPage = 10; // 페이지당 보여줄 항목 수
 
@@ -77,4 +77,4 @@ function AdminPaging({ users, onItemsChange }) {
     );
 }
 
-export default AdminPaging;
+export default AdminPagingUser;

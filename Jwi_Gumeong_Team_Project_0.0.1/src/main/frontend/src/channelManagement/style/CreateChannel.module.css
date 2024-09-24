@@ -29,3 +29,53 @@
     text-align: left;
 }
 
+.createChannelLine{
+    display: flex;
+    position: relative;
+}
+
+.createHelpIcon{
+    cursor: pointer;
+    position: relative;
+    margin: auto;
+    margin-left: 4px;
+    padding: 2px;
+    height: 16px;
+    width: 16px;
+}
+
+.createHelpModal{
+    width: 400px;
+    height: 85px;
+    z-index: 20;
+    border-radius: 10px;
+    border: 1px solid #F3F3F3;
+    bottom: 22px;
+    left: 184px;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 3.9px 0px #00000080;
+    text-align: center;
+    align-items: center;
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 15px 5px;
+}
+
+.createHelpModalTitle{
+    font-size: 13px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.createHelpModalImg{
+    width: auto;
+    height: 45px;
+}
+
+.createHelpModalText{
+    font-size: 12px;
+    font-weight: 500;
+    color: #999999;
+}

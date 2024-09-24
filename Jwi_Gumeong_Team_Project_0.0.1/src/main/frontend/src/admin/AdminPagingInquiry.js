@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import styles from './style/AdminPaging.module.css';
 
-function AdminPaging({ users, onItemsChange }) {
+function AdminPagingInquiry({ inquiry, onItemsChange }) {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
     const itemsPerPage = 10; // 페이지당 보여줄 항목 수
 
     // 총 페이지 수 계산
-    const totalPages = Math.ceil(users.length / itemsPerPage);
+    const totalPages = Math.ceil(inquiry.length / itemsPerPage);
 
     // 현재 페이지에서 보여줄 데이터 슬라이싱
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = inquiry.slice(indexOfFirstItem, indexOfLastItem);
 
     useEffect(() => {
         if (onItemsChange) {
             onItemsChange(currentItems);
         }
-        if(users.length < 11){
+        if(inquiry.length < 11){
             setCurrentPage(1);
         }
-    }, [currentPage,users]);
+    }, [currentPage,inquiry]);
 
     // 다음 페이지로 이동
     const handleNextPage = () => {
@@ -62,7 +62,6 @@ function AdminPaging({ users, onItemsChange }) {
                 return(
                     <div
                         key={pageNumber}
-                        // className={`${styles.adminPageingNowBtn} ${currentPage === pageNumber ? styles.active : ''}`}
                         className={`${styles.adminPageingNowBtn} ${currentPage === pageNumber ? styles.active : ''}`}
                         onClick={() => handlePageClick(pageNumber)}
                     >
@@ -77,4 +76,4 @@ function AdminPaging({ users, onItemsChange }) {
     );
 }
 
-export default AdminPaging;
+export default AdminPagingInquiry;

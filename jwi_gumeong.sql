@@ -7,7 +7,7 @@ ALTER TABLE `alarm` ADD COLUMN `referenceUserKey` INT COMMENT '알림을 발생�
 -- DB자체에서도 바꿔뒀으니 알터만 하면됨
 ALTER TABLE `report`
 MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
-select * from alarm;
+select * from `alarm`;
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
 values ('3','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
 

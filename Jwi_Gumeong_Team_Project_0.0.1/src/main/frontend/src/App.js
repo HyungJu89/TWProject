@@ -25,6 +25,7 @@ import { setSessionId,setUserKey,setLoggedIn,logout } from './slice/sessionSlice
 import { useDispatch, useSelector } from 'react-redux';
 import { Suspense, useState, useEffect } from 'react';
 import axios from 'axios';
+
 function App() {
     let reportState = useSelector((state) => state.reportModal)
     let imgState = useSelector((state) => state.imgUiModal)

@@ -12,7 +12,9 @@ import closeModalIcon from '../icon/btn/btn-image-Close.png';
 import reply from '../icon/img/reply-ing.png';
 import serviceLogo from '../icon/img/service-Illustration.png';
 import AlarmModal from '../modal/AlarmModal.js';
-import AdminPaging from './AdminPaging.js';
+import AdminPagingUser from './AdminPagingUser.js';
+import AdminPagingInquiry from './AdminPagingInquiry.js';
+import AdminPagingReport from './AdminPagingReport.js';
 import styles from './style/AdminMain.module.css';
 
 function AdminMain() {
@@ -23,13 +25,19 @@ function AdminMain() {
     const [inquiryResponses, setInquiryResponses] = useState({}); // 문의 답변
     const [dropdownOpen, setDropdownOpen] = useState(false); // 문의 종류 드롭다운
     const [dropdownOpen2, setDropdownOpen2] = useState(false); // 문의 종류 드롭다운2
-    const [dropdownOpen3, setDropdownOpen3] = useState(false); // 검색 종류 드롭다운
+    const [dropdownOpen3, setDropdownOpen3] = useState(false); // 검색 종류 드롭다운3
+    const [dropdownOpen4, setDropdownOpen4] = useState(false); // 검색 종류 드롭다운4
+    const [dropdownOpen5, setDropdownOpen5] = useState(false); // 검색 종류 드롭다운5
     const [selectedOption, setSelectedOption] = useState("선택하세요"); // 문의 종류 최초 상태
     const [selectedOption2, setSelectedOption2] = useState("선택하세요"); // 문의 종류 최초 상태
-    const [selectedOption3, setSelectedOption3] = useState("닉네임"); // 문의 종류 최초 상태
+    const [selectedOption3, setSelectedOption3] = useState("닉네임"); // 유저 검색 최초 상태
+    const [selectedOption4, setSelectedOption4] = useState("닉네임"); // 문의 검색 최초 상태
+    const [selectedOption5, setSelectedOption5] = useState("닉네임"); // 신고 검색 최초 상태
     const [faqContent, setFaqContent] = useState(null); // 자주 묻는 질문 내용
     const [inquiryContent, setInquiryContent] = useState(null); // 문의 내역 내용
     const [searchUserInput,setSearchUserInput] = useState(''); // 유저 검색
+    const [searchInqInput,setSearchInqInput] = useState(''); // 질문 검색
+    const [searchReportInput,setSearchReportInput] = useState(''); // 질문 검색
     const [inputComplete, setInputComplete] = useState(false); // 문의 내용이 전부 있는지
     const [modalOpen, setModalOpen] = useState(false);  // 알림 모달
     const [modalContent, setModalContent] = useState('');
@@ -44,13 +52,29 @@ function AdminMain() {
     const [revertBtn,setRevertBtn] = useState(false);
     const [update,setUpdate] = useState(false);
     const [report,setReport] = useState([]);
-    const [currentItems, setCurrentItems] = useState([]);
+    const [reportCopy,setReportCopy] = useState([]);
+    const [pagingUsers, setPagingUsers] = useState([]);
+    const [pagingInquiry, setPagingInquiry] = useState([]);
+    const [pagingReport, setPagingReport] = useState([]);
     const cookieCheck = getCookie('frontCookie');
-    
+
+    // 문의답변 답변부분에서 데이터 형식에 따라 받아오는 방식을 수정해야될꺼같음
+    // 일단 데이터를 불러온 다음에 키가 있으면 그거에 따라 데이터 바인딩?? 하면될듯
+    // 근데 수정해야할 부분이 좀 많음.
+
     const handleItemsChange = (items) => {
-        setCurrentItems(items);
+        setPagingUsers(items);
     };
 
+    const handleItemsChangeInquiry = (items) => {
+        setPagingInquiry(items);
+    };
+
+    const handleItemsChangeReport = (items) => {
+        setPagingReport(items);
+    };
+
+    // 엔터키 클릭시 유저 검색 후 set하는 로직
     const handleEnter = (e) => {
         if (e.key === "Enter" || e === "enter") {
             switch (selectedOption3) {
@@ -58,7 +82,80 @@ function AdminMain() {
                     setUsers(usersCopy.filter(userData => userData.nickName.includes(searchUserInput)));
                     break;
                 case "이메일":
-                    setUsers(usersCopy.filter(userData => userData.email.includes(searchUserInput)));
+                    setUsers(usersCopy.filter(userData => userData.email.includes(searchInqInput)));
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    // 스위치 케이스문으로 입력받은 닉네임 or 이메일 or 제목별로 조정
+    // 입력받은 값을 onChange state에 저장 후 엔터키다운 or 검색버튼 클릭시 작동되게끔 구성
+    // 유저 정보를 찾기 위해 파인드 사용하여 배열참조
+
+    const handleEnterInq = (e) => {
+        if (e.key === "Enter" || e === "enter") {
+            switch (selectedOption4) {
+                case "닉네임":
+                    if(searchInqInput === ""){
+                        setInquiries(inquirieCopy);
+                    } else {
+                        let filteredUsers = usersCopy.filter(userData => userData.nickName.includes(searchInqInput));
+                        if (filteredUsers.length === 1) {
+                            setInquiries(inquirieCopy.filter(inqData => inqData.userKey === parseInt(filteredUsers[0].userKey)));
+                        } else if (filteredUsers.length === 0) {
+                            alert('검색 결과가 없습니다.');
+                        } else {
+                            let userKeys = filteredUsers.map(userData => parseInt(userData.userKey));
+                            setInquiries(inquirieCopy.filter(inqData => userKeys.includes(inqData.userKey)));
+                        }
+                    }
+                    break;
+                case "이메일":
+                    if(searchInqInput === ""){
+                        setInquiries(inquirieCopy);
+                    } else {
+                        let filteredUsers = usersCopy.filter(userData => userData.email.includes(searchInqInput));
+                        if (filteredUsers.length === 1) {
+                            setInquiries(inquirieCopy.filter(inqData => inqData.userKey === parseInt(filteredUsers[0].userKey)));
+                        } else if (filteredUsers.length === 0) {
+                            alert('검색 결과가 없습니다.');
+                        } else {
+                            let userKeys = filteredUsers.map(userData => parseInt(userData.userKey));
+                            setInquiries(inquirieCopy.filter(inqData => userKeys.includes(inqData.userKey)));
+                        }
+                    }
+                    break;
+                case "제목":
+                    if(searchInqInput === ""){
+                        setInquiries(inquirieCopy);
+                    } else {
+                        setInquiries(inquirieCopy.filter(inqData => inqData.title.includes(searchInqInput)));
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    const handleEnterReport = (e) => {
+        if (e.key === "Enter" || e === "enter") {
+            switch (selectedOption5) {
+                case "닉네임":
+                    if(searchReportInput === ""){
+                        setReport(reportCopy);
+                    } else {
+                        setReport(reportCopy.filter(reportData => reportData.reportUser.nickName.includes(searchReportInput)));
+                    }
+                    break;
+                case "이메일":
+                    if(searchReportInput === ""){
+                        setReport(reportCopy);
+                    } else {
+                        setReport(reportCopy.filter(reportData => reportData.reportUser.email.includes(searchReportInput)));
+                    }
                     break;
                 default:
                     break;
@@ -72,6 +169,7 @@ function AdminMain() {
             .then(response => {
                 if (response.data) {
                     setReport(response.data);
+                    setReportCopy(response.data);
                 } else {
                     console.log("유저 리스트 불러오기 실패");
                 }
@@ -245,7 +343,7 @@ function AdminMain() {
                 console.log("문의 내역 가져오기 실패: " + error.message);
             });
         } 
-    }, [tab, userKey, update]);
+    }, [tab, update]);
 
     // 문의 하기 내용
     const [files, setFiles] = useState([]); // 문의 넣을 때 이미지
@@ -271,6 +369,18 @@ function AdminMain() {
         setSelectedOption3(option);
         setForm({ ...form, category: option });
         setDropdownOpen3(false);
+    };
+
+    const optionSelect4 = (option) => {
+        setSelectedOption4(option);
+        setForm({ ...form, category: option });
+        setDropdownOpen4(false);
+    };
+
+    const optionSelect5 = (option) => {
+        setSelectedOption5(option);
+        setForm({ ...form, category: option });
+        setDropdownOpen5(false);
     };
 
     const handleInputChange = (e) => {
@@ -443,7 +553,7 @@ function AdminMain() {
                 return (
                     <div className={styles.faqContainer}>
                         {/* 이거 순번체킹 말고 key값 받아와서 체킹하는걸로 해야할듯? */}
-                        {currentItems.map((users, idx) => {
+                        {pagingUsers.map((users, idx) => {
                             let banData = banned.find(ban => ban.userKey === parseInt(users.userKey));
                             let reportData = report.filter(repot => repot.reportUser.userKey === parseInt(users.userKey));
                             let reportDataCategory = (categorys) =>{
@@ -585,7 +695,7 @@ function AdminMain() {
                         {inquiries.length === 0 ? (
                             <div className={styles.noHistory}>문의 내역이 없습니다.</div>
                         ) : (
-                            inquiries.map((inquiry, idx) => {
+                            pagingInquiry.map((inquiry, idx) => {
                                 // const response = inquiryResponses.find(responseData => responseData.inquiryKey === inquiry.inquiryKey );
                                 const response = inquiryResponses[inquiry.inquiryKey];
                                 // 날짜 형식 변경 2024년 O월 O일
@@ -594,7 +704,7 @@ function AdminMain() {
                                     month: 'long', 
                                     day: 'numeric' 
                                 }).format(new Date(response.createdAt)) : '-'; // 날짜가 없으면 - 로 표시
-                                let userInData = usersCopy.find(data => parseInt(data.userKey) === inquiries[idx].userKey);
+                                let userInData = usersCopy.find(data => parseInt(data.userKey) === inquiries[idx]?.userKey);
                                 // 검색기능 만들기 생각하고있는것
                                 // 내용 검색같은 경우엔 inquiries.filter 로 내용 넣어서 표기하면 될꺼같고 
                                 // 유저 이메일,닉네임 같은 경우엔 값을 받아와서 userKey만 뽑고 그걸 filter로 찾아야할듯?
@@ -613,7 +723,7 @@ function AdminMain() {
                                                             <div className={styles.inquiryResponse}>답변완료</div>
                                                         )}
                                                     </div>
-                                                    <div className={styles.inquirySubtitle}>유저이메일: {userInData.email} / 유저닉네임: {userInData.nickName}</div>
+                                                    <div className={styles.inquirySubtitle}>유저이메일: {userInData?.email} / 유저닉네임: {userInData?.nickName}</div>
                                                     <div className={styles.inquirySubtitle}>답변 날짜: {formattedDate}</div>
                                                 </div>
                                             </div>
@@ -733,25 +843,23 @@ function AdminMain() {
                         <div className={styles.sanctionList}>
                             {/* 내역이 없을 시 */}
                             {
-                                report.length === 0 ? (
+                                pagingReport.length === 0 ? (
                                     <div className={styles.noHistory}>신고 받은 내역이 없습니다.</div>
                                 ) : (
                                     // 제재 내역이 있을 시
-                                    report.map((a,i)=>{
+                                    pagingReport.map((a,i)=>{
                                         return(
-                                            <div className={styles.reportItem} key={i}>
-                                                    {
-                                                        report[i].state === "unprocessed" ?
-                                                            <div className={styles.reportLine}>
-                                                                {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
-                                                                <div className={styles.reportContent}>신고내용 : {report[i].content.substr(0,80)}</div>
-                                                                <div className={styles.reportCategory}>카테고리 : {report[i].category}</div>
-                                                                <div className={styles.reportReportUser}>신고받은사람 : {report[i].reportUser.nickName} ( {report[i].reportUser.email} ) </div>
-                                                                <div className={styles.reportUser}>신고자 :{report[i].user.nickName} ( {report[i].user.email} ) </div>
-                                                            </div>
-                                                            :null
-                                                    }
-                                            </div>
+                                            pagingReport[i].state === "unprocessed" ?
+                                                <div className={styles.reportItem} key={i}>
+                                                    <div className={styles.reportLine}>
+                                                        {/* 검색기능 및 정렬기능 처리중인것 등등 표기하는것도괜찮을꺼같다. */}
+                                                        <div className={styles.reportContent}>신고내용 : {pagingReport[i].content.substr(0,80)}</div>
+                                                        <div className={styles.reportCategory}>카테고리 : {pagingReport[i].category}</div>
+                                                        <div className={styles.reportReportUser}>신고받은사람 : {pagingReport[i].reportUser.nickName} ( {pagingReport[i].reportUser.email} ) </div>
+                                                        <div className={styles.reportUser}>신고자 :{pagingReport[i].user.nickName} ( {pagingReport[i].user.email} ) </div>
+                                                    </div>
+                                                </div>
+                                            :null
                                         )
                                     })    
                                 )
@@ -822,7 +930,7 @@ function AdminMain() {
                 {
                     tab === 0 ?
                     <div>
-                        <AdminPaging users={users} onItemsChange={handleItemsChange}/>
+                        <AdminPagingUser users={users} onItemsChange={handleItemsChange}/>
                         <div className={styles.userSearch}>
                             <div className={styles.userSearchList}>유저검색</div>
                             <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
@@ -839,7 +947,7 @@ function AdminMain() {
                                     </div>
                             }
                             <div className={styles.inputDiv}>
-                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={(e)=>setSearchUserInput(e.target.value)} onKeyDown={handleEnter}/>
+                                <input placeholder='검색어를 입력하세요' onChange={(e)=>setSearchUserInput(e.target.value)} onKeyDown={handleEnter}/>
                                 <img style={{cursor: 'pointer'}} src={search} onClick={()=>{handleEnter("enter")}}/>
                             </div>
                         </div>
@@ -851,24 +959,25 @@ function AdminMain() {
                 {
                     tab === 2 ?
                     <div>
+                        <AdminPagingInquiry inquiry={inquiries} onItemsChange={handleItemsChangeInquiry}/>
                         <div className={styles.userSearch}>
                             <div className={styles.userSearchList}>질문답변</div>
-                            <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
-                                {selectedOption3}
+                            <div onClick={() => setDropdownOpen4(!dropdownOpen4)} className={styles.inqSelect}>
+                                {selectedOption4}
                             </div>
                             {
-                                dropdownOpen3 &&
+                                dropdownOpen4 &&
                                     <div className={styles.dropdown3}>
                                         {["닉네임", "이메일", "제목"].map((option, index) => (
-                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect4(option)}>
                                                 {option}
                                             </div>
                                         ))}
                                     </div>
                             }
                             <div className={styles.inputDiv}>
-                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={()=>{}} />
-                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
+                                <input placeholder='검색어를 입력하세요' onChange={(e)=>{setSearchInqInput(e.target.value)}} onKeyDown={handleEnterInq}/>
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{handleEnterInq("enter")}}/>
                             </div>
                         </div>
                     </div>
@@ -879,24 +988,25 @@ function AdminMain() {
                 {
                     tab === 4 ?
                     <div>
+                        <AdminPagingReport report={report} onItemsChange={handleItemsChangeReport}/>
                         <div className={styles.userSearch}>
                             <div className={styles.userSearchList}>신고내역</div>
-                            <div onClick={() => setDropdownOpen3(!dropdownOpen3)} className={styles.inqSelect}>
-                                {selectedOption3}
+                            <div onClick={() => setDropdownOpen5(!dropdownOpen5)} className={styles.inqSelect}>
+                                {selectedOption5}
                             </div>
                             {
-                                dropdownOpen3 &&
+                                dropdownOpen5 &&
                                     <div className={styles.dropdown3}>
                                         {["닉네임", "이메일"].map((option, index) => (
-                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect3(option)}>
+                                            <div key={index} className={styles.dropdownItem} onClick={() => optionSelect5(option)}>
                                                 {option}
                                             </div>
                                         ))}
                                     </div>
                             }
                             <div className={styles.inputDiv}>
-                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={()=>{}} />
-                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{}}/>
+                                <input onClick={()=>{}} onBlur={()=>{}} placeholder='검색어를 입력하세요' onChange={(e)=>{setSearchReportInput(e.target.value)}} onKeyDown={handleEnterReport}/>
+                                <img style={{cursor: 'pointer'}} src={search} onClick={()=>{handleEnterReport("enter")}}/>
                             </div>
                         </div>
                     </div>

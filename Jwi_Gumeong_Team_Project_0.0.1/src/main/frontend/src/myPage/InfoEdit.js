@@ -25,6 +25,8 @@ function InfoEdit() {
     const [showPasswordCheck, setShowPasswordCheck] = useState(false); //비밀번호 보임,안보임 state
     const [LoginCheck, setLoginCheck] = useState(false);
     const navigate = useNavigate();
+    var jsonSessionInfo = sessionStorage.getItem('sessionId');
+    var sessionInfo = JSON.parse(jsonSessionInfo);   
     //닉네임 유효성 검사
     const nickNameRegEx = /^[A-Za-z0-9\uAC00-\uD7A3]{2,8}$/;
     //비밀번호 유효성 검사
@@ -33,31 +35,33 @@ function InfoEdit() {
     const specialCharRegEx = /[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]/;
     const letterRegEx = /[A-Za-z]/;
     const bigLetterRegEx = /[A-Z]/;
-        //비밀번호 유효성 검사로직
-        const PasswordCheck = (password) => {
-            setpasswordWarning2('');
-            if (!passwordRegEx.test(password)) {
-                setpasswordWarning2('비밀번호의 형식이 맞지 않습니다.(8자~20자)');
-            }
-            if (!numberRegEx.test(password)) {
-                setpasswordWarning2('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.');
-            }
-            if (!specialCharRegEx.test(password)) {
-                setpasswordWarning2('비밀번호는 적어도 하나의 특수 문자를 포함해야 합니다.');
-            }
-            if (!letterRegEx.test(password)) {
-                setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
-            }
-            if (!bigLetterRegEx.test(password)) {
-                setpasswordWarning2('비밀번호에는 대문자가 하나 이상 포함되어야 합니다.');
-            }
-            if (oriPassword == password){
-                setpasswordWarning2('이미 사용한 비밀번호는 사용하실 수 없습니다.');
-            }
-            if(!samePassword){
-                setpasswordWarning2('비밀번호가 일치하지 않습니다.');
-            }
-        };
+
+    //비밀번호 유효성 검사로직
+    const PasswordCheck = (password) => {
+        setpasswordWarning2('');
+        if (!passwordRegEx.test(password)) {
+            setpasswordWarning2('비밀번호의 형식이 맞지 않습니다.(8자~20자)');
+        }
+        if (!numberRegEx.test(password)) {
+            setpasswordWarning2('비밀번호는 적어도 하나의 숫자를 포함해야 합니다.');
+        }
+        if (!specialCharRegEx.test(password)) {
+            setpasswordWarning2('비밀번호는 적어도 하나의 특수 문자를 포함해야 합니다.');
+        }
+        if (!letterRegEx.test(password)) {
+            setpasswordWarning2('비밀번호는 적어도 하나의 영어 알파벳을 포함해야 합니다.');
+        }
+        if (!bigLetterRegEx.test(password)) {
+            setpasswordWarning2('비밀번호에는 대문자가 하나 이상 포함되어야 합니다.');
+        }
+        if (oriPassword == password){
+            setpasswordWarning2('이미 사용한 비밀번호는 사용하실 수 없습니다.');
+        }
+        if(!samePassword){
+            setpasswordWarning2('비밀번호가 일치하지 않습니다.');
+        }
+    };
+
     const handleNickname = (e) => {
         if (e.target.value.length == 0 || e.target.value.length <= 8) {
             setNickname(e.target.value);
@@ -72,20 +76,25 @@ function InfoEdit() {
             
         }
     };
+
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
+
     const toggleShowPasswordCheck = () => {
         setShowPasswordCheck(!showPasswordCheck);
     };
+
     //input에 넣는값으로 state바꿔주는 함수
     const handlePasswordChange = (e) => {    
         setPassword(e.target.value);
     };
+
     //input에 넣는값으로 state바꿔주는 함수
     const handlepasswordCheckChange = (e) => {
         setpasswordCheck(e.target.value);
     };
+
     //닉네임 유효성 검사로직
     const nickNameChecks = (nickName) => {
         if (nickNameRegEx.test(nickName)) {
@@ -95,16 +104,19 @@ function InfoEdit() {
             return false;
         }
     }
+
     const changeUserInfo = async () => {
         if (!nickNameChecks(nickName)) {
             setNickNameWarning('닉네임 형식이 맞지 않습니다.(2~8자 + 올바른조합)');
             setNickNameCheck(false);
         }
+        // 여기에서 한번에 보내는거 말고 경우를 3개로 늘려야할꺼같음.
         else if (nickNameChecks(nickName)) {
             try {
                 const userData = {
                     pw: password,
-                    nickName: nickName
+                    nickName: nickName,
+                    sessionId: sessionInfo.sessionId
                 };
                 const userResponse = await axios.post('/myPage/loginRetry', userData); 
                 if(userResponse.data.check){
@@ -117,6 +129,11 @@ function InfoEdit() {
             }
         }
     }
+
+    const onResign = () => {
+        navigate("/resign");
+    }
+
     useEffect(() => {
         if(nickName !== ''){
             setIsButtonActive(true);
@@ -134,15 +151,12 @@ function InfoEdit() {
         }
     }, [password, passwordCheck]);
 
-
     return (
         <>
         {
             LoginCheck ?
-            
             <div className={styles.MyPageContainer}>
             <div className={styles.topFont}>정보 수정</div>
-
             <div className={styles.formGroup}>
                 <p>닉네임</p>
                 <div className={styles.inputWrapper}>
@@ -193,6 +207,11 @@ function InfoEdit() {
                 }}>
                 정보 수정
             </button>
+            <div className={styles.resignButton} onClick={()=>{
+                    onResign();
+                }}>
+                회원탈퇴
+            </div>
         </div> : <LoginChecks setLoginCheck = {setLoginCheck} setOriPassword = {setOriPassword}/>
         }
         </>
