@@ -24,22 +24,25 @@ public class MyPageController {
 	//로그인체크
 	@PostMapping("/loginRetry")
 	public CheckDto loginRetry(@RequestBody User userData) {
-		System.out.println(userData);
 		return myPageService.loginRetry(userData);
 	}
 	
 	//로그인체크
 	@PostMapping("/edit")
 	public CheckDto edit(@RequestBody User userData) {
-		System.out.println(userData);
-		return myPageService.loginRetry(userData);
+		return myPageService.userEdit(userData);
 	}
 	
 	//즐겨찾기 관리
 	@GetMapping("/favorites")
 	public List<FavoritesEntity> userFavoritesList(@RequestParam("sessionId") String sessionId) {
-		System.out.println(sessionId);
 		return myPageService.favoritesList(sessionId);
+		
+	}
+	//채널별 즐겨찾기 카운트
+	@GetMapping("/favoritesCount")
+	public int favoritesCount(@RequestParam("channelKey") int channelKey) {
+		return myPageService.favoritesCount(channelKey);
 		
 	}
 	

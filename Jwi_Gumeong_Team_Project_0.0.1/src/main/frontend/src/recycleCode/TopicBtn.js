@@ -6,7 +6,10 @@ function TopicBtn({ topic, settopic }) {
     const [loginCheck,setLoginChanck] = useState(false);
 
 useEffect(()=>{
-    setLoginChanck(sessionStorage.getItem('sessionId') != null)
+    const timer = setTimeout(() => {
+        setLoginChanck(sessionStorage.getItem('sessionId') != null)
+    }, 1000);
+    return () => clearTimeout(timer);
 },[])
 
     return (

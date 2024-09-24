@@ -10,7 +10,7 @@ import styles from './style/Header.module.css';
 import {Link, useNavigate, useLocation} from 'react-router-dom';
 import axios from 'axios';
 //이미지 import
-import Logo from '../icon/logo/logo.png'; //로고 이미지
+import Logo from '../icon/logo/Frame 153.png'; //로고 이미지
 import searching from '../icon/24px/searching.png';
 import formulation from '../icon/img/formulation-ing.png';
 import reply from '../icon/img/reply-ing.png';

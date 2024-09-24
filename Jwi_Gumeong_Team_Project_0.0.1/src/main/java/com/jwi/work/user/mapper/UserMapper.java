@@ -66,8 +66,10 @@ public interface UserMapper{
 		// 유저 정보 가져오기
 		public User getUserInfo(int userKey);
 		
-		//여기부터 비번찾기
+		// 여기부터 비번찾기
 		public void updatePw(User user);
+		
+		// 닉네임 변경
 		
 		// 유저 닉네임 찾아오기
 		public String getNickName(int userKey);

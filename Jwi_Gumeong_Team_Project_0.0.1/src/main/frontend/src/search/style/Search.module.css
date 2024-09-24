@@ -29,20 +29,20 @@
     margin-right: 470px;
 }
 
-.creactChannel {
+.createChannel {
     display: flex;
     width: 145px;
     height: 24px;
     margin-right: 14px;
 }
 
-.creactChannel img {
+.createChannel img {
     width: 24px;
     height: 24px;
     margin-left: 10px;
 }
 
-.creactChannelText {
+.createChannelText {
     height: 14px;
     font-size: 14px;
     font-weight: 500;

@@ -100,7 +100,9 @@
 .passwordCheck {
     color: #EC000E;
 }
-
+.passwordCheck.active{
+    color: #FF8901;
+}
 .loginButton {
     width: 626px;
     height: 60px;

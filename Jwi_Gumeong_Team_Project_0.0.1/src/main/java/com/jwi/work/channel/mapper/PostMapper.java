@@ -15,8 +15,10 @@ public interface PostMapper {
 	// 게시글 숫자
 	public int postCount (@Param("channelKey")int channelKey);
 	
+
 	// 게시글 리스트 뽑아줌
 	public List<PostDto> postList(@Param("sessionId")String sessionId,@Param("channelKey")int channelKey,@Param("offset") int offset,@Param("limit") int limit);
+
 	
 	// 해시값 검색하여 이미지 데이터뽑아오기
 	public ImageInfoDto selectHash(@Param("imageHash") String imageHash);

@@ -17,6 +17,8 @@ public interface ChannelMapper {
 	
 	public ChannelDto channelGet(@Param("sessionId")String sessionId,@Param("channelId")String channelId);
 	
+	public void followerCountUpdate(@Param("followerCount")int followerCount,@Param("channelKey")int channelKey);
+	
     // 시간 범위 내에서 데이터 가져오기
 	public List<ChannelDto> HotBoardGet(
         @Param("startTime") String startTime,

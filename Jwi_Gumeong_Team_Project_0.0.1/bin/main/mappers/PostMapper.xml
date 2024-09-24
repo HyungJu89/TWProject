@@ -7,7 +7,14 @@
 		SELECT COUNT(*) FROM post WHERE channelKey = #{channelKey}
 	</select>
 	
+
+	
 	<select id="postList" parameterType="map" resultType="com.jwi.work.channel.dto.postDto.PostDto">
+		WITH userKeyCTE AS (
+	    	SELECT userKey 
+    		FROM userConnection 
+    		WHERE sessionId = #{sessionId}
+		)
 		SELECT 
 			post.postKey,
 			post.content,
@@ -25,26 +32,15 @@
             			1 
             		FROM 
             			`like` AS l
-            		JOIN
-            			userConnection uc ON l.userKey = uc.userKey
             		WHERE 
             			l.postKey = post.postKey  
-            			AND uc.sessionId = #{sessionId}
+            			AND l.userKey = (SELECT userKey FROM userKeyCTE)
             	) THEN TRUE
             	ELSE FALSE
         	END AS `like`,
         	
 			CASE
-				WHEN EXISTS(
-					SELECT
-						1
-					FROM
-						`userConnection` uc
-					WHERE
-						uc.userKey = post.userKey
-						AND uc.sessionId = #{sessionId}
-
-				) THEN TRUE
+				WHEN post.userKey = (SELECT userKey FROM userKeyCTE) THEN TRUE
 				ELSE FALSE
 				END AS myPost
 		FROM 
@@ -80,9 +76,9 @@
         	post.createdAt DESC
 		LIMIT	
 			#{offset},#{limit}
-
-		
 	</select>
+	
+
 	
 	<select id="selectHash" parameterType="String" resultType="com.jwi.work.channel.dto.sqlDto.ImageInfoDto">
 		SELECT imageKey,imageUrl,referenceCount FROM image WHERE imageHash = #{imageHash}

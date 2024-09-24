@@ -4,7 +4,7 @@ import axios from 'axios';
 import '../../App.css';
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styles from '../style/PublicBoard.module.css';
-import big_comment from '../../icon/20px/bigcomment.png';
+import replyImg from '../../icon/20px/reply.png';
 import emoticon_activation from '../../icon/24px/emoticon-activation.png';
 import emoticon_deactivation from '../../icon/24px/emoticon-deactivation.png';
 import Emogi from '../../Emogi/Emogi.js';
@@ -91,7 +91,7 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLod
 
     return (
         <div className={`${styles.bigComments} fadein`}>
-            <img className={styles.BcImg} src={big_comment} />
+            <img className={styles.BcImg} src={replyImg} />
             <div className={styles.commentDiv}>{/* 댓글 달기 */}
                 <div className={styles.replyAreaDiv}>
                     {replyNickName && <a className={styles.replyAreaDivText}>@{replyNickName}</a>}
