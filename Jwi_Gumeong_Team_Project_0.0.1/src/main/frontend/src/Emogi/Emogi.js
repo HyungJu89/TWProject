@@ -54,8 +54,6 @@ function Emogi({textareaRef, comment, setComment}) {
     setComment(newValue);
     textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
     // 커서 위치 유지
-    console.log(newValue);
-    console.log(comment+"중요한 애");
     textarea.focus();
 };
 

@@ -22,7 +22,6 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     const [commentLode, setCommentLode] = useState(true);
     let [comments, setComments] = useState([]);
     const textareaRef = useRef(null); //댓글달기 영역
-    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const navigate = useNavigate();
@@ -72,18 +71,23 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
 
     //모달함수
     let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off   
+    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     const modalRef = useRef(null);
     const moreRef = useRef(null);
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
             if (moreON &&
-                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target)) { setmoreON(false); } //신고, 삭제 닫음
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
+                { setmoreON(false); } //신고, 삭제 닫음
+            if (EmojiOn &&
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
+                { setEmojiOn(false); } //신고, 삭제 닫음
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => { //클린업
-            document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [moreON]);
+    }, [moreON, EmojiOn]);
 
 
     //댓글 작성 
@@ -185,8 +189,8 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                     onInput={handleInput}
                 />
                 <div className={styles.commentNav}>
-                    <img onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
-                    {EmojiOn && <Emogi textareaRef={textareaRef} comment={comment} setComment={setComment} />}
+                    <img ref={moreRef} onClick={() => { !EmojiOn && setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
+                    {EmojiOn && <div ref={modalRef}><Emogi textareaRef={textareaRef} comment={comment} setComment={setComment} /></div>}
                     <div style={{ color: commentTextColor }}>
                         {commentLength}/{commentsLimit}
                         <button style={{ backgroundColor: commentButtonColor }} onClick={createComment}>등록</button>{/*기본 댓글 등록*/}
