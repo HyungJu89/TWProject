@@ -11,7 +11,8 @@ import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
 import refresh from '../icon/24px/refresh.png';
-import TopicBtn from '../recycleCode/TopicBtn.js'
+import TopicBtn from '../recycleCode/TopicBtn.js';
+import AlarmModal from '../modal/AlarmModal.js';
 
 function Main({ onLogout, isLoggedIn }) {
     let navigate = useNavigate();
@@ -27,6 +28,11 @@ function Main({ onLogout, isLoggedIn }) {
         setModalOpen(false);
         navigate('/signIn');
         window.scrollTo(0, 0);
+    };
+
+    const openModal = (content) => {
+        setModalContent(content);
+        setModalOpen(true);
     };
 
     //추천순
@@ -142,7 +148,6 @@ function Main({ onLogout, isLoggedIn }) {
         }
 
     }, [topic]);
-
 
     return (
         <div>

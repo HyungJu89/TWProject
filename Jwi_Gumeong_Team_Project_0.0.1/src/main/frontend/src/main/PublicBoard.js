@@ -29,16 +29,7 @@ function PublicBoard({ postInfo }) {
     //이미지
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState('');
     const navigate = useNavigate();
-
-    const closeModal = () => {
-        setModalOpen(false);
-        navigate('/signIn');
-        window.scrollTo(0, 0);
-    };
-
     const [commentCount, setCommentCount] = useState(0);
 
     useEffect(() => {
@@ -61,11 +52,6 @@ function PublicBoard({ postInfo }) {
 
     const updateLike = async(newHeart) => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
-        if(!sessionIdJson){
-            setModalContent('로그인 되어 있지 않습니다.');
-            setModalOpen(true);
-            return;
-        }
         let sessionId = JSON.parse(sessionIdJson).sessionId
 
         const like = {
@@ -84,9 +70,8 @@ function PublicBoard({ postInfo }) {
     const likeOnClick = ()=>{
         const newHeart = !heart;
         let sessionIdJson = sessionStorage.getItem('sessionId');
-                if(!sessionIdJson){
-            setModalContent('로그인 되어 있지 않습니다.');
-            setModalOpen(true);
+        if (!sessionIdJson) {
+            openModal('로그인 되어 있지 않습니다.');
             return;
         }
         setLikeCount((state) => newHeart ? state+1 : state-1 )
@@ -168,9 +153,6 @@ function PublicBoard({ postInfo }) {
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
             {commentsON && <Comments postKey={postInfo.postKey} setCommentCount={setCommentCount} />}
-            {modalOpen && 
-                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
-            }
         </div>
     )
 }

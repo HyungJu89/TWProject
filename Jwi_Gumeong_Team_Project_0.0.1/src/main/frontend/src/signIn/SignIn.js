@@ -84,7 +84,10 @@ function SignIn() {
                     dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
 
                     navigate('/');
-                    window.location.reload();
+
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
                 }
                 if(userResponse.data.wrongCount >= 5){
                     setModalContent('비밀번호를 5회 이상 틀리셨습니다!');
