@@ -37,10 +37,7 @@ public class AlarmService {
     private InquiryAlarmRepository inquiryRepository;
 	@Autowired
 	private UserRepository userRepository;
-	@Autowired
-	private LikeRepository likeRepository;
 
-    
     public List<Alarm> selectAlarm(int userKey) {
         List<Alarm> alarms = alarmRepository.findByUserKey(userKey);
 
@@ -133,6 +130,12 @@ public class AlarmService {
             // 현재 좋아요 알림의 threshold (10, 50, 100)에 맞는 subContent 설정
             String threshold = alarm.getReferenceType().replace("like_", "");
             alarm.setSubContent(threshold); // 좋아요 개수 알림을 subContent로 설정
+            
+            // Post에서 Channel 객체를 가져와 channelImageUrl에 설정
+            Channel channel = post.getChannel();
+            if (channel != null && channel.getImageUrl() != null) {
+                alarm.setChannelImageUrl(channel.getImageUrl());
+            }
         }
     }
 

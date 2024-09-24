@@ -192,8 +192,16 @@
 	
 	<!-- 알림 테이블에 새로운 알림 삽입 -->
 	<insert id="insertAlarm" parameterType="map">
-	    INSERT INTO alarm (userKey, referenceType, referenceKey, read)
-	    VALUES (#{userKey}, #{referenceType}, #{referenceKey}, 0)
+	    INSERT INTO alarm (
+	    	`userKey`
+	    	, `referenceType`
+	    	, `referenceKey`
+	    	, `read`
+	    ) VALUES (
+	    	#{userKey}
+	    	, #{referenceType}
+	    	, #{referenceKey}
+	    	, 0)
 	</insert>
 
 </mapper>

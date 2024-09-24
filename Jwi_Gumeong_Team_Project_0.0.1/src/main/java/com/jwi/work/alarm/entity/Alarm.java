@@ -23,8 +23,8 @@ public class Alarm {
 	private int alarmKey;
 	@Column(name = "userKey", nullable = false)
 	private int userKey;
-	@Column(name = "referenceUserKey", nullable = true)
-	private int referenceUserKey;
+	@Column(name = "referenceUserKey")
+	private Integer referenceUserKey;
 	@Column(name = "referenceType", nullable = false, length = 50)
 	private String referenceType;
 	@Column(name = "referenceKey", nullable = false)

@@ -307,7 +307,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                 return notification.referenceType === 'post' || notification.referenceType === 'comment';
             } else if (activeButton === 2) {
                 // 좋아요일때
-                return notification.referenceType === 'like';
+                return notification.referenceType.startsWith('like');
             } else if (activeButton === 3) {
                 // 문의나 제재내역일때
                 return notification.referenceType === 'inquiry' || notification.referenceType === 'system';

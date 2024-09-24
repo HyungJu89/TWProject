@@ -101,7 +101,8 @@ alter table `user` add `pwWrong` int default 0;
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
-select*from`alarm`;
+select * from `likeAlarmLog`;
+select * from `alarm`;
 drop table user;
 insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zdasaszx@a.coaafaaassm','12s4','fdaadssdafsa','비밀',0,null,'activate',NOW(),NOW());
 -- 자동 생성된 INSERT 문들
