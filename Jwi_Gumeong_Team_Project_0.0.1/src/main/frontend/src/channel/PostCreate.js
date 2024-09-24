@@ -124,7 +124,7 @@ function PostCreact({channelKey}) {
 
     return (
         <div className={style.postCreact}>{/*게시글 작성 box*/}
-            {!hasContent && <span className={style.placeholderContentTop}>내용을 입력하세요.(3자 이상)<br /><p className={style.placeholderContentBottom}>비매너 행위는 하지마세요.</p><br /><p className={style.placeholderContentBottom}>* 욕설, 광고(도배), 악의적인 글, 친목, 성희롱(음란물) 등</p></span>
+            {!hasContent && <span className={style.placeholderContentTop}>내용을 입력하세요.(3자 이상)<br /><p className={style.placeholderContentBottom}>비매너 행위는 제재의 대상이 됩니다.</p><br /><p className={style.placeholderContentBottom}>* 욕설, 광고(도배), 악의적인 글, 친목, 성희롱(음란물) 등</p></span>
             }
             <div
                 contentEditable="true"
