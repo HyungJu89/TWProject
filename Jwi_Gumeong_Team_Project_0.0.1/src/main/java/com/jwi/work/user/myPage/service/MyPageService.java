@@ -49,11 +49,9 @@ public class MyPageService {
     	if(user.getEmail() !=null) {
     		userInfo.setEmail(user.getEmail());
     	}
-    	
     	if(user.getPw() !=null) {
     		userInfo.setPw(user.getPw());
     	}
-    	
     	// 패스워드 입력 안할시에 널처리
     	if(emailTest(userInfo)) {
     		userCheck.setCheck(true);
@@ -74,22 +72,71 @@ public class MyPageService {
 	 *	ㅊㅈㅇ : 나중에 마이페이지에서 접속로그 보여줘도 좋겠다
 	 */
 	
-	// 정보수정 전체 로직
-	public CheckDto userEdit(User user) {
+	// 정보수정 비밀번호 로직
+	public CheckDto userEditPw(User user) {
 		// 반환하기위한 객체 생성
 		CheckDto userCheck = new CheckDto();
 		User newUser = signInService.getUserInfo(user.getSessionId());
 		user.setEmail(newUser.getEmail());
-		// 비밀번호 수정문
+		// 패스워드 입력이 없을시 
 		if(user.getPw() == "") {
 			user.setPw(null);
 		}
-		System.out.println(user);
+		if(user.getNickName() == "") {
+			user.setNickName(null);
+		}
 		if(user.getPw() != null) {
 			userMapper.updatePw(user);
 		}
-		System.out.println(user);
+		userCheck.setWarningMessage("패스워드 수정 완료");
+		userCheck.setCheck(true);
+		return userCheck;
+	}
+	
+	// 정보수정 닉네임 로직
+	public CheckDto userEditNickName(User user) {
+		// 반환하기위한 객체 생성
+		CheckDto userCheck = new CheckDto();
+		User newUser = signInService.getUserInfo(user.getSessionId());
+		user.setEmail(newUser.getEmail());
+		// 패스워드 입력이 없을시 
+		if(user.getPw() == "") {
+			user.setPw(null);
+		}
+		// 닉네임 입력이 없을시
+		if(user.getNickName() == "") {
+			user.setNickName(null);
+		}
+		if(user.getNickName() != null) {
+			userMapper.updateNickName(user);
+		}
+		userCheck.setWarningMessage("닉네임 수정 완료");
+		userCheck.setCheck(true);
+		return userCheck;
+	}
+	
+	// 정보수정 전체 로직
+	public CheckDto userEditAll(User user) {
+		// 반환하기위한 객체 생성
+		CheckDto userCheck = new CheckDto();
+		User newUser = signInService.getUserInfo(user.getSessionId());
+		user.setEmail(newUser.getEmail());
+		// 패스워드 입력이 없을시 
+		if(user.getPw() == "") {
+			user.setPw(null);
+		}
 		
+		// 닉네임 입력이 없을시
+		if(user.getNickName() == "") {
+			user.setNickName(null);
+		}
+		
+		// 닉네임 입력이 없을시
+		if(user.getNickName() != null && user.getPw() != null) {
+			userMapper.updatePw(user);
+			userMapper.updateNickName(user);
+		}
+		userCheck.setWarningMessage("닉네임,패스워드 수정 완료");
 		userCheck.setCheck(true);
 		return userCheck;
 	}
