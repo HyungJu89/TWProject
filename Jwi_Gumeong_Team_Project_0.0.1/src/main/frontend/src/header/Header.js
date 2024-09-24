@@ -34,11 +34,11 @@ import { getCookie } from '../cookies/Cookies.js';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function Header({onClickSearch, onLogout, isLoggedIn}) {
+    const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
     let [justSearchOn, setJustSearchOn] = useState(false); //검색창 클릭시 노출되는 모달창 확인
     const [searchInput,setSearchInput] = useState('');
     const [searchInputs,setSearchInputs] = useState('');
     let [recentSearchData, setRecentSearchData] = useState([]);
-    const userKey = useSelector((state) => state.session.userKey); // 세션 아이디로 가져온 유저 키값
 
     let navigate = useNavigate();
     let location = useLocation();
@@ -113,6 +113,28 @@ function Header({onClickSearch, onLogout, isLoggedIn}) {
 function Icon({navigate, userKey}) { /* 로그인 시 노출되는 알림 아이콘 UI */
     let [img, setImg] = useState(notification_deactivation); /*알림 hover 이팩트 변환용*/
     let [showNotifications, setShowNotifications] = useState(false); /* 알림 모달 표시 여부 */
+    let [unreadCount, setUnreadCount] = useState(0); // 알림 개수
+
+    // 알림 개수 가져오기
+    useEffect(() => {
+        const fetchUnreadCount = async () => {
+            if (userKey !== null) {
+                try {
+                    const response = await axios.post('/alarm/count/unread', null, { params: { userKey } });
+                    if (response.data.result === "success") {
+                        setUnreadCount(response.data.unreadCount);
+                    }
+                } catch (error) {
+                    console.log("알림 개수 가져오기 에러: ", error);
+                }
+            }
+        };
+        fetchUnreadCount(); // 컴포넌트 마운트 시 호출
+
+        const intervalId = setInterval(fetchUnreadCount, 10000); // 30초마다 호출
+
+        return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+    }, [userKey]);
 
     return (
         <div className={styles.iconContainer}>
@@ -124,7 +146,9 @@ function Icon({navigate, userKey}) { /* 로그인 시 노출되는 알림 아이
                 onMouseLeave={() => setImg(notification_deactivation)}
                 onClick={() => setShowNotifications(!showNotifications)}>
                 <img src={img} alt="Notification" />
-                <div className={styles.redNotRead}>16</div>
+                {unreadCount > 0 && ( // 안 읽은 알림이 1개 이상일 때만 보이기
+                    <div className={styles.redNotRead}>{unreadCount}</div>
+                )}
             </div>
             {showNotifications && <NotificationModal userKey={userKey} />}
         </div>
@@ -283,7 +307,7 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                 return notification.referenceType === 'post' || notification.referenceType === 'comment';
             } else if (activeButton === 2) {
                 // 좋아요일때
-                return notification.referenceType === 'like';
+                return notification.referenceType.startsWith('like');
             } else if (activeButton === 3) {
                 // 문의나 제재내역일때
                 return notification.referenceType === 'inquiry' || notification.referenceType === 'system';
@@ -323,7 +347,9 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     content = notification.content;
                     subContent = `${notification.nickname}님이 대댓글을 달았어요.`;
                     break;
-                case 'like':
+                case 'like_10':
+                case 'like_50':
+                case 'like_100':
                     icon = notification.channelImageUrl || n_heart_activation;
                     content = notification.content;
                     subContent = `해당글이 ♥${notification.subContent}개를 받았어요.`; // 좋아요 알림 
@@ -335,6 +361,8 @@ function NotificationModal({ userKey }) { /* 알림 모달찰 */
                     break;
                 case 'system':
                     icon = notification.reportedUserKey === userKey ? report : formulation;
+                    content = `당신의 선함으로 ${notification.nickname}님이 제재를 받았어요!`;
+                    subContent = `신고내용 : ${notification.reason}, 대상자가 ${notification.date}일 정지를 받았습니다.`;
                     break;
                 default:
                     break;

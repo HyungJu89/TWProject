@@ -94,4 +94,13 @@ public class AlarmRestController {
 		
 		return result;
 	}
+	
+	@PostMapping("/count/unread")
+    public Map<String, Object> countUnreadAlarms(@RequestParam("userKey") int userKey) {
+        int unreadCount = alarmService.unreadAlarms(userKey);
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", "success");
+        result.put("unreadCount", unreadCount);
+        return result;
+    }
 }

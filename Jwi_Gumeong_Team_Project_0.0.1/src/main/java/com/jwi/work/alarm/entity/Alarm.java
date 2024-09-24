@@ -23,20 +23,18 @@ public class Alarm {
 	private int alarmKey;
 	@Column(name = "userKey", nullable = false)
 	private int userKey;
-	@Column(name = "referenceUserKey", nullable = true)
-	private int referenceUserKey;
+	@Column(name = "referenceUserKey")
+	private Integer referenceUserKey;
 	@Column(name = "referenceType", nullable = false, length = 50)
 	private String referenceType;
 	@Column(name = "referenceKey", nullable = false)
 	private int referenceKey;
-	@Column(name = "read", nullable = false)
+	@Column(name = "`read`", nullable = false)
 	private int read;
 	@Column(name = "createdAt", nullable = false)
     private LocalDateTime createdAt;  
     @Column(name = "updatedAt", nullable = false)
     private LocalDateTime updatedAt;
-    @Column(name = "likeCount", nullable = true)    
-    private Integer likeCount;
     
     @Transient
     private String subContent; 
@@ -64,5 +62,7 @@ public class Alarm {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    
 	
 }
