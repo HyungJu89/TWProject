@@ -80,8 +80,8 @@ function UserAfter({ onLogout }) {
                     const {data} = (sessionId && await axios.get(`/myPage/favorites`,{params:{sessionId : sessionId}}))
                     setFavoritesList(data);
                 } catch (error) {
-                    // console.error('Channel API Error:', error);
-                    //오류가 이상하게 떠서 주석 처리함
+                    console.error('Channel API Error:', error);
+                    // 오류가 이상하게 떠서 주석 처리함
                 }
             };
             favorites();
