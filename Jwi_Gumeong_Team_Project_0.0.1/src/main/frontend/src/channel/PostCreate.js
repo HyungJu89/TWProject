@@ -87,7 +87,7 @@ function PostCreact({channelKey}) {
             setModalOpenKeepURL(true);
             return;
         }
-        if(content.length < contentLimit){
+        if(content.length > contentLimit){
             setModalContent('내용이 너무 길어요.');
             setModalOpenKeepURL(true);
             return;
@@ -140,6 +140,7 @@ function PostCreact({channelKey}) {
 
         useEffect(() => {
             EmojiOn && (contentRef.current.innerText=content);
+            setHasContent(content.trim().length !== 0)
         }, [content]);
 
     return (
@@ -169,10 +170,8 @@ function PostCreact({channelKey}) {
                 <div className={style.emotIcon}>
                     <img ref={moreRef} onClick={() => { !EmojiOn && setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emotIcon} art='이모티콘' />
                     {EmojiOn && 
-                    // <div ref={modalRef}>
                         <Emogi now={'post'} textareaRef={contentRef} modalRef={modalRef} content={content} setContent={setContent} />
-                        // </div>
-                        }
+                    }
                 </div>{/*이모티콘 아이콘*/}
 
                 <div className={style.imageIcon}><img src={imageIcon} alt='이미지' onClick={imageFileClick} /></div>{/*이미지 아이콘*/}
