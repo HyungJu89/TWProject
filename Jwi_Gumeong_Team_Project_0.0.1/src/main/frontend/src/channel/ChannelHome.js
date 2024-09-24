@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 import PostCreate from './PostCreate.js';
 import { useChannel } from '../recycleCode/ApiQuery.js';
 import MainBanner from './MainBanner.js';
-import PublicBoard from '../main/PublicBoard.js'
+import Loading from '../loading/Loading.js';
+import PublicBoard from '../main/PublicBoard.js';
 import ChannelBody from './ChannelBody.js';
 import PublicMenu from '../main/PublicMenu.js'
 import { channelGet } from '../recycleCode/ChannelAxios.js';
@@ -100,9 +101,13 @@ function ChannelHome() {
     }, [channelInfo, postPage]);
 
     //------------------------------------------------------------------------------
-
-    if (channelInfo == null) {
-        return <div>채널 홈 로딩중</div>;
+    // 첫 번째 쿼리: 채널 정보를 가져오기.
+    const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
+    // 추후에 에러 페이지 만들기
+    if (isLoadingChannel || channelInfo == null) {
+        return  <Loading/>;
+    // if (channelInfo == null) {
+    //     return <div>채널 홈 로딩중</div>;
     }
     return (
         <div>
@@ -116,11 +121,11 @@ function ChannelHome() {
                         <PostCreate channelKey={channelInfo.channelKey} />
                         <div className={style.postList}>
                             {postList.success ?
-                                <>
+                                <div className={("fadein")}>
                                     {postList.search.map((postInfo, index) =>
                                         <PublicBoard key={index} postInfo={postInfo}/>
                                     )}
-                                </> : 
+                                </div> : 
                                     <div className={style.nonPostList}>생성된 게시글이 없습니다.</div>
                                 
                             }
@@ -134,7 +139,7 @@ function ChannelHome() {
                     <div className={style.listRight}>
                         <div className={style.sideBar}>
                              {/* 이부분 */}
-                            <PublicMenu isLoggedIn = {isLoggedIn} onLogout={handleLogout}/>
+                            <PublicMenu  isLoggedIn = {isLoggedIn} onLogout={handleLogout}/>
                         </div>
                     </div>
                 </div>

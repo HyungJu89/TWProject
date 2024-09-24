@@ -58,7 +58,6 @@ function Search({ search }) {
                     page: channelPage
                 }
             });
-            console.log(data)
             return data;
         } catch (error) {
             console.error('Channel API Error:', error);

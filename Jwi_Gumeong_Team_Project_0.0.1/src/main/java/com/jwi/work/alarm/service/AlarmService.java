@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jwi.work.alarm.entity.Alarm;
+import com.jwi.work.alarm.entity.Banned;
 import com.jwi.work.alarm.entity.Channel;
 import com.jwi.work.alarm.entity.Comment;
 import com.jwi.work.alarm.entity.InquiryAlarm;
@@ -16,13 +17,9 @@ import com.jwi.work.alarm.repository.AlarmRepository;
 import com.jwi.work.alarm.repository.BannedRepository;
 import com.jwi.work.alarm.repository.CommentRepository;
 import com.jwi.work.alarm.repository.InquiryAlarmRepository;
-import com.jwi.work.alarm.repository.LikeRepository;
 import com.jwi.work.alarm.repository.PostRepository;
-import com.jwi.work.alarm.repository.ReplyRepository;
-import com.jwi.work.alarm.repository.ReportRepository;
-import com.jwi.work.center.inquiry.entity.Inquiry;
+import com.jwi.work.center.sanction.entity.Sanction;
 import com.jwi.work.user.entity.UserEntity;
-import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.user.repository.UserRepository;
 
 @Service
@@ -37,21 +34,12 @@ public class AlarmService {
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
-    private ReplyRepository replyRepository; // 댓글,대댓글 머지 후 자세하게
-    @Autowired
     private InquiryAlarmRepository inquiryRepository;
-    @Autowired
-    private ReportRepository reportRepository;
-    @Autowired
-    private BannedRepository bannedRepository;
-	@Autowired
-	private UserMapper userMapper;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private LikeRepository likeRepository;
+	private BannedRepository bannedRepository;
 
-    
     public List<Alarm> selectAlarm(int userKey) {
         List<Alarm> alarms = alarmRepository.findByUserKey(userKey);
 
@@ -65,7 +53,9 @@ public class AlarmService {
 	            	// 대댓글 알림
 	            	commentNotification(alarm);
 	            	break;
-	            case "like":
+	            case "like_10":
+	            case "like_50":
+	            case "like_100":
 	                // 좋아요 알림
 	            	likeNotification(alarm);
 	                break;
@@ -75,6 +65,7 @@ public class AlarmService {
 	                break;
 	            case "system":
 	            	// 신고 처리 결과 알림
+	            	systemNotification(alarm);
                     break;
 	            default:
 	                break;
@@ -133,49 +124,23 @@ public class AlarmService {
     // Like 알림
     private void likeNotification(Alarm alarm) {
         Optional<Post> postOpt = postRepository.findById(alarm.getReferenceKey());
+        
         if (postOpt.isPresent()) {
             Post post = postOpt.get();
-            long likeCount = likeRepository.countByPost(post);  // 해당 게시글의 좋아요 수
-
-            // 10개, 50개, 100개 각각 한 번씩만 알림을 보내기 위해 이전 알림 확인
-            boolean isNotifiedAt10 = alarmRepository.existsByUserKeyAndReferenceKeyAndReferenceTypeAndLikeCount(
-                post.getUser().getUserKey(), post.getPostKey(), "like", 10);
-            boolean isNotifiedAt50 = alarmRepository.existsByUserKeyAndReferenceKeyAndReferenceTypeAndLikeCount(
-                post.getUser().getUserKey(), post.getPostKey(), "like", 50);
-            boolean isNotifiedAt100 = alarmRepository.existsByUserKeyAndReferenceKeyAndReferenceTypeAndLikeCount(
-                post.getUser().getUserKey(), post.getPostKey(), "like", 100);
-
-            // 10개 이상일 때 알림을 한 번만 보냄
-            if (likeCount >= 10 && !isNotifiedAt10) {
-                sendLikeNotification(alarm, post, 10);
-            }
-
-            // 50개 이상일 때 알림을 한 번만 보냄
-            if (likeCount >= 50 && !isNotifiedAt50) {
-                sendLikeNotification(alarm, post, 50);
-            }
-
-            // 100개 이상일 때 알림을 한 번만 보냄
-            if (likeCount >= 100 && !isNotifiedAt100) {
-                sendLikeNotification(alarm, post, 100);
+            alarm.setContent(post.getContent()); // 게시글 내용을 알림 content에 설정
+            
+            // 현재 좋아요 알림의 threshold (10, 50, 100)에 맞는 subContent 설정
+            String threshold = alarm.getReferenceType().replace("like_", "");
+            alarm.setSubContent(threshold); // 좋아요 개수 알림을 subContent로 설정
+            
+            // Post에서 Channel 객체를 가져와 channelImageUrl에 설정
+            Channel channel = post.getChannel();
+            if (channel != null && channel.getImageUrl() != null) {
+                alarm.setChannelImageUrl(channel.getImageUrl());
             }
         }
     }
 
-    // 좋아요 알림 전송 메서드
-    private void sendLikeNotification(Alarm alarm, Post post, int likeThreshold) {
-    	// Post에서 Channel 객체를 가져와 channelImageUrl에 설정
-        Channel channel = post.getChannel();
-        if (channel != null && channel.getImageUrl() != null) {
-            alarm.setChannelImageUrl(channel.getImageUrl());
-        }
-        // 게시글 내용을 content에 저장
-        alarm.setContent(post.getContent());
-        // 좋아요 수 저장
-        alarm.setSubContent(String.valueOf(likeThreshold));  // subContent에 likeThreshold 저장
-        // 알림을 DB에 저장
-        alarmRepository.save(alarm);
-    }
     
     // Inquiry 알림
     private void inquiryNotification(Alarm alarm) {
@@ -195,6 +160,31 @@ public class AlarmService {
             inquiryAlarm.setRead(0);  // 알림을 읽지 않은 상태로 설정
             alarmRepository.save(inquiryAlarm);
         }
+    }
+    
+    // 신고 처리 결과 알림
+    private void systemNotification(Alarm alarm) {
+        // 신고한 유저의 알림
+        if (alarm.getReferenceUserKey() > 0) {
+            Optional<UserEntity> reportedUserOpt = userRepository.findById(alarm.getReferenceUserKey());
+            if (reportedUserOpt.isPresent()) {
+                UserEntity reportedUser = reportedUserOpt.get();
+                alarm.setNickname(reportedUser.getNickName());  // 제재 받은 유저의 닉네임
+                // 제재 사유 및 일수를 저장
+                Optional<Banned> bannedOpt = bannedRepository.findById(alarm.getReferenceKey());
+                if (bannedOpt.isPresent()) {
+                	
+                	Banned banned = bannedOpt.get();
+                    alarm.setReason(banned.getReason());   // 제재 사유 저장
+                    alarm.setDate(banned.getDate());       // 제재 일수 저장
+                }
+            }
+        }
+    }
+
+    // 안 읽은 알람
+    public int unreadAlarms(int userKey) {
+        return alarmRepository.countByUserKeyAndRead(userKey, 0);
     }
     
     public int deleteAlarm(int notificationId) {

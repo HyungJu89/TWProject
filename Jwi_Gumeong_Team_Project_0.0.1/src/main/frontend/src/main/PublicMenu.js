@@ -13,7 +13,7 @@ import btn_right from '../icon/btn/btn-right.png';
 import { getUserInfo } from '../slice/loginSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 
-function PublicMenu({ isLoggedIn, onLogout }) {
+function PublicMenu({ isLoggedIn, onLogout,bookmarkON }) {
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);
     const dispatch = useDispatch();
@@ -40,7 +40,7 @@ function PublicMenu({ isLoggedIn, onLogout }) {
 
     return (
         <div className={styles.rightDiv}>{/*유저 영역 */}
-            {isLoggedIn ? <UserAfter onLogout={onLogout}/> : <UserBefore/>}
+            {isLoggedIn ? <UserAfter bookmarkON={bookmarkON} onLogout={onLogout}/> : <UserBefore/>}
             <div className={styles.recommendation}>{/* 추천 */}
                 <p style={{ margin: '0px', marginLeft: '21px' }}>추천</p>
                 <div className={styles.list}>
@@ -85,7 +85,7 @@ function UserAfter({ onLogout }) {
                 }
             };
             favorites();
-        },[sessionId]);
+        },[sessionId/*,favoritesList (ps.즐겨찾기 후 즉시 반영을 위해 했는데 5613513번 보내서 막아둠)*/]);
         
         //즐겨찾기 게시판(2)  :: 채널 정보 가져오기
         const [channelList, setChannelList] = useState([]); //즐겨찾기에서 찾은key를 기반으로 채널 정보 가져오기

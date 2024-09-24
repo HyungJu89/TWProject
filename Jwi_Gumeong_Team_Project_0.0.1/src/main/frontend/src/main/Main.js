@@ -166,7 +166,7 @@ function Main({ onLogout, isLoggedIn }) {
                     <TopicBtn topic={topic} settopic={settopic} />
                     {postList.success &&
                     <>{postList.search ?
-                            <div className={styles.fadein}>
+                            <div className="fadein">
                                 {postList.search.map((postInfo, index) =>
                                     <PublicBoard key={index} postInfo={postInfo} />
                                 )}

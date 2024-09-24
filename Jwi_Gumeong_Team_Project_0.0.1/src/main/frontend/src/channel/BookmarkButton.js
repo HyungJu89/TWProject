@@ -62,7 +62,7 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
     }
 
     return (
-        <div>
+        <div style={{cursor:'pointer'}}>
             {bookmarkOn ? <BookMarkTrue setBookMarkOn={setBookMarkOn} bookMarkOnclick={bookMarkOnclick}/> 
             : <BookMarkNone setBookmarkImg={setBookmarkImg} bookmarkImg={bookmarkImg} setBookMarkOn={setBookMarkOn} bookMarkOnclick={bookMarkOnclick}/> }
             {modalOpen && 

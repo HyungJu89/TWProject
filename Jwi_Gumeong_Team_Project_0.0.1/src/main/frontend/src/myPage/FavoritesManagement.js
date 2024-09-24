@@ -76,7 +76,7 @@ function FavoritesManagement() {
             fetchChannels();
             }, [favoritesList]);
 
-                    //즐겨찾기 게시판(3) :: 페이징
+        //즐겨찾기 게시판(3) :: 페이징
         const nowChannelList = channelList.slice(pagingNow, pagingMax);
         const result = channelList.length / 7;
         const maxPaging = result !== Math.floor(result) ? Math.floor(result) + 1 : result;
@@ -95,8 +95,7 @@ function FavoritesManagement() {
                         <div>
                             {nowChannelList.map((channelInfo, index) =>
                                 <div key={index}>
-                                    <SearchChannel channelInfo={channelInfo[0]} formatUnit={formatUnit}/>
-                                    {console.log(channelInfo[0])}
+                                    <SearchChannel favoritesList={favoritesList} channelInfo={channelInfo[0]} formatUnit={formatUnit}/>
                                 </div>
                             )}
                         </div>
@@ -117,9 +116,36 @@ function FavoritesManagement() {
     )
 }
 
-function SearchChannel({ channelInfo, formatUnit }) {
+function SearchChannel({favoritesList, channelInfo, formatUnit }) {
     let navigate = useNavigate();
     const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
+
+        //즐겨찾기 게시판(4) :: 즐겨찾기 카운팅
+        useEffect(() => {
+            const count = async () => {
+                try {
+                    const {data} = await axios.get(`/myPage/favoritesCount`,{params:{channelKey : channelInfo.channelKey}});
+                    setFavoriteCount(data);
+                } catch (error) {
+                    console.error('Channel API Error:', error);
+                }
+            };
+            count();
+        }, []);
+
+        //BookmarkButton 컴포넌트 전달을 위한 데이터 바인딩
+        const channel = {
+            channelKey: channelInfo.channelKey,
+            id: channelInfo.id,
+            name: channelInfo.name,
+            imageUrl: channelInfo.imageUrl,
+            followerCount: channelInfo.followerCount,
+            favoriteCount: favoriteCount,
+            favorite: false
+        };
+        if (favoritesList.some(item => item.channelKey === channelInfo.channelKey)) {
+            channel.favorite = true;
+        }
 
     return (
         <>
@@ -128,17 +154,17 @@ function SearchChannel({ channelInfo, formatUnit }) {
                 <div className={styles.title}> {/* 클릭시 URL 이동 */}
                     <img src={channelInfo.imageUrl} />
                 </div>
-                <div className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
+                <div onClick={() => {  navigate(`/channel/${channelInfo.id}`); window.scrollTo(0, 0) }}  className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
                     <div className={styles.channelName}>{channelInfo.name}</div>{/*채널명*/}
                     <div className={styles.follower}>
-                        <div className={styles.markText}>팔로워</div>
+                        <div className={styles.markText}>팔로워&nbsp;</div>
                         <div className={styles.markCount}> {formatUnit(channelInfo.followerCount)}</div>{/*팔로워*/}
-                        <div className={styles.markText}>즐겨찾기</div>
+                        <div className={styles.markText}>즐겨찾기&nbsp;</div>
                         <div className={styles.markCount}>{formatUnit(favoriteCount)}</div>
                     </div>
                 </div>
                 <div className={styles.bookMark}>
-                    <BookmarkButton channelInfo={channelInfo} setFavoriteCount={setFavoriteCount} />
+                    <BookmarkButton channelInfo={channel} setFavoriteCount={setFavoriteCount} />
                 </div>
             </div>
             <hr className={styles.horizontalLine} />
