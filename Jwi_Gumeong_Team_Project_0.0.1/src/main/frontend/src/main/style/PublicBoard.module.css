@@ -258,6 +258,7 @@
 .listContent {
     font-weight: 400;
     color: #101010;
+    word-break: break-all;
 }
 .replyNickNameBlue{
     color: #35559E;
