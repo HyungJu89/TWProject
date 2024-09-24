@@ -24,6 +24,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     const textareaRef = useRef(null); //댓글달기 영역
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
+    const [modalOpenKeepURL, setModalOpenKeepURL] = useState(false);
     const navigate = useNavigate();
     let disPatch = useDispatch();
 
@@ -33,6 +34,10 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
         disPatch(openImgUiModalFalse())
         navigate('/signIn');
         window.scrollTo(0, 0);
+    };
+
+    const closeModalKeepURL = () => {
+        setModalOpenKeepURL(false);
     };
 
     //댓글 길이 제한
@@ -93,7 +98,10 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     //댓글 작성 
     const createComment = async () => {
         if (commentsLimit < commentLength) {
-            return alert('너무 김');
+            setModalContent('내용이 너무 짧아요.');
+            setModalOpenKeepURL(true);
+            return;
+            // return alert('너무 김');
         }
         // 추가로 로직필요하면 여기에
         let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -190,7 +198,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                 />
                 <div className={styles.commentNav}>
                     <img ref={moreRef} onClick={() => { !EmojiOn && setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
-                    {EmojiOn && <div ref={modalRef}><Emogi textareaRef={textareaRef} comment={comment} setComment={setComment} /></div>}
+                    {EmojiOn && <Emogi  now={'comments'} modalRef={modalRef} textareaRef={textareaRef} setComment={setComment} />}
                     <div style={{ color: commentTextColor }}>
                         {commentLength}/{commentsLimit}
                         <button style={{ backgroundColor: commentButtonColor }} onClick={createComment}>등록</button>{/*기본 댓글 등록*/}
@@ -221,9 +229,13 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                     })}
                 </>
             }
-                {modalOpen && 
+            {/* 너무 힘들어서 그냥 등록 버튼을 막아버리고 결심 */}
+                {/* {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }
+                {modalOpenKeepURL && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModalKeepURL} />
+            } */}
         </div>
     )
 }
