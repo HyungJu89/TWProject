@@ -201,24 +201,20 @@ function InfoEdit() {
         // 여기에서 한번에 보내는거 말고 경우를 3개로 늘려야할꺼같음.
         if(isButtonActive){
             try {
-                console.log("닉네임체크 여부 : " + nickNameCheck + " 패스워드 체크 여부 " +pwCheck);
                 let userResponse = {};
                 const userData = {
                     pw: password,
                     nickName: nickName,
                     sessionId: sessionInfo.sessionId
                 };
-                if (nickNameCheck) {
+                if (nickNameCheck && !pwCheck) {
                     userResponse = await axios.post('/myPage/editNickName', userData); 
-                    console.log('닉네임');
                 }
-                if (pwCheck){
+                if (pwCheck && !nickNameCheck){
                     userResponse = await axios.post('/myPage/editPw', userData); 
-                    console.log('패스워드');
                 }
                 if (nickNameCheck && pwCheck){
                     userResponse = await axios.post('/myPage/editAll', userData); 
-                    console.log('둘다');
                 }
                 if(userResponse.data.check){
                     // alert("ㅋㅋ 바뀜ㄴ다");
