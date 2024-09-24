@@ -22,7 +22,6 @@ function ChannelHome() {
     const [channelInfo,setChannelInfo] = useState();
     const [postList,setPostList] = useState([]);
     const [postPage,setPostPage] = useState(1);
-    const [favoritesCountHome, setFavoritesCountHome] = useState(0);
     //세션화용 코드,state
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);
@@ -114,7 +113,7 @@ function ChannelHome() {
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
                 <MainBanner channelId={channelId} route={'channel'} />
-                <ChannelBody channelInfo={channelInfo} setFavoritesCountHome={setFavoritesCountHome} favoritesCountHome={favoritesCountHome}/>
+                <ChannelBody channelInfo={channelInfo}/>
             </div>
             <div className={style.channelInfoBack}>
                 <div className={style.mainList}>
@@ -140,7 +139,7 @@ function ChannelHome() {
                     <div className={style.listRight}>
                         <div className={style.sideBar}>
                              {/* 이부분 */}
-                            <PublicMenu  isLoggedIn = {isLoggedIn} onLogout={handleLogout} setFavoritesCountHome={setFavoritesCountHome} favoritesCountHome={favoritesCountHome}/>
+                            <PublicMenu  isLoggedIn = {isLoggedIn} onLogout={handleLogout}/>
                         </div>
                     </div>
                 </div>

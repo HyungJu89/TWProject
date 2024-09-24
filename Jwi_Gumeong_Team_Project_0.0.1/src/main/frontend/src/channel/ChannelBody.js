@@ -9,9 +9,10 @@ import { useQuery } from 'react-query';
 import { useState } from 'react';
 import {formatUnit} from '../recycleCode/FormatUnit.js';
 
-function ChannelBody({channelInfo,setFavoritesCountHome,favoritesCountHome}) {
+function ChannelBody({channelInfo}) {
 
     const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
+    const [v2ComingSoon, setV2ComingSoon] = useState(false);//2차 버전에서 다시 부활
 
     return (
         <div className={style.channelBody}>{/* 채널 정보 bar */}
@@ -26,10 +27,10 @@ function ChannelBody({channelInfo,setFavoritesCountHome,favoritesCountHome}) {
                         <div className={style.imageBackground}>
                             <div className={style.channelTop}>
                                 <div className={style.channelName}>{channelInfo.name}</div>
-                                <div className={style.announcement}><img src={announcement} />[필수!]우리 토픽의 공지사항</div>
+                                {v2ComingSoon && <div className={style.announcement}><img src={announcement} />[필수!]우리 토픽의 공지사항</div>}
                             </div>
                             <div  className={style.bookmark}>
-                                <BookmarkButton channelInfo={channelInfo} setFavoriteCount={setFavoriteCount} setFavoritesCountHome={setFavoritesCountHome} favoritesCountHome={favoritesCountHome}/>
+                                <BookmarkButton channelInfo={channelInfo} setFavoriteCount={setFavoriteCount} />
                             </div>
                         </div>
                     </div>

@@ -10,7 +10,7 @@ import lodash from 'lodash';
 import axios from 'axios';
 import AlarmModal from '../modal/AlarmModal.js';
 
-function BookmarkButton({channelInfo,setFavoriteCount, setFavoritesCountHome, favoritesCountHome}) {
+function BookmarkButton({channelInfo,setFavoriteCount}) {
     const [bookmarkOn, setBookMarkOn] = useState(channelInfo.favorite);
     const [bookmarkImg, setBookmarkImg] = useState(bookmarkActivation);
     const navigate = useNavigate();
@@ -57,7 +57,6 @@ function BookmarkButton({channelInfo,setFavoriteCount, setFavoritesCountHome, fa
     const bookMarkOnclick = () =>{
         const favorite = !bookmarkOn;
         setFavoriteCount((state) => (favorite ? state +1 : state - 1 ));
-        setFavoritesCountHome(favoritesCountHome+1);
         setBookMarkOn(favorite)
         bookMarkDebounce(favorite)
     }
