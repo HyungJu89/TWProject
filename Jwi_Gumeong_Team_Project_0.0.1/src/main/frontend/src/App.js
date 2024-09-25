@@ -85,7 +85,7 @@ function App() {
                 {imgState.popUp && <ImgUi/>}{/*이미지 팝업*/}
                 <Routes>
                     <Route path='/' element={<Main onLogout={onLogout} isLoggedIn = {isLoggedIn}/>}/> {/* 메인(홈) 접속 페이지 */}
-                    <Route path='/allTopic' element={<AllTopic/>}/> {/* 전체 채널 */}
+                    <Route path='/allTopic' element={<AllTopic onLogout={onLogout} isLoggedIn = {isLoggedIn}/>}/> {/* 전체 채널 */}
                     <Route path='/channel/:channelId' element={<ChannelHome/>}/>{/*채널*/}
                     <Route path='/signIn' element={<SignIn/>}/>
                     <Route path='/signUp' element={<SignUp/>}/>

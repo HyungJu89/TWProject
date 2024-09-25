@@ -14,18 +14,15 @@ import { ko } from 'date-fns/locale'; // 한국어 설정
 
 //댓글 포커스용 ref 받는 코드(forwardRef)
 const CommentsList = forwardRef(function CommentsList(
-{ index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex, setCommentStart, commentStart, PublicBoardImgmodal }, ref) {
+    { index, postKey, comment, setCommentLode, replyOnclick, onClear, replyInputState, replyInputIndex, setCommentStart, commentStart, PublicBoardImgmodal }, ref) {
     let [commentMoreON, setCommentmoreON] = useState(false); //삭제,수정,신고 모달 on/off   
-    const [nowRef, setNowRef] = useState(0) ; //모달(Ref)지정용 함수 = 현재 누른 댓글의 key를 비교해서 동일한 모달만 오픈
-    const [commentColor,setCommentColor] = useState(comment.state != "common" ? '#999999' : '#101010');
+    const [nowRef, setNowRef] = useState(0); //모달(Ref)지정용 함수 = 현재 누른 댓글의 key를 비교해서 동일한 모달만 오픈
     const modalRef = useRef(null);
     const moreRef = useRef(null);
-    const [replyMoreON, setReplyMoreON] = useState(false); //삭제,수정,신고 모달 on/off    
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
             if (commentMoreON &&
-                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target)) 
-                { setCommentmoreON(false); } //신고, 삭제 닫음
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target)) { setCommentmoreON(false); } //신고, 삭제 닫음
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => { //클린업
@@ -48,108 +45,114 @@ const CommentsList = forwardRef(function CommentsList(
     }, [commentStart]);
 
     //날짜 세팅
-    function timeSetting(createdAt){
+    function timeSetting(createdAt) {
         return formatDistanceToNow(new Date(createdAt), { addSuffix: true, locale: ko });
         //formatDistanceToNow : 특정 시간을 기준으로 현재까지의 시간을 계산
         //addSuffix : ~전 ~후 같은 접미사
     }
-    
-    useEffect(()=>{
-        setCommentColor(comment.state != "common" ? '#999999' : '#101010')
-    },[comment])
+
+    // useEffect(()=>{
+    //     setCommentColor(comment.state != "common" ? '#999999' : '#101010')
+    // },[comment])
+
     return (
         <>
             <div>{/* 댓글 */}
-                <div className={styles.list} style={{ marginBottom: '0px'}}  ref={ref}>
-                    <div className={styles.listNav}>
-                        <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{timeSetting(comment.createdAt)}</a></div>
-                        <div>
-                            <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(comment.commentKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
-                            {commentMoreON &&
-                            nowRef === comment.commentKey ?
-                                <div ref={modalRef}>
-                                    <MoreDeleteMini
-                                        setCommentLode = {setCommentLode} 
-                                        state = {comment.state} 
-                                        nickName={comment.nickName} 
-                                        referenceType={'comment'} 
-                                        referenceKey={comment.commentKey} 
-                                        myContent={comment.myComment} 
-                                        right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'} 
-                                        top={'30px'}/>
-                                </div> 
-                                : null} {/*신고, 삭제 모달*/}
-                        </div>
-                    </div>
-                    <div className={styles.listContent} style={{color : commentColor }}>{comment.comment}</div>
-                    <div className={styles.replyDiv} onClick={() => (replyInputState == 'comment' && replyInputIndex == comment.commentKey) ? onClear() : replyOnclick('comment', comment.commentKey)}>
-                        <div className={styles.replyDivText} style={{ marginBottom: '20px' }}><img src={comments_20px} />답글달기</div>
-                    </div>
-                    {(replyInputState == 'comment' && replyInputIndex == comment.commentKey) &&
-                        <ReplyArea 
-                            postKey={postKey} 
-                            commentKey={comment.commentKey} 
-                            setCommentLode={setCommentLode} 
-                            onClear={onClear}  
-                            setCommentStart={setCommentStart} 
-                            commentStart={commentStart}
-                            setReplyNew={setReplyNew}/>
-                    }
+                <div className={styles.list} style={{ marginBottom: '0px' }} ref={ref}>
+                    {comment.state == "common" ?
+                        <>
+                            <div className={styles.listNav}>
+                                <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{timeSetting(comment.createdAt)}</a></div>
+                                <div>
+                                    <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(comment.commentKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
+                                    {commentMoreON &&
+                                        nowRef === comment.commentKey ?
+                                        <div ref={modalRef}>
+                                            <MoreDeleteMini
+                                                setCommentLode={setCommentLode}
+                                                state={comment.state}
+                                                nickName={comment.nickName}
+                                                referenceType={'comment'}
+                                                referenceKey={comment.commentKey}
+                                                myContent={comment.myComment}
+                                                right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'}
+                                                top={'30px'} />
+                                        </div>
+                                        : null} {/*신고, 삭제 모달*/}
+                                </div>
+                            </div>
+                            <div className={styles.listContent}>{comment.comment}</div>
+                            <div className={styles.replyDiv} onClick={() => (replyInputState == 'comment' && replyInputIndex == comment.commentKey) ? onClear() : replyOnclick('comment', comment.commentKey)}>
+                                <div className={styles.replyDivText} style={{ marginBottom: '20px' }}><img src={comments_20px} />답글달기</div>
+                            </div>
+                            {(replyInputState == 'comment' && replyInputIndex == comment.commentKey) &&
+                                <ReplyArea
+                                    postKey={postKey}
+                                    commentKey={comment.commentKey}
+                                    setCommentLode={setCommentLode}
+                                    onClear={onClear}
+                                    setCommentStart={setCommentStart}
+                                    commentStart={commentStart}
+                                    setReplyNew={setReplyNew} />
+                            }
+                        </>
+                        : comment.replys[0].replyKey != 0 && <div className={styles.deleteContent}>삭제된 댓글입니다.</div>}
                 </div>
             </div>
             {/*대댓글*/}
-                    {comment.replys[0].replyKey != 0 && comment.replys.map((reply, replyIndex) => {
-                        return (
-                            <div key={reply.replyKey}>
-                                <div className={styles.bigComments}>
-                                    <img className={styles.BcImg} src={replyImg} />
-                                    <div className={styles.list}  ref={replyIndex === comment.replys.length-1 ? replyFocus : null}>
-                                        <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
-                                            <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{timeSetting(reply.createdAt)}</a></div>
-                                            <div>
-                                                <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(reply.replyKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
-                                                {commentMoreON &&
+            {comment.replys[0].replyKey != 0 && comment.replys.map((reply, replyIndex) => {
+                return (
+                    <div key={reply.replyKey}>
+                        <div className={styles.bigComments}>
+                            <img className={styles.BcImg} src={replyImg} />
+                            {reply.state == "common" ?
+                                <div className={styles.list} ref={replyIndex === comment.replys.length - 1 ? replyFocus : null}>
+                                    <div className={styles.listNav}>{/*닉네임, 글 작성 일시*/}
+                                        <div className={styles.listName}>{reply.nickName}<a className={styles.time}>{timeSetting(reply.createdAt)}</a></div>
+                                        <div>
+                                            <img ref={moreRef} onClick={() => { !commentMoreON && setCommentmoreON(true); setNowRef(reply.replyKey) }} className={styles.moreImg} src={more} /> {/* 신고삭제 모달 연결 해야함 */}
+                                            {commentMoreON &&
                                                 nowRef === reply.replyKey ?
                                                 <div ref={modalRef}>
-                                                <MoreDeleteMini 
-                                                    setCommentLode = {setCommentLode}
-                                                    state = {reply.state}
-                                                    nickName={reply.nickName} 
-                                                    referenceType={'reply'} 
-                                                    referenceKey={reply.replyKey} 
-                                                    myContent={reply.myReply} 
-                                                    right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'} 
-                                                    top={'30px'}/>
-                                                </div> 
-                                                : null} {/*신고, 삭제 모달*/}                                            
-                                            </div>
-                                        </div>
-                                        {reply.replyNickName &&
-                                            <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
-                                        }
-                                        <a className={styles.listContent} style={{color : reply.state != "common" ? '#999999' : '#101010'}}>{reply.reply}</a>
-                                        <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == reply.replyKey) ? onClear() : replyOnclick('reply', reply.replyKey)}>
-                                            <div className={styles.replyDivText}><img src={comments_20px} />답글달기</div>
+                                                    <MoreDeleteMini
+                                                        setCommentLode={setCommentLode}
+                                                        state={reply.state}
+                                                        nickName={reply.nickName}
+                                                        referenceType={'reply'}
+                                                        referenceKey={reply.replyKey}
+                                                        myContent={reply.myReply}
+                                                        right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'}
+                                                        top={'30px'} />
+                                                </div>
+                                                : null} {/*신고, 삭제 모달*/}
                                         </div>
                                     </div>
+                                    {reply.replyNickName &&
+                                        <a className={styles.replyNickNameBlue}>@{reply.replyNickName}</a>
+                                    }
+                                    <a className={styles.listContent} style={{ color: '#101010' }}>{reply.reply}</a>
+                                    <div className={styles.replyDiv} onClick={() => (replyInputState == 'reply' && replyInputIndex == reply.replyKey) ? onClear() : replyOnclick('reply', reply.replyKey)}>
+                                        <div className={styles.replyDivText}><img src={comments_20px} />답글달기</div>
+                                    </div>
                                 </div>
-                                {(replyInputState == 'reply' && replyInputIndex == reply.replyKey) &&
-                                    <ReplyArea 
-                                        postKey={postKey} 
-                                        commentKey={comment.commentKey} 
-                                        replyKey={reply.replyKey} 
-                                        replyNickName={reply.nickName} 
-                                        setCommentLode={setCommentLode} 
-                                        onClear={onClear} 
-                                        setCommentStart={setCommentStart} 
-                                        commentStart={commentStart}
-                                        setReplyNew={setReplyNew} />
-                                }
-                            </div>
-                        )
-                    }
+                                : <div className={styles.deleteReply}>삭제된 댓글입니다.</div>
+                            }
+                        </div>
+                        {(replyInputState == 'reply' && replyInputIndex == reply.replyKey) &&
+                            <ReplyArea
+                                postKey={postKey}
+                                commentKey={comment.commentKey}
+                                replyKey={reply.replyKey}
+                                replyNickName={reply.nickName}
+                                setCommentLode={setCommentLode}
+                                onClear={onClear}
+                                setCommentStart={setCommentStart}
+                                commentStart={commentStart}
+                                setReplyNew={setReplyNew} />
+                        }
+                    </div>
                 )
-            }
+            })}
         </>
     )
 });

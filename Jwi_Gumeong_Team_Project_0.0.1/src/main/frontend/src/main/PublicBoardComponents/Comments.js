@@ -177,7 +177,6 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     }, [commentStart]);
     return (
         <div>
-            <div className={styles.dashed} />{/* 회색줄 */}
             <div className={styles.widthNav} style={{ justifyContent: 'start' }}>
                 <div className={styles.arrayDiv} ref={moreRef} style={{ cursor: 'pointer' }} onClick={() => { !moreON && setmoreON(true) }} >
                     정렬순서<img style={{ marginLeft: '4px' }} src={expand_more} />

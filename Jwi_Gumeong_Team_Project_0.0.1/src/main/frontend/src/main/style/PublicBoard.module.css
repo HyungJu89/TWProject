@@ -335,3 +335,26 @@
 .a{
     position: absolute;
 }
+
+.deleteContent {
+    background-color: #f4f4F4;
+    padding: 20px;
+    height: 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-weight: 400;
+    color: #BBBBBB;
+    word-break: break-all;
+}
+
+.deleteReply {
+    background-color: #f4f4F4;
+    padding: 20px;
+    height: 20px;
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-weight: 400;
+    color: #BBBBBB;
+    word-break: break-all;
+}

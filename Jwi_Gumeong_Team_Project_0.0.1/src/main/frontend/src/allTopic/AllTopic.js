@@ -13,10 +13,11 @@ import Paging from '../Paging/Paging.js'
 import illustration01 from '../icon/img/illustration01.png';
 import TopicBtn from '../recycleCode/TopicBtn.js'
 
-function AllTopic() {
-    const navigate = useNavigate();
-    const [topic, settopic] = useState(0);
-    const [loginOn, setLoginOn] = useState(false);
+function AllTopic({ onLogout, isLoggedIn }) {
+    let navigate = useNavigate();
+    let [topic, settopic] = useState(0);
+    let [loginOn, setLoginOn] = useState(false);
+
     const [channel, setChannel] = useState('');
     const [postList, setPostList] = useState([]);
     const [postPage, setPostPage] = useState(1);
@@ -130,7 +131,7 @@ function AllTopic() {
                     }
                 </div>
                 {/* 오른쪽 로그인, 추천 영역 */}
-                <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
+                <PublicMenu isLoggedIn={isLoggedIn} onLogout={onLogout} />
             </div>
         </div>
     );

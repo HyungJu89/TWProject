@@ -8,10 +8,12 @@ import { reportInfo } from '../../slice/ReportDtoSlice.js';
 import { openModal } from '../../slice/ReportModalSlice.js';
 import {delectByUser} from '../../recycleCode/delectByUser.js'
 import AlarmModal from '../../modal/AlarmModal.js';
+import { useNavigate } from 'react-router-dom';
 
 function MoreDelete({ state, nickName, referenceType, referenceKey, modalRef, right, top, myContent }) {
     const [modalContent, setModalContent] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
+    const navigate = useNavigate();
     const closeModal = () => {
         setModalOpen(false);
     };
@@ -26,20 +28,20 @@ function MoreDelete({ state, nickName, referenceType, referenceKey, modalRef, ri
         dispatch(openModal())
     }
 
-    const delectOnClick = () => {
-        let sessionIdJson = sessionStorage.getItem('sessionId');
-        if(!sessionIdJson){
-            setModalContent('로그인 되어 있지 않습니다.');
-            setModalOpen(true);
-            return;
-        }
-        if(state != "common"){
-            setModalContent('이미 삭제된 게시글입니다..');
-            setModalOpen(true);
-            return
-        }
-        delectByUser(referenceType,referenceKey)
-        setCommentLode((state) => state ? false : true)
+        const delectOnClick = () => {
+            let sessionIdJson = sessionStorage.getItem('sessionId');
+            if(!sessionIdJson){
+                setModalContent('로그인 되어 있지 않습니다.');
+                setModalOpen(true);
+                return;
+            }
+            if(state != "common"){
+                setModalContent('이미 삭제된 게시글입니다..');
+                setModalOpen(true);
+                return
+            }
+            delectByUser(referenceType,referenceKey)
+            navigate(0);
     }
 
     return (
