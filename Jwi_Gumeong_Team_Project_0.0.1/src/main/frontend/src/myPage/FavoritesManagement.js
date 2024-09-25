@@ -4,6 +4,7 @@ import List from '../icon/24px/List.png';
 import Star from '../icon/20px/favorites-deactivation.png';
 import btn_left from '../icon/btn/btn-left.png';
 import btn_right from '../icon/btn/btn-right.png';
+import xBoxImg from '../icon/img/profile.png';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import PublicBoard from '../main/PublicBoard.js';
@@ -150,12 +151,16 @@ function SearchChannel({favoritesList, channelInfo, formatUnit }) {
 
     return (
         <>
-            <div className={styles.formGroup}>
+            <div onClick={() => {  navigate(`/channel/${channelInfo.id}`); window.scrollTo(0, 0) }} className={styles.formGroup}>
                 <img src={List} />
                 <div className={styles.title}> {/* 클릭시 URL 이동 */}
-                    <img src={channelInfo.imageUrl} />
+                    {channelInfo.imageUrl ? 
+                        <img src={channelInfo.imageUrl} />
+                        :
+                        <img src={xBoxImg} />
+                    }
                 </div>
-                <div onClick={() => {  navigate(`/channel/${channelInfo.id}`); window.scrollTo(0, 0) }}  className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
+                <div className={styles.streammerInfo} style={{ cursor: 'pointer' }}>
                     <div className={styles.channelName}>{channelInfo.name}</div>{/*채널명*/}
                     <div className={styles.follower}>
                         <div className={styles.markText}>팔로워&nbsp;</div>

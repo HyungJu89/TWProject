@@ -12,6 +12,7 @@ import btn_left from '../icon/btn/btn-left.png';
 import btn_right from '../icon/btn/btn-right.png';
 import { getUserInfo } from '../slice/loginSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
+import xBoxImg from '../icon/img/profile.png';
 
 function PublicMenu({ isLoggedIn, onLogout,bookmarkON }) {
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
@@ -48,7 +49,13 @@ function PublicMenu({ isLoggedIn, onLogout,bookmarkON }) {
                         <>
                             {randomBoard.info.map((item, i)=>
                             <div onClick={()=>{navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
-                                <div className={styles.imgDiv}><img src={item.imageUrl} /></div>
+                                <div className={styles.imgDiv}>
+                                {item.imageUrl?
+                                    <img src={item.imageUrl} />
+                                    :
+                                    <img src={xBoxImg} />
+                                }
+                                </div>
                                 {item.name}
                             </div>
                             )}
@@ -146,7 +153,13 @@ function UserAfter({ onLogout }) {
                         <>
                             {nowChannelList.map((item, i)=>
                             <div onClick={()=>{navigate(`/channel/${item[0].id}`); window.scrollTo(0, 0) }} className={styles.reChannel} key={i}>
-                                <div className={styles.imgDiv}><img src={item[0].imageUrl} /></div>
+                                <div className={styles.imgDiv}>
+                                {item[0].imageUrl ?
+                                    <img src={item[0].imageUrl} />
+                                    :
+                                    <img src={xBoxImg} />
+                                }   
+                                </div>
                                 {item[0].name}
                             </div>
                             )}

@@ -44,7 +44,6 @@
 
 /* nav */
 .widthNav {
-    z-index: -1;
     position: relative;
     width: 726px;
     height: 24px;
@@ -73,6 +72,9 @@
     margin-left: 10px;
 }
 
+.widthNav .arrayDiv {
+    display: flex;
+}
 .widthNav div {
     display: flex;
 }
@@ -149,7 +151,7 @@
     padding: 14px;
     margin-bottom: 20px;
     position: relative;
-    z-index: 99999;
+    z-index: 0;
 }
 /*대댓글 태그용*/
 /* .replyAreaDiv{

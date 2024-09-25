@@ -5,7 +5,6 @@ export const delectByUser = async (referenceType,referenceKey) => {
     let sessionId = JSON.parse(sessionIdJson)?.sessionId
 
     if (!sessionId) {
-        console.log("로그인 안되어있음");
         return;
     }
 
@@ -33,7 +32,6 @@ export const delectByUser = async (referenceType,referenceKey) => {
     try {
         // axios.post로 API 요청
         const { data } = await axios.post(apiUrl, delectByUserDto);
-        console.log(data)
         return data;
     } catch (error) {
         console.error(`Error deleting ${referenceType}:`, error);

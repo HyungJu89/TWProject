@@ -10,6 +10,7 @@ import music from '../icon/20px/music.png';
 import food from '../icon/20px/food.png';
 import skill from '../icon/20px/skill.png';
 import economy from '../icon/20px/economy.png';
+import xBoxImg from '../icon/img/profile.png';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
@@ -85,7 +86,13 @@ function MainBanner({ channelId, route,
                                 <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */} 
                                 <div className={style.liveTitle}>{partnersLive?.liveTitle}</div>
                                     <div className={style.mainbannerDiv}>
-                                        <div className={style.divImg}> <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" /></div>
+                                        <div className={style.divImg}> 
+                                            {partnersLiveInfo?.channelImageUrl ?
+                                            <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
+                                            :
+                                            <img className={style.icon} src={xBoxImg} alt="Channel Icon" />
+                                            }
+                                        </div>
                                         <div className={style.textArea}>
                                             {partnersLiveInfo?.channelName}
                                             <div className={style.category}>

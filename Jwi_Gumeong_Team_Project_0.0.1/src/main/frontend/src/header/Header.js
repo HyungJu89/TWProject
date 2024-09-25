@@ -27,6 +27,7 @@ import n_heart_deactivation from '../icon/32px/n-heart-deactivation.png';
 import n_service_activation from '../icon/32px/n-service-activation.png';
 import n_service_deactivation from '../icon/32px/n-service-deactivation.png';
 import more from '../icon/24px/more.png';
+import xBoxImg from '../icon/img/profile.png';
 import '../App.css';
 import { useSelector } from 'react-redux';
 import AlarmModal from '../modal/AlarmModal.js';
@@ -129,6 +130,21 @@ function Icon({ navigate, userKey }) { /* 로그인 시 노출되는 알림 아�
     let [showNotifications, setShowNotifications] = useState(false); /* 알림 모달 표시 여부 */
     let [unreadCount, setUnreadCount] = useState(0); // 알림 개수
 
+    //모달함수
+    const modalRef = useRef(null);
+    const moreRef = useRef(null);
+    useEffect(() => {//영역외 클릭시 모달 닫히는 코드
+        const handleClickOutside = (event) => {
+            if (showNotifications &&
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
+                {setShowNotifications(false); } //신고, 삭제 닫음
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => { //클린업
+        document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showNotifications]);
+
     // 알림 개수 가져오기
     useEffect(() => {
         const fetchUnreadCount = async () => {
@@ -157,18 +173,19 @@ function Icon({ navigate, userKey }) { /* 로그인 시 노출되는 알림 아�
             <div className={styles.icon_notification}
                 onMouseEnter={() => setImg(notification_activation)}
                 onMouseLeave={() => setImg(notification_deactivation)}
-                onClick={() => setShowNotifications(!showNotifications)}>
+                onClick={() => setShowNotifications(!showNotifications)}
+                ref={modalRef}>
                 <img src={img} alt="Notification" />
                 {unreadCount > 0 && (
                     <div className={styles.redNotRead}>{unreadCount}</div> // 안 읽은 알림이 1개 이상일 때만 보이기
                 )}
             </div>
-            {showNotifications && <NotificationModal userKey={userKey} />}
+            {showNotifications && <NotificationModal moreRef={moreRef} userKey={userKey}  />}
         </div>
     );
 }
 
-function NotificationModal({ userKey }) { /* 알림 모달 */
+function NotificationModal({ userKey, moreRef }) { /* 알림 모달 */
     const [activeButton, setActiveButton] = useState(1); /* 현재 활성화된 버튼 상태 */
     const [showDropdown, setShowDropdown] = useState(false); /* more 아이콘 클릭 시 드롭다운 */
     const [modalOpen, setModalOpen] = useState(false);
@@ -233,7 +250,6 @@ function NotificationModal({ userKey }) { /* 알림 모달 */
                 {children}
                 {visible && (
                     <div className={`${styles.tooltipMsg} ${animationStarted ? styles.tooltipAnimation : ''}`}>
-                        {message}
                     </div>
                 )}
             </div>
@@ -387,7 +403,12 @@ function NotificationModal({ userKey }) { /* 알림 모달 */
                 <div className={styles.notificationBox} key={index}>
                     <div className={styles.notificationItem}>
                         <div className={`${styles.notificationDot} ${notification.read ? styles.noDot : ''}`}></div> {/* 안 읽은 알림 */}
-                        <img className={styles.iconImg} src={icon} alt="icon" />  {/* 프로필 or 이미지 */}
+                        {/* 프로필 or 이미지 */}
+                        {icon ?
+                            <img className={styles.iconImg} src={icon} alt="icon" />  
+                            :
+                            <img className={styles.iconImg} src={xBoxImg} alt="icon" />  
+                        }
                         <div className={styles.notificationItemContent} onClick={() => onRead(notification.alarmKey)}> {/* 내용 div onClick는 읽음처리 */}
                             <span className={styles.applyContent}>{content}</span> {/* 게시글 제목 */}
                             <span className={styles.applyId}>{subContent}</span> {/* 알림 설명 */}
@@ -400,7 +421,7 @@ function NotificationModal({ userKey }) { /* 알림 모달 */
     };
 
     return (
-        <div className={styles.notificationModal}>
+        <div className={styles.notificationModal} ref={moreRef}>
             <div className={styles.notificationHeader}>
                 <div className={styles.notificationTitle}>알림</div>
                 <div className={styles.moreBtnContainer}>

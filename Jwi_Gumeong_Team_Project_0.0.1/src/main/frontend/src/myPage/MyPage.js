@@ -34,7 +34,7 @@ function MyPage() {
 
     return (
         // loginSession === true ?
-            <div className={styles.MyPage}>
+            <div className={('fadein', styles.MyPage)}>
                 <TopicBtn topic={topic} settopic={settopic} />
                 {topic === '정보 수정' && <InfoEdit/>}
                 {topic === '내가 쓴 글' && <MyPosts />}
@@ -46,7 +46,9 @@ function MyPage() {
 
 function TopicBtn({ topic, settopic }) {
     return (
-        <div className={styles.Nav}>
+        <div className={styles.Nav}
+        style={{marginBottom: topic === '내가 쓴 글' ? '0px' : '10px'}}
+        >
             <div className={styles.topicdiv}>
                 <div 
                     onClick={() => settopic('정보 수정')}
@@ -57,7 +59,7 @@ function TopicBtn({ topic, settopic }) {
                 </div>
                 <div 
                     onClick={() => settopic('내가 쓴 글')}
-                    style={{ color: topic === '내가 쓴 글' ? 'black' : '#999999' }}
+                    style={{color: topic === '내가 쓴 글' ? 'black' : '#999999'}}
                 >
                     내가 쓴 글
                     {topic === '내가 쓴 글' && <div className={styles.bar} />}
