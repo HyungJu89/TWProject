@@ -55,7 +55,6 @@ function Emogi({textareaRef, modalRef, comment, setComment, content, setContent,
 
   const emojiPost = (emoji) => {
     const textarea = textareaRef.current;
-    console.log(textarea.value);
     if (!textarea) return;
       const start = textarea.selectionStart;//선택된 텍스트의 시작 위치 또는 커서의 위치
       const end = textarea.selectionEnd;//선택된 텍스트의 마지막
