@@ -19,7 +19,6 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
 
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
     };
 
     const bookMarkDebounce = useCallback(
@@ -29,7 +28,6 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
         []
     );
     
-
     const updateFavorite = async(favorite)=>{
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if (!sessionIdJson) {

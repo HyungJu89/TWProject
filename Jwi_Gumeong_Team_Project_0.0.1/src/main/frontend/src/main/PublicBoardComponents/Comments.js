@@ -31,7 +31,6 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
         setModalOpen(false);
         disPatch(clearPost())
         disPatch(openImgUiModalFalse())
-        navigate('/signIn');
         window.scrollTo(0, 0);
     };
 

@@ -30,7 +30,6 @@ function MiniPublicBoard() {
 
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
     };
     
     // 디바운스요 변수

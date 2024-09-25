@@ -26,7 +26,6 @@ function Main({ onLogout, isLoggedIn }) {
 
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
         window.scrollTo(0, 0);
     };
 

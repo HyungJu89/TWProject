@@ -67,7 +67,6 @@ function Search({ search }) {
 
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
     };
 
     const createChannelOnClick = () =>{

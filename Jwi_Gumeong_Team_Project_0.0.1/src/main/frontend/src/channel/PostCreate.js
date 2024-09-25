@@ -28,7 +28,6 @@ function PostCreact({channelKey}) {
     const [modalContent, setModalContent] = useState('');
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
     };
     const closeModalKeepURL = () => {
         setModalOpenKeepURL(false);
