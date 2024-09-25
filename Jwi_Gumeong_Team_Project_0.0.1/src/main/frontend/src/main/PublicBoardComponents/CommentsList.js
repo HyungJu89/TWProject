@@ -22,7 +22,8 @@ const CommentsList = forwardRef(function CommentsList(
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
             if (commentMoreON &&
-                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target)) { setCommentmoreON(false); } //신고, 삭제 닫음
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target)) 
+                { setCommentmoreON(false); } //신고, 삭제 닫음
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => { //클린업
@@ -58,8 +59,8 @@ const CommentsList = forwardRef(function CommentsList(
     return (
         <>
             <div>{/* 댓글 */}
-                <div className={styles.list} style={{ marginBottom: '0px' }} ref={ref}>
-                    {comment.state == "common" ?
+                <div className={styles.list} style={{ marginBottom: '0px' }} ref={ref} >
+                    {comment?.state == "common" ?
                         <>
                             <div className={styles.listNav}>
                                 <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{timeSetting(comment.createdAt)}</a></div>
@@ -76,7 +77,9 @@ const CommentsList = forwardRef(function CommentsList(
                                                 referenceKey={comment.commentKey}
                                                 myContent={comment.myComment}
                                                 right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'}
-                                                top={'30px'} />
+                                                top={'30px'} 
+                                                setCommentmoreON={setCommentmoreON}
+                                                />
                                         </div>
                                         : null} {/*신고, 삭제 모달*/}
                                 </div>
@@ -122,7 +125,9 @@ const CommentsList = forwardRef(function CommentsList(
                                                         referenceKey={reply.replyKey}
                                                         myContent={reply.myReply}
                                                         right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'}
-                                                        top={'30px'} />
+                                                        top={'30px'} 
+                                                        setCommentmoreON={setCommentmoreON}
+                                                        />
                                                 </div>
                                                 : null} {/*신고, 삭제 모달*/}
                                         </div>

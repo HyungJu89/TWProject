@@ -10,7 +10,7 @@ import { reportInfo } from '../../slice/ReportDtoSlice.js';
 import {delectByUser} from '../../recycleCode/delectByUser.js'
 import AlarmModal from '../../modal/AlarmModal.js';
 
-function MoreDeleteMini({ setCommentLode,state,nickName, referenceType, referenceKey, myContent, right, top }) {
+function MoreDeleteMini({ setCommentLode,state,nickName, referenceType, referenceKey, myContent, right, top, setCommentmoreON }) {
     const [modalContent, setModalContent] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
     const closeModal = () => {
@@ -36,13 +36,12 @@ function MoreDeleteMini({ setCommentLode,state,nickName, referenceType, referenc
             setModalOpen(true);
             return;
         }
-        
-
         if(state != "common"){
             setModalContent('삭제된 댓글입니다..');
             setModalOpen(true); 
             return; 
         }
+        setCommentmoreON(false);
         delectByUser(referenceType,referenceKey)
         setCommentLode((state) => state ? false : true)
     }

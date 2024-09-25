@@ -151,7 +151,10 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
 
     //댓글 불러오기
     useEffect(() => {
-        fetchData()
+        const timer = setTimeout(() => {
+            fetchData()
+        }, 300); // 3000ms = 3초
+        return () => clearTimeout(timer);
     }, [commentLode, isAsc])
 
     const replyOnclick = (state, index) => {
@@ -204,7 +207,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                 <>
                     {comments.info.comment.map((comment, index) => {
                         return (
-                            <div className={index === comments.info.comment.length-1 ? null : styles.mainArea_bodart} style={{marginTop:'20px'}} key={comment.commentKey}>
+                            <div className={index === comments.info.comment.length-1 ||(comment.state == "delete" && comment.replys[0].replyKey == 0) ? null : styles.mainArea_bodart} style={{marginTop:'20px'}} key={comment.commentKey}>
                                 <CommentsList
                                     index={index}
                                     postKey={postKey}
