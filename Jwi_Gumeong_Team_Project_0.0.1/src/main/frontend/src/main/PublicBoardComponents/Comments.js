@@ -41,7 +41,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     //댓글 길이 저장
     const [commentLength, setCommentLength] = useState(0);
     //댓글작성 버튼 색상
-    const [commentButtonColor, setCommentButtonColor] = useState('#FF8901');
+    const [commentButtonColor, setCommentButtonColor] = useState('#BBBBBB');
     //댓글 길이 text 색상
     const [commentTextColor, setCommentTextColor] = useState('#BBBBBB');
     //댓글 정렬순서
@@ -64,8 +64,14 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
         setComment(e.target.value)
         setCommentLength(e.target.value.length)
         setCommentButtonColor(e.target.value.length <= commentsLimit ? '#FF8901' : '#BBBBBB')
+        setCommentButtonColor(e.target.value.length > 3 ? '#FF8901' : '#BBBBBB')
         setCommentTextColor(e.target.value.length <= commentsLimit ? '#BBBBBB' : '#EC000E')
     };
+
+    useEffect(()=>{
+        setCommentLength(comment.length);
+        setCommentButtonColor(commentLength >= 3 && comment.length <= commentsLimit  ? '#FF8901' : '#BBBBBB')
+    },[comment,commentLength]);
 
     //모달함수
     let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off 
@@ -86,8 +92,8 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
 
     //댓글 작성 
     const createComment = async () => {
-        if (commentsLimit < commentLength) {
-            return alert('너무 김');
+        if (commentsLimit < commentLength || commentLength < 3) {
+            return;
         }
         // 추가로 로직필요하면 여기에
         let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -113,6 +119,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
             console.error('Error creating channel:', error);
         }
         setComment('');
+        setCommentLength(0);
         setCommentLode((state) => state ? false : true)
     }
 

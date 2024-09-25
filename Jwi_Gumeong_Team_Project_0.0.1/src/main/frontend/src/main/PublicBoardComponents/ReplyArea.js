@@ -18,11 +18,15 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLod
     //댓글 길이 저장
     const [replyLength, setReplyLength] = useState(0);
     //댓글작성 버튼 색상
-    const [replyButtonColor, setReplyButtonColor] = useState('#FF8901');
+    const [replyButtonColor, setReplyButtonColor] = useState('#BBBBBB');
     //댓글 길이 text 색상
     const [replyTextColor, setReplyTextColor] = useState('#BBBBBB');
 
     const replyCreate = async () => {
+        if (replysLimit < replyLength || replyLength < 3) {
+            return;
+        }
+
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if (!sessionIdJson) {
             return alert('로그인되어있지않습니다.')
@@ -60,9 +64,14 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLod
         }
         setReply(e.target.value)
         setReplyLength(e.target.value.length)
-        setReplyButtonColor(e.target.value.length <= replysLimit ? '#FF8901' : '#BBBBBB')
+        setReplyButtonColor(replyLength >= 3 && reply.length <= replysLimit  ? '#FF8901' : '#BBBBBB')
         setReplyTextColor(e.target.value.length <= replysLimit ? '#BBBBBB' : '#EC000E')
     };
+
+    useEffect(()=>{
+        setReplyLength(reply.length);
+        setReplyButtonColor(replyLength >= 3 && reply.length <= replysLimit  ? '#FF8901' : '#BBBBBB')
+    },[reply,replyLength]);
 
     //모달함수
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
@@ -98,7 +107,9 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLod
                 <div className={styles.commentNav}>
                     <img className={styles.iconimg} ref={moreRef} onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
                     {EmojiOn &&<Emogi  now={'comments'} modalRef={modalRef} textareaRef={textareaRef} setComment={setReply} />}
-                    <div style={{ color: replyTextColor }}>{replyLength}/{replysLimit}<button style={{ backgroundColor: replyButtonColor }} onClick={() => replyCreate()}>등록</button></div>
+                    <div style={{ color: replyTextColor }}>
+                        {replyLength}/{replysLimit}
+                    <button style={{ backgroundColor: replyButtonColor }} onClick={() => replyCreate()}>등록</button></div>
                 </div>
             </div>
         </div>
