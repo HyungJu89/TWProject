@@ -8,10 +8,12 @@ import { reportInfo } from '../../slice/ReportDtoSlice.js';
 import { openModal } from '../../slice/ReportModalSlice.js';
 import {delectByUser} from '../../recycleCode/delectByUser.js'
 import AlarmModal from '../../modal/AlarmModal.js';
+import { useNavigate } from 'react-router-dom';
 
 function MoreDelete({ state, nickName, referenceType, referenceKey, modalRef, right, top, myContent }) {
     const [modalContent, setModalContent] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
+    const navigate = useNavigate();
     const closeModal = () => {
         setModalOpen(false);
     };
@@ -39,7 +41,7 @@ function MoreDelete({ state, nickName, referenceType, referenceKey, modalRef, ri
                 return
             }
             delectByUser(referenceType,referenceKey)
-            setCommentLode((state) => state ? false : true)
+            navigate(0);
         }
 
 
