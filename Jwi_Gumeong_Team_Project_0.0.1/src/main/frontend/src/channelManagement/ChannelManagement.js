@@ -17,7 +17,6 @@ function ChannelManagement() {
     const { ManagementChannelId } = location.state || {};
     const [openTap, setOpenTap] = useState(0);
     const [v2ComingSoon, setV2ComingSoon] = useState(false);//2차 버전에서 다시 부활
-
     // 모달 상태
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
@@ -62,7 +61,6 @@ function ChannelManagement() {
             return openModal('로그인 되어있지않습니다. ', () => navigate(-1));
         }
     })
-
 
     return (
         <div className={style.createMain}>

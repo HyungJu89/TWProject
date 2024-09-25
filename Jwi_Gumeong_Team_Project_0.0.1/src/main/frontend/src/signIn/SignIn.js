@@ -4,8 +4,8 @@ import styles from './style/SignIn.module.css';
 import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { getUserInfo,fetchSessionId } from '../slice/loginSlice.js';
+import { useDispatch } from 'react-redux';
+import { fetchSessionId } from '../slice/loginSlice.js';
 import { setLoggedIn } from '../slice/sessionSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
 
@@ -13,7 +13,7 @@ function SignIn() {
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);    
     // 세션화성공
-    const userState = useSelector((state) => state.session);
+    // const userState = useSelector((state) => state.session);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     //모든 정보가 입력되면 버튼 활성화
@@ -83,6 +83,9 @@ function SignIn() {
                     dispatch(fetchSessionId(email));
                     dispatch(setLoggedIn(true)); // 로그인 성공 후 상태 업데이트
                     navigate('/');
+                    setTimeout(() => {
+                        window.location.reload(); // 새로 고침을 하여 알림 데이터 표시
+                    }, 500);
                 }
                 if(userResponse.data.wrongCount >= 5){
                     setModalContent('비밀번호를 5회 이상 틀리셨습니다!');

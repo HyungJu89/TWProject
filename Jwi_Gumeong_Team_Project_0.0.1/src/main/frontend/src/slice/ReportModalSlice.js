@@ -15,7 +15,6 @@ let reportModal = createSlice({
 
 })
 
-
 export let {openModal, offModal} = reportModal.actions
 export default reportModal;
 

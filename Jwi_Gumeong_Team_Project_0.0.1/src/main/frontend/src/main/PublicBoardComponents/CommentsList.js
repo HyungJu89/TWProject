@@ -147,7 +147,9 @@ const CommentsList = forwardRef(function CommentsList(
                                 }
                             </div>
                         )
-                    })}
+                    }
+                )
+            }
         </>
     )
 });

@@ -14,15 +14,12 @@ import illustration01 from '../icon/img/illustration01.png';
 import TopicBtn from '../recycleCode/TopicBtn.js'
 
 function AllTopic() {
-    let navigate = useNavigate();
-    let [topic, settopic] = useState(0);
-    let [loginOn, setLoginOn] = useState(false);
-
+    const navigate = useNavigate();
+    const [topic, settopic] = useState(0);
+    const [loginOn, setLoginOn] = useState(false);
     const [channel, setChannel] = useState('');
     const [postList, setPostList] = useState([]);
     const [postPage, setPostPage] = useState(1);
-
-
     
     const searchRecommendedPost = async () => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -68,7 +65,6 @@ function AllTopic() {
         }
     };
 
-
     const searchAllPost = async () => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         let sessionId = null;
@@ -90,7 +86,6 @@ function AllTopic() {
         }
     };
 
-
     useEffect(() => {
         setPostList([]);
         switch (topic) {
@@ -104,18 +99,13 @@ function AllTopic() {
                 searchAllPost()
                 break;
             default:
-
                 break;
         }
-
     }, [topic,postPage]);
 
     useEffect(() => {
         setPostPage(1)
     }, [topic]);
-
-
-
 
     return (
         <div >
@@ -135,11 +125,9 @@ function AllTopic() {
                         <div className={styles.nonPostList}>게시글이 없습니다.</div>
                     }</>
                     }
-
                     {(postList.success && postList.paging?.pageCount > 1) &&
                         <Paging paging={postList.paging} postPage={postPage} setPostPage={setPostPage} />
                     }
-
                 </div>
                 {/* 오른쪽 로그인, 추천 영역 */}
                 <PublicMenu loginOn={loginOn} setLoginOn={setLoginOn} channel={channel} />
@@ -147,8 +135,5 @@ function AllTopic() {
         </div>
     );
 }
-
-
-
 
 export default AllTopic;

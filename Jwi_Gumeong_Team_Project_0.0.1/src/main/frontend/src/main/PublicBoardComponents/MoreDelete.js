@@ -26,23 +26,21 @@ function MoreDelete({ state, nickName, referenceType, referenceKey, modalRef, ri
         dispatch(openModal())
     }
 
-        const delectOnClick = () => {
-            let sessionIdJson = sessionStorage.getItem('sessionId');
-            if(!sessionIdJson){
-                setModalContent('로그인 되어 있지 않습니다.');
-                setModalOpen(true);
-                return;
-            }
-            if(state != "common"){
-                setModalContent('이미 삭제된 게시글입니다..');
-                setModalOpen(true);
-                return
-            }
-            delectByUser(referenceType,referenceKey)
-            setCommentLode((state) => state ? false : true)
+    const delectOnClick = () => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if(!sessionIdJson){
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
         }
-
-
+        if(state != "common"){
+            setModalContent('이미 삭제된 게시글입니다..');
+            setModalOpen(true);
+            return
+        }
+        delectByUser(referenceType,referenceKey)
+        setCommentLode((state) => state ? false : true)
+    }
 
     return (
         <div ref={modalRef} className={styles.moreUi} style={{ right: right, top: top }}>
@@ -59,6 +57,5 @@ function MoreDelete({ state, nickName, referenceType, referenceKey, modalRef, ri
         </div>
     )
 }
-
 
 export default MoreDelete;

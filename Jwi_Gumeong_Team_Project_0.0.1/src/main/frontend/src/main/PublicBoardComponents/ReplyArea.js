@@ -49,7 +49,6 @@ function ReplyArea({ postKey, commentKey, replyKey, replyNickName, setCommentLod
         setCommentLode((state) => state ? false : true);
         setReply('');
         onClear();
-
     }
 
     const handleInput = (e) => {//스크롤 늘어나게

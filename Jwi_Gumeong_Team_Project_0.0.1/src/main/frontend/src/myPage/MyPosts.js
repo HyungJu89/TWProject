@@ -19,7 +19,6 @@ function MyPosts() {
     // 닫기
     const [onClose, setOnClose] = useState(null);
 
-
     const myPostSelect = async () => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         let sessionId = null;
@@ -64,9 +63,7 @@ function MyPosts() {
         }
         setPostList([]);
         myPostSelect()
-
     }, [postPage]);
-
 
     return (
         <div className={styles.MyPosts}>

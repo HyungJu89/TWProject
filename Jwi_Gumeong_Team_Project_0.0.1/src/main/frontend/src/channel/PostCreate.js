@@ -24,14 +24,9 @@ function PostCreact({channelKey}) {
     // 이미지 어레이
     const [selectedImage, setSelectedImage] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalOpenKeepURL, setModalOpenKeepURL] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
-    };
-    const closeModalKeepURL = () => {
-        setModalOpenKeepURL(false);
     };
 
     // text 의 상태 저장시켜줌, 길이가 300이 넘어갈때 글자 색 변경
@@ -84,12 +79,12 @@ function PostCreact({channelKey}) {
         let sessionId = JSON.parse(sessionIdJson).sessionId
         if(content.length < 3){
             setModalContent('내용이 너무 짧아요.');
-            setModalOpenKeepURL(true);
+            setModalOpen(true);
             return;
         }
         if(content.length > contentLimit){
             setModalContent('내용이 너무 길어요.');
-            setModalOpenKeepURL(true);
+            setModalOpen(true);
             return;
         }
 
@@ -122,26 +117,26 @@ function PostCreact({channelKey}) {
         window.scrollTo(0, 0);  // 페이지 로드 후 스크롤 위치를 (0, 0)으로 설정
     };
 
-        //모달함수
-        let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
-        const modalRef = useRef(null);
-        const moreRef = useRef(null);
-        useEffect(() => {//영역외 클릭시 모달 닫히는 코드
-            const handleClickOutside = (event) => {
-                if (EmojiOn &&
-                    !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
-                    { setEmojiOn(false); } //신고, 삭제 닫음
-            };
-            document.addEventListener('mousedown', handleClickOutside);
-            return () => { //클린업
-            document.removeEventListener('mousedown', handleClickOutside);
-            };
-        }, [EmojiOn]);
+    //모달함수
+    let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
+    const modalRef = useRef(null);
+    const moreRef = useRef(null);
+    useEffect(() => {//영역외 클릭시 모달 닫히는 코드
+        const handleClickOutside = (event) => {
+            if (EmojiOn &&
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
+                { setEmojiOn(false); } //신고, 삭제 닫음
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => { //클린업
+        document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [EmojiOn]);
 
-        useEffect(() => {
-            EmojiOn && (contentRef.current.innerText=content);
-            setHasContent(content.trim().length !== 0)
-        }, [content]);
+    useEffect(() => {
+        EmojiOn && (contentRef.current.innerText=content);
+        setHasContent(content.trim().length !== 0)
+    }, [content]);
 
     return (
         <div className={style.postCreact}>{/*게시글 작성 box*/}
@@ -189,9 +184,6 @@ function PostCreact({channelKey}) {
 
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
-            }
-            {modalOpenKeepURL && 
-                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModalKeepURL} />
             }
         </div>
     )
