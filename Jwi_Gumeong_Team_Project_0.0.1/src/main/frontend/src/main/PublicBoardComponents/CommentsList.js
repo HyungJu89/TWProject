@@ -60,7 +60,7 @@ const CommentsList = forwardRef(function CommentsList(
     return (
         <>
             <div>{/* 댓글 */}
-                <div className={styles.list} style={{ marginBottom: '0px' }}  ref={ref}>
+                <div className={styles.list} style={{ marginBottom: '0px'}}  ref={ref}>
                     <div className={styles.listNav}>
                         <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{timeSetting(comment.createdAt)}</a></div>
                         <div>

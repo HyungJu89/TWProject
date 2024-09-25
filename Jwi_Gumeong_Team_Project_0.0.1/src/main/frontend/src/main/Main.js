@@ -168,7 +168,7 @@ function Main({ onLogout, isLoggedIn }) {
                     <>{postList.search ?
                             <div className="fadein">
                                 {postList.search.map((postInfo, index) =>
-                                    <PublicBoard key={index} postInfo={postInfo} />
+                                    <PublicBoard key={index} postInfo={postInfo} index={index} />
                                 )}
                             </div> : 
                         <div className={styles.nonPostList}>게시글이 없습니다.</div>

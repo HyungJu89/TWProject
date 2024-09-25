@@ -20,7 +20,7 @@ import AlarmModal from '../modal/AlarmModal.js';
 import { formatDistanceToNow } from 'date-fns'; // 아래와 같이 사용되는 날짜 라이브러리
 import { ko } from 'date-fns/locale'; // 한국어 설정
 
-function PublicBoard({ postInfo }) {
+function PublicBoard({ postInfo,index }) {
     let disPatch = useDispatch();
     const [heart, setHeart] = useState(false); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(0);
@@ -124,7 +124,7 @@ function PublicBoard({ postInfo }) {
     }
 
     return (
-        <div className={('fadein', styles.mainDiv)}>
+        <div className={('fadein', styles.mainDiv)} style={{ zIndex: -Number(index) }}>
             {postInfo.postChannel && (
                 <ChannelTitle postChannel={postInfo.postChannel} />
             )}

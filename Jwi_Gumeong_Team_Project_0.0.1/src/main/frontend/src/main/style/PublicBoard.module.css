@@ -1,4 +1,6 @@
 .mainDiv {
+    position: relative;
+    z-index: -5;
     width: 726px;
     background-color: white;
     margin: 10px 0px;
@@ -42,7 +44,7 @@
 
 /* nav */
 .widthNav {
-    z-index: 1;
+    z-index: -1;
     position: relative;
     width: 726px;
     height: 24px;
@@ -87,6 +89,7 @@
 /*본문*/
 .contentArea {
     position: relative;
+    z-index: -1;
     width: 726px;
     display: flex;
     word-wrap: break-word;
@@ -145,6 +148,8 @@
     border-radius: 10px;
     padding: 14px;
     margin-bottom: 20px;
+    position: relative;
+    z-index: 99999;
 }
 /*대댓글 태그용*/
 /* .replyAreaDiv{
@@ -186,10 +191,9 @@
     padding: 0px;
 }
 
-
-
 .commentNav {
     position: relative;
+    z-index: 9999;
     height: 34px;
     display: flex;
     align-items: center;
@@ -220,6 +224,7 @@
 }
 
 .list {
+    position: relative;
     margin-bottom: 20px;
     max-width: 100%;
     width: 100%;
@@ -232,7 +237,7 @@
     max-width: 100%;
     min-width: 404px;
     position: relative; /*현재 최지은의 가장 큰 적*/
-    z-index: 1;
+    z-index: -1;
 }
 
 .listNav .moreImg {
