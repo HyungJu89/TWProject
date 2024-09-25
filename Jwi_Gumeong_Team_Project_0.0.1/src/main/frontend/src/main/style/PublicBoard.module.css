@@ -235,11 +235,12 @@
     align-items: center;
     max-width: 100%;
     min-width: 404px;
-    position: relative; /*현재 최지은의 가장 큰 적*/
-    z-index: -1;
+    position: relative; 
 }
 
 .listNav .moreImg {
+    position: relative;
+    z-index: 5;
     height: 20px;
     cursor: pointer;
 }
@@ -251,6 +252,8 @@
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 6px;
+    position: relative;
+    z-index: -1;
 }
 
 .listName .time {
