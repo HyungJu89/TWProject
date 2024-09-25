@@ -29,3 +29,29 @@
     height: 2px;
     background-color: #FF8901;
 }
+
+.Nav .topicdiv div.active::after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    top: 41px;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 2px;
+    background-color: #FF8901;
+    border-radius: 18px;
+}
+
+.Nav .topicdiv div:hover::after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    top: 41px;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 2px;
+    background-color: #FF8901;
+    border-radius: 18px;
+}
