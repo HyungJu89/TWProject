@@ -37,37 +37,10 @@ function Header({ onClickSearch, onLogout, isLoggedIn }) {
     const [searchInput, setSearchInput] = useState('');
     const [searchInputs, setSearchInputs] = useState('');
     let [recentSearchData, setRecentSearchData] = useState([]);
-    const [unreadCount, setUnreadCount] = useState(0); // 안 읽은 알림 개수
-    const [notifications, setNotifications] = useState([]); // 알림 데이터
     let navigate = useNavigate();
     let location = useLocation();
     let popModalRef = useRef(null);
     let popinputRef = useRef(null);
-
-    // 알림 데이터를 가져오는 함수
-    const fetchNotifications = async () => {
-        if (userKey) {
-            try {
-                const countResponse = await axios.post('/alarm/count/unread', null, { params: { userKey } });
-                if (countResponse.data.result === "success") {
-                    setUnreadCount(countResponse.data.unreadCount); // 안 읽은 알림 개수 설정
-                }
-                const listResponse = await axios.post('/alarm/list', null, { params: { userKey } });
-                if (listResponse.data.result === "success") {
-                    setNotifications(listResponse.data.list); // 알림 리스트 설정
-                }
-            } catch (error) {
-                console.error("알림 가져오기 에러: ", error);
-            }
-        }
-    };
-
-    // 로그인 후 알림 데이터를 가져오기
-    useEffect(() => {
-        fetchNotifications(); // 로그인 후 알림 데이터를 가져옴
-        const intervalId = setInterval(fetchNotifications, 30000); // 30초마다 알림 데이터 업데이트
-        return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
-    }, [userKey]);
 
     const handleEnter = (e) => {
         if (e.key === "Enter" || e === "enter") {
@@ -138,7 +111,6 @@ function Header({ onClickSearch, onLogout, isLoggedIn }) {
                             navigate={navigate}
                             userKey={userKey}
                             isLoggedIn={isLoggedIn}
-                            notifications={notifications}
                         />
                         <div onClick={onLogout} className={styles.signInBtn}>로그아웃</div>
                     </div>
@@ -152,7 +124,7 @@ function Header({ onClickSearch, onLogout, isLoggedIn }) {
     );
 }
 
-function Icon({ navigate, userKey, notifications }) { /* 로그인 시 노출되는 알림 아이콘 UI */
+function Icon({ navigate, userKey }) { /* 로그인 시 노출되는 알림 아이콘 UI */
     let [img, setImg] = useState(notification_deactivation); /*알림 hover 이팩트 변환용*/
     let [showNotifications, setShowNotifications] = useState(false); /* 알림 모달 표시 여부 */
     let [unreadCount, setUnreadCount] = useState(0); // 알림 개수
@@ -173,7 +145,7 @@ function Icon({ navigate, userKey, notifications }) { /* 로그인 시 노출되
         };
         fetchUnreadCount();
 
-        const intervalId = setInterval(fetchUnreadCount, 30000); // 30초마다 호출
+        const intervalId = setInterval(fetchUnreadCount, 1000); // 1초마다 호출
         return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
     }, [userKey]);
 
@@ -191,16 +163,43 @@ function Icon({ navigate, userKey, notifications }) { /* 로그인 시 노출되
                     <div className={styles.redNotRead}>{unreadCount}</div> // 안 읽은 알림이 1개 이상일 때만 보이기
                 )}
             </div>
-            {showNotifications && <NotificationModal userKey={userKey} notifications={notifications} />}
+            {showNotifications && <NotificationModal userKey={userKey} />}
         </div>
     );
 }
 
-function NotificationModal({ userKey, notifications }) { /* 알림 모달 */
+function NotificationModal({ userKey }) { /* 알림 모달 */
     const [activeButton, setActiveButton] = useState(1); /* 현재 활성화된 버튼 상태 */
     const [showDropdown, setShowDropdown] = useState(false); /* more 아이콘 클릭 시 드롭다운 */
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
+    const [unreadCount, setUnreadCount] = useState(0); // 안 읽은 알림 개수
+    const [notifications, setNotifications] = useState([]); // 알림 데이터
+
+    // 알림 데이터를 가져오는 함수
+    const fetchNotifications = async () => {
+        if (userKey) {
+            try {
+                const countResponse = await axios.post('/alarm/count/unread', null, { params: { userKey } });
+                if (countResponse.data.result === "success") {
+                    setUnreadCount(countResponse.data.unreadCount); // 안 읽은 알림 개수 설정
+                }
+                const listResponse = await axios.post('/alarm/list', null, { params: { userKey } });
+                if (listResponse.data.result === "success") {
+                    setNotifications(listResponse.data.list); // 알림 리스트 설정
+                }
+            } catch (error) {
+                console.error("알림 가져오기 에러: ", error);
+            }
+        }
+    };
+
+    // 로그인 후 알림 데이터를 가져오기
+    useEffect(() => {
+        fetchNotifications(); // 로그인 후 알림 데이터를 가져옴
+        const intervalId = setInterval(fetchNotifications, 30000); // 30초마다 알림 데이터 업데이트
+        return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+    }, [userKey]);
 
     // 툴팁
     const Tooltip = ({ children, message }) => {
@@ -258,6 +257,13 @@ function NotificationModal({ userKey, notifications }) { /* 알림 모달 */
         try {
             const response = await axios.post('/alarm/delete', null, { params: { notificationId } });
             if (response.data.result === 'success') {
+                // 삭제된 알림이 읽지 않은 상태였다면 읽지 않은 알림 개수 감소
+                const deletedNotification = notifications.find(notification => notification.alarmKey === notificationId);
+                // 삭제된 알림이 읽지 않은 상태였으면 unreadCount 감소
+                if (deletedNotification && !deletedNotification.read) {
+                    setUnreadCount(prevUnreadCount => Math.max(0, prevUnreadCount - 1));
+                }
+                // 알림 목록 업데이트
                 setNotifications(notifications.filter(notification => notification.alarmKey !== notificationId));
             } else {
                 setModalContent('알람 삭제에 실패 하였습니다.\n잠시 후 다시 시도해 주세요 ');
@@ -273,8 +279,12 @@ function NotificationModal({ userKey, notifications }) { /* 알림 모달 */
         try {
             const response = await axios.post('/alarm/read', null, { params: { notificationId } });
             if (response.data.result === 'success') {
+                // 알림을 읽은 후 상태 업데이트
                 setNotifications(notifications.map(notification =>
-                    notification.alarmKey === notificationId ? { ...notification, read: true } : notification));
+                    notification.alarmKey === notificationId ? { ...notification, read: true } : notification
+                ));
+                // 읽지 않은 알림 개수 감소
+                setUnreadCount(prevUnreadCount => Math.max(0, prevUnreadCount - 1));
             } else {
                 setModalContent('알람 읽기에 실패 하였습니다.\n잠시 후 다시 시도해 주세요 ');
                 setModalOpen(true);
@@ -289,6 +299,8 @@ function NotificationModal({ userKey, notifications }) { /* 알림 모달 */
         try {
             await axios.post('/alarm/read/all', null, { params: { userKey } });
             setNotifications(notifications.map(notification => ({ ...notification, read: true })));
+            // 모든 알림을 읽었으므로 읽지 않은 알림 개수를 0으로 설정
+            setUnreadCount(0);
         } catch (error) {
             console.log("모두 읽음 에러: " + error.message);
         }
@@ -299,6 +311,8 @@ function NotificationModal({ userKey, notifications }) { /* 알림 모달 */
         try {
             await axios.post('/alarm/delete/all', null, { params: { userKey } });
             setNotifications([]);
+            // 모든 알림을 삭제했으므로 읽지 않은 알림 개수를 0으로 설정
+            setUnreadCount(0);
         } catch (error) {
             console.log("전체 삭제 에러: " + error.message);
         }
