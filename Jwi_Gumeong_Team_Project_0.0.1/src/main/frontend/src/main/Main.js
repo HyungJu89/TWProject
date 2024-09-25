@@ -13,6 +13,7 @@ import MainBanner from '../channel/MainBanner.js';
 import refresh from '../icon/24px/refresh.png';
 import TopicBtn from '../recycleCode/TopicBtn.js';
 import AlarmModal from '../modal/AlarmModal.js';
+import xBoxImg from '../icon/img/profile.png';
 
 function Main({ onLogout, isLoggedIn }) {
     let navigate = useNavigate();
@@ -166,7 +167,11 @@ function Main({ onLogout, isLoggedIn }) {
                                 <>{hotBoardList.info.length > 0 ?
                                     hotBoardList.info.map((item, i) =>
                                         <div onClick={() => { navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.channel} key={i}>
+                                            {item.imageUrl ?
                                             <div className={styles.imgDiv}><img src={item.imageUrl} /></div>
+                                            :
+                                            <div className={styles.imgDiv}><img src={xBoxImg} /></div>
+                                            }
                                             <div className={styles.text}>{item.name}</div></div>
                                     ) : <div className={styles.nulltext}>아직 인기 게시판이 갱신되지 않았어요 :3</div>}
                                 </>

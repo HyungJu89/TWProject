@@ -10,6 +10,7 @@ import check_deactivation from '../icon/24px/check-deactivation.png'
 import check_activation from '../icon/24px/check-activation.png'
 import { useChannel } from '../recycleCode/ApiQuery.js';
 import AlarmModal from '../modal/AlarmModal.js';
+import xBoxImg from '../icon/img/profile.png';
 
 
 function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
@@ -120,7 +121,11 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
             <div className={style.announcementArea}>
                 <div className={style.formGroup}>
                     <div className={style.imgDiv}>
-                    <img src={channelApi.channelImageUrl} alt="채널 이미지" />
+                    {channelApi.channelImageUrl ?
+                        <img src={channelApi.channelImageUrl} alt="채널 이미지" />
+                        :
+                        <img src={xBoxImg} alt="채널 이미지" />
+                    }
                     </div>
                     <div className={style.streammerInfo}>
                         <div className={style.channelName}>{channelApi.channelName}</div>
