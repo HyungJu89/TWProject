@@ -485,7 +485,7 @@
     height: 17px;
     padding: 2px 6px 2px 6px;
     border-radius: 83px;
-    opacity: 0px;
+    /* opacity: 0px; */
     background-color: #FF8901;
 
     /* 글자 */
@@ -543,7 +543,7 @@
     height: 240px;
     gap: 0px;
     border-radius: 20px;
-    opacity: 0px;
+    /* opacity: 0px; */
     background-color: #FFFFFF;
 
     font-size: 14px;

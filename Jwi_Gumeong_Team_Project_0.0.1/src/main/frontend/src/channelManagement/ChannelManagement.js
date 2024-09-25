@@ -8,10 +8,11 @@ import enroll from '../icon/32px/enroll.png';
 import give_up from '../icon/32px/give-up.png';
 import '../App.css';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function ChannelManagement() {
+    let navigate = useNavigate();
     const location = useLocation();
     const { ManagementChannelId } = location.state || {};
     const [openTap, setOpenTap] = useState(0);
@@ -45,7 +46,7 @@ function ChannelManagement() {
         if (onClose) {
             onClose();
         }
-    };
+    }
 
     // 모달 열기
     const openModal = (content, close = null) => {
@@ -54,6 +55,14 @@ function ChannelManagement() {
         setOnClose(() => close);
         setModalOpen(true);
     };
+
+    useEffect(()=>{
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if (!sessionIdJson) {
+            return openModal('로그인 되어있지않습니다. ', () => navigate(-1));
+        }
+    })
+
 
     return (
         <div className={style.createMain}>

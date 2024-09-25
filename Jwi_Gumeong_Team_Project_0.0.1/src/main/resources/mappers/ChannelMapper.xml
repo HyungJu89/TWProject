@@ -23,6 +23,7 @@
 			channel.name,
 			channel.followerCount,
 			channel.imageUrl,
+			channel.updatedAt,
 			COALESCE(COUNT(favorites.channelKey), 0) AS favoriteCount ,
 			<!-- 단순하게 case 문으로 생각하면 됨 CASE WHEN EXISTS 안의 값이  특정 조건을 만족하는 데이터가 있는지-->
 			<!--  EXISTS 는 서브쿼리 안에 행이 존재하면 트루가 반환됨. -->
@@ -49,6 +50,10 @@
 		GROUP BY 
         	channel.channelKey
 	</select>
+	
+	<update id="followerCountUpdate" parameterType="int">
+		UPDATE channel set followerCount = #{followerCount} WHERE channelKey = #{channelKey}
+	</update>
 	
     <!-- 인기게시판 :: 일정 기간 내 게시글 -->
     <select id="HotBoardGet" parameterType="map" resultType="com.jwi.work.channel.dto.channelDto.ChannelDto">

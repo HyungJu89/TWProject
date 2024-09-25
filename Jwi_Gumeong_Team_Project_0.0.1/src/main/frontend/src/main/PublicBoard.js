@@ -124,7 +124,7 @@ function PublicBoard({ postInfo }) {
     }
 
     return (
-        <div className={styles.mainDiv}>
+        <div className={('fadein', styles.mainDiv)}>
             {postInfo.postChannel && (
                 <ChannelTitle postChannel={postInfo.postChannel} />
             )}
@@ -134,10 +134,11 @@ function PublicBoard({ postInfo }) {
                 {moreON && <MoreDelete state = {postInfo.state} modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-82px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
-                <div className={styles.text}>
+                {imgBeing.length > 0 ?
+                <>
+                    <div className={styles.text}>
                     {postInfo.content}
-                </div>
-                {imgBeing.length > 0 &&
+                    </div>
                     <div onClick={imgOnclick} className={styles.imgClick}>{/* 이미지 */}
                         <div className={styles.imgArea}>
                             <img src={`http://localhost:9090/images/${imgBeing[0]}`} />
@@ -147,6 +148,12 @@ function PublicBoard({ postInfo }) {
                                 </div>}
                         </div>
                     </div>
+                </>:
+                    <>
+                    <div className={styles.text2}>
+                    {postInfo.content}
+                    </div>
+                    </>
                 }
             </div>
             <div className={styles.widthNav} style={{ marginBottom: '0px' }}>{/* 하단 댓글,좋아요,공유 */}

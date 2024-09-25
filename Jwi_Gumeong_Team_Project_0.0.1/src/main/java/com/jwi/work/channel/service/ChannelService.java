@@ -1,5 +1,6 @@
 package com.jwi.work.channel.service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.jwi.work.api.chzzkApi.dto.ChannelApiInfoDto;
+import com.jwi.work.api.chzzkApi.util.ChzzkAPIInfo;
 import com.jwi.work.channel.dto.bodyDto.ChannelCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto;
 import com.jwi.work.channel.dto.channelDto.ChannelDto;
@@ -25,6 +28,9 @@ public class ChannelService {
 	private ChannelMapper channelMapper;
 	@Autowired
 	private ChannelRepository channelRepository;
+	
+	@Autowired
+	private ChzzkAPIInfo chzzkAPIInfo;
 
 	public boolean channelCheck(String channelId) {
 		// 채널 생성이 안되어있으면 true 가 리턴이 된다.
@@ -66,10 +72,26 @@ public class ChannelService {
 
 	public AnswerDto<ChannelDto> channelGet(String sessionId,String channelId) {
 		AnswerDto<ChannelDto> answer = new AnswerDto<ChannelDto>();
-		System.out.println(channelMapper.channelGet(sessionId,channelId));
+
 		try {
 			if(channelMapper.channelCheck(channelId) == 1) {
-				answer.setInfo(channelMapper.channelGet(sessionId,channelId));
+				ChannelDto channelInfo = channelMapper.channelGet(sessionId,channelId);
+		        // 현재 시간을 가져옴
+		        LocalDateTime now = LocalDateTime.now();
+//
+//		        // 두 시간 사이의 차이를 구함
+		        Duration duration = Duration.between(channelInfo.getUpdatedAt(), now);
+//		        
+				if(duration.toHours() >= 24) {
+					ChannelApiInfoDto apiInfoDto = chzzkAPIInfo.channelApiInfoGet(channelId).getContent();
+					
+
+					
+					channelMapper.followerCountUpdate(apiInfoDto.getFollowerCount(), channelInfo.getChannelKey());
+
+				}
+				channelInfo.setUpdatedAt(null);
+				answer.setInfo(channelInfo);
 				answer.setSuccess(true);
 			}else {
 				answer.setSuccess(false);

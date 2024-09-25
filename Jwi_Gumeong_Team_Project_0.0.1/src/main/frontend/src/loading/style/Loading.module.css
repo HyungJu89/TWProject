@@ -1,0 +1,32 @@
+.main{
+    display: flex;
+    align-items: center;
+    height: 90vh;
+}
+.loading {
+    margin: auto;
+    width: 700px;
+    height: 191px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: #BBBBBB;
+    font-size: 20px;
+}
+.loading img{
+    width: 126px;
+    height: 126px;
+}
+
+.spin{
+    animation: rotate 4s linear infinite; /* 4초 동안 회전, 무한 반복 */
+}
+@keyframes rotate {
+    from {
+    transform: rotate(0deg);
+    }
+    to {
+    transform: rotate(360deg);
+    }
+}

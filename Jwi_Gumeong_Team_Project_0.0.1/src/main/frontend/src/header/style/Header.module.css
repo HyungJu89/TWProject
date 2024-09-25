@@ -309,7 +309,7 @@ body{
     width: 40px;
     height: 40px;
     gap: 0px;
-    opacity: 0px;
+    /* opacity: 0px; */
     border-radius: 50%;
 }
 
@@ -320,7 +320,7 @@ body{
     width: 223px;
     height: 37px;
     gap: 4px;
-    opacity: 0px;
+    /* opacity: 0px; */
 }
 
 /* 알림창 게시글 제목 */

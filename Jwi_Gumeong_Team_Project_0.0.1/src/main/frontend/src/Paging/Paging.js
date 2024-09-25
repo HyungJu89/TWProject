@@ -32,7 +32,8 @@ function Paging({ paging, postPage, setPostPage }) {
     const bockUp = endPage < paging.pageCount
 
     const numberOnClick = (page) => {
-        setPostPage(page)
+        setPostPage(page);
+        window.scrollTo(0, 0);
     }
 
     const blockUpOnClick = () => {

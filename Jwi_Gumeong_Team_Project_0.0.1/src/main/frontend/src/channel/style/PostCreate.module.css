@@ -108,6 +108,7 @@
     height: 24px;
     width: 24px;
     margin-right: 14px;
+    position: relative;
 }
 
 /* 이모트 아이콘 img*/

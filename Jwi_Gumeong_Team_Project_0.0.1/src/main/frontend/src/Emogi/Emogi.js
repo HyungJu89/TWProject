@@ -29,7 +29,62 @@ import symbol_deactivation from '../icon/20px/symbol-deactivation.png';
 
 import '../App.css';
 
-function Emogi({setEmogiAdd}) {
+function Emogi({textareaRef, modalRef, comment, setComment, content, setContent, now}) {
+  
+  // 이모지 삽입 함수
+  let [emogiAdd, setEmogiAdd] = useState('')// 새로운 이모지
+
+  useEffect(() => { //이모지 함수 실행
+      if (emogiAdd) {
+        if (now === 'comments'){
+          insertEmogiAtCursor(emogiAdd);
+        }else{
+          emojiPost(emogiAdd);
+        }
+        setEmogiAdd(''); // 이모지 추가 후 초기화
+      }
+  }, [emogiAdd]);
+
+  const insertEmogiAtCursor = (emoji) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+      const start = textarea.selectionStart;//선택된 텍스트의 시작 위치 또는 커서의 위치
+      const end = textarea.selectionEnd;//선택된 텍스트의 마지막
+      const value = textarea.value;// textarea의 현재 값을 가져옴
+      // 현재 커서 위치 기준으로 텍스트를 나누고 이모지 삽입
+      const newValue = value.slice(0, start) + emoji + value.slice(end);
+      // 텍스트를 업데이트하고 커서를 이모지 뒤에 위치시킴
+      textarea.value = newValue;
+      setComment(textarea.value);
+      textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+      // 커서 위치 유지
+      textarea.focus();
+};
+
+  const emojiPost = (emoji) => {
+    const textarea = textareaRef.current;
+    console.log(textarea.value);
+    if (!textarea) return;
+      const selection = window.getSelection(); // 사용자 선택 영역 정보
+      
+      const start = selection.focusOffset;//선택된 텍스트의 시작 위치 또는 커서의 위치
+      const end = textarea.innerText.length;//선택된 텍스트의 마지막
+      
+      const value = textarea.innerText;// textarea의 현재 값을 가져옴
+      const newValue = value.slice(0, start) + emoji + value.slice(end);
+      
+      // setContent(content+newValue);
+      setContent(newValue);
+      console.log(newValue);
+      console.log(selection);
+      console.log(start);
+      // const range = selection.getRangeAt(0); // 선택된 첫 번째 범위
+      // const start = range.startOffset; // 선택된 텍스트의 시작 인덱스
+      // const end = range.endOffset; // 선택된 텍스트의 끝 인덱스
+      // const newRange = document.createRange();
+      // console.log(newRange);
+      textarea.focus();
+  }
 
   let emotion = ['😀', '😃', '😄','😁', '😆', '😅', '🤣', '😂', '🙂', '😉', '😊', '😚', '😙', '😏', '😋', '😛', '😜', '🤪', '😝', '🤗', '🤭','🤫','🤔','🤤','🤠','🥳','😎','🤓','🧐','🙃','🤐','🤨','😐','😑','😶','😒'];
   let nature = ['🐵','🐒','🦍','🦧','🐶','🐕','🦮','🐕‍🦺','🐩','🐺','🦊','🦝','🐱','🐈','🦁','🐯','🐅','🐆','🐴','🐎','🦄','🦓','🦌','🐮','🐂','🐃','🐄','🐷','🐖','🐗','🐽','🐏','🐑','🐐','🐪','🐫'];
@@ -43,7 +98,7 @@ function Emogi({setEmogiAdd}) {
   let [selectEmogi, setSelectEmogi] = useState('');
 
   return(
-        <div className={styles.emogiMain}>
+        <div ref={modalRef} className={styles.emogiMain}>
           <div className={styles.emogiIcon}>
             <img onClick={()=>{setEmogiList(emotion), setCategory('표정')}} src={category === '표정' ? face_activation :face_deactivation}/>{/*표정*/}
             <img onClick={()=>{setEmogiList(nature),  setCategory('자연')}} src={category === '자연' ? nature_activation :nature_deactivation}/>{/*자연물*/}
