@@ -249,10 +249,11 @@ body{
 
 /* 알림 내용 창 */
 .notificationModal .notificationContent {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     margin: 10px 20px 10px 20px;
     width: 314px;
-    max-height: 395px;
+    height: 395px;
     overflow-y: overlay;
     overflow-x: hidden;
     row-gap :14px;
@@ -309,7 +310,6 @@ body{
     width: 40px;
     height: 40px;
     gap: 0px;
-    /* opacity: 0px; */
     border-radius: 50%;
 }
 
@@ -320,7 +320,6 @@ body{
     width: 223px;
     height: 37px;
     gap: 4px;
-    /* opacity: 0px; */
 }
 
 /* 알림창 게시글 제목 */
@@ -341,6 +340,9 @@ body{
     height: 15px;
     text-align: left;
     color: #999999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .deleteIcon {

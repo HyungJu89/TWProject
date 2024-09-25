@@ -75,10 +75,8 @@ function ChannelHome() {
                 setModalOpen(true);
                 return navigate('/');
             }
-
             setChannelInfo(channel.info);
             fetchData(channel.info.channelKey, postPage);
-
         } catch (error) { 
             console.error('채널 확인 중 오류 발생:', error);
             setModalContent('채널 확인 중 오류가 발생했습니다.');
@@ -123,7 +121,7 @@ function ChannelHome() {
                             {postList.success ?
                                 <div className={("fadein")}>
                                     {postList.search.map((postInfo, index) =>
-                                        <PublicBoard key={index} postInfo={postInfo}/>
+                                        <PublicBoard key={index} postInfo={postInfo} index={index}/>
                                     )}
                                 </div> : 
                                     <div className={style.nonPostList}>생성된 게시글이 없습니다.</div>
@@ -144,7 +142,6 @@ function ChannelHome() {
                     </div>
                 </div>
             </div>
-
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }

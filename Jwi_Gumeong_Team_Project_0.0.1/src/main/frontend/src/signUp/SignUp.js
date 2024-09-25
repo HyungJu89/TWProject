@@ -27,7 +27,6 @@ function Agree({ setAgreeCheck }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     
-
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value === 'true');
     };

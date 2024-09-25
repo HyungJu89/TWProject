@@ -7,6 +7,7 @@ import LoginChecks from './LoginChecks.js';
 import { useNavigate } from 'react-router-dom';
 import { getUserInfo } from '../slice/loginSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
+import AlarmModal from '../modal/AlarmModal.js';
 
 //정보수정 페이지
 function InfoEdit() {
@@ -36,6 +37,15 @@ function InfoEdit() {
     const specialCharRegEx = /[!@#$%^&*()_+\[\]{};':"\\|,.<>\/?`~=.-]/;
     const letterRegEx = /[A-Za-z]/;
     const bigLetterRegEx = /[A-Z]/;
+
+    // 알림 모달
+    const [modalOpen, setModalOpen] = useState(false);
+    // 모달 내용
+    const [modalContent, setModalContent] = useState('');
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
     const handleEnter = (e) => {
         if (e.key === "Enter") {
@@ -160,8 +170,8 @@ function InfoEdit() {
             setUserInput(e.target.value.length);
         }
         if (e.target.value.length >= 9) {
-            alert('닉네임은 8자 이하만 사용가능 합니다!');
-            
+            setModalContent('닉네임은 8자 이하만 사용가능 합니다!');
+            setModalOpen(true);
         }
     };
 
@@ -218,7 +228,8 @@ function InfoEdit() {
                 }
                 if(userResponse.data.check){
                     // alert("ㅋㅋ 바뀜ㄴ다");
-                    alert(userResponse.data.warningMessage);
+                    setModalContent(userResponse.data.warningMessage);
+                    setModalOpen(true);
                     navigate("/");
                     //여기에 네비게이트 넣으면 됨
                 } else if(!userResponse.data.check){
@@ -300,6 +311,9 @@ function InfoEdit() {
                 회원탈퇴
             </div>
         </div> : <LoginChecks setLoginCheck = {setLoginCheck} setOriPassword = {setOriPassword}/>
+        }
+        {modalOpen && 
+            <AlarmModal content={<div className={styles.alarmModal}>{modalContent}</div>} onClose={closeModal} />
         }
         </>
 

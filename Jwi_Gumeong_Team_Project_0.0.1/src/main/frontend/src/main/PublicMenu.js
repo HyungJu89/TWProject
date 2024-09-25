@@ -72,58 +72,58 @@ function UserAfter({ onLogout }) {
         sessionId = JSON.parse(sessionIdJson).sessionId
     }
 
-        //즐겨찾기 게시판(1) :: 유저 정보 기준으로 연동된 즐겨찾기 가져오기
-        const [favoritesList, setFavoritesList] = useState(); //즐겨찾기 key
-        useEffect(() => {
-            const favorites = async () => {
-                try {
-                    const {data} = (sessionId && await axios.get(`/myPage/favorites`,{params:{sessionId : sessionId}}))
-                    setFavoritesList(data);
-                } catch (error) {
-                    console.error('Channel API Error:', error);
-                    // 오류가 이상하게 떠서 주석 처리함
-                }
-            };
-            favorites();
-        },[sessionId/*,favoritesList (ps.즐겨찾기 후 즉시 반영을 위해 했는데 5613513번 보내서 막아둠)*/]);
-        
-        //즐겨찾기 게시판(2)  :: 채널 정보 가져오기
-        const [channelList, setChannelList] = useState([]); //즐겨찾기에서 찾은key를 기반으로 채널 정보 가져오기
-        useEffect(() => {
-            const fetchChannels = async () => {
+    //즐겨찾기 게시판(1) :: 유저 정보 기준으로 연동된 즐겨찾기 가져오기
+    const [favoritesList, setFavoritesList] = useState(); //즐겨찾기 key
+    useEffect(() => {
+        const favorites = async () => {
             try {
-                //favoritesList에서 구한 channelKey만 골라서 배열저장
-                const channelKeys = (favoritesList && Array.isArray(favoritesList)) 
-                ? favoritesList.map(item => item.channelKey) 
-                : [];  
-
-                if (channelKeys.length > 0) {
-                const channelInfo =
-                    await Promise.all( //비동기 통신이 완료 될 때 까지 기다림
-                    channelKeys.map(key =>
-                        axios.get('/channel/findKey', { params: { channelKey: key } })
-                    ));
-                    setChannelList(channelInfo.map(channelInfo => channelInfo.data));
-                };
+                const {data} = (sessionId && await axios.get(`/myPage/favorites`,{params:{sessionId : sessionId}}))
+                setFavoritesList(data);
             } catch (error) {
-                console.error('Channel API Error:', error);
-                }
+                // console.error('Channel API Error:', error);
+                //오류가 이상하게 떠서 주석 처리함
             }
-            fetchChannels();
-            }, [favoritesList]);
+        };
+        favorites();
+    },[sessionId/*,favoritesList (ps.즐겨찾기 후 즉시 반영을 위해 했는데 5613513번 보내서 막아둠)*/]);
+    
+    //즐겨찾기 게시판(2)  :: 채널 정보 가져오기
+    const [channelList, setChannelList] = useState([]); //즐겨찾기에서 찾은key를 기반으로 채널 정보 가져오기
+    useEffect(() => {
+        const fetchChannels = async () => {
+        try {
+            //favoritesList에서 구한 channelKey만 골라서 배열저장
+            const channelKeys = (favoritesList && Array.isArray(favoritesList)) 
+            ? favoritesList.map(item => item.channelKey) 
+            : [];  
 
-        //즐겨찾기 게시판(3) :: 페이징
-        const nowChannelList = channelList.slice(pagingNow, pagingMax);
-        const result = channelList.length / 7;
-        const maxPaging = result !== Math.floor(result) ? Math.floor(result) + 1 : result;
-        function BtnRightPaging(){
-            setPagingNow(pagingNow+7)
-            setPagingMax(pagingMax+7)
+            if (channelKeys.length > 0) {
+            const channelInfo =
+                await Promise.all( //비동기 통신이 완료 될 때 까지 기다림
+                channelKeys.map(key =>
+                    axios.get('/channel/findKey', { params: { channelKey: key } })
+                ));
+                setChannelList(channelInfo.map(channelInfo => channelInfo.data));
+            };
+        } catch (error) {
+            console.error('Channel API Error:', error);
+            }
         }
-        function BtnLeftPaging(){
-            setPagingNow(pagingNow-7)
-            setPagingMax(pagingMax-7)
-        }
+        fetchChannels();
+        }, [favoritesList]);
+
+    //즐겨찾기 게시판(3) :: 페이징
+    const nowChannelList = channelList.slice(pagingNow, pagingMax);
+    const result = channelList.length / 7;
+    const maxPaging = result !== Math.floor(result) ? Math.floor(result) + 1 : result;
+    function BtnRightPaging(){
+        setPagingNow(pagingNow+7)
+        setPagingMax(pagingMax+7)
+    }
+    function BtnLeftPaging(){
+        setPagingNow(pagingNow-7)
+        setPagingMax(pagingMax-7)
+    }
 
     return (
         <div className={styles.fadein}>
@@ -187,6 +187,5 @@ function UserBefore() {
         </div>
     )
 }
-
 
 export default PublicMenu;

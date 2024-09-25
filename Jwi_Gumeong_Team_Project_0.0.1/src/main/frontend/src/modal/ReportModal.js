@@ -8,7 +8,6 @@ import closeImg from '../icon/24px/close.png'
 // 알림 모달
 function ReportModal() {
     const reportContentRef = useRef(null);
-
     let reportDto = useSelector((state) => { return state.reportDto })
     console.log(reportDto)
     const dispatch = useDispatch()
@@ -49,8 +48,6 @@ function ReportModal() {
         setContent(e.target.value)
     }
 
-
-
     const reportSubmit = async () => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if (!sessionIdJson) {
@@ -84,11 +81,7 @@ function ReportModal() {
         } catch (error) {
             console.error('업로드 실패:', error);
         }
-
-
-
     }
-
 
     return (
         <div className={styles.modalContainer}>
@@ -122,20 +115,19 @@ function ReportModal() {
                                     </div>
                                 )}
                             </div>
-
                         </div>
                         {reportAlarm && (
                             <div className={styles.reportAlarmText}>
                                 신고 사유를 선택해 주세요
                             </div>
                         )}
-                    <textarea
-                        value={content}
-                        className={styles.reportContent}
-                        ref={reportContentRef}
-                        placeholder='사유를 입력해주세요.'
-                        onInput={onInputContent}
-                    />
+                        <textarea
+                            value={content}
+                            className={styles.reportContent}
+                            ref={reportContentRef}
+                            placeholder='사유를 입력해주세요.'
+                            onInput={onInputContent}
+                        />
                         <div className={styles.contentLengthDiv} style={{ color: (content.length <= contentLength) ? '#BBBBBB' : '#EC000E' }}>({content.length}/{contentLength})</div>
                     </div>
                 </div>

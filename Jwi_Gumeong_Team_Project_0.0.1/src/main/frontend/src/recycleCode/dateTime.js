@@ -1,8 +1,6 @@
 export const dateTime = (date) => {
-    
     const dateTime = new Date(date);
     const currentDate = new Date();
-
     const difference = currentDate.getTime() -  dateTime.getTime();
 
     const days = Math.floor(difference / (1000 * 60 * 60 * 24));

@@ -561,123 +561,120 @@ function AdminMain() {
                             }
                             return(
                                 <div key={users.userKey} className={styles.faqItem}>
-                                        <div className={styles.faqHeader} onClick={() => openedFaq(idx)}>
-                                            <div className={styles.faqDetails}>
-                                                <div className={styles.faqTitle}>{users.userKey} . {users.email}</div>
-                                                <div className={styles.faqSubtitle}>{users.nickName}</div>
-                                                <div className={styles.userStateLine}>
-                                                    {/* 제제 완료했을때 빨강색 */}
-                                                    { users.state === "deactivate" && banData?.state === "activate" ? <div className={styles.userStateactivate}>제재완료</div> : null}
-                                                    {/* 신고 접수 된 상태 파란색 */}
-                                                    {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
-                                                    {/* 데이터가 오브젝트 배열인데 일단 한개만임시로 참조하게끔 해놨음. */}
-                                                    {/* 나중에 하나하나 처리할 예정 */}
-                                                    { reportData.length !== 0 
-                                                        && reportData.find(prev => prev.state === "unprocessed")?.state === "unprocessed" 
-                                                        ? <div className={styles.userStatedeactivate}>신고접수</div> 
-                                                        : null}
-                                                    {/* 신고 처리 완료 딱지도 만들면 좋을듯? */}
-                                                    {/* 자살중인 계정은 회색? */}
-                                                    { users.state === "secession" ? <div className={styles.userStatedeling}>비활성화</div> : null}
-                                                    {/* 탈퇴계정은 안나옴 ㅅㄱ */}
-                                                </div>
+                                    <div className={styles.faqHeader} onClick={() => openedFaq(idx)}>
+                                        <div className={styles.faqDetails}>
+                                            <div className={styles.faqTitle}>{users.userKey} . {users.email}</div>
+                                            <div className={styles.faqSubtitle}>{users.nickName}</div>
+                                            <div className={styles.userStateLine}>
+                                                {/* 제제 완료했을때 빨강색 */}
+                                                { users.state === "deactivate" && banData?.state === "activate" ? <div className={styles.userStateactivate}>제재완료</div> : null}
+                                                {/* 신고 접수 된 상태 파란색 */}
+                                                {/* 여기는 스테이트에서 조정하는게 아니라 신고 테이블쪽 에서 값 있으면 이거 활성화 시키는게 맞을듯 */}
+                                                {/* 데이터가 오브젝트 배열인데 일단 한개만임시로 참조하게끔 해놨음. */}
+                                                {/* 나중에 하나하나 처리할 예정 */}
+                                                { reportData.length !== 0 
+                                                    && reportData.find(prev => prev.state === "unprocessed")?.state === "unprocessed" 
+                                                    ? <div className={styles.userStatedeactivate}>신고접수</div> 
+                                                    : null}
+                                                {/* 신고 처리 완료 딱지도 만들면 좋을듯? */}
+                                                {/* 자살중인 계정은 회색? */}
+                                                { users.state === "secession" ? <div className={styles.userStatedeling}>비활성화</div> : null}
+                                                {/* 탈퇴계정은 안나옴 ㅅㄱ */}
                                             </div>
                                         </div>
-                                        {/* FAQ의 번호와 인덱스가 같으면 열림 */}
-                                        { faqContent === idx && (
-                                            <div>
-                                                {
-                                                    // 데이터가 오브젝트 배열인데 일단 한개만임시로 참조하게끔 해놨음.
-                                                    reportData.length !== 0 && reportData.find(prev => prev.state === "unprocessed")?.state === "unprocessed" ?
-                                                    <div className={styles.faqContent}>
-                                                        {/* 신고받은거 넣으면 될듯 */}
-                                                        {/* 네비게이트로 신고 내역쪽으로 리다이렉트 */}
-                                                        <div className={styles.faqContentText}> 전체 신고 갯수 ( {reportData.length}개 ) </div>
-                                                        {/* 전체참조문으로 만들 필요성이 있음. */}
-                                                        {/* ㅋㅋ 그럴필요 없었음 */}
-                                                        { renderReportCategory(reportDataCategory,'보안','보안') }
-                                                        { renderReportCategory(reportDataCategory,'불법성','불법성') }
-                                                        { renderReportCategory(reportDataCategory,'청소년','청소년') }
-                                                        { renderReportCategory(reportDataCategory,'사회/질서','사회/질서') }
-                                                        { renderReportCategory(reportDataCategory,'기준위반','기준위반') }
-                                                        { renderReportCategory(reportDataCategory,'욕설/혐오','욕설/혐오') }
-                                                    </div>
-                                                    : null
-                                                }
-
-                                                {
-                                                users.state !== "activate" && banData?.state === "activate" ?
-                                                    <div className={styles.userOption}>
-                                                        {/* 신고 테이블 조회해서 신고 수리내역 표기 */}
-                                                        <div className={styles.userOptionReport}>신고접수일 : {reportData.length !== 0 ? <>{ reportData[reportData?.length-1]?.createdAt.substr(0,10) }</> : <>-</>}</div>
-                                                        {/* 신고 내역같은것도 여기다가 추가하면 좋을꺼같음 */}
-
-                                                        {/* 여기에 제재 했을경우 3항 연산자 하면될꺼같고 */}
-                                                        {/* banned 테이블 조회해서 날짜 표기 */}
-                                                        <div className={styles.userOptionBlock}>제재일 : {banData?.reasonDate.substr(0,10)} ~ {banData?.endDate.substr(0,10)} / {banData?.date}일</div>
-                                                        <div className={styles.userOptionBlockBtn} onClick={()=>{setRevertBtn(prev => !prev)}}>되돌리기</div>
-                                                    </div>
-                                                    : 
-                                                    <div className={styles.userOption}>
-                                                        <div className={styles.userOptionBlockBtn} onClick={()=>{setMoreBtnOption(prev => !prev)}}>더보기▽</div>
-                                                    </div>
-                                                }
-                                                
-                                                {
-                                                moreBtnOption === true && users.state !== "deactivate" && banData?.state !== "activate" ?
-                                                    <div className={styles.inqFieldUser}>
-                                                        <label>제재 종류</label>
-                                                        <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
-                                                            {selectedOption}
-                                                        </div>
-                                                        <label>제재 일수</label>
-                                                        <div onClick={() => setDropdownOpen2(!dropdownOpen2)} className={styles.inqSelect}>
-                                                            {
-                                                            selectedOption2 === "영구" || selectedOption2 === "선택하세요"
-                                                                ? selectedOption2 : <div>{selectedOption2} 일</div>
-                                                            }
-
-                                                        </div>
-                                                        {/* 문의 종류 선택 드롭다운 */}
-                                                        {
-                                                            dropdownOpen &&
-                                                                <div className={styles.dropdown}>
-                                                                    {["약관 위반", "도배", "욕설", "다메닝겐", "바보"].map((option, index) => (
-                                                                        <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
-                                                                            {option}
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                        }
-                                                        {
-                                                            dropdownOpen2 &&
-                                                                <div className={styles.dropdown2}>
-                                                                    {["1", "7", "14", "30", "60", "90", "365", "영구"].map((option, index) => (
-                                                                        <div key={index} className={styles.dropdownItem} onClick={() => optionSelect2(option)}>
-                                                                            {option} 일 제재
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                        }
-                                                        {/* 여기에서 오브젝트 생성해서 넣으면될듯????????????? */}
-                                                        <div className={styles.bannedBtn} onClick={()=>{updateBannedDeAct(users.userKey)}}>제재</div>
-                                                    </div>
-                                                    : null
-                                                }
-                                                {
-                                                    revertBtn === true && users.state !== "activate" && banData?.state === "activate" ?
-                                                    <div className={styles.revertOption}>
-                                                        진짜로 밴 취소할꺼에요?
-                                                        <div className={styles.revertSelect}>
-                                                            <div className={styles.revertSelectYes} onClick={()=>{updateBannedAct(users.userKey)}}>YES</div>
-                                                            <div className={styles.revertSelectNo} onClick={()=>{setRevertBtn(prev => !prev)}}>NO</div>
-                                                        </div>
-                                                    </div>
-                                                    :null
-                                                }
-                                            </div>
-                                        )}
                                     </div>
+                                    {/* FAQ의 번호와 인덱스가 같으면 열림 */}
+                                    { faqContent === idx && (
+                                        <div>
+                                            {
+                                                // 데이터가 오브젝트 배열인데 일단 한개만임시로 참조하게끔 해놨음.
+                                                reportData.length !== 0 && reportData.find(prev => prev.state === "unprocessed")?.state === "unprocessed" ?
+                                                <div className={styles.faqContent}>
+                                                    {/* 신고받은거 넣으면 될듯 */}
+                                                    {/* 네비게이트로 신고 내역쪽으로 리다이렉트 */}
+                                                    <div className={styles.faqContentText}> 전체 신고 갯수 ( {reportData.length}개 ) </div>
+                                                    {/* 전체참조문으로 만들 필요성이 있음. */}
+                                                    {/* ㅋㅋ 그럴필요 없었음 */}
+                                                    { renderReportCategory(reportDataCategory,'보안','보안') }
+                                                    { renderReportCategory(reportDataCategory,'불법성','불법성') }
+                                                    { renderReportCategory(reportDataCategory,'청소년','청소년') }
+                                                    { renderReportCategory(reportDataCategory,'사회/질서','사회/질서') }
+                                                    { renderReportCategory(reportDataCategory,'기준위반','기준위반') }
+                                                    { renderReportCategory(reportDataCategory,'욕설/혐오','욕설/혐오') }
+                                                </div>
+                                                : null
+                                            }
+                                            {
+                                            users.state !== "activate" && banData?.state === "activate" ?
+                                                <div className={styles.userOption}>
+                                                    {/* 신고 테이블 조회해서 신고 수리내역 표기 */}
+                                                    <div className={styles.userOptionReport}>신고접수일 : {reportData.length !== 0 ? <>{ reportData[reportData?.length-1]?.createdAt.substr(0,10) }</> : <>-</>}</div>
+                                                    {/* 신고 내역같은것도 여기다가 추가하면 좋을꺼같음 */}
+                                                    {/* 여기에 제재 했을경우 3항 연산자 하면될꺼같고 */}
+                                                    {/* banned 테이블 조회해서 날짜 표기 */}
+                                                    <div className={styles.userOptionBlock}>제재일 : {banData?.reasonDate.substr(0,10)} ~ {banData?.endDate.substr(0,10)} / {banData?.date}일</div>
+                                                    <div className={styles.userOptionBlockBtn} onClick={()=>{setRevertBtn(prev => !prev)}}>되돌리기</div>
+                                                </div>
+                                                : 
+                                                <div className={styles.userOption}>
+                                                    <div className={styles.userOptionBlockBtn} onClick={()=>{setMoreBtnOption(prev => !prev)}}>더보기▽</div>
+                                                </div>
+                                            }
+                                            
+                                            {
+                                            moreBtnOption === true && users.state !== "deactivate" && banData?.state !== "activate" ?
+                                                <div className={styles.inqFieldUser}>
+                                                    <label>제재 종류</label>
+                                                    <div onClick={() => setDropdownOpen(!dropdownOpen)} className={styles.inqSelect}>
+                                                        {selectedOption}
+                                                    </div>
+                                                    <label>제재 일수</label>
+                                                    <div onClick={() => setDropdownOpen2(!dropdownOpen2)} className={styles.inqSelect}>
+                                                        {
+                                                        selectedOption2 === "영구" || selectedOption2 === "선택하세요"
+                                                            ? selectedOption2 : <div>{selectedOption2} 일</div>
+                                                        }
+                                                    </div>
+                                                    {/* 문의 종류 선택 드롭다운 */}
+                                                    {
+                                                        dropdownOpen &&
+                                                            <div className={styles.dropdown}>
+                                                                {["약관 위반", "도배", "욕설", "다메닝겐", "바보"].map((option, index) => (
+                                                                    <div key={index} className={styles.dropdownItem} onClick={() => optionSelect(option)}>
+                                                                        {option}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                    }
+                                                    {
+                                                        dropdownOpen2 &&
+                                                            <div className={styles.dropdown2}>
+                                                                {["1", "7", "14", "30", "60", "90", "365", "영구"].map((option, index) => (
+                                                                    <div key={index} className={styles.dropdownItem} onClick={() => optionSelect2(option)}>
+                                                                        {option} 일 제재
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                    }
+                                                    {/* 여기에서 오브젝트 생성해서 넣으면될듯????????????? */}
+                                                    <div className={styles.bannedBtn} onClick={()=>{updateBannedDeAct(users.userKey)}}>제재</div>
+                                                </div>
+                                                : null
+                                            }
+                                            {
+                                                revertBtn === true && users.state !== "activate" && banData?.state === "activate" ?
+                                                <div className={styles.revertOption}>
+                                                    진짜로 밴 취소할꺼에요?
+                                                    <div className={styles.revertSelect}>
+                                                        <div className={styles.revertSelectYes} onClick={()=>{updateBannedAct(users.userKey)}}>YES</div>
+                                                        <div className={styles.revertSelectNo} onClick={()=>{setRevertBtn(prev => !prev)}}>NO</div>
+                                                    </div>
+                                                </div>
+                                                :null
+                                            }
+                                        </div>
+                                    )}
+                                </div>
                             )})}
                     </div>
                 );
@@ -1012,7 +1009,6 @@ function AdminMain() {
                     </div>
                     :null
                 }
-
             </div>
             {/* 알람 모달 */}
             {modalOpen && 

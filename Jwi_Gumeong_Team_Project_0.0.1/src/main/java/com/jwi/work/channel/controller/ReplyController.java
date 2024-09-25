@@ -32,6 +32,7 @@ public AnswerDto<String> replyDelete(@RequestBody ReplyDeleteDto deleteDto){
 
 @PostMapping("/deleteByUser")
 public AnswerDto<String> replyDeleteByUser(@RequestBody DeleteByUser replyDelete){
+
 	return replyservice.replyDeleteByUser(replyDelete);
 }
 	

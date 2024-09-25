@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import styles from './style/TopicBtn.module.css'
 
 function TopicBtn({ topic, settopic }) {
-
     const [loginCheck,setLoginChanck] = useState(false);
 
-useEffect(()=>{
-    const timer = setTimeout(() => {
-        setLoginChanck(sessionStorage.getItem('sessionId') != null)
-    }, 1000);
-    return () => clearTimeout(timer);
-},[])
+    useEffect(()=>{
+        const timer = setTimeout(() => {
+            setLoginChanck(sessionStorage.getItem('sessionId') != null)
+        }, 1000);
+        return () => clearTimeout(timer);
+    },[]);
 
     return (
         <div className={styles.Nav}>
@@ -34,8 +33,6 @@ useEffect(()=>{
                     <div>실시간 토픽<div className={styles.bar} /></div>
                 </div>
             }
-
-
         </div>
     )
 }

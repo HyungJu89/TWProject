@@ -13,9 +13,7 @@ import Paging from '../Paging/Paging.js'
 import AlarmModal from '../modal/AlarmModal.js';
 
 function Search({ search }) {
-
     let navigate = useNavigate();
-
     const [channelList, setChannelList] = useState([]);
     const [postList, setPostList] = useState([]);
     const [channelPage, setChannePage] = useState(1);
@@ -67,7 +65,6 @@ function Search({ search }) {
 
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
     };
 
     const createChannelOnClick = () =>{
@@ -86,9 +83,7 @@ function Search({ search }) {
             const channelListData = await searchChannel(search, channelPage);
             setChannelList(channelListData)
         };
-
         fetchData();
-
     }, [search, channelPage])
 
     useEffect(() => {
@@ -97,7 +92,6 @@ function Search({ search }) {
             setPostList(postListData)
         };
         fetchData();
-
     }, [search, postPage])
 
     const pageUp = () => {
@@ -127,7 +121,6 @@ function Search({ search }) {
                             {channelList.search.map((channelInfo, index) =>
                                 <div key={index}>
                                     <SearchChannel channelInfo={channelInfo} />
-
                                 </div>
                             )}
                         </div>
@@ -164,7 +157,6 @@ function Search({ search }) {
 }
 
 function SearchChannel({ channelInfo }) {
-
     let navigate = useNavigate();
     const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
 

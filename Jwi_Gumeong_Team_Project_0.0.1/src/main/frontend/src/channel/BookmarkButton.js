@@ -13,13 +13,11 @@ import AlarmModal from '../modal/AlarmModal.js';
 function BookmarkButton({channelInfo,setFavoriteCount}) {
     const [bookmarkOn, setBookMarkOn] = useState(channelInfo.favorite);
     const [bookmarkImg, setBookmarkImg] = useState(bookmarkActivation);
-    const navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
 
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
     };
 
     const bookMarkDebounce = useCallback(
@@ -29,7 +27,6 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
         []
     );
     
-
     const updateFavorite = async(favorite)=>{
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if (!sessionIdJson) {
@@ -72,22 +69,22 @@ function BookmarkButton({channelInfo,setFavoriteCount}) {
     )
 }
 
-    function BookMarkNone({setBookmarkImg,bookmarkImg,bookMarkOnclick}){
-        return(
-            <div onClick={()=>{bookMarkOnclick()}} className={style.bookmarkButton}
-                onMouseEnter={()=>{setBookmarkImg(bookmarkActivationW)}}
-                onMouseLeave={()=>{setBookmarkImg(bookmarkActivation)}} >
-                <img src={bookmarkImg} />
-                <div className={style.bookmarkText}>즐겨찾기</div>
-            </div>
-        )
-    }
-    function BookMarkTrue({bookMarkOnclick}){
-        return(
-            <div onClick={()=>{bookMarkOnclick(true)}} className={style.bookMark}>
-                <img src={Star}/><div className={style.text}>즐겨찾기 중</div>
-            </div>
-        )
-    }
+function BookMarkNone({setBookmarkImg,bookmarkImg,bookMarkOnclick}){
+    return(
+        <div onClick={()=>{bookMarkOnclick()}} className={style.bookmarkButton}
+            onMouseEnter={()=>{setBookmarkImg(bookmarkActivationW)}}
+            onMouseLeave={()=>{setBookmarkImg(bookmarkActivation)}} >
+            <img src={bookmarkImg} />
+            <div className={style.bookmarkText}>즐겨찾기</div>
+        </div>
+    )
+}
+function BookMarkTrue({bookMarkOnclick}){
+    return(
+        <div onClick={()=>{bookMarkOnclick(true)}} className={style.bookMark}>
+            <img src={Star}/><div className={style.text}>즐겨찾기 중</div>
+        </div>
+    )
+}
 
 export default BookmarkButton;

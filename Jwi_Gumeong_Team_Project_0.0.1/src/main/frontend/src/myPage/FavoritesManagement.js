@@ -120,32 +120,33 @@ function SearchChannel({favoritesList, channelInfo, formatUnit }) {
     let navigate = useNavigate();
     const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
 
-        //즐겨찾기 게시판(4) :: 즐겨찾기 카운팅
-        useEffect(() => {
-            const count = async () => {
-                try {
-                    const {data} = await axios.get(`/myPage/favoritesCount`,{params:{channelKey : channelInfo.channelKey}});
-                    setFavoriteCount(data);
-                } catch (error) {
-                    console.error('Channel API Error:', error);
-                }
-            };
-            count();
-        }, []);
-
-        //BookmarkButton 컴포넌트 전달을 위한 데이터 바인딩
-        const channel = {
-            channelKey: channelInfo.channelKey,
-            id: channelInfo.id,
-            name: channelInfo.name,
-            imageUrl: channelInfo.imageUrl,
-            followerCount: channelInfo.followerCount,
-            favoriteCount: favoriteCount,
-            favorite: false
+    //즐겨찾기 게시판(4) :: 즐겨찾기 카운팅
+    useEffect(() => {
+        const count = async () => {
+            try {
+                const {data} = await axios.get(`/myPage/favoritesCount`,{params:{channelKey : channelInfo.channelKey}});
+                setFavoriteCount(data);
+            } catch (error) {
+                console.error('Channel API Error:', error);
+            }
         };
-        if (favoritesList.some(item => item.channelKey === channelInfo.channelKey)) {
-            channel.favorite = true;
-        }
+        count();
+    }, []);
+
+    //BookmarkButton 컴포넌트 전달을 위한 데이터 바인딩
+    const channel = {
+        channelKey: channelInfo.channelKey,
+        id: channelInfo.id,
+        name: channelInfo.name,
+        imageUrl: channelInfo.imageUrl,
+        followerCount: channelInfo.followerCount,
+        favoriteCount: favoriteCount,
+        favorite: false
+    };
+
+    if (favoritesList.some(item => item.channelKey === channelInfo.channelKey)) {
+        channel.favorite = true;
+    }
 
     return (
         <>
@@ -170,7 +171,6 @@ function SearchChannel({favoritesList, channelInfo, formatUnit }) {
             <hr className={styles.horizontalLine} />
         </>
     )
-
 }
 
 export default FavoritesManagement;

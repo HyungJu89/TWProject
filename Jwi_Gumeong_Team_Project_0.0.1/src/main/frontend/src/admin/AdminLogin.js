@@ -146,7 +146,6 @@ function AdminLogin() {
                 }
                 <button onClick={() => { handleLogin(); }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}> 로그인 </button>
             </div>
-
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }

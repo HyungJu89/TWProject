@@ -56,7 +56,6 @@ function EmailAvailable({ setEmailCerti, setEmail, email }) {
     const [countCerti, setCountCerti] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState(''); // 모달 내용
-
     // 이메일 비밀번호 유효성 검사
     const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
 
@@ -122,11 +121,11 @@ function EmailAvailable({ setEmailCerti, setEmail, email }) {
                     setEmailCheck(false);
                 }
             })
-                .catch(error => {
-                    console.error('Channel API Error:', error);
-                    setModalContent('서버와의 통신에 문제가 발생했습니다.');
-                    setModalOpen(true);
-                })
+            .catch(error => {
+                console.error('Channel API Error:', error);
+                setModalContent('서버와의 통신에 문제가 발생했습니다.');
+                setModalOpen(true);
+            })
         }
     };
 
@@ -184,7 +183,6 @@ function EmailAvailable({ setEmailCerti, setEmail, email }) {
                     setModalOpen(true);
                 }
             }} className={`${styles.loginButton} ${checkCerti ? styles.active : ''}`}>다음</button>
-
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }

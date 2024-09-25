@@ -21,10 +21,9 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     // 컴포넌트 로드용 함수
     const [commentLode, setCommentLode] = useState(true);
     let [comments, setComments] = useState([]);
-    const textareaRef = useRef(null); //댓글달기 영역
+    const textareaRef = useRef(null); //
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-    const [modalOpenKeepURL, setModalOpenKeepURL] = useState(false);
     const navigate = useNavigate();
     let disPatch = useDispatch();
 
@@ -32,12 +31,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
         setModalOpen(false);
         disPatch(clearPost())
         disPatch(openImgUiModalFalse())
-        navigate('/signIn');
         window.scrollTo(0, 0);
-    };
-
-    const closeModalKeepURL = () => {
-        setModalOpenKeepURL(false);
     };
 
     //댓글 길이 제한
@@ -47,7 +41,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     //댓글 길이 저장
     const [commentLength, setCommentLength] = useState(0);
     //댓글작성 버튼 색상
-    const [commentButtonColor, setCommentButtonColor] = useState('#FF8901');
+    const [commentButtonColor, setCommentButtonColor] = useState('#BBBBBB');
     //댓글 길이 text 색상
     const [commentTextColor, setCommentTextColor] = useState('#BBBBBB');
     //댓글 정렬순서
@@ -56,7 +50,6 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     const commentFocus = useRef(null);
     const [commentStart, setCommentStart] = useState(0);
     const [commentNew, setCommentNew] = useState(false);
-
     const [replyInputState, setReplyInputState] = useState('');
     const [replyInputIndex, setReplyInputIndex] = useState(0);
 
@@ -71,19 +64,22 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
         setComment(e.target.value)
         setCommentLength(e.target.value.length)
         setCommentButtonColor(e.target.value.length <= commentsLimit ? '#FF8901' : '#BBBBBB')
+        setCommentButtonColor(e.target.value.length > 3 ? '#FF8901' : '#BBBBBB')
         setCommentTextColor(e.target.value.length <= commentsLimit ? '#BBBBBB' : '#EC000E')
     };
 
+    useEffect(()=>{
+        setCommentLength(comment.length);
+        setCommentButtonColor(commentLength >= 3 && comment.length <= commentsLimit  ? '#FF8901' : '#BBBBBB')
+    },[comment,commentLength]);
+
     //모달함수
-    let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off   
+    let [moreON, setmoreON] = useState(false); //정렬순서 모달 on/off 
     let [EmojiOn, setEmojiOn] = useState(false);//이모지 모달 on/off
     const modalRef = useRef(null);
     const moreRef = useRef(null);
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
-            if (moreON &&
-                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
-                { setmoreON(false); } //신고, 삭제 닫음
             if (EmojiOn &&
                 !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
                 { setEmojiOn(false); } //신고, 삭제 닫음
@@ -92,16 +88,12 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
         return () => { //클린업
         document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [moreON, EmojiOn]);
-
+    }, [EmojiOn]);
 
     //댓글 작성 
     const createComment = async () => {
-        if (commentsLimit < commentLength) {
-            setModalContent('내용이 너무 짧아요.');
-            setModalOpenKeepURL(true);
+        if (commentsLimit < commentLength || commentLength < 3) {
             return;
-            // return alert('너무 김');
         }
         // 추가로 로직필요하면 여기에
         let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -127,6 +119,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
             console.error('Error creating channel:', error);
         }
         setComment('');
+        setCommentLength(0);
         setCommentLode((state) => state ? false : true)
     }
 
@@ -197,7 +190,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                     onInput={handleInput}
                 />
                 <div className={styles.commentNav}>
-                    <img ref={moreRef} onClick={() => { !EmojiOn && setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
+                    <img ref={moreRef}  onClick={() => { EmojiOn == true ? setEmojiOn(false) : setEmojiOn(true) }} style={{ cursor: 'pointer' }} src={emoticon_deactivation} />
                     {EmojiOn && <Emogi  now={'comments'} modalRef={modalRef} textareaRef={textareaRef} setComment={setComment} />}
                     <div style={{ color: commentTextColor }}>
                         {commentLength}/{commentsLimit}
@@ -229,16 +222,10 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
                     })}
                 </>
             }
-            {/* 너무 힘들어서 그냥 등록 버튼을 막아버리고 결심 */}
-                {/* {modalOpen && 
-                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
-            }
-                {modalOpenKeepURL && 
-                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModalKeepURL} />
-            } */}
         </div>
     )
 }
+
 function CommentsZero(){
     return(
         <div className={styles.CommentsZero}>

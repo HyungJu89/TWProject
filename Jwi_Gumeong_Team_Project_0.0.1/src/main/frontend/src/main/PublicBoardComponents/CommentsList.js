@@ -60,7 +60,7 @@ const CommentsList = forwardRef(function CommentsList(
     return (
         <>
             <div>{/* 댓글 */}
-                <div className={styles.list} style={{ marginBottom: '0px' }}  ref={ref}>
+                <div className={styles.list} style={{ marginBottom: '0px'}}  ref={ref}>
                     <div className={styles.listNav}>
                         <div className={styles.listName}>{comment.nickName}<a className={styles.time}>{timeSetting(comment.createdAt)}</a></div>
                         <div>
@@ -114,10 +114,10 @@ const CommentsList = forwardRef(function CommentsList(
                                                 <MoreDeleteMini 
                                                     setCommentLode = {setCommentLode}
                                                     state = {reply.state}
-                                                    nickName={comment.nickName} 
-                                                    referenceType={'comment'} 
-                                                    referenceKey={comment.commentKey} 
-                                                    myContent={comment.myComment} 
+                                                    nickName={reply.nickName} 
+                                                    referenceType={'reply'} 
+                                                    referenceKey={reply.replyKey} 
+                                                    myContent={reply.myReply} 
                                                     right={PublicBoardImgmodal === 'open' ? '0px' : '-82px'} 
                                                     top={'30px'}/>
                                                 </div> 
@@ -147,7 +147,9 @@ const CommentsList = forwardRef(function CommentsList(
                                 }
                             </div>
                         )
-                    })}
+                    }
+                )
+            }
         </>
     )
 });

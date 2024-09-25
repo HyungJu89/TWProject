@@ -22,17 +22,26 @@ function Header() {
                     고객센터
                 </div>
                 <div className={styles.point}/> {/* 점 */}
-                이용약관
+                <div style={{cursor:'pointer'}}  onClick={() => { navigate('/customerService'); window.scrollTo(0, 0) }}>
+                    이용약관
+                </div>
                 <div className={styles.point}/>
-                광고문의
+                <div style={{cursor:'pointer'}}  onClick={() => { navigate('/customerService'); window.scrollTo(0, 0) }}>
+                    광고문의
+                </div>
                 <div className={styles.point}/>
-                의견제안
+                <div style={{cursor:'pointer'}}  onClick={() => { navigate('/customerService'); window.scrollTo(0, 0) }}>
+                    의견제안
+                </div>
                 <div className={styles.info}>
                     jwigumeong © 2024 jwigumeongTeam
                 </div>
             </div>
+            <div className={styles.basic}>
+                
+            </div>
         </div>
-
     );
 }
+
 export default Header;

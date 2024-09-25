@@ -30,7 +30,6 @@ function MiniPublicBoard() {
 
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
     };
     
     // 디바운스요 변수
@@ -79,7 +78,6 @@ function MiniPublicBoard() {
         heartDebounce(newHeart);
     }
     
-
     //모달함수
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
     const modalRef = useRef(null);
@@ -95,12 +93,12 @@ function MiniPublicBoard() {
         };
     }, [moreON]);
 
-        //날짜 세팅
-        function timeSetting(createdAt){
-            return formatDistanceToNow(new Date(createdAt), { addSuffix: true, locale: ko });
-            //formatDistanceToNow : 특정 시간을 기준으로 현재까지의 시간을 계산
-            //addSuffix : ~전 ~후 같은 접미사
-        }
+    //날짜 세팅
+    function timeSetting(createdAt){
+        return formatDistanceToNow(new Date(createdAt), { addSuffix: true, locale: ko });
+        //formatDistanceToNow : 특정 시간을 기준으로 현재까지의 시간을 계산
+        //addSuffix : ~전 ~후 같은 접미사
+    }
 
     return (
         <div className={styles.mainDiv}>
