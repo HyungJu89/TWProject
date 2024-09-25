@@ -80,15 +80,18 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     const moreRef = useRef(null);
     useEffect(() => {//영역외 클릭시 모달 닫히는 코드
         const handleClickOutside = (event) => {
+            if (moreON &&
+                !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
+                { setmoreON(false); } //신고, 삭제 닫음
             if (EmojiOn &&
                 !modalRef.current.contains(event.target) && !moreRef.current.contains(event.target))
-                { setEmojiOn(false); } //신고, 삭제 닫음
+                { setEmojiOn(false); } //이모지 닫음
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => { //클린업
         document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [EmojiOn]);
+    }, [moreON, EmojiOn]);
 
     //댓글 작성 
     const createComment = async () => {
@@ -176,9 +179,9 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
         <div>
             <div className={styles.dashed} />{/* 회색줄 */}
             <div className={styles.widthNav} style={{ justifyContent: 'start' }}>
-                <div ref={moreRef} style={{ cursor: 'pointer' }} onClick={() => { !moreON && setmoreON(true) }} >
+                <div className={styles.arrayDiv} ref={moreRef} style={{ cursor: 'pointer' }} onClick={() => { !moreON && setmoreON(true) }} >
                     정렬순서<img style={{ marginLeft: '4px' }} src={expand_more} />
-                    {moreON && <div ref={modalRef}><MoreAlign setIsAsc={setIsAsc} /></div>} {/*정렬 모달*/}
+                    {moreON && <MoreAlign setIsAsc={setIsAsc} modalRef={modalRef}  />} {/*정렬 모달*/}
                 </div>
             </div>
             <div className={styles.commentDiv}>{/* 댓글 달기 */}
