@@ -249,10 +249,11 @@ body{
 
 /* 알림 내용 창 */
 .notificationModal .notificationContent {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     margin: 10px 20px 10px 20px;
     width: 314px;
-    max-height: 395px;
+    height: 395px;
     overflow-y: overlay;
     overflow-x: hidden;
     row-gap :14px;
