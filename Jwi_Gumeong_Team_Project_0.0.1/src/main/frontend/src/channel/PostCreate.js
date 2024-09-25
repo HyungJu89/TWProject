@@ -87,7 +87,7 @@ function PostCreact({channelKey}) {
             setModalOpenKeepURL(true);
             return;
         }
-        if(content.length < contentLimit){
+        if(content.length > contentLimit){
             setModalContent('내용이 너무 길어요.');
             setModalOpenKeepURL(true);
             return;

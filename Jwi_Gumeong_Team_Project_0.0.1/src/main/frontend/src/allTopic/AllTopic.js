@@ -90,7 +90,7 @@ function AllTopic({ onLogout, isLoggedIn }) {
         }
     };
 
-
+    
     useEffect(() => {
         setPostList([]);
         switch (topic) {
