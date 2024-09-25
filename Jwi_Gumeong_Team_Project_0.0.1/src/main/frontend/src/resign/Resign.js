@@ -17,8 +17,6 @@ function Resign({ onLogout }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
-    console.log(userKey);
-
     useEffect(() => {
         // 유저 키가 없으면 리턴
         if (!userKey) {

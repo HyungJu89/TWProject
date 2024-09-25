@@ -11,7 +11,6 @@ export const checkChannel = async (channelId) => {
         console.error('Channel API Error:', error);
         throw new Error('Failed to fetch channel data');
     }
-
 };
 
 export const channelGet = async (channelId) => {

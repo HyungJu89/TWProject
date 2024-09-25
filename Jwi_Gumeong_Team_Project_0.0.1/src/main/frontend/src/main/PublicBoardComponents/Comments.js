@@ -50,7 +50,6 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
     const commentFocus = useRef(null);
     const [commentStart, setCommentStart] = useState(0);
     const [commentNew, setCommentNew] = useState(false);
-
     const [replyInputState, setReplyInputState] = useState('');
     const [replyInputIndex, setReplyInputIndex] = useState(0);
 
@@ -105,7 +104,6 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [moreON]);
-
 
     //댓글 작성 
     const createComment = async () => {
@@ -241,6 +239,7 @@ function Comments({ postKey, setCommentCount, PublicBoardImgmodal }) {
         </div>
     )
 }
+
 function CommentsZero(){
     return(
         <div className={styles.CommentsZero}>

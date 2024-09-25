@@ -75,10 +75,8 @@ function ChannelHome() {
                 setModalOpen(true);
                 return navigate('/');
             }
-
             setChannelInfo(channel.info);
             fetchData(channel.info.channelKey, postPage);
-
         } catch (error) { 
             console.error('채널 확인 중 오류 발생:', error);
             setModalContent('채널 확인 중 오류가 발생했습니다.');
@@ -144,7 +142,6 @@ function ChannelHome() {
                     </div>
                 </div>
             </div>
-
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }

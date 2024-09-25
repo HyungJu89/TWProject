@@ -16,7 +16,6 @@ function MoreDeleteMini({ setCommentLode,state,nickName, referenceType, referenc
     const closeModal = () => {
         setModalOpen(false);
     };
-    
     const dispatch = useDispatch()
 
     const reportOnClick = () => {
@@ -44,8 +43,6 @@ function MoreDeleteMini({ setCommentLode,state,nickName, referenceType, referenc
             setModalOpen(true); 
             return; 
         }
-        
-        
         delectByUser(referenceType,referenceKey)
         setCommentLode((state) => state ? false : true)
     }
@@ -64,6 +61,5 @@ function MoreDeleteMini({ setCommentLode,state,nickName, referenceType, referenc
         </div>
     )
 }
-
 
 export default MoreDeleteMini;

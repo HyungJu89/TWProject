@@ -4,10 +4,8 @@ import styles from './style/AdminPaging.module.css';
 function AdminPagingInquiry({ inquiry, onItemsChange }) {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호
     const itemsPerPage = 10; // 페이지당 보여줄 항목 수
-
     // 총 페이지 수 계산
     const totalPages = Math.ceil(inquiry.length / itemsPerPage);
-
     // 현재 페이지에서 보여줄 데이터 슬라이싱
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;

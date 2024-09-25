@@ -15,7 +15,6 @@ export const delectByUser = async (referenceType,referenceKey) => {
         referenceKey : referenceKey,
     }
 
-
     switch (referenceType) {
         case 'post':
             apiUrl = '/post/deleteByUser';
@@ -29,15 +28,15 @@ export const delectByUser = async (referenceType,referenceKey) => {
         default:
             console.error("잘못된 referenceType:", referenceType);
             return;
-}
-try {
-    // axios.post로 API 요청
-    const { data } = await axios.post(apiUrl, delectByUserDto);
-    console.log(data)
-    return data;
-} catch (error) {
-    console.error(`Error deleting ${referenceType}:`, error);
-    throw new Error(`Failed to delete ${referenceType}`);
-}
+    }
 
+    try {
+        // axios.post로 API 요청
+        const { data } = await axios.post(apiUrl, delectByUserDto);
+        console.log(data)
+        return data;
+    } catch (error) {
+        console.error(`Error deleting ${referenceType}:`, error);
+        throw new Error(`Failed to delete ${referenceType}`);
+    }
 };

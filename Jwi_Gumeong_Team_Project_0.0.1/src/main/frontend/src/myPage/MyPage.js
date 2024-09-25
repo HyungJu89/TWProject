@@ -74,5 +74,4 @@ function TopicBtn({ topic, settopic }) {
     );
 }
 
-
 export default MyPage;

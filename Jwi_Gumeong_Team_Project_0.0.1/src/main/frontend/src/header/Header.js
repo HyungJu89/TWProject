@@ -39,10 +39,8 @@ function Header({ onClickSearch, onLogout, isLoggedIn }) {
     let [recentSearchData, setRecentSearchData] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0); // 안 읽은 알림 개수
     const [notifications, setNotifications] = useState([]); // 알림 데이터
-
     let navigate = useNavigate();
     let location = useLocation();
-
     let popModalRef = useRef(null);
     let popinputRef = useRef(null);
 
@@ -54,7 +52,6 @@ function Header({ onClickSearch, onLogout, isLoggedIn }) {
                 if (countResponse.data.result === "success") {
                     setUnreadCount(countResponse.data.unreadCount); // 안 읽은 알림 개수 설정
                 }
-
                 const listResponse = await axios.post('/alarm/list', null, { params: { userKey } });
                 if (listResponse.data.result === "success") {
                     setNotifications(listResponse.data.list); // 알림 리스트 설정

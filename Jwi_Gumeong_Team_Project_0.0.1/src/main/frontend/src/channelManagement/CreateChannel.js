@@ -66,8 +66,6 @@ function CreateChannel({ManagementChannelId, openModal}) {
                 noticeFalse()
                 return
             }
-
-
         } catch {
             setSignText('서버 통신중 에러가 발생하였습니다 다시한번 시도해주세요.')
             noticeFalse()
@@ -97,13 +95,10 @@ function CreateChannel({ManagementChannelId, openModal}) {
                 }
             }
         }
-
         fetchData();
     }, [ManagementChannelId]);
 
-
     return (
-
         <div className={style.createChannel}> {/*개설 할 스트리머 URL 입력부분 */}
             <div className={style.createChannelLine}>
                 <div className={style.createChannelText}>개설 할 스트리머 URL입력</div>
@@ -125,10 +120,7 @@ function CreateChannel({ManagementChannelId, openModal}) {
                 <CreateChannelNext notice = {notice} channelInfo={channelInfo} channelUrl={channelUrl} openModal={openModal}/>
             )}
         </div>
-
     )
 }
-
-
 
 export default CreateChannel;
