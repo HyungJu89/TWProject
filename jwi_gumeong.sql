@@ -1,111 +1,5 @@
--- 2024-09-23 [안재원] V 0.1.17
--- 수정 내용 : 좋아요 알람 로그 테이블 추가 (중복방지)
-CREATE TABLE likeAlarmLog (
-    logKey INT PRIMARY KEY AUTO_INCREMENT,
-    postKey INT NOT NULL COMMENT '게시글 키',
-    threshold INT NOT NULL COMMENT '좋아요 임계값 (10, 50, 100)',
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY unique_log (postKey, threshold)
-);
-
--- 2024-09-10 [안재원] V 0.1.16?
--- 수정 내용 alarm 테이블 컬럼 하나 추가
-ALTER TABLE `alarm` ADD COLUMN `referenceUserKey` INT COMMENT '알림을 발생시킨 사용자 키';
-
--- 2024-08-24 [조영민] V 0.1.15
--- 수정내용 : report 테이블 category int -> varchar로 수정 report 인서트문 추가
--- DB자체에서도 바꿔뒀으니 알터만 하면됨
-ALTER TABLE `report`
-MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
-select * from alarm;
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('1','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
-
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('2','8','post','4','욕설/혐오','왜 처리 안함 ㅡㅡ','unprocessed',now(),now());
-
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('4','2','post','4','오류/버그','에이펙스에서 핵쓰고다녔음 ㅡㅡ','unprocessed',now(),now());
-
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('4','2','post','4','오류/버그','엉덩이에서 총나옴 이거 어케 처리할껀데 진짜','unprocessed',now(),now());
-
-insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('8','2','post','4','욕설/혐오','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
-
-select *from user;
-
--- 2024-08-23 [조영민] V 0.1.14
--- 수정내용 : `state` 정지 상태  추가
-ALTER TABLE `bannedLog`
-ADD COLUMN `state` VARCHAR(50) NOT NULL COMMENT '정지 상태';
-
--- 2024-08-21 [조영민] V 0.1.13
--- 수정내용 : bannedLog 추가
--- banned에서 update문으로 데이터를 수정하기 떄문에 로그를 남기는 방식으로 수정함
-CREATE TABLE `bannedLog` (
-   `bannedLogKey`   INT PRIMARY KEY AUTO_INCREMENT   NOT NULL COMMENT '정지 키',
-   `bannedKey`   INT   NOT NULL COMMENT '밴 테이블 키',
-   `userKey`   INT   NOT NULL COMMENT '유저 키',
-   `adminKey` INT NOT NULL COMMENT '어드민 키',
-   `reason` VARCHAR(50) NOT NULL COMMENT '정지 사유',
-   `reasonDate` DATETIME NOT NULL DEFAULT NOW() COMMENT '정지 시작 날짜',
-   `date`   INT   NOT NULL COMMENT '정지일수',
-   `state` VARCHAR(50) NOT NULL COMMENT '정지 상태',
-   `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-	
-select *from bannedLog;
-select *from banned;
-
--- 2024-08-19 [안재원] V 0.1.12
--- 수정내용 : alarm 테이블에서 title 컬럼 제거
-ALTER TABLE `alarm` DROP `title`;
-ALTER TABLE `alarm` DROP `content`;
-
--- 2024-08-15 [임재열] V 0.1.11
--- 수정내용 : admin 테이블 adminName 칼럼에 유니크가 추가되어있지않아 동일한 adminName 의 행이 만들어짐
-ALTER TABLE `admin` ADD CONSTRAINT `uniqueAdminName` UNIQUE (`adminName`);
-
--- 2024-08-15 [조영민] V 0.1.10 
--- 수정내용 : ADMIN TABLE 컬럼명 수정 id => adminName / pw => adminPassWord 헤싱된 insert문 추가
--- 패스워드 인코더로 insert하는것이 불가능하기 때문에 직접 insert하는걸로 변경했음
--- id : asdf /  pw : asdf123
-select *from admin;
-insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("asdf","$2a$12$qWMhwV31meoA0C6fvoVLX.OBe4NXvyz09HIewoxQ8EPProosm54z6","activate",now(),now());
-insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) values("dsfs3975","$2a$12$5UdVf8drVmy.R/dNuULOAej7jmz7aqoS7ON50aG.zzdSNZbJlYdBq","activate",now(),now());
-
--- 2024-08-15 [안재원] V 0.1.9 
--- 수정내용 : inquiry 테이블 Title 소문자로 변경 및 이미지 Null 가능으로 변경 , inquiryResponse 이미지 Null 가능, faq 이미지 Null 가능
-ALTER TABLE `inquiry` RENAME COLUMN `Title` to `title`;
-ALTER TABLE `inquiry` MODIFY `image` TEXT COMMENT '이미지 URL';
-ALTER TABLE `inquiryResponse` MODIFY `image` TEXT COMMENT '이미지 URL';
-ALTER TABLE `faq` MODIFY `imagePath` TEXT COMMENT '이미지 URL';
-
--- 2024-08-12 15시 13분 [김형주] V 0.1.8 
--- 수정내용 : 유저테이블에 pwWrong(비밀번호 틀린횟수) 추가
--- 비밀번호 5회제한 로직을 수월하게 만들기 위해 수정했습니다!
-alter table `user` add `pwWrong` int default 0;
-
--- 2024-08-10 00시 46분 [임재열] V 0.1.7
--- 수정내용 : like 테이블 오타수정
-
--- 2024-08-08 16시 53분 [임재열] V 0.1.6
--- 수정내용 : loginLog, userConnection 커밋내용이 누락되어 추가 및 외래키 추가
-
--- 2024-08-08 11시 39분 [임재열] V 0.1.5 
--- 수정내용 : 외래키 사용 및 참조된 외래키가 삭제되면 해당 키를 참조하는 모든 행을 삭제
--- 외래키란? : 다른테이블의 정보를 참조할때 사용하는 key
-
 CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
-drop DATABASE jwi;
-select*from`user`;
-drop table user;
-insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zdasaszx@a.coaafaaassm','12s4','fdaadssdafsa','비밀',0,null,'activate',NOW(),NOW());
--- 자동 생성된 INSERT 문들
--- 자동 생성된 INSERT 문들
 
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
@@ -120,7 +14,6 @@ CREATE TABLE `user` (
 	`updatedAt`	DATETIME	NOT NULL	DEFAULT NOW() ON UPDATE NOW()
 );
 
-select*from `favorites`;
 CREATE TABLE `favorites` (
 	`favoritesKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL	COMMENT '유저키',
@@ -129,7 +22,6 @@ CREATE TABLE `favorites` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES user(`userKey`) ON DELETE CASCADE
 );
-select*from `channel`;
 CREATE TABLE `channel` (
 	`channelKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`id`	VARCHAR(32)	NOT NULL	COMMENT '채널 아이디',
@@ -172,8 +64,6 @@ CREATE TABLE `like` (
     FOREIGN KEY (`postKey`) REFERENCES `post`(`postKey`) ON DELETE CASCADE
 );
 
-DROP TABLE `like`;
-
 CREATE TABLE `manager` (
 	`managerKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`userKey`	INT	NOT NULL	COMMENT '유저키',
@@ -198,10 +88,9 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
-select *from report;
 CREATE TABLE admin (
     adminKey    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
-    adminName    VARCHAR(30) COMMENT '어드민아이디',
+    adminName    VARCHAR(30) unique COMMENT '어드민아이디',
     adminPassWord    VARCHAR(255)    NOT NULL    COMMENT '비밀번호',
     state    VARCHAR(50)    NOT NULL    DEFAULT 'activate'    COMMENT '어드민 상태 "activate","deactivate","secession"  작업자와 상의',
     createdAt    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -223,12 +112,12 @@ CREATE TABLE `alarm` (
 	`userKey`	INT	NOT NULL	COMMENT '유저키',
 	`referenceType`	VARCHAR(50)	NOT NULL	COMMENT '알람종류 "inquiry","post","comment","system","like" 테이블 이름으로  시스템 메세지는 system 으로',
 	`referenceKey`	INT	NULL	COMMENT '참조 키',
+    `referenceUserKey` INT COMMENT '알림을 발생시킨 사용자 키',
 	`read`	TINYINT	NOT NULL	DEFAULT 0	COMMENT 'read유무',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
-
 
 CREATE TABLE `inquiry` (
 	`inquiryKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 키',
@@ -246,7 +135,7 @@ CREATE TABLE `inquiryResponse` (
 	`responseKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '문의 답변 키',
 	`inquiryKey`	INT	NOT NULL	COMMENT '문의 키',
 	`adminKey`	INT	NOT NULL	COMMENT '어드민 키',
-	`Title`	VARCHAR(30)	NOT NULL	COMMENT '제목',
+	`title`	VARCHAR(30)	NOT NULL	COMMENT '제목',
 	`responseText`	TEXT	NOT NULL	COMMENT '답변 내용',
 	`image`	TEXT	COMMENT '이미지 URL',
 	`createdAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -277,9 +166,6 @@ CREATE TABLE `banned` (
 	`updatedAt`	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
-INSERT INTO `banned` (`userKey`, `reason`, `reasonDate`, `date`, `state`, `createdAt`, `updatedAt`) 
-VALUES(1, '사유사유', '2024-04-04', 30, 'activate', now(), now());
-SELECT * FROM `banned`;
 
 CREATE TABLE `managerLog` (
 	`managerLogKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL	COMMENT '매니저 활동로그키',
@@ -327,7 +213,7 @@ CREATE TABLE `loginLog`(
 `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
-select*from userConnection;
+
 CREATE TABLE `userConnection` (
 `userKey`   INT  NOT NULL,
 `sessionId` VARCHAR(30) UNIQUE NULL,
@@ -336,3 +222,26 @@ CREATE TABLE `userConnection` (
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
+CREATE TABLE likeAlarmLog (
+    logKey INT PRIMARY KEY AUTO_INCREMENT,
+    postKey INT NOT NULL COMMENT '게시글 키',
+    threshold INT NOT NULL COMMENT '좋아요 임계값 (10, 50, 100)',
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_log (postKey, threshold)
+);
+
+CREATE TABLE `bannedLog` (
+   `bannedLogKey`   INT PRIMARY KEY AUTO_INCREMENT   NOT NULL COMMENT '정지 키',
+   `bannedKey`   INT   NOT NULL COMMENT '밴 테이블 키',
+   `userKey`   INT   NOT NULL COMMENT '유저 키',
+   `adminKey` INT NOT NULL COMMENT '어드민 키',
+   `reason` VARCHAR(50) NOT NULL COMMENT '정지 사유',
+   `reasonDate` DATETIME NOT NULL DEFAULT NOW() COMMENT '정지 시작 날짜',
+   `date`   INT   NOT NULL COMMENT '정지일수',
+   `state` VARCHAR(50) NOT NULL COMMENT '정지 상태',
+   `createdAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   `updatedAt`   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+	
+insert into admin(adminName,adminPassWord,state,createdAt,updatedAt) 
+values("admin","$2a$12$ep.J5qmOpxecJU2wUyBPv.Gej.X8ErLKTVPRihqrUw3OL0Pbmf1Qy","activate",now(),now());
