@@ -26,6 +26,7 @@ import n_heart_activation from '../icon/32px/n-heart-activation.png';
 import n_heart_deactivation from '../icon/32px/n-heart-deactivation.png';
 import n_service_activation from '../icon/32px/n-service-activation.png';
 import n_service_deactivation from '../icon/32px/n-service-deactivation.png';
+import xBoxImg from '../icon/img/profile.png';
 import more from '../icon/24px/more.png';
 import '../App.css';
 import { useSelector } from 'react-redux';
@@ -353,12 +354,12 @@ function NotificationModal({ userKey }) { /* 알림 모달 */
 
             switch (notification.referenceType) {
                 case 'post':
-                    icon = notification.channelImageUrl || formulation;
+                    icon = notification.channelImageUrl || xBoxImg;
                     content = notification.content;
                     subContent = `${notification.nickname}님이 댓글을 달았어요.`;
                     break;
                 case 'comment':
-                    icon = notification.channelImageUrl || formulation;
+                    icon = notification.channelImageUrl || xBoxImg;
                     content = notification.content;
                     subContent = `${notification.nickname}님이 대댓글을 달았어요.`;
                     break;
