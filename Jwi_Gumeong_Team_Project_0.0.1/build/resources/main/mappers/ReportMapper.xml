@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwi.work.report.mapper.ReportMapper">
+
+<insert id="reportSubmit" parameterType="com.jwi.work.report.dto.bodyDto.ReportDto">           
+	INSERT INTO report(reportUserKey,userKey,referenceType,referenceKey,category,content)
+	SELECT 
+		t.userKey,uc.userKey,#{referenceType},#{referenceKey},#{category},#{content}
+	FROM
+	<!-- myBatis의 case 문법  -->
+			<choose>
+				<when test="referenceType == 'post'">
+					(SELECT userKey FROM post WHERE postKey = #{referenceKey}) AS t
+				</when>
+				<when test="referenceType == 'comment'">
+					(SELECT userKey FROM comment WHERE commentKey = #{referenceKey}) AS t
+				</when>
+				<when test="referenceType == 'reply'">
+					(SELECT userKey FROM reply WHERE replyKey = #{referenceKey}) AS t
+				</when>	
+				<otherwise>
+            <!-- referenceType이 'post', 'comment', 'reply'가 아닌 경우 -->
+            		SELECT NULL AS userKey FROM DUAL WHERE 1=0
+        		</otherwise>
+		</choose>
+	LEFT JOIN 
+		(SELECT userKey FROM userConnection WHERE sessionId=#{sessionId})AS uc 
+	ON 1=1 
+	WHERE
+		NOT EXISTS(
+			SELECT 
+				1 
+			FROM 
+				report 
+			WHERE 
+				userKey = uc.userKey 
+			AND 
+				referenceType = #{referenceType} 
+			AND 
+				referenceKey = #{referenceKey}
+		)
+	AND t.userKey != uc.userKey
+</insert>
+
+
+</mapper>

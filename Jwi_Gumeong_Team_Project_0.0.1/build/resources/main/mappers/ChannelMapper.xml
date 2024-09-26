@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwi.work.channel.mapper.ChannelMapper">
+
+
+	<!-- 채널 생성시 -->
+
+	<select id="channelCheck" parameterType="String"
+		resultType="int">
+		SELECT COUNT(*) FROM channel WHERE id = #{channelId}
+	</select>
+
+	<insert id="channelCreate" parameterType="com.jwi.work.channel.dto.bodyDto.ChannelCreateDto">
+		INSERT INTO channel (id,name,imageUrl,followerCount) value
+		(#{id},#{name},#{imageUrl},#{followerCount})
+	</insert>
+
+	<select id="channelGet" parameterType="String" resultType="com.jwi.work.channel.dto.channelDto.ChannelDto">
+		SELECT
+			channel.channelKey,
+			channel.id,
+			channel.name,
+			channel.followerCount,
+			channel.imageUrl,
+			channel.updatedAt,
+			COALESCE(COUNT(favorites.channelKey), 0) AS favoriteCount ,
+			<!-- 단순하게 case 문으로 생각하면 됨 CASE WHEN EXISTS 안의 값이  특정 조건을 만족하는 데이터가 있는지-->
+			<!--  EXISTS 는 서브쿼리 안에 행이 존재하면 트루가 반환됨. -->
+        	CASE 
+            	WHEN EXISTS(
+        			SELECT  
+            			1 
+        			FROM 
+        		    	favorites f
+		        	JOIN
+            			userConnection uc ON f.userKey = uc.userKey
+        			WHERE 
+	            		f.channelKey = channel.channelKey 
+	            		AND uc.sessionId = #{sessionId}
+    				) THEN TRUE
+    			ELSE FALSE
+        	END AS isFavorite
+		FROM
+			channel
+		LEFT JOIN
+			favorites ON channel.channelKey = favorites.channelKey
+		WHERE 
+			channel.id = #{channelId}
+		GROUP BY 
+        	channel.channelKey
+	</select>
+	
+	<update id="followerCountUpdate" parameterType="int">
+		UPDATE channel set followerCount = #{followerCount} WHERE channelKey = #{channelKey}
+	</update>
+	
+    <!-- 인기게시판 :: 일정 기간 내 게시글 -->
+    <select id="HotBoardGet" parameterType="map" resultType="com.jwi.work.channel.dto.channelDto.ChannelDto">
+		SELECT 
+		    c.name,
+		    c.imageUrl,
+		    c.id,
+		    COUNT(*) AS post_count
+		FROM post p
+		JOIN channel c ON p.channelKey = c.channelKey
+		WHERE p.createdAt BETWEEN #{startTime} AND #{endTime}
+		GROUP BY c.channelKey, c.name, c.imageUrl
+		ORDER BY post_count DESC
+		LIMIT 0, 10
+    </select>
+    
+        <!-- 추천 :: 그냥 7개 무작위 -->
+    <select id="RandomBoard" parameterType="map" resultType="com.jwi.work.channel.dto.channelDto.ChannelDto">
+		SELECT * 
+		FROM channel
+		ORDER BY RAND()
+		LIMIT 7;
+    </select>
+
+   <insert id="favorite" parameterType="com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto">
+   		INSERT INTO 
+			favorites(userKey,channelKey)
+<!-- SELECT 결과값으로 INSERT를 한다. 대신 데이터형식이나 검색한 칼럼의 수가 똑같아야함  -->
+		SELECT 
+			UC.userKey, #{channelKey}
+		FROM 
+			userConnection AS UC
+		WHERE 
+			UC.sessionId = #{sessionId}
+		AND 
+		<!-- NOT EXISTS 는 서브쿼리의 결과가 존재하지않을때 true를 반환하고 존재할때 false를 반환한다.  -->
+		<!-- select 를 할때 where 조건에 false 가 있을때 select 되지않는다. -->
+		<!-- 이를 이용해서 like 테이블에 userKey와 postKey를 같이 가지고있는 행이 있는지 확인하고 없을때만 insert 되게 처리한다. -->
+			NOT EXISTS(
+			SELECT 
+				1 
+			FROM 
+				`favorites` 
+			WHERE 
+				channelKey = #{channelKey}
+			AND 
+				userKey = UC.userKey
+		)
+   </insert>
+   
+   <delete id="unFavorite" parameterType="com.jwi.work.channel.dto.bodyDto.ChannelFavoriteDto">
+   		DELETE FROM `favorites` WHERE channelKey = #{channelKey} AND userKey = (
+		SELECT UC.userKey FROM userConnection AS UC WHERE UC.sessionId = #{sessionId}
+		)
+   </delete>
+
+
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    	
+    <wb-module deploy-name="Jwi_Gumeong_Team_Project_0.0.1">
+        		
+        <property name="context-root" value="Jwi_Gumeong_Team_Project_0.0.1"/>
+        		
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/frontend/build"/>
+        		
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/resources"/>
+        		
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/bin/generated-sources/annotations"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/bin/generated-test-sources/annotations"/>
+        	
+    </wb-module>
+    
+</project-modules>

@@ -1,5 +1,5 @@
 server:
-  port : 9090
+  port : 8080
   
 spring:
   servlet:
@@ -41,7 +41,7 @@ logging:
     org.springframework.security: DEBUG
 
 file:
-  upload-dir: uploads/resources/fileupload/
+  upload-dir: /home/ec2-user/upload_images/
   
 jwt:
   key: chldldlarladkswh0828chldldlarladkswh0828chldldlarladkswh0828

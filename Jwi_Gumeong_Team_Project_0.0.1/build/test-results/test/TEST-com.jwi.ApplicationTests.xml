@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.jwi.ApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-09-26T11:23:28" hostname="BOOK-LUR16EOQBM" time="0.549">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.jwi.ApplicationTests" time="0.549"/>
+  <system-out><![CDATA[20:23:20.033 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.jwi.ApplicationTests]: ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+20:23:20.186 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.jwi.Application for test class com.jwi.ApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
+2024-09-26T20:23:20.697+09:00  INFO 22776 --- [    Test worker] com.jwi.ApplicationTests                 : Starting ApplicationTests using Java 17.0.6 with PID 22776 (started by AHN in C:\workspace\CHZZK\Jwi_Gumeong_Team_Project_0.0.1)
+2024-09-26T20:23:20.700+09:00  INFO 22776 --- [    Test worker] com.jwi.ApplicationTests                 : No active profile set, falling back to 1 default profile: "default"
+2024-09-26T20:23:21.725+09:00  INFO 22776 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-09-26T20:23:21.903+09:00  INFO 22776 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 164 ms. Found 17 JPA repository interfaces.
+2024-09-26T20:23:22.730+09:00  INFO 22776 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-09-26T20:23:22.815+09:00  INFO 22776 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-09-26T20:23:22.854+09:00  INFO 22776 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-09-26T20:23:23.210+09:00  INFO 22776 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-09-26T20:23:23.241+09:00  INFO 22776 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-09-26T20:23:23.544+09:00  INFO 22776 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3063be68
+2024-09-26T20:23:23.547+09:00  INFO 22776 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-09-26T20:23:24.968+09:00  INFO 22776 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-09-26T20:23:24.972+09:00  INFO 22776 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-09-26T20:23:26.798+09:00  WARN 22776 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-09-26T20:23:27.104+09:00  INFO 22776 --- [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2024-09-26T20:23:27.691+09:00  INFO 22776 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@319c77de, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@12dcfa6a, org.springframework.security.web.context.SecurityContextHolderFilter@63088bbd, org.springframework.security.web.header.HeaderWriterFilter@257f1509, org.springframework.web.filter.CorsFilter@299022a9, org.springframework.security.web.authentication.logout.LogoutFilter@62a9e9bf, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@32107bba, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@102bce96, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1f9009d3, org.springframework.security.web.session.SessionManagementFilter@6089c1e3, com.jwi.work.config.JwtFilter@4c9ed40, org.springframework.security.web.access.ExceptionTranslationFilter@24484dfb, org.springframework.security.web.access.intercept.AuthorizationFilter@27e0906f]
+2024-09-26T20:23:28.164+09:00  INFO 22776 --- [    Test worker] com.jwi.ApplicationTests                 : Started ApplicationTests in 7.771 seconds (process running for 9.288)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

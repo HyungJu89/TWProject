@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1d171663.css",
+    "main.js": "/static/js/main.3edc06aa.js",
+    "static/js/206.8ac086ca.chunk.js": "/static/js/206.8ac086ca.chunk.js",
+    "static/media/illustration02.png": "/static/media/illustration02.8647d606335f47c641c8.png",
+    "static/media/help-img.png": "/static/media/help-img.0e200a8efe9365b68d60.png",
+    "static/media/404-img-x.png": "/static/media/404-img-x.f5a0c6626370ca95d922.png",
+    "static/media/adult_img.png": "/static/media/adult_img.c8827aca14130076fe1c.png",
+    "static/media/service-Illustration.png": "/static/media/service-Illustration.5d6de016b05115c1852e.png",
+    "static/media/report-ing.png": "/static/media/report-ing.8d13a948047d2c71ae9b.png",
+    "static/media/reply-ing.png": "/static/media/reply-ing.5bbd06e3d248ef722019.png",
+    "static/media/formulation-ing.png": "/static/media/formulation-ing.443af44884e38d187b1e.png",
+    "static/media/illustration01.png": "/static/media/illustration01.06a02c81be05930565bc.png",
+    "static/media/report-pop-img.png": "/static/media/report-pop-img.a1b5bf5e78f5a80e0a20.png",
+    "static/media/ask-ing.png": "/static/media/ask-ing.89cd7a54a7342a3c0428.png",
+    "static/media/profile.png": "/static/media/profile.7e5ee6e53919e51c3881.png",
+    "index.html": "/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.1d171663.css",
+    "static/js/main.3edc06aa.js"
+  ]
+}

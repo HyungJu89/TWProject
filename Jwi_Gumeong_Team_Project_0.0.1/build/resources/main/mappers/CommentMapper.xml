@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwi.work.channel.mapper.CommentMapper">
+
+<resultMap type="com.jwi.work.channel.dto.commentDto.CommentDto" id="commentResultMap">
+	<id property="commentKey" column="commentKey"/>
+	<result property="nickName" column="C_nickName"/>
+	<result property="comment" column="C_comment"/>
+	<result property="state" column="C_state"/>
+	<result property="myComment" column="myComment"/>
+	<result property="createdAt" column="C_createdAt"/>
+	<result property="updatedAt" column="C_updatedAt"/>
+	<collection property="replys" ofType="com.jwi.work.channel.dto.postDto.ReplyDto" resultMap="replyResultMap"/>
+</resultMap>
+
+<resultMap type="com.jwi.work.channel.dto.commentDto.ReplyDto" id="replyResultMap">
+	<id property="replyKey" column="replyKey"/>
+	<result property="nickName" column="R_nickName"/>
+	<result property="replyNickName" column="R_replyNickName"/>
+	<result property="reply" column="R_reply"/>
+	<result property="state" column="R_state"/>
+	<result property="myReply" column="myReply"/>
+	<result property="createdAt" column="R_createdAt"/>
+	<result property="updatedAt" column="R_updatedAt"/>
+</resultMap>
+
+
+
+<select id="commentCount" parameterType="int" resultType="int">
+	SELECT
+		IFNULL(COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0),0)
+	FROM 
+		comment 	
+	LEFT JOIN
+		reply	ON comment.commentKey = reply.commentKey
+	WHERE postKey = #{postKey} 
+</select>
+
+<!-- 댓글, 대댓글 출력 -->
+<!-- 게시글 key로 댓글, 대댓글을 가져오고 유저키를 닉네임으로 변환하여 출력 + 이 댓글이 내가 작성한 댓글, 대댓글 인지 까지도 출력 -->
+<select id="commentSelect" parameterType="map" resultMap="commentResultMap">
+	SELECT
+		comment.commentKey,
+		comment.comment AS C_comment,
+		comment.state AS C_state,
+		comment.createdAt AS C_createdAt,
+		comment.updatedAt AS C_updatedAt,
+		
+		c.nickName AS C_nickName,
+	
+		reply.replyKey,
+		reply.reply AS R_reply,
+		reply.state AS R_state,
+		reply.createdAt AS R_createdAt,
+		reply.updatedAt AS R_updatedAt,
+		
+		r.nickName AS R_nickName,
+		rr.nickName AS R_replyNickName,
+        	
+			CASE
+				WHEN EXISTS(
+					SELECT
+						1
+					FROM
+						`userConnection` uc
+					WHERE
+						uc.userKey = comment.userKey
+						AND uc.sessionId = #{sessionId}
+						
+				) THEN TRUE
+				ELSE FALSE
+				END AS myComment,
+        	
+			CASE
+				WHEN EXISTS(
+					SELECT
+						1
+					FROM
+						`userConnection` uc
+					WHERE
+						uc.userKey = reply.userKey
+						AND uc.sessionId = #{sessionId}
+
+				) THEN TRUE
+				ELSE FALSE
+				END AS myReply
+	
+	
+	FROM 
+		comment
+	LEFT JOIN
+		user AS c ON comment.userKey = c.userKey
+	LEFT JOIN
+		reply ON comment.commentKey = reply.commentKey
+	LEFT JOIN
+		user AS r ON reply.userKey = r.userKey
+	LEFT JOIN
+		reply AS replyReply ON reply.replyreplyKey = replyReply.replyKey
+	LEFT JOIN
+		user AS rr ON replyReply.userKey = rr.userKey
+	WHERE
+		comment.postKey = #{postKey} 
+	ORDER BY
+		comment.createdAt
+    <if test="isAsc">
+        ASC
+    </if>
+    <if test="!isAsc">
+        DESC
+    </if>
+	, reply.createdAt ASC
+</select>
+
+<insert id="commentCreate" parameterType="com.jwi.work.channel.dto.bodyDto.CommentCreateDto" >
+	INSERT INTO comment(userKey,postKey,comment)
+	SELECT 
+		userKey,#{postKey},#{comment}
+	FROM 
+		userConnection
+	WHERE
+		sessionId = #{sessionId}
+</insert>
+
+	<update id="commentDeleteByUser" parameterType="com.jwi.work.channel.dto.bodyDto.DeleteByUser">
+		UPDATE comment SET state = 'delete' WHERE commentKey = #{referenceKey} AND userKey = (SELECT userKey FROM userConnection WHERE sessionId = #{sessionId})
+	</update>
+
+
+
+</mapper>

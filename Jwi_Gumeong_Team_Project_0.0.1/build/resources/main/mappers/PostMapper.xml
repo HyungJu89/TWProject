@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwi.work.channel.mapper.PostMapper">
+
+	<select id="postCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM post WHERE channelKey = #{channelKey}
+	</select>
+	
+
+	
+	<select id="postList" parameterType="map" resultType="com.jwi.work.channel.dto.postDto.PostDto">
+		WITH userKeyCTE AS (
+	    	SELECT userKey 
+    		FROM userConnection 
+    		WHERE sessionId = #{sessionId}
+		)
+		SELECT 
+			post.postKey,
+			post.content,
+			post.image,
+			post.state,
+			post.createdAt,
+			post.updatedAt,
+			commentSummary.totalCommentCount AS commentCount,
+			likeSummary.likeCount,
+			user.nickName,
+			
+			CASE 
+            	WHEN EXISTS(
+            		SELECT  
+            			1 
+            		FROM 
+            			`like` AS l
+            		WHERE 
+            			l.postKey = post.postKey  
+            			AND l.userKey = (SELECT userKey FROM userKeyCTE)
+            	) THEN TRUE
+            	ELSE FALSE
+        	END AS `like`,
+        	
+			CASE
+				WHEN post.userKey = (SELECT userKey FROM userKeyCTE) THEN TRUE
+				ELSE FALSE
+				END AS myPost
+		FROM 
+			post 
+		LEFT JOIN
+			(SELECT
+				`like`.postKey,
+				COUNT(`like`.postKey) AS likeCount
+			FROM
+				`like`
+			GROUP BY
+				`like`.postKey
+			) AS likeSummary ON post.postKey = likeSummary.postKey
+		LEFT JOIN
+			user ON post.userKey = user.userKey
+		LEFT JOIN
+			<!-- 서브쿼리 : 댓글 숫자를 뽑기위해 필요 -->
+			<!-- comment 테이블에서 postKey를 선택하고 postKey의 갯수를 세는 기능, 결과는 postKey별로 그룹화해서 각 post에 댓글 갯수를 반환함 -->
+			<!-- 서브 쿼리로 그룹화 시킨 값중 post.postKey 와 동일한 postKey를 가진 행을 결과에 추가해준다 -->
+   	     	(SELECT 
+        		comment.postKey, 
+        		COUNT(DISTINCT comment.commentKey) + IFNULL(SUM(reply.replyKey IS NOT NULL), 0) AS totalCommentCount
+     		FROM 
+        		comment
+     		LEFT JOIN 
+        		reply ON comment.commentKey = reply.commentKey
+     		GROUP BY 
+        		comment.postKey
+        ) AS commentSummary ON post.postKey = commentSummary.postKey
+		WHERE 
+			post.channelKey = #{channelKey}  AND post.state = 'common'
+		ORDER BY
+        	post.createdAt DESC
+		LIMIT	
+			#{offset},#{limit}
+	</select>
+	
+
+	
+	<select id="selectHash" parameterType="String" resultType="com.jwi.work.channel.dto.sqlDto.ImageInfoDto">
+		SELECT imageKey,imageUrl,referenceCount FROM image WHERE imageHash = #{imageHash}
+	</select>
+	
+	<select id="selectUrl" parameterType="String" resultType="com.jwi.work.channel.dto.sqlDto.ImageInfoDto">
+		SELECT imageKey,imageUrl,referenceCount FROM image WHERE imageUrl = #{imageUrl}
+	</select>
+	
+	<insert id="postCreate" parameterType="map">
+		INSERT INTO post(userKey,channelKey,content,image) value (#{userKey},#{channelKey},#{content},#{imageJson})
+	</insert>
+
+	<insert id="insertImg" parameterType="map">
+		INSERT INTO image(imageUrl,imageHash,referenceCount) value (#{imageUrl},#{imageHash},1)
+	</insert>
+	
+	<update id="referenceUp" parameterType="int">
+		UPDATE image set referenceCount = referenceCount + 1 WHERE imageKey = #{imageKey}
+	</update>
+	
+	<update id="referenceDown" parameterType="int">
+		UPDATE image set referenceCount = referenceCount - 1 WHERE imageKey = #{imageKey} 
+	</update>
+
+	<delete id="deleteImg" parameterType="int">
+		DELETE FROM image WHERE imageKey = #{imageKey}
+	</delete>
+
+	<select id="postInfo" resultType="com.jwi.work.channel.dto.sqlDto.PostInfoDto" parameterType="int">
+		SELECT userKey,image FROM post WHERE postKey = #{postKey}
+	</select>
+	
+	<update id="postDeleteByUser" parameterType="com.jwi.work.channel.dto.bodyDto.DeleteByUser">
+		UPDATE post SET state = 'delete' WHERE postKey = #{referenceKey} AND userKey = (SELECT userKey FROM userConnection WHERE sessionId = #{sessionId})
+	</update>
+	
+	<delete id="postDelete" parameterType="int">
+		DELETE FROM post WHERE postKey = #{postKey}
+	</delete>
+
+	<select id="userKey" resultType="int" parameterType="String">
+		SELECT IFNULL(userKey,0) FROM userConnection WHERE sessionId = #{sessionId}
+	</select>
+
+<!-- 	<update id= "postUpdate" parameterType="map">
+		UPDATE post set content = #{content} , image = #{image} WHERE postKey = #{postKey}
+	</update> -->
+
+<!-- 좋아요 누를때 중복방지 -->
+	<insert id="likeUp" parameterType="com.jwi.work.channel.dto.bodyDto.PostLikeDto">
+		INSERT INTO 
+			`like`(userKey,postKey)
+<!-- SELECT 결과값으로 INSERT를 한다. 대신 데이터형식이나 검색한 칼럼의 수가 똑같아야함  -->
+		SELECT 
+			UC.userKey, #{postKey}
+		FROM 
+			userConnection AS UC
+		WHERE 
+			UC.sessionId = #{sessionId}
+		AND 
+		<!-- NOT EXISTS 는 서브쿼리의 결과가 존재하지않을때 true를 반환하고 존재할때 false를 반환한다.  -->
+		<!-- select 를 할때 where 조건에 false 가 있을때 select 되지않는다. -->
+		<!-- 이를 이용해서 like 테이블에 userKey와 postKey를 같이 가지고있는 행이 있는지 확인하고 없을때만 insert 되게 처리한다. -->
+			NOT EXISTS(
+			SELECT 
+				1 
+			FROM 
+				`like` 
+			WHERE 
+				postKey = #{postKey}
+			AND 
+				userKey = UC.userKey
+		)
+	</insert>
+
+	<delete id="likeDown" parameterType="com.jwi.work.channel.dto.bodyDto.PostLikeDto">
+		DELETE FROM `like` WHERE postKey = #{postKey} AND userKey = (
+		SELECT UC.userKey FROM userConnection AS UC WHERE UC.sessionId = #{sessionId}
+		)
+	</delete>
+	
+	<!-- 게시물의 좋아요 개수 가져오기 -->
+	<select id="getLikeCount" parameterType="int" resultType="int">
+	    SELECT COUNT(*)
+	    FROM `like`
+	    WHERE postKey = #{postKey}
+	</select>
+	
+	<!-- 알림이 이미 발생했는지 확인 -->
+	<select id="checkLikeAlarmLogExists" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM `likeAlarmLog`
+	    WHERE `postKey` = #{postKey}
+	    AND `threshold` = #{threshold}
+	</select>
+
+	<!-- 알림 fhrm 추가 -->
+	<insert id="insertLikeAlarmLog" parameterType="map">
+	    INSERT INTO `likeAlarmLog`(
+	    	`postKey`
+	    	, `threshold`)
+	    VALUES (
+	    	#{postKey}
+	    	, #{threshold})
+	</insert>
+	
+	<!-- 알림 테이블에 새로운 알림 삽입 -->
+	<insert id="insertAlarm" parameterType="map">
+	    INSERT INTO alarm (
+	    	`userKey`
+	    	, `referenceType`
+	    	, `referenceKey`
+	    	, `read`
+	    ) VALUES (
+	    	#{userKey}
+	    	, #{referenceType}
+	    	, #{referenceKey}
+	    	, 0)
+	</insert>
+
+</mapper>
