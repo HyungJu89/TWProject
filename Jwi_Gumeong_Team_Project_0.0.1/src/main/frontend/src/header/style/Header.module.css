@@ -390,7 +390,7 @@ body{
     padding: 2px 6px;
     z-index: 100;
     visibility: hidden;
-    opacity: 0;
+    opacity: 0; /* 투명도 처음에는 안 보여야함 */
     white-space: nowrap; /* 줄 바꿈 방지 */
 }
 
