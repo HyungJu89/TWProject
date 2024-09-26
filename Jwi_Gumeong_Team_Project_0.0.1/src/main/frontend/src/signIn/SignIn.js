@@ -62,7 +62,6 @@ function SignIn() {
     };
     
     const checkUser = async () => {
-        // console.log(count);
         if (email !== '' && password !== '') {
             try {
                 const userData = {
@@ -117,7 +116,6 @@ function SignIn() {
 
     // 유저정보 체크 로직
     useEffect(() => {
-        // console.log(sessionInfo.sessionId);
         if (email !== '' && password !== ''){
             setIsButtonActive(true);
         }else if(email == ''){

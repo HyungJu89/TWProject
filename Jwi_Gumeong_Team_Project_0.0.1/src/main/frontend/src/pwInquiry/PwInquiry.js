@@ -17,7 +17,6 @@ function PwInquiry({ onLogout }) {
         };
         try {
             const response = await axios.post('/issuedPw', userData);
-            // console.log(response.data);
             setCertiNum(response.data);
         } catch (error) {
             console.error('Channel API Error:', error);

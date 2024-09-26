@@ -194,20 +194,6 @@ function InfoEdit() {
     };
 
     const changeUserInfo = async () => {
-        // 클릭시 체킹
-        // if (nickNameCheck || pwCheck) {
-        //     if(nickName !== ''){
-        //         // 닉네임 유효성 검사 테스트
-        //         nickNameChecks(nickName);
-        //     }
-        //     if(password !== ''){
-        //         //패스워드 유효성 검사 테스트
-        //         PasswordCheck(password);
-        //     }
-        // } else {
-        //     console.log("한개라도 입력하셈");
-        // }
-        
         // 여기에서 한번에 보내는거 말고 경우를 3개로 늘려야할꺼같음.
         if(isButtonActive){
             try {
@@ -227,15 +213,11 @@ function InfoEdit() {
                     userResponse = await axios.post('/myPage/editAll', userData); 
                 }
                 if(userResponse.data.check){
-                    // alert("ㅋㅋ 바뀜ㄴ다");
                     setModalContent(userResponse.data.warningMessage);
                     setModalOpen(true);
                     navigate("/");
                     //여기에 네비게이트 넣으면 됨
-                } else if(!userResponse.data.check){
-
                 }
-                console.log(userResponse);
             } catch (error) {
                 console.error('Channel API Error:', error);
             }
