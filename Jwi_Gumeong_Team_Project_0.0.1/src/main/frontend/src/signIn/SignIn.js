@@ -84,7 +84,7 @@ function SignIn() {
                     navigate('/');
                     setTimeout(() => {
                         window.location.reload(); // 새로 고침을 하여 알림 데이터 표시
-                    }, 500);
+                    }, 300);
                 }
                 if(userResponse.data.wrongCount >= 5){
                     setModalContent('비밀번호를 5회 이상 틀리셨습니다!');

@@ -146,7 +146,7 @@ function Icon({ navigate, userKey }) { /* 로그인 시 노출되는 알림 아�
         };
         fetchUnreadCount();
 
-        const intervalId = setInterval(fetchUnreadCount, 1000); // 1초마다 호출
+        const intervalId = setInterval(fetchUnreadCount, 500); // 0.5초마다 호출
         return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
     }, [userKey]);
 
@@ -198,7 +198,7 @@ function NotificationModal({ userKey }) { /* 알림 모달 */
     // 로그인 후 알림 데이터를 가져오기
     useEffect(() => {
         fetchNotifications(); // 로그인 후 알림 데이터를 가져옴
-        const intervalId = setInterval(fetchNotifications, 30000); // 30초마다 알림 데이터 업데이트
+        const intervalId = setInterval(fetchNotifications, 500); // 0.5초마다 알림 데이터 업데이트
         return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
     }, [userKey]);
 
