@@ -79,9 +79,10 @@
 
 .leftDiv .hotBoard .channel .text{
     width: 115px;
-    height: 40px;
+    height: 50px;
+    border-radius: 0px;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow:  ellipsis;
 }
 .leftDiv .hotBoard .channel .imgDiv{
     width: 90px;
