@@ -1,14 +1,23 @@
--- 2024-08-24 [최지은] V 0.1.16
--- 수정내용 : 대문자를 소문자로 바꾸는 힘!!!!!
-ALTER TABLE `inquiryresponse` RENAME COLUMN `Title` to `title`;
-select*from inquiryresponse;
+-- 2024-09-23 [안재원] V 0.1.17
+-- 수정 내용 : 좋아요 알람 로그 테이블 추가 (중복방지)
+CREATE TABLE likeAlarmLog (
+    logKey INT PRIMARY KEY AUTO_INCREMENT,
+    postKey INT NOT NULL COMMENT '게시글 키',
+    threshold INT NOT NULL COMMENT '좋아요 임계값 (10, 50, 100)',
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_log (postKey, threshold)
+);
+
+-- 2024-09-10 [안재원] V 0.1.16?
+-- 수정 내용 alarm 테이블 컬럼 하나 추가
+ALTER TABLE `alarm` ADD COLUMN `referenceUserKey` INT COMMENT '알림을 발생시킨 사용자 키';
 
 -- 2024-08-24 [조영민] V 0.1.15
 -- 수정내용 : report 테이블 category int -> varchar로 수정 report 인서트문 추가
 -- DB자체에서도 바꿔뒀으니 알터만 하면됨
 ALTER TABLE `report`
 MODIFY COLUMN `category` VARCHAR(32) NOT NULL COMMENT '신고 사유';
-select *from report;
+select * from alarm;
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
 values ('1','2','post','4','보안','꼴보기싫음 ㅡㅡ','unprocessed',now(),now());
 
@@ -22,7 +31,9 @@ insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,c
 values ('4','2','post','4','오류/버그','엉덩이에서 총나옴 이거 어케 처리할껀데 진짜','unprocessed',now(),now());
 
 insert into `report`(reportUserKey,userKey,referenceType,referenceKey,category,content,state,createdAt,updatedAt)
-values ('4','2','post','4','욕설/혐오','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
+values ('8','2','post','4','욕설/혐오','아니 이새끼좀 처리하라고 진짜 핵쓰고 별의별 지랄 다함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@','unprocessed',now(),now());
+
+select *from user;
 
 -- 2024-08-23 [조영민] V 0.1.14
 -- 수정내용 : `state` 정지 상태  추가
@@ -91,7 +102,11 @@ CREATE DATABASE jwi default CHARACTER SET UTF8MB4;
 use jwi;
 drop DATABASE jwi;
 select*from`user`;
-insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zddsaszxdasdf1@naver.com','12s4','f4fzcvx3r','비밀',0,null,'activate',NOW(),NOW());
+drop table user;
+insert into user(email,pw,nickName,gender,pwWrong,birthday,state,createdAt,updatedAt) values ('zdasaszx@a.coaafaaassm','12s4','fdaadssdafsa','비밀',0,null,'activate',NOW(),NOW());
+-- 자동 생성된 INSERT 문들
+-- 자동 생성된 INSERT 문들
+
 CREATE TABLE `user` (
 	`userKey`	INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 	`email`	VARCHAR(30) UNIQUE	NOT NULL,
@@ -183,6 +198,7 @@ CREATE TABLE `report` (
 	FOREIGN KEY (`reportUserKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
 
+select *from report;
 CREATE TABLE admin (
     adminKey    INT PRIMARY KEY AUTO_INCREMENT    NOT NULL    COMMENT '어드민 키',
     adminName    VARCHAR(30) COMMENT '어드민아이디',
@@ -311,6 +327,7 @@ CREATE TABLE `loginLog`(
 `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`userKey`) REFERENCES `user`(`userKey`) ON DELETE CASCADE
 );
+select*from userConnection;
 CREATE TABLE `userConnection` (
 `userKey`   INT  NOT NULL,
 `sessionId` VARCHAR(30) UNIQUE NULL,

@@ -15,9 +15,9 @@ import ChannelTitle from './PublicBoardComponents/ChannelTitle.js';
 import Comments from './PublicBoardComponents/Comments.js';
 import MoreDelete from './PublicBoardComponents/MoreDelete.js';
 import { useNavigate } from 'react-router-dom';
-import { openImgUiModalFalse } from '../slice/mainSlice';
-import { clearPost } from '../slice/PostSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
+import { formatDistanceToNow } from 'date-fns'; // 아래와 같이 사용되는 날짜 라이브러리
+import { ko } from 'date-fns/locale'; // 한국어 설정
 
 function MiniPublicBoard() {
     let postInfo = useSelector((state)=>{ return state.postInfo })
@@ -26,15 +26,14 @@ function MiniPublicBoard() {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const navigate = useNavigate();
+    const PublicBoardImgmodal = ('open'); //이미지 팝업 상태에 따른 신고,삭제 모달 위치 변환용
 
     const closeModal = () => {
         setModalOpen(false);
-        navigate('/signIn');
     };
     
     // 디바운스요 변수
     let [commentsON, setCommentsON] = useState(false); //댓글 on/off
-
     const [commentCount,setCommentCount] = useState(0);
 
     useEffect(() => {
@@ -78,7 +77,7 @@ function MiniPublicBoard() {
         setHeart(newHeart)
         heartDebounce(newHeart);
     }
-
+    
     //모달함수
     let [moreON, setmoreON] = useState(false); //삭제,수정,신고 모달 on/off
     const modalRef = useRef(null);
@@ -94,15 +93,22 @@ function MiniPublicBoard() {
         };
     }, [moreON]);
 
+    //날짜 세팅
+    function timeSetting(createdAt){
+        return formatDistanceToNow(new Date(createdAt), { addSuffix: true, locale: ko });
+        //formatDistanceToNow : 특정 시간을 기준으로 현재까지의 시간을 계산
+        //addSuffix : ~전 ~후 같은 접미사
+    }
+
     return (
         <div className={styles.mainDiv}>
             {postInfo.postChannel && (
                 <ChannelTitle postChannel={postInfo.postChannel} />
             )}
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
-                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
+                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· {timeSetting(postInfo.createdAt)}</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true) }} src={more} />
-                {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'0px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
+                {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-0px'} top={'30px'} myContent={postInfo.myPost} />}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
                 <div className={styles.text}>
@@ -120,7 +126,7 @@ function MiniPublicBoard() {
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
-            {commentsON && <Comments postKey={postInfo.postKey} setCommentCount={setCommentCount} />}
+            {commentsON && <Comments postKey={postInfo.postKey} setCommentCount={setCommentCount} PublicBoardImgmodal={PublicBoardImgmodal} />}
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }

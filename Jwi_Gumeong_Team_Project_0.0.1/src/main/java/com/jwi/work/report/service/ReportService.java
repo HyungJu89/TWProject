@@ -16,7 +16,6 @@ public class ReportService {
 	public AnswerDto<String> reportSubmit(ReportDto reportDto){
 		
 		AnswerDto<String> answerDto = new AnswerDto<>();
-		
 		if(reportDto.getReferenceType().equals("post") || reportDto.getReferenceType().equals("comment") || reportDto.getReferenceType().equals("reply")) {
 			reportMapper.reportSubmit(reportDto);
 			answerDto.setSuccess(true);

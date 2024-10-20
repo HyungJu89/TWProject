@@ -4,10 +4,9 @@
     background-color: white;
     margin: 0px 0px;
     padding: 20px 30px;
-    overflow: auto;
+    overflow: scroll;
     overflow-x: hidden;
     height: 94%;
-    background-color: #BBBBBB;
 }
 
 .title {
@@ -246,6 +245,7 @@
     width: 106px;
     height: 31px;
     border-radius: 0px;
+    cursor: pointer;
 }
 
 .moreUi .text:hover {

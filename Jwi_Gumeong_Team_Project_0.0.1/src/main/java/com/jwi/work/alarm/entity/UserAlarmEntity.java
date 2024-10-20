@@ -55,4 +55,9 @@ public class UserAlarmEntity {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    public String getPw() {
+        return null;
+    }
+    
 }

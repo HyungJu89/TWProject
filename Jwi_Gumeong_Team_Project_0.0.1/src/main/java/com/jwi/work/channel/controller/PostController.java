@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jwi.work.channel.dto.bodyDto.DeleteByUser;
 import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
 import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
@@ -33,6 +34,12 @@ public class PostController {
 		return postService.postSelect(sessionId,channelKey,page);
 	}
 	
+	//내가 쓴글
+	@GetMapping("/myPost")
+	public SearchDto<List<PostDto>> postMyPost(@RequestParam("sessionId") String sessionId,@RequestParam("page")int page){
+		return postService.postMyPost(sessionId,page);
+	}
+	
 	
 	@PostMapping("/create")
 	public AnswerDto<String> postCreate(
@@ -46,15 +53,24 @@ public class PostController {
 		
 	}
 	
+	@PostMapping("/deleteByUser")
+	public AnswerDto<String> postDeleteByUser(@RequestBody DeleteByUser postDelete){
+		return postService.postDeleteByUser(postDelete);
+	}
+	
 	@PostMapping("/delete")
 	public AnswerDto<String> postDelete(@RequestBody PostDeleteDto deleteDto	){
 		return postService.postDelete(deleteDto);
 	}
 	
+	
+	
 	@PostMapping("/like")
 	public void postLike(@RequestBody PostLikeDto likeDto) {
 		postService.postLike(likeDto);
 	}
+	
+	
 	
 	/*
 	 * @PostMapping("/update") public AnswerDto<String> postUpdate(

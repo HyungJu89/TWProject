@@ -13,12 +13,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jwi.work.channel.dto.bodyDto.DeleteByUser;
 import com.jwi.work.channel.dto.bodyDto.PostDeleteDto;
 import com.jwi.work.channel.dto.bodyDto.PostLikeDto;
 import com.jwi.work.channel.dto.postDto.PostDto;
 import com.jwi.work.channel.dto.sqlDto.ImageInfoDto;
 import com.jwi.work.channel.dto.sqlDto.PostInfoDto;
 import com.jwi.work.channel.mapper.PostMapper;
+import com.jwi.work.channel.mapper.SearchMapper;
 import com.jwi.work.util.FileManagerUtil;
 import com.jwi.work.util.PagingUtil;
 import com.jwi.work.util.dto.AnswerDto;
@@ -29,6 +31,9 @@ public class PostService {
 
 	@Autowired
 	private PostMapper postMapper;
+	
+	@Autowired
+	private SearchMapper searchMapper;
 
 	@Autowired
 	private FileManagerUtil fileManagerUtil;
@@ -65,6 +70,39 @@ public class PostService {
 
 		return postSelect;
 	}
+	
+	
+	public SearchDto<List<PostDto>> postMyPost(String sessionId,int page){
+		// 한페이지에 나올 개시글 숫자
+		final int LIMIT_PAGE = 10;
+
+		SearchDto<List<PostDto>> postSelect = new SearchDto<>();
+
+		// 게시글 숫자
+		int postCount = searchMapper.myPostCount(sessionId);
+
+		// 게시글이 없을때 바로 리턴시켜줌
+		if (postCount == 0) {
+			postSelect.setSuccess(false);
+
+			return postSelect;
+		}
+		
+		// 게시글이 있기떄문에 true로 변경
+		postSelect.setSuccess(true);
+
+		// 게시글 페이징 처장
+		postSelect.setPaging(pagingUtil.paging(page, postCount, LIMIT_PAGE));
+		
+		// 게시글 불러오기, 채널키로 해당 채널에 있는 게시글들을 불러오고 LIMIT로 게시글을 몇개 가져올껀지 지정
+			List<PostDto> posts = searchMapper.postMyPost(sessionId,postSelect.getPaging().getOffset(),postSelect.getPaging().getLimit());
+			
+			// return 해줘야할 객체에 담아줌
+			postSelect.setSearch(posts);
+
+		return postSelect;
+	}
+	
 	
 	
 	public AnswerDto<String> postCreate(int channelKey, String sessionId, String content, List<MultipartFile> files) {
@@ -138,10 +176,24 @@ public class PostService {
 
 		return answer;
 	}
+	
+	public AnswerDto<String> postDeleteByUser(DeleteByUser postDelete){
+
+		AnswerDto<String> anwer = new AnswerDto<>();
+		try {
+			postMapper.postDeleteByUser(postDelete);
+			anwer.setSuccess(true);
+		}catch (Exception e) {
+			anwer.setSuccess(false);
+		}
+		return anwer;
+		
+	}
 
 	public AnswerDto<String> postDelete(PostDeleteDto postDelete) {
 		PostInfoDto post = new PostInfoDto();
 		
+	
 		AnswerDto<String> anwer = new AnswerDto<>();
 		// postKey로 개시글 조회
 		post = postMapper.postInfo(postDelete.getPostKey());
@@ -205,7 +257,38 @@ public class PostService {
 			postMapper.likeDown(likeDto);
 		}
 		
+		// 알림 추가 로직
+	    int likeCount = postMapper.getLikeCount(likeDto.getPostKey()); // 현재 포스트의 좋아요 개수를 가져옴
+	    PostInfoDto postInfo = postMapper.postInfo(likeDto.getPostKey()); // 해당 포스트의 정보를 가져옴
+	    int postUserKey = postInfo.getUserKey(); // 해당 게시글의 작성자 userKey
+
+	    // 좋아요가 10, 50, 100을 넘었을 때만 알림을 추가
+	    addLikeAlarm(likeCount, postUserKey, likeDto.getPostKey());
 		
+		
+	}
+	
+	private void addLikeAlarm(int likeCount, int postUserKey, int postKey) {
+	    if (likeCount >= 10 && likeCount < 50) {
+	        // 좋아요 10개 넘었을 때 알림 추가
+	        insertLikeAlarmIfNotExists(postUserKey, "like_10", postKey, 10);
+	    } else if (likeCount >= 50 && likeCount < 100) {
+	        // 좋아요 50개 넘었을 때 알림 추가
+	        insertLikeAlarmIfNotExists(postUserKey, "like_50", postKey, 50);
+	    } else if (likeCount >= 100) {
+	        // 좋아요 100개 넘었을 때 알림 추가
+	        insertLikeAlarmIfNotExists(postUserKey, "like_100", postKey, 100);
+	    }
+	}
+
+	private void insertLikeAlarmIfNotExists(int userKey, String referenceType, int postKey, int threshold) {
+	    // likeAlarmLog에 임계값에 대한 기록이 있는지 확인
+	    int logCount = postMapper.checkLikeAlarmLogExists(postKey, threshold);
+	    if (logCount == 0) {
+	        // 로그에 없으면 기록하고, 알림 삽입
+	        postMapper.insertLikeAlarmLog(postKey, threshold);
+	        postMapper.insertAlarm(userKey, referenceType, postKey);
+	    }
 	}
 	
 //	public AnswerDto<String> postUpdate(int postKey,int userKey,String content,List<MultipartFile>files) {

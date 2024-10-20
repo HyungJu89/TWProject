@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jwi.work.admin.util.JwtUtil;
+import com.jwi.work.alarm.entity.Alarm;
 import com.jwi.work.alarm.entity.Report;
 import com.jwi.work.alarm.entity.UserAlarmEntity;
+import com.jwi.work.alarm.repository.AlarmRepository;
 import com.jwi.work.alarm.repository.ReportRepository;
 import com.jwi.work.center.inquiry.entity.Inquiry;
 import com.jwi.work.center.inquiry.entity.InquiryResponse;
@@ -27,7 +29,6 @@ import com.jwi.work.user.dto.User;
 import com.jwi.work.user.mapper.UserMapper;
 import com.jwi.work.util.FileManagerUtil;
 import com.jwi.work.util.NowDate;
-import com.jwi.work.util.PagingUtil;
 
 import lombok.AllArgsConstructor;
 
@@ -36,6 +37,13 @@ import lombok.AllArgsConstructor;
 public class AdminService {
 	
 	// @Autowired << Bean 자동으로 돌려줌 ㅅㄱ
+	
+    /** 
+     * TODO : 
+     * 먼저 데이터 찾은다음에 있으면 전환 없으면 생성으로 하면 되려나? // 
+     * 로그 만들어야됨 / 로그 테이블 , JPA 엔티티는 만들었음
+     * 로그 다함 이제 페이징 처리 하고 다른걸로 넘어가면될듯 신고기능을 빨리 받아야지 연결할수있음.
+     **/
 	
 	// Admin쪽으로 POST 요청 들어오면 처리
 	@Autowired
@@ -56,6 +64,8 @@ public class AdminService {
 	private NowDate dateCal;
 	@Autowired
     private FileManagerUtil fileManagerUtil;
+	@Autowired
+	private AlarmRepository alarmRepository;
 	
 	// 데이터베이스에 직접 insert 하는거보다 여기에서 인코딩 거치고 넣는게 더 나을듯?
 	public String loginJWT(Map<String,String> data) {
@@ -79,36 +89,6 @@ public class AdminService {
 		return userMapper.getAllUser();
 	}
 	
-	// 페이징 관련 더미코드
-	
-//	public List<User> getPageingUsers(int page, int limitPage, PagingDto pagingDto){
-//		List<User> users = userMapper.getAllUser();
-//		if (page <= 0) {
-//            page = 1;
-//        }
-//		PagingDto pageing = pagingUtil.paging(page, users.size(), limitPage);
-//		List<User> pageingUsers = users.stream()
-//				.skip(pageing.getOffset())
-//                .limit(pageing.getLimit())
-//                .map(new User(
-//    				users.getUserKey(),
-//					users.getEmail(),
-//					users.getPwWrong(),
-//    				users.getNickName(),
-//    				users.getGender(),
-//    				users.getBirthday(),
-//                    users.getState(),
-//                    users.getCreatedAt(),
-//                    users.getUpdatedAt()
-//                ))
-//                .collect(Collectors.toList());
-//		return users;
-//	}
-	
-//	public List<Report> asdf(){
-//		
-//	}
-	
     public List<Inquiry> selectInquiry() {
     	// 재원이 형이 작성한 inquiryRepository(JPA) 문법에 따라 .findAll()을 호출
     	return inquiryRepository.findAll();
@@ -127,14 +107,6 @@ public class AdminService {
     public List<Report> selectReport(){
     	return reportRepository.findAll();
     }
-    
-    /** 
-     * TODO : 
-     * 먼저 데이터 찾은다음에 있으면 전환 없으면 생성으로 하면 되려나? // 
-     * 로그 만들어야됨 / 로그 테이블 , JPA 엔티티는 만들었음
-     * 로그 다함 이제 페이징 처리 하고 다른걸로 넘어가면될듯 신고기능을 빨리 받아야지 연결할수있음.
-     **/
-    
     // 유저 밴하는 기능
     public void banndUser(Map<String,String> userData) {
     	// JPA 연결되어있는 리파지토리에서 JPA 문법을 이용해 매핑처리해둔 findByUserKey를 호출후 찾은 경우
@@ -151,12 +123,6 @@ public class AdminService {
     	// .get("adminName", String.class)
     	// 재원이형 여기서 알람리파지토리.save 하면됨!!!
     	// 비어있는경우 insert문 작동
-    	for(Report reports :report) {
-    		// 이게 신고게시글 신고한놈의 User.UserKey 부분
-//    		System.out.println(reports.getUser().getUserKey());
-    		reports.setState("process");
-    		reportRepository.save(reports);
-    	}
     	
 	    if (sanctions.isEmpty()) {
 	    	//유저 비활성화로 전환 (밴)
@@ -168,7 +134,6 @@ public class AdminService {
             Sanction savedSanction = sanctionRepository.save(sanction);
             bannedKey = savedSanction.getBannedKey();
             sanctionLog.setBannedKey(bannedKey);
-            
         // 비어있지 않는경우 update 문 작동
 	    } else {
 	    	System.out.println(" 이미 밴 되어있는 유저입니다 업데이트문으로 바꿈" + userData);
@@ -181,6 +146,22 @@ public class AdminService {
 	            sanctionRepository.save(sanctionR);
 	    	}
 	    }
+	    
+	    for(Report reports : report) {
+			// 이게 신고게시글 신고한놈의 User.UserKey 부분
+//	    		System.out.println(reports.getUser().getUserKey());
+    		reports.setState("process");
+    		reportRepository.save(reports);
+    		
+    		// 신고한 유저에게 알림 추가
+            Alarm reportUserAlarm = new Alarm();
+            reportUserAlarm.setUserKey(reports.getUser().getUserKey()); // 신고한 유저
+            reportUserAlarm.setReferenceType("system");
+            reportUserAlarm.setReferenceKey(bannedKey);  // 신고 참조
+            reportUserAlarm.setReferenceUserKey(reports.getReportUser().getUserKey()); // 제재 받은 유저 키
+            reportUserAlarm.setReason(reports.getCategory()); // 신고 사유
+            alarmRepository.save(reportUserAlarm);
+    	}
 	    // 중요한점 JPA에선 .save << 이 함수가 update / insert 다 사용할수있음.
 	    // 얘가 똑똑해서 알아서 구분함
 	    userMapper.updateDeAct(Integer.parseInt(userData.get("userKey")));
@@ -234,20 +215,19 @@ public class AdminService {
 					if (savedFileName != null) {
 						fileUrls.add(savedFileName);
 					}
-				}
+				}	
 			}
 			int adminKey = 1;
 			String title = "임시";
 			// 어드민 키 아직 못받아와서 하드코딩 했음
 			InquiryResponse inquiryResponse = new InquiryResponse();
-			System.out.println(responseText);
 			inquiryResponse.setInquiryKey(inquiryKey);
 			inquiryResponse.setAdminKey(adminKey);
 			inquiryResponse.setTitle(title);
 			inquiryResponse.setResponseText(responseText);
 			inquiryResponse.setImage(String.join(",", fileUrls));
 			inquiryResponseRepository.save(inquiryResponse);
-
+			
 			return "success";
 
 		} catch (Exception e) {

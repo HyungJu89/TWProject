@@ -10,6 +10,7 @@ import check_deactivation from '../icon/24px/check-deactivation.png'
 import check_activation from '../icon/24px/check-activation.png'
 import { useChannel } from '../recycleCode/ApiQuery.js';
 import AlarmModal from '../modal/AlarmModal.js';
+import xBoxImg from '../icon/img/profile.png';
 
 
 function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
@@ -41,6 +42,7 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
         }
         notice && !checkBoxIcon ? setButtonColor('#FF8901') : setButtonColor('#BBBBBB')
     }
+
     const onClickButton = async () => {
         // 체크박스 예외처리
         if (!checkBoxIcon) {
@@ -52,7 +54,6 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
             openModal('입력한 ID와 생성할 채널의 ID가 다릅니다.');
             return;
         }
-
         if (notice && checkBoxIcon) {
             const channelCreate = {
                 id: channelInfo.channelId,
@@ -81,7 +82,6 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
 
         if (number / num[0] >= 1) {
             let int = Math.floor(number / num[1]);
-
             return Math.floor(int / 10) + unit[0] + Math.floor(int % 10) + unit[1]
         }
         if (number / num[1] >= 1) {
@@ -107,6 +107,7 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
     }, [rulesAdd])
 
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelUrl);
+    
     if (isLoadingChannel) {
         return <></>;
     }
@@ -119,14 +120,18 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
             <div className={style.announcementTitle}>개설 할 채널 확인</div> {/*채널 공지사항 부분 Text */}
             <div className={style.announcementArea}>
                 <div className={style.formGroup}>
-                    <img src={channelApi.channelImageUrl} alt="채널 이미지" />
+                    <div className={style.imgDiv}>
+                    {channelApi.channelImageUrl ?
+                        <img src={channelApi.channelImageUrl} alt="채널 이미지" />
+                        :
+                        <img src={xBoxImg} alt="채널 이미지" />
+                    }
+                    </div>
                     <div className={style.streammerInfo}>
                         <div className={style.channelName}>{channelApi.channelName}</div>
                         <div className={style.follower}>
                             <div className={style.markText}>팔로워</div>
                             <div className={style.markCount}> {formatUnit(channelApi.followerCount)}</div>
-                            <div className={style.markText}>즐겨찾기</div>
-                            <div className={style.markCount}> 10000만</div>
                         </div>
                     </div>
                 </div>
@@ -140,7 +145,6 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
             </div> {/*채널 내 공지사항 제목 */}
             <input className={style.noticeInputBox}
                 placeholder='공지사항의 제목을 입력해주세요.' />
-
             <div className={style.announcementTitle}>채널 규칙</div> {/*채널 공지사항 부분 Text */}
             <div className={style.noticeRulesBox} ref={rulesRef}>
                 <div className={style.noticeRules} style={{ marginTop: '0px' }}>01.
@@ -149,7 +153,6 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
                 {rulesAdd}
             </div>
             <div onClick={rulesAddArray} className={style.noticeRulesAdd}><img src={rule_add} alt="규칙 추가" />규칙 추가하기</div>
-
             <div className={style.announcementTitle}>공지사항 하고 싶은 말</div> {/*채널 공지사항 부분 Text */}
             <textarea className={style.moreText} placeholder='추가적으로 하고 싶은 말을 입력해주세요. (선택)' />
             </div>
@@ -182,7 +185,6 @@ function CreateChannelNext({ notice, channelInfo, channelUrl, openModal }) {
                 개설하기
             </div>
         </div>
-
     )
 }
 

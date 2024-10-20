@@ -18,6 +18,7 @@ public class FavoritesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int favoritesKey;
+    
     // 넌 이제부터 유저키야 알았지?
     @ManyToOne
     @JoinColumn(name = "userKey", nullable = true)

@@ -27,7 +27,6 @@ function Agree({ setAgreeCheck }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
     
-
     const handleOptionChange = (event) => {
         setSelectedOption(event.target.value === 'true');
     };
@@ -354,7 +353,6 @@ function Join() {
         if (e.target.value.length == 0 || e.target.value.length <= 8) {
             const value = e.target.value.replace(/\s/g, '');
             setNickname(value);
-            // console.log(userInput);
             setUserInput(value.length);
         }
         else if (e.target.value.length >= 9) {

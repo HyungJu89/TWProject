@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface ChannelRepository extends JpaRepository<ChannelEntity, Integer> {
-	public List<ChannelEntity> findByChannelKey(int channelKey);
+	List<ChannelEntity> findByChannelKey(int channelKey);
 }

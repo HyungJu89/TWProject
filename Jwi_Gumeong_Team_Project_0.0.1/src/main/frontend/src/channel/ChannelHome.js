@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 import PostCreate from './PostCreate.js';
 import { useChannel } from '../recycleCode/ApiQuery.js';
 import MainBanner from './MainBanner.js';
-import PublicBoard from '../main/PublicBoard.js'
+import Loading from '../loading/Loading.js';
+import PublicBoard from '../main/PublicBoard.js';
 import ChannelBody from './ChannelBody.js';
 import PublicMenu from '../main/PublicMenu.js'
 import { channelGet } from '../recycleCode/ChannelAxios.js';
@@ -21,7 +22,6 @@ function ChannelHome() {
     const [channelInfo,setChannelInfo] = useState();
     const [postList,setPostList] = useState([]);
     const [postPage,setPostPage] = useState(1);
-    
     //세션화용 코드,state
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);
@@ -61,7 +61,6 @@ function ChannelHome() {
                 }
             });
             setPostList(data);
-            console.log(data)
         } catch (error) {
             console.error('Channel API Error:', error);
             throw new Error('Failed to fetch channel data');
@@ -71,18 +70,14 @@ function ChannelHome() {
     const handleCheckChannel = async (channelId) => {
         try {
             const channel = await channelGet(channelId); // 비동기 호출
-            console.log(channel.info);
-            
             if (!channel.success) {
                 setModalContent('생성되지 않은 게시판입니다.');
                 setModalOpen(true);
                 return navigate('/');
             }
-
             setChannelInfo(channel.info);
             fetchData(channel.info.channelKey, postPage);
-
-        } catch (error) {
+        } catch (error) { 
             console.error('채널 확인 중 오류 발생:', error);
             setModalContent('채널 확인 중 오류가 발생했습니다.');
             setModalOpen(true);
@@ -108,13 +103,10 @@ function ChannelHome() {
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
     // 추후에 에러 페이지 만들기
     if (isLoadingChannel || channelInfo == null) {
-        return <div>채널 홈 로딩중</div>;
+        return  <Loading/>;
+    // if (channelInfo == null) {
+    //     return <div>채널 홈 로딩중</div>;
     }
-
-    if (isErrorChannel || !channelApi) {
-        return <div>에러남</div>;
-    }
-
     return (
         <div>
             <div className={style.ChannelTop}> {/* 얘 포인트 */}
@@ -126,12 +118,14 @@ function ChannelHome() {
                     <div className={style.listLeft}>
                         <PostCreate channelKey={channelInfo.channelKey} />
                         <div className={style.postList}>
-                            {postList.success && 
-                                <>
+                            {postList.success ?
+                                <div className={("fadein")}>
                                     {postList.search.map((postInfo, index) =>
-                                        <PublicBoard key={index} postInfo={postInfo} />
+                                        <PublicBoard key={index} postInfo={postInfo} index={index}/>
                                     )}
-                                </>
+                                </div> : 
+                                    <div className={style.nonPostList}>생성된 게시글이 없습니다.</div>
+                                
                             }
                         </div>
                         <div className={style.bottomPaging}>
@@ -143,12 +137,11 @@ function ChannelHome() {
                     <div className={style.listRight}>
                         <div className={style.sideBar}>
                              {/* 이부분 */}
-                            <PublicMenu isLoggedIn = {isLoggedIn} onLogout={handleLogout}/>
+                            <PublicMenu  isLoggedIn = {isLoggedIn} onLogout={handleLogout}/>
                         </div>
                     </div>
                 </div>
             </div>
-
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }

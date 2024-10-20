@@ -29,20 +29,20 @@
     margin-right: 470px;
 }
 
-.creactChannel {
+.createChannel {
     display: flex;
     width: 145px;
     height: 24px;
     margin-right: 14px;
 }
 
-.creactChannel img {
+.createChannel img {
     width: 24px;
     height: 24px;
     margin-left: 10px;
 }
 
-.creactChannelText {
+.createChannelText {
     height: 14px;
     font-size: 14px;
     font-weight: 500;
@@ -183,4 +183,19 @@
     font-weight: 500;
     line-height: 25.04px;
     color: #999999;
+}
+
+.nullPublicBoard{
+    display: flex;
+    width: 786px;
+    height: 240px;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17.53px;
+    text-align: center;
+    color: #999999;
+    background-color: #FFFFFF;
 }

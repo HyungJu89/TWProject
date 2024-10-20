@@ -16,10 +16,12 @@ import Comments from './PublicBoardComponents/Comments.js';
 import MoreDelete from './PublicBoardComponents/MoreDelete.js';
 import ChannelTitle from './PublicBoardComponents/ChannelTitle.js';
 import { useNavigate } from 'react-router-dom';
-import { reportInfo } from '../slice/ReportDtoSlice.js';
 import AlarmModal from '../modal/AlarmModal.js';
+import { formatDistanceToNow } from 'date-fns'; // 아래와 같이 사용되는 날짜 라이브러리
+import { ko } from 'date-fns/locale'; // 한국어 설정
 
-function PublicBoard({ postInfo }) {
+function PublicBoard({ postInfo,index }) {
+    let disPatch = useDispatch();
     const [heart, setHeart] = useState(false); //좋아요 누름 확인
     const [likeCount, setLikeCount] = useState(0);
     // 디바운스요 변수
@@ -27,18 +29,7 @@ function PublicBoard({ postInfo }) {
     //이미지
     let [imgBeing, setImgBeing] = useState([]);// 이미지가 존재하는지 검사
     let [imgCount, setImgCount] = useState('');// ★ 이미지 hover 갯수 임시 변수
-    const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState('');
     const navigate = useNavigate();
-
-    const closeModal = () => {
-        setModalOpen(false);
-        navigate('/signIn');
-    };
-
-    let state = useSelector((state) => { return state });
-    let dispatch = useDispatch();
-
     const [commentCount, setCommentCount] = useState(0);
 
     useEffect(() => {
@@ -61,11 +52,6 @@ function PublicBoard({ postInfo }) {
 
     const updateLike = async(newHeart) => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
-        if(!sessionIdJson){
-            setModalContent('로그인 되어 있지 않습니다.');
-            setModalOpen(true);
-            return;
-        }
         let sessionId = JSON.parse(sessionIdJson).sessionId
 
         const like = {
@@ -83,6 +69,11 @@ function PublicBoard({ postInfo }) {
 
     const likeOnClick = ()=>{
         const newHeart = !heart;
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if (!sessionIdJson) {
+            openModal('로그인 되어 있지 않습니다.');
+            return;
+        }
         setLikeCount((state) => newHeart ? state+1 : state-1 )
         setHeart(newHeart)
         heartDebounce(newHeart);
@@ -106,24 +97,33 @@ function PublicBoard({ postInfo }) {
     const imgOnclick = () => {
         const { image, ...newPostInfo } = postInfo;
         const updatePostInfo = { ...newPostInfo, image: imgBeing }
-        dispatch(changePost(updatePostInfo))
-        dispatch(openImgUiModal())
+        disPatch(changePost(updatePostInfo))
+        disPatch(openImgUiModal())
     }
+
+    //날짜 세팅
+    function timeSetting(createdAt){
+        return formatDistanceToNow(new Date(createdAt), { addSuffix: true, locale: ko });
+        //formatDistanceToNow : 특정 시간을 기준으로 현재까지의 시간을 계산
+        //addSuffix : ~전 ~후 같은 접미사
+    }
+
     return (
-        <div className={styles.mainDiv}>
+        <div className={('fadein', styles.mainDiv)} style={{ zIndex: -Number(index) }}>
             {postInfo.postChannel && (
                 <ChannelTitle postChannel={postInfo.postChannel} />
             )}
             <div className={styles.widthNav} style={{ marginTop: '0px' }}>
-                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· 1일</div></div>
+                <div className={styles.name}>{postInfo.nickName}<div className={styles.grayText}>· {timeSetting(postInfo.createdAt)}</div></div>
                 <img ref={moreRef} onClick={() => { !moreON && setmoreON(true) }} src={more} />
-                {moreON && <MoreDelete modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-82px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
+                {moreON && <MoreDelete state = {postInfo.state} modalRef={modalRef} nickName={postInfo.nickName} referenceType={'post'} referenceKey={postInfo.postKey} right={'-82px'} top={'30px'} myContent={postInfo.myPost} />} {/*신고, 삭제 모달*/}
             </div>
             <div className={styles.contentArea}>{/* 본문 */}
-                <div className={styles.text}>
+                {imgBeing.length > 0 ?
+                <>
+                    <div className={styles.text}>
                     {postInfo.content}
-                </div>
-                {imgBeing.length > 0 &&
+                    </div>
                     <div onClick={imgOnclick} className={styles.imgClick}>{/* 이미지 */}
                         <div className={styles.imgArea}>
                             <img src={`http://localhost:9090/images/${imgBeing[0]}`} />
@@ -133,6 +133,12 @@ function PublicBoard({ postInfo }) {
                                 </div>}
                         </div>
                     </div>
+                </>:
+                    <>
+                    <div className={styles.text2}>
+                    {postInfo.content}
+                    </div>
+                    </>
                 }
             </div>
             <div className={styles.widthNav} style={{ marginBottom: '0px' }}>{/* 하단 댓글,좋아요,공유 */}
@@ -147,9 +153,6 @@ function PublicBoard({ postInfo }) {
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
             {commentsON && <Comments postKey={postInfo.postKey} setCommentCount={setCommentCount} />}
-            {modalOpen && 
-                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
-            }
         </div>
     )
 }

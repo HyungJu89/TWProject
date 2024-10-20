@@ -51,4 +51,56 @@ public class AlarmRestController {
 		
 		return result;
 	}
+	
+	@PostMapping("/read")
+	public Map<String, String> updateAlarm(@RequestParam("notificationId") int notificationId) {
+		
+		int num = alarmService.updateAlarm(notificationId);
+		Map<String, String> result = new HashMap<>();
+		
+		if(num == 1) {
+			result.put("result", "success");
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
+	
+	@PostMapping("/read/all")
+	public Map<String, String> updateAllAlarm(@RequestParam("userKey") int userKey) {
+		int num = alarmService.updateAllAlarm(userKey);
+		Map<String, String> result = new HashMap<>();
+		
+		if(num >= 1) {
+			result.put("result", "success");
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
+	
+	@PostMapping("/delete/all")
+	public Map<String, String> deleteAllAlarm(@RequestParam("userKey") int userKey) {
+		int num = alarmService.deleteAllAlaram(userKey);
+		Map<String, String> result = new HashMap<>();
+		
+		if(num >= 1) {
+			result.put("result", "success");
+		} else {
+			result.put("result", "fail");
+		}
+		
+		return result;
+	}
+	
+	@PostMapping("/count/unread")
+    public Map<String, Object> countUnreadAlarms(@RequestParam("userKey") int userKey) {
+        int unreadCount = alarmService.unreadAlarms(userKey);
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", "success");
+        result.put("unreadCount", unreadCount);
+        return result;
+    }
 }

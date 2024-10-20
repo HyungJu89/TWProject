@@ -10,6 +10,7 @@ import music from '../icon/20px/music.png';
 import food from '../icon/20px/food.png';
 import skill from '../icon/20px/skill.png';
 import economy from '../icon/20px/economy.png';
+import xBoxImg from '../icon/img/profile.png';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useChannel, useLiveInfo } from '../recycleCode/ApiQuery.js';
@@ -18,7 +19,6 @@ function MainBanner({ channelId, route,
     channelIdSub1, channelIdSub2, channelIdSub3, postList }) {
     let navigate = useNavigate();
     // 첫 번째 쿼리: 채널 정보를 가져오기.
-
     const { data: channelApi, isLoading: isLoadingChannel, isError: isErrorChannel } = useChannel(channelId);
     const { data: channelApi1, isLoading: isLoadingChannel1, isError: isErrorChannel1 } = useChannel(channelIdSub1);
     const { data: channelApi2, isLoading: isLoadingChannel2, isError: isErrorChannel2 } = useChannel(channelIdSub2);
@@ -28,10 +28,8 @@ function MainBanner({ channelId, route,
     const { data: liveInfoApi1, isLoading: isLoadingLiveInfo1, isError: isErrorLiveInfo1 } = useLiveInfo(channelIdSub1);
     const { data: liveInfoApi2, isLoading: isLoadingLiveInfo2, isError: isErrorLiveInfo2 } = useLiveInfo(channelIdSub2);
     const { data: liveInfoApi3, isLoading: isLoadingLiveInfo3, isError: isErrorLiveInfo3 } = useLiveInfo(channelIdSub3);
-
     // 라이브 정보 변경 시 partnersLive 업데이트
     let [partnersLive, setPartnersLive] = useState(liveInfoApi);
-    
     // 라이브 정보 변경 시 partnersLiveInfo 업데이트
     let [partnersLiveInfo, setPartnersLiveInfo] = useState(channelApi);
 
@@ -55,8 +53,8 @@ function MainBanner({ channelId, route,
         isErrorLiveInfo3 || isErrorChannel3) {
         return <>에러</>;
     }
-    return (
 
+    return (
         <div className={style.channelInfoBack}> {/*상단 이미지 배너 */}
             {channelApi.openLive ? (
                 <div className={style.gradinetMainBanner}>
@@ -75,7 +73,6 @@ function MainBanner({ channelId, route,
                                 <img src={partnersLive?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
                             )
                         )}
-
                         {/* 라이브 방송 정보 */}
                             {route === 'channel' ?/* 라이브 제목 */
                                 (<div className={style.liveInfo} style={{cursor:'default'}}>
@@ -89,7 +86,13 @@ function MainBanner({ channelId, route,
                                 <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */} 
                                 <div className={style.liveTitle}>{partnersLive?.liveTitle}</div>
                                     <div className={style.mainbannerDiv}>
-                                        <div className={style.divImg}> <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" /></div>
+                                        <div className={style.divImg}> 
+                                            {partnersLiveInfo?.channelImageUrl ?
+                                            <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
+                                            :
+                                            <img className={style.icon} src={xBoxImg} alt="Channel Icon" />
+                                            }
+                                        </div>
                                         <div className={style.textArea}>
                                             {partnersLiveInfo?.channelName}
                                             <div className={style.category}>
@@ -101,7 +104,7 @@ function MainBanner({ channelId, route,
                                                             return <img src={art} />;
                                                         case '음악/노래':
                                                             return <img src={music} />;
-                                                        case '먹방':
+                                                        case '먹방/쿡방':
                                                             return <img src={food} />;
                                                         case '과학/기술':
                                                             return <img src={skill} />;
@@ -137,9 +140,6 @@ function MainBanner({ channelId, route,
                     <div className={style.backgroundImage}><img src={offBanner} /></div>
                 )}
         </div>
-
-
-
     )
 }
 
@@ -152,7 +152,6 @@ function LiveImgAdultCheck({ liveImginfo, channelinfo, setPartnersLive, setPartn
                 (<img src={liveImginfo?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />)
             }                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
         </div >
-
     )
 }
 

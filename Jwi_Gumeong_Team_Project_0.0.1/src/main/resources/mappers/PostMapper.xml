@@ -7,7 +7,14 @@
 		SELECT COUNT(*) FROM post WHERE channelKey = #{channelKey}
 	</select>
 	
+
+	
 	<select id="postList" parameterType="map" resultType="com.jwi.work.channel.dto.postDto.PostDto">
+		WITH userKeyCTE AS (
+	    	SELECT userKey 
+    		FROM userConnection 
+    		WHERE sessionId = #{sessionId}
+		)
 		SELECT 
 			post.postKey,
 			post.content,
@@ -25,26 +32,15 @@
             			1 
             		FROM 
             			`like` AS l
-            		JOIN
-            			userConnection uc ON l.userKey = uc.userKey
             		WHERE 
             			l.postKey = post.postKey  
-            			AND uc.sessionId = #{sessionId}
+            			AND l.userKey = (SELECT userKey FROM userKeyCTE)
             	) THEN TRUE
             	ELSE FALSE
         	END AS `like`,
         	
 			CASE
-				WHEN EXISTS(
-					SELECT
-						1
-					FROM
-						`userConnection` uc
-					WHERE
-						uc.userKey = post.userKey
-						AND uc.sessionId = #{sessionId}
-
-				) THEN TRUE
+				WHEN post.userKey = (SELECT userKey FROM userKeyCTE) THEN TRUE
 				ELSE FALSE
 				END AS myPost
 		FROM 
@@ -80,9 +76,9 @@
         	post.createdAt DESC
 		LIMIT	
 			#{offset},#{limit}
-
-		
 	</select>
+	
+
 	
 	<select id="selectHash" parameterType="String" resultType="com.jwi.work.channel.dto.sqlDto.ImageInfoDto">
 		SELECT imageKey,imageUrl,referenceCount FROM image WHERE imageHash = #{imageHash}
@@ -115,6 +111,10 @@
 	<select id="postInfo" resultType="com.jwi.work.channel.dto.sqlDto.PostInfoDto" parameterType="int">
 		SELECT userKey,image FROM post WHERE postKey = #{postKey}
 	</select>
+	
+	<update id="postDeleteByUser" parameterType="com.jwi.work.channel.dto.bodyDto.DeleteByUser">
+		UPDATE post SET state = 'delete' WHERE postKey = #{referenceKey} AND userKey = (SELECT userKey FROM userConnection WHERE sessionId = #{sessionId})
+	</update>
 	
 	<delete id="postDelete" parameterType="int">
 		DELETE FROM post WHERE postKey = #{postKey}
@@ -160,5 +160,44 @@
 		SELECT UC.userKey FROM userConnection AS UC WHERE UC.sessionId = #{sessionId}
 		)
 	</delete>
+	
+	<!-- 게시물의 좋아요 개수 가져오기 -->
+	<select id="getLikeCount" parameterType="int" resultType="int">
+	    SELECT COUNT(*)
+	    FROM `like`
+	    WHERE postKey = #{postKey}
+	</select>
+	
+	<!-- 알림이 이미 발생했는지 확인 -->
+	<select id="checkLikeAlarmLogExists" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM `likeAlarmLog`
+	    WHERE `postKey` = #{postKey}
+	    AND `threshold` = #{threshold}
+	</select>
+
+	<!-- 알림 fhrm 추가 -->
+	<insert id="insertLikeAlarmLog" parameterType="map">
+	    INSERT INTO `likeAlarmLog`(
+	    	`postKey`
+	    	, `threshold`)
+	    VALUES (
+	    	#{postKey}
+	    	, #{threshold})
+	</insert>
+	
+	<!-- 알림 테이블에 새로운 알림 삽입 -->
+	<insert id="insertAlarm" parameterType="map">
+	    INSERT INTO alarm (
+	    	`userKey`
+	    	, `referenceType`
+	    	, `referenceKey`
+	    	, `read`
+	    ) VALUES (
+	    	#{userKey}
+	    	, #{referenceType}
+	    	, #{referenceKey}
+	    	, 0)
+	</insert>
 
 </mapper>

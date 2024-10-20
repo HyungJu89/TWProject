@@ -19,3 +19,24 @@
     margin-left: 15px;
     width: 378px;
 }
+
+.postList{
+    position: relative;
+    z-index: 0;
+}
+
+.nonPostList{
+    display: flex;
+    margin-top: 10px;
+    height: 240px;
+    width: 786px;
+    background-color: #FFFFFF;
+    color: #999999;
+    font-family: Spoqa Han Sans Neo;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17.53px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}

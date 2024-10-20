@@ -8,15 +8,15 @@ import enroll from '../icon/32px/enroll.png';
 import give_up from '../icon/32px/give-up.png';
 import '../App.css';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AlarmModal from '../modal/AlarmModal.js';
 
 function ChannelManagement() {
+    let navigate = useNavigate();
     const location = useLocation();
     const { ManagementChannelId } = location.state || {};
     const [openTap, setOpenTap] = useState(0);
     const [v2ComingSoon, setV2ComingSoon] = useState(false);//2차 버전에서 다시 부활
-
     // 모달 상태
     const [modalOpen, setModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
@@ -45,7 +45,7 @@ function ChannelManagement() {
         if (onClose) {
             onClose();
         }
-    };
+    }
 
     // 모달 열기
     const openModal = (content, close = null) => {
@@ -54,6 +54,13 @@ function ChannelManagement() {
         setOnClose(() => close);
         setModalOpen(true);
     };
+
+    useEffect(()=>{
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if (!sessionIdJson) {
+            return openModal('로그인 되어있지않습니다. ', () => navigate(-1));
+        }
+    })
 
     return (
         <div className={style.createMain}>
@@ -70,33 +77,34 @@ function ChannelManagement() {
                         </>
                     }
                 </div>
-{v2ComingSoon && 
-<>
-                <div className={style.container}>{/* 관리자 신청 */}
-                    <div className={style.createChannelTitle} onClick={() => tapClick(2)}>
-                        <img src={enroll} alt="관리자 신청" />
-                        <div className={style.createChannelTitleText}>채널 관리자 신청하기</div>
-                    </div>
-                    {openTap === 2 &&
+                {
+                    v2ComingSoon && 
                         <>
-                            <div className={styleManagement.dashed} />{/* 회색줄 */}
-                            <ApplyManager openModal={openModal} />
+                            <div className={style.container}>{/* 관리자 신청 */}
+                                <div className={style.createChannelTitle} onClick={() => tapClick(2)}>
+                                    <img src={enroll} alt="관리자 신청" />
+                                    <div className={style.createChannelTitleText}>채널 관리자 신청하기</div>
+                                </div>
+                                {openTap === 2 &&
+                                    <>
+                                        <div className={styleManagement.dashed} />{/* 회색줄 */}
+                                        <ApplyManager openModal={openModal} />
+                                    </>
+                                }
+                            </div>
+                            <div className={style.container}>{/* 관리자 포기 */}
+                                <div className={style.createChannelTitle} onClick={() => tapClick(3)}> 
+                                    <img src={give_up} alt="관리자 포기" />
+                                    <div className={style.createChannelTitleText}>채널 관리자 포기하기</div>
+                                </div>
+                                {openTap === 3 &&
+                                    <>
+                                        <div className={styleManagement.dashed} />{/* 회색줄 */}
+                                        <GiveUpManager openModal={openModal} />
+                                    </>
+                                }
+                            </div>
                         </>
-                    }
-                </div>
-                <div className={style.container}>{/* 관리자 포기 */}
-                    <div className={style.createChannelTitle} onClick={() => tapClick(3)}> 
-                        <img src={give_up} alt="관리자 포기" />
-                        <div className={style.createChannelTitleText}>채널 관리자 포기하기</div>
-                    </div>
-                    {openTap === 3 &&
-                        <>
-                            <div className={styleManagement.dashed} />{/* 회색줄 */}
-                            <GiveUpManager openModal={openModal} />
-                        </>
-                    }
-</div>
-</>
                 }
             </div>
             {modalOpen && 

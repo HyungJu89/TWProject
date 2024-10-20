@@ -21,7 +21,6 @@ function ImgUi(){
     let disPatch = useDispatch();
     let [btnHover, setBtnHover] = useState(btn_image_Close);
     let [content, setContent] = useState(false);
-
     const [imageNumver,setImageNumver] = useState(0);
 
     const closeImageModal = () =>{
@@ -36,6 +35,7 @@ function ImgUi(){
     const imageDown = () => {
         setImageNumver((state)=> state >= 1 ? state - 1 : 0)
     }
+
     return(
         <div className={styles.imgPopUp}>
             {/*닫기버튼*/}
@@ -73,6 +73,7 @@ function ImgUi(){
         </div>
     )
 }
+
 function Content({setContent,content}){
     return(
         <div className={styles.mainContent}>
@@ -85,4 +86,5 @@ function Content({setContent,content}){
         </div>
     )
 }
+
 export default ImgUi;

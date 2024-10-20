@@ -1,10 +1,11 @@
 
 .emogiMain div{ border-radius: 0px;}
 .emogiMain{
-        z-index: 9999;
+        z-index: 99999;
         position: absolute;
         padding: 0px 20px;
         top: 30px;
+        left: 0px;
         width: 402px;
         border-radius: 7px;
         background: #FFFFFF;

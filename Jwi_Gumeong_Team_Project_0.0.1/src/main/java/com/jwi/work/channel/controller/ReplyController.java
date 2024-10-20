@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jwi.work.channel.dto.bodyDto.DeleteByUser;
 import com.jwi.work.channel.dto.bodyDto.ReplyCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ReplyDeleteDto;
 import com.jwi.work.channel.service.ReplyService;
@@ -27,6 +28,12 @@ public AnswerDto<String> replyCreate(@RequestBody ReplyCreateDto createDto){
 @PostMapping("/delete")
 public AnswerDto<String> replyDelete(@RequestBody ReplyDeleteDto deleteDto){
 	return replyservice.replyDelete(deleteDto);
+}
+
+@PostMapping("/deleteByUser")
+public AnswerDto<String> replyDeleteByUser(@RequestBody DeleteByUser replyDelete){
+
+	return replyservice.replyDeleteByUser(replyDelete);
 }
 	
 }

@@ -11,7 +11,9 @@ import PublicBoard from './PublicBoard.js';
 import PublicMenu from './PublicMenu.js';
 import MainBanner from '../channel/MainBanner.js';
 import refresh from '../icon/24px/refresh.png';
-import TopicBtn from '../recycleCode/TopicBtn.js'
+import TopicBtn from '../recycleCode/TopicBtn.js';
+import AlarmModal from '../modal/AlarmModal.js';
+import xBoxImg from '../icon/img/profile.png';
 
 function Main({ onLogout, isLoggedIn }) {
     let navigate = useNavigate();
@@ -20,6 +22,18 @@ function Main({ onLogout, isLoggedIn }) {
     const [postList, setPostList] = useState([]);
     const [partnersLive, setPartnersLive] = useState([]);
     const [hotBoardList, setHotBoardList] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+
+    const closeModal = () => {
+        setModalOpen(false);
+        window.scrollTo(0, 0);
+    };
+
+    const openModal = (content) => {
+        setModalContent(content);
+        setModalOpen(true);
+    };
 
     //추천순
     const searchRecommendedPost = async () => {
@@ -85,7 +99,6 @@ function Main({ onLogout, isLoggedIn }) {
         }
     };
 
-
     //인기 게시판 :: 우리 DB에서 하루동안 게시글 많은 채널 10개 가져오기 
     useEffect(() => {
         const hotBoardLoad = async () => {
@@ -98,7 +111,6 @@ function Main({ onLogout, isLoggedIn }) {
         };
         hotBoardLoad();
     }, []);
-
 
     useEffect(() => { //메인 무작위 방송 추천
         const addPartners = async () => {
@@ -129,12 +141,9 @@ function Main({ onLogout, isLoggedIn }) {
                 searchAllPost()
                 break;
             default:
-
                 break;
         }
-
     }, [topic]);
-
 
     return (
         <div>
@@ -157,18 +166,24 @@ function Main({ onLogout, isLoggedIn }) {
                             {hotBoardList && hotBoardList.success &&
                                 <>{hotBoardList.info.length > 0 ?
                                     hotBoardList.info.map((item, i) =>
-                                        <div onClick={() => { navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.channel}>
+                                        <div onClick={() => { navigate(`/channel/${item.id}`); window.scrollTo(0, 0) }} className={styles.channel} key={i}>
+                                            {item.imageUrl ?
                                             <div className={styles.imgDiv}><img src={item.imageUrl} /></div>
+                                            :
+                                            <div className={styles.imgDiv}><img src={xBoxImg} /></div>
+                                            }
                                             <div className={styles.text}>{item.name}</div></div>
-                                    ) : <div className={styles.nulltext}>아직 인기 게시판이 갱신되지 않았어요 :3</div>}</>}
+                                    ) : <div className={styles.nulltext}>아직 인기 게시판이 갱신되지 않았어요 :3</div>}
+                                </>
+                            }
                         </div>
                     </div>
                     <TopicBtn topic={topic} settopic={settopic} />
                     {postList.success &&
                     <>{postList.search ?
-                            <div className={styles.fadein}>
+                            <div className="fadein">
                                 {postList.search.map((postInfo, index) =>
-                                    <PublicBoard key={index} postInfo={postInfo} />
+                                    <PublicBoard key={index} postInfo={postInfo} index={index} />
                                 )}
                             </div> : 
                         <div className={styles.nonPostList}>게시글이 없습니다.</div>
@@ -181,6 +196,9 @@ function Main({ onLogout, isLoggedIn }) {
                 </div>
                 <PublicMenu isLoggedIn={isLoggedIn} onLogout={onLogout} />
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     );
 }

@@ -1,4 +1,6 @@
 .mainDiv {
+    position: relative;
+    z-index: 0;
     width: 726px;
     background-color: white;
     margin: 10px 0px;
@@ -42,7 +44,6 @@
 
 /* nav */
 .widthNav {
-    z-index: 1;
     position: relative;
     width: 726px;
     height: 24px;
@@ -71,6 +72,9 @@
     margin-left: 10px;
 }
 
+.widthNav .arrayDiv {
+    display: flex;
+}
 .widthNav div {
     display: flex;
 }
@@ -87,12 +91,19 @@
 /*본문*/
 .contentArea {
     position: relative;
+    z-index: -1;
     width: 726px;
     display: flex;
+    word-wrap: break-word;
 }
 
 .contentArea .text {
     width: 529px;
+    max-width: 726px;
+    margin-right: 20px;
+}
+.contentArea .text2 {
+    max-width: 726px;
     margin-right: 20px;
 }
 
@@ -121,8 +132,14 @@
     font-size: 20px;
     cursor: pointer;
 }
+.contentArea .imgClick .imgArea img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지가 컨테이너를 완전히 채우도록 조정 */
+    object-position: center; /* 이미지의 중앙을 기준으로 자름 */
+}
 .imgArea:hover {
-    background-color: rgb(0, 0, 0,0.7);
+    background-color: rgb(0, 0, 0,0.4);
 }
 
 
@@ -133,6 +150,7 @@
     border-radius: 10px;
     padding: 14px;
     margin-bottom: 20px;
+    /* position: relative; */
 }
 /*대댓글 태그용*/
 /* .replyAreaDiv{
@@ -174,10 +192,9 @@
     padding: 0px;
 }
 
-
-
 .commentNav {
     position: relative;
+    z-index: 9999;
     height: 34px;
     display: flex;
     align-items: center;
@@ -201,21 +218,30 @@
 }
 
 /* 댓글창 컴포넌트 - List */
+.mainArea_bodart{
+    border-radius: 0px;
+    border-bottom: 1px solid #F3F3F3;
+    margin-top: 20px;
+}
+
 .list {
     margin-bottom: 20px;
+    max-width: 100%;
+    width: 100%;
 }
 
 .listNav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 726px;
-    min-width: 696px;
-    position: relative; /*현재 최지은의 가장 큰 적*/
-    z-index: 1;
+    max-width: 100%;
+    min-width: 404px;
+    position: relative; 
 }
 
 .listNav .moreImg {
+    position: relative;
+    z-index: 5;
     height: 20px;
     cursor: pointer;
 }
@@ -227,6 +253,8 @@
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 6px;
+    position: relative;
+    z-index: -1;
 }
 
 .listName .time {
@@ -238,6 +266,7 @@
 .listContent {
     font-weight: 400;
     color: #101010;
+    word-break: break-all;
 }
 .replyNickNameBlue{
     color: #35559E;
@@ -304,4 +333,27 @@
 }
 .a{
     position: absolute;
+}
+
+.deleteContent {
+    background-color: #f4f4F4;
+    padding: 20px;
+    height: 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-weight: 400;
+    color: #BBBBBB;
+    word-break: break-all;
+}
+
+.deleteReply {
+    background-color: #f4f4F4;
+    padding: 20px;
+    height: 20px;
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-weight: 400;
+    color: #BBBBBB;
+    word-break: break-all;
 }

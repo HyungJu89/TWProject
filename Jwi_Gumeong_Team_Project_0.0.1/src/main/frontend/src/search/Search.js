@@ -8,14 +8,18 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import PublicBoard from '../main/PublicBoard.js'
 import { formatUnit } from '../recycleCode/FormatUnit.js';
+import Paging from '../Paging/Paging.js'
+
+import AlarmModal from '../modal/AlarmModal.js';
+
 function Search({ search }) {
-
     let navigate = useNavigate();
-
     const [channelList, setChannelList] = useState([]);
     const [postList, setPostList] = useState([]);
     const [channelPage, setChannePage] = useState(1);
     const [postPage, setPostPage] = useState(1);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
     //get 요청을 할때 params 로 데이터를 실어서 보낼수 있다.
     const searchChannel = async (search, channelPage) => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
@@ -59,25 +63,35 @@ function Search({ search }) {
         }
     };
 
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
+    const createChannelOnClick = () =>{
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if (!sessionIdJson) {
+            setModalContent('로그인 되어 있지 않습니다.');
+            setModalOpen(true);
+            return;
+        }
+
+        navigate(`/channelManagement`)
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const channelListData = await searchChannel(search, channelPage);
             setChannelList(channelListData)
-            console.log(channelListData)
         };
-
         fetchData();
-
     }, [search, channelPage])
 
     useEffect(() => {
         const fetchData = async () => {
             const postListData = await searchPost(search, postPage);
             setPostList(postListData)
-            console.log(postListData)
         };
         fetchData();
-
     }, [search, postPage])
 
     const pageUp = () => {
@@ -87,6 +101,9 @@ function Search({ search }) {
     const pageDown = () => {
         setChannePage(prevState => (prevState - 1) >= 1 ? prevState - 1 : prevState = 1)
     }
+
+    let id = sessionStorage.getItem('sessionId');
+
     return (
         <div className={style.searchMain}>
             <div>
@@ -94,22 +111,21 @@ function Search({ search }) {
                     <div className={style.searchBodyTop}>
                         {/*상단 제목*/}
                         <div className={style.searchTitle}>토픽 게시판</div>
-                        <div className={style.creactChannel}>
-                            <img className={style.creactChannelIcon} src={OpenChannel} />
-                            <div className={style.creactChannelText} onClick={() => navigate(`/channelManagement`)}>토픽 게시판 만들기</div>
-                        </div>
+                        {id && <div className={style.createChannel}>
+                            <img className={style.createChannelIcon} src={OpenChannel} />
+                            <div className={style.createChannelText} onClick={createChannelOnClick}>토픽 게시판 만들기</div>
+                        </div>}
                     </div>
-                    {channelList.success ?
+                    {channelList.success && channelList.search ?
                         <div className={style.searchChannelList}>                    {/*검색된 게시판 포문 돌려야함 1번 돌아가는대 8번*/}
                             {channelList.search.map((channelInfo, index) =>
                                 <div key={index}>
                                     <SearchChannel channelInfo={channelInfo} />
-
                                 </div>
                             )}
                         </div>
                         : <div className={style.nonPostText}>만들어진 토픽 게시판이 없어요</div>}
-                    {(channelList.success && channelList.paging.pagingBut) &&
+                    {(channelList.success && channelList.paging) &&
                         <div className={style.pageing}>
                             <div className={style.pageBtn}>
                                 <img src={btnLeft} style={style.btnLeft} onClick={pageDown} /> {channelPage}/{channelList.paging.pageCount} <img src={btnRight} style={style.btnRight} onClick={pageUp} />
@@ -122,25 +138,27 @@ function Search({ search }) {
                         검색어와 관련된 토픽
                     </div>
                 </div>
-                {postList.success &&
-                    <>
+                {(postList.success && postList.search) ?
+                    <div>
                         {postList.search.map((postInfo, index) =>
                             <PublicBoard key={index} postInfo={postInfo} />
                         )}
-                    </>
+                    </div> : <div className={style.nullPublicBoard}>검색어와 관련된 토픽이 없어요</div>
+                }
+                {(postList.success && postList.paging?.pageCount > 1) &&
+                        <Paging paging={postList.paging} postPage={postPage} setPostPage={setPostPage} />
                 }
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     )
 }
 
 function SearchChannel({ channelInfo }) {
-
     let navigate = useNavigate();
-
-    
     const [favoriteCount, setFavoriteCount] = useState(channelInfo.favoriteCount);
-
 
     return (
         <>

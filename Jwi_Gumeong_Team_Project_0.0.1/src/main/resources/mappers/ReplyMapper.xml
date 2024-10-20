@@ -14,5 +14,9 @@
 </insert>
 
 
+	<update id="replyDeleteByUser" parameterType="com.jwi.work.channel.dto.bodyDto.DeleteByUser">
+		UPDATE reply SET state = 'delete' WHERE replyKey = #{referenceKey} AND userKey = (SELECT userKey FROM userConnection WHERE sessionId = #{sessionId})
+	</update>
+
 
 </mapper>

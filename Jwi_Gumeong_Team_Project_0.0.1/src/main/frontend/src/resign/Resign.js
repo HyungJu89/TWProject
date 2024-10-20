@@ -34,7 +34,7 @@ function Resign({ onLogout }) {
         .catch(error => {
             console.log("유저 정보 가져오기 에러 : " + error.message);
         });
-    }, [userKey]);
+    }, [userKey, navigate]);
 
     const checkClick = () => {
         setIsChecked(prevState => !prevState);
@@ -49,7 +49,11 @@ function Resign({ onLogout }) {
     const modalClose = (action) => {
         setIsModalOpen(false);
         if (action === 'confirm') {
-            if (!userKey) return;
+            if (!userKey) {
+                setAlarmContent('로그인 되어 있지 않습니다.');
+                setIsAlarmOpen(true);
+                return;
+            } 
             axios.post('/user/account/resign', null, { params: { userKey: userKey } })
                 .then(response => {
                     if (response.data.result === "success") {
@@ -72,6 +76,8 @@ function Resign({ onLogout }) {
         setIsAlarmOpen(false);
         if (alarmContent === '탈퇴에 성공하셨습니다.') {
             onLogout();
+            navigate('/signin');
+        } else  if (alarmContent === '로그인 되어 있지 않습니다.') {
             navigate('/signin');
         } else {
             window.location.reload();

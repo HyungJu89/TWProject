@@ -110,6 +110,7 @@
             align-items: center;
             width: 318px;
             height: 48px;
+            margin-top: 20px;
         }
 
 .rightDiv .recommendation{
@@ -124,6 +125,11 @@
     margin-top: 20px;
     font-size: 16px;
     font-weight: 400;
+}
+
+.rightDiv .recommendation .list .none{
+    text-align: center;
+    color: #999999;
 }
 .rightDiv .recommendation .list .reChannel{
     display: flex;
@@ -157,4 +163,8 @@
     border-bottom: 1px solid #F3F3F3;
     border-radius: 0px;
     background-color: white;
+}
+
+.div48{
+    width: 48px;
 }

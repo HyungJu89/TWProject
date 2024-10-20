@@ -8,5 +8,5 @@ import com.jwi.work.alarm.entity.UserAlarmEntity;
 
 @Repository
 public interface BannedRepository extends JpaRepository<Banned, Integer> {
-    public Banned findByUser(UserAlarmEntity user); 
+    
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.jwi.work.alarm.dto.AlarmDto;
 import com.jwi.work.alarm.mapper.AlarmMapper;
+import com.jwi.work.channel.dto.bodyDto.DeleteByUser;
 import com.jwi.work.channel.dto.bodyDto.ReplyCreateDto;
 import com.jwi.work.channel.dto.bodyDto.ReplyDeleteDto;
 import com.jwi.work.channel.mapper.ReplyMapper;
@@ -27,16 +28,17 @@ public class ReplyService {
 		
 		
 		int userKey = alarmMapper.getUserKey(createDto.getSessionId());
-		
 		if(createDto.getReplyreplyKey() == 0) {
 			
 		AlarmDto alarmDto = alarmMapper.getCommentUserKey(createDto.getCommentKey());
-
+		
+		alarmDto.setUserKey(userKey);
+		
 			if(userKey != alarmDto.getPostUserKey()) {
 				alarmMapper.postAlarm(alarmDto);
 			}
 			
-			if(userKey != alarmDto.getCommentUserKey()) {
+			if(userKey != alarmDto.getCommentUserKey()&& alarmDto.getPostUserKey() != alarmDto.getCommentUserKey()) {
 				alarmMapper.commentAlarm(alarmDto);
 			}
 	
@@ -45,17 +47,17 @@ public class ReplyService {
 		} else {
 
 		AlarmDto alarmDto = alarmMapper.getReplyUserKey(createDto.getReplyreplyKey());
+		alarmDto.setUserKey(userKey);
 		
-
 		if(userKey != alarmDto.getPostUserKey()) {
 			alarmMapper.postAlarm(alarmDto);
 		}
 		
-		if(userKey != alarmDto.getCommentUserKey()) {
+		if(userKey != alarmDto.getCommentUserKey() && alarmDto.getPostUserKey() != alarmDto.getCommentUserKey()) {
 			alarmMapper.commentAlarm(alarmDto);
 		}
 		
-		if(userKey != alarmDto.getReplyUserKey()) {
+		if(userKey != alarmDto.getReplyUserKey() &&  alarmDto.getPostUserKey() != alarmDto.getReplyUserKey() && alarmDto.getReplyUserKey() != alarmDto.getCommentUserKey()) {
 			alarmMapper.replyAlarm(alarmDto);
 		}
 
@@ -67,6 +69,21 @@ public class ReplyService {
 		answer.setSuccess(true);
 		
 		return answer;
+	}
+	
+	
+	public AnswerDto<String> replyDeleteByUser(DeleteByUser replyDelete){
+		
+		AnswerDto<String> anwer = new AnswerDto<>();
+
+		try {
+			replyMapper.replyDeleteByUser(replyDelete);
+			anwer.setSuccess(true);
+		}catch (Exception e) {
+			anwer.setSuccess(false);
+		}
+		return anwer;
+		
 	}
 	
 	public AnswerDto<String> replyDelete(ReplyDeleteDto deleteDto){

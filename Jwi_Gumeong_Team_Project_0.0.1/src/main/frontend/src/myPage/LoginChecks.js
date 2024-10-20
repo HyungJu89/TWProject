@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import show from '../icon/24px/show.png'; //비밀번호 보임 이미지
 import hide from '../icon/24px/hide.png'; //비밀번호 안보임 이미지
 import styles from './style/LoginChecks.module.css';
+import AlarmModal from '../modal/AlarmModal.js';
 
 function LoginChecks(props) {
     //자, 생각을 해봐 형주야. 이건 이미 로그인 된 아이디야. 그러니까 지금 로그인된 이메일이랑 대조를 해서 그 결과값을 보여줘야 해 알겠어? 알겠냐고?
@@ -16,7 +17,21 @@ function LoginChecks(props) {
     const [loginCheck, setLoginCheck] = useState(false);
     var jsonSessionInfo = sessionStorage.getItem('sessionId');
     var sessionInfo = JSON.parse(jsonSessionInfo);    
+    // 알림 모달
+    const [modalOpen, setModalOpen] = useState(false);
+    // 모달 내용
+    const [modalContent, setModalContent] = useState('');
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
     
+    const handleEnter = (e) => {
+        if (e.key === "Enter") {
+            checkUser();
+        }
+    };
+
     const handleEmailChange = (e) => {
         const value = e.target.value.replace(/\s/g, '');
         setEmail(value);
@@ -40,9 +55,7 @@ function LoginChecks(props) {
         }
     }, [email, password]);
 
-
     const checkUser = async () => {
-        // console.log(count);
         if (email !== '' && password !== '') {
             try {
                 const userData = {
@@ -80,6 +93,7 @@ function LoginChecks(props) {
                             placeholder="이메일을 입력하세요"
                             value={email}
                             onChange={handleEmailChange}
+                            onKeyDown={handleEnter}
                         />
                     </div>
                 </div>
@@ -92,6 +106,7 @@ function LoginChecks(props) {
                             placeholder="비밀번호를 입력하세요"
                             value={password}
                             onChange={handlePasswordChange}
+                            onKeyDown={handleEnter}
                         />
                         <img src={showPassword ? show : hide} className={styles.icon} onClick={toggleShowPassword} />
                     </div>
@@ -101,13 +116,22 @@ function LoginChecks(props) {
                 }
                 <button onClick={
                     () => {
-                        if (email == '') { alert('이메일을 입력해주세요!'); }
-                        else if (password == '') { alert('비밀번호를 입력해주세요!'); }
-                        else {checkUser();}
+                        if (email == "") {
+                            setModalContent('이메일을 입력해주세요!');
+                            setModalOpen(true);
+                        } else if (password == "") {
+                            setModalContent('비밀번호를 입력해주세요!');
+                            setModalOpen(true);
+                        } else {
+                            checkUser();
+                        }
                         // if(이메일과 비밀번호가 적혀있으면){대충 엑시오스 요청해서 데이터베이스랑 데이터대조 후 로그인진행}
                         // 과거의 김형주 죽이고 싶다.
                     }} className={`${styles.loginButton} ${isButtonActive ? styles.active : ''}`}>다음</button>
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div className={styles.alarmModal}>{modalContent}</div>} onClose={closeModal} />
+            }
         </>
     );
 }

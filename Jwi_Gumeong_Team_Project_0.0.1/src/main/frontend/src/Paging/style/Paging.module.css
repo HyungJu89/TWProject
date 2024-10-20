@@ -1,8 +1,10 @@
 .mainDiv{
-    width: 598px;
+    max-width: 598px;
+    width:  none;
     height: 24px;
     margin: 80px auto 100px auto;
     display: flex;
+    justify-content: center;
     font-size: 16px;
     font-weight: 400;
 }
