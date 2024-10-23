@@ -61,65 +61,100 @@ function MainBanner({ channelId, route,
                     <div className={style.MainBanner}>
                         {/* 라이브 이미지 */}
                         {route === 'channel' ? (
+                            //channel
                             liveInfoApi?.adult ? ( //19세 체크
                                 <div className={style.adult}><img src={adult_img}/></div>
                             ) : (
                                 <img src={liveInfoApi?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
                             )
                         ) : (
+                            //main
                             partnersLive?.adult ? ( //19세 체크
                                 <div className={style.adult}><img src={adult_img}/></div>
                             ) : (
+                                partnersLive?.liveImageUrl?
                                 <img src={partnersLive?.liveImageUrl?.replace("{type}", 1080)} alt="Live Image" />
+                                :
+                                <div className={style.noSignal}>No Signal</div>
                             )
                         )}
                         {/* 라이브 방송 정보 */}
                             {route === 'channel' ?/* 라이브 제목 */
+                                //channel
                                 (<div className={style.liveInfo} style={{cursor:'default'}}>
                                 <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */}
                                 <div className={style.liveTitle}>{liveInfoApi?.liveTitle}</div>
                                 <LiveLink channelId={channelId} />
                                 </div>)
                                 :
+                                //main
                                 //pageCheck : 게시판 개설 여부 ? 개설된 게시판으로 이동 : 클릭한 스트리머 정보로 게시판 개설 추천
                                 (<div onClick={()=>{navigate(`/pageCheck/${partnersLiveInfo?.channelId}`); window.scrollTo(0, 0)}} className={style.liveInfo}>
-                                <div className={style.liveIcon}><div className={style.point}></div>LIVE</div> {/* 라이브 아이콘 */} 
+                                    {partnersLive? /* 라이브 아이콘 */
+                                    <div className={style.liveIcon}><div className={style.point}></div>LIVE</div>  
+                                    :
+                                    <div className={style.noSignalLIVE}></div>
+                                    }
                                 <div className={style.liveTitle}>{partnersLive?.liveTitle}</div>
-                                    <div className={style.mainbannerDiv}>
-                                        <div className={style.divImg}> 
-                                            {partnersLiveInfo?.channelImageUrl ?
-                                            <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
-                                            :
-                                            <img className={style.icon} src={xBoxImg} alt="Channel Icon" />
-                                            }
-                                        </div>
-                                        <div className={style.textArea}>
-                                            {partnersLiveInfo?.channelName}
-                                            <div className={style.category}>
-                                                {(() => {
-                                                    switch (partnersLive?.liveCategoryValue) {
-                                                        case 'talk':
-                                                            return <img src={talk} />;
-                                                        case '그림/아트':
-                                                            return <img src={art} />;
-                                                        case '음악/노래':
-                                                            return <img src={music} />;
-                                                        case '먹방/쿡방':
-                                                            return <img src={food} />;
-                                                        case '과학/기술':
-                                                            return <img src={skill} />;
-                                                        case '시사/경제':
-                                                            return <img src={economy} />;
-                                                        case '':
-                                                            return <img src={talk} />;
-                                                        default:
-                                                            return <img src={game} />;
-                                                    }
-                                                })()
+                                    {partnersLive ?
+                                        <div className={style.mainbannerDiv}>
+                                            <div className={style.divImg}> 
+                                                {partnersLiveInfo?.channelImageUrl ? //채널 아이콘 예외처리
+                                                <img className={style.icon} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
+                                                :
+                                                <img className={style.icon} src={xBoxImg} alt="Channel Icon" />
                                                 }
-                                            {partnersLive?.liveCategoryValue}</div>
+                                            </div>
+                                            <div className={style.textArea}>
+                                                {partnersLiveInfo?.channelName}
+                                                <div className={style.category}>
+                                                    {(() => {
+                                                        switch (partnersLive?.liveCategoryValue) {
+                                                            case 'talk':
+                                                                return <img src={talk} />;
+                                                            case '그림/아트':
+                                                                return <img src={art} />;
+                                                            case '음악/노래':
+                                                                return <img src={music} />;
+                                                            case '먹방/쿡방':
+                                                                return <img src={food} />;
+                                                            case '과학/기술':
+                                                                return <img src={skill} />;
+                                                            case '시사/경제':
+                                                                return <img src={economy} />;
+                                                            case '':
+                                                                return <img src={talk} />;
+                                                            default:
+                                                                return <img src={game} />;
+                                                        }
+                                                    })()
+                                                    }
+                                                {partnersLive?.liveCategoryValue}</div>
+                                            </div>
                                         </div>
-                                    </div>
+                                        :
+                                    <>
+                                    {partnersLiveInfo?.channelImageUrl ? //방송종료 시 노출
+                                        <div className={style.mainbannerDiv}>
+                                            <div className={style.noSignalimgDIV}>
+                                                <img className={style.noSignalimg} src={partnersLiveInfo?.channelImageUrl} alt="Channel Icon" />
+                                            </div>
+                                            <div className={style.textArea}>
+                                                    {partnersLiveInfo?.channelName}
+                                            <div className={style.category}>
+                                                <img src={talk} />방송이 종료되었어요!
+                                            </div>
+                                            </div>
+                                        </div>
+                                        :
+                                        <>
+                                        <div className={style.noSignalimgDIV}>
+                                            <img className={style.noSignalimg} src={xBoxImg} alt="Channel Icon" />
+                                        </div>
+                                        </>
+                                    }
+                                    </>
+                                    }
                                 </div>)
                             }
                     {/*메인 선택 배너*/}
@@ -146,11 +181,21 @@ function MainBanner({ channelId, route,
 function LiveImgAdultCheck({ liveImginfo, channelinfo, setPartnersLive, setPartnersLiveInfo}) {
     return (
         < div onClick={() => { setPartnersLive(liveImginfo); setPartnersLiveInfo(channelinfo) }} className={style.box} >
-            {liveImginfo?.adult ?
-                (<div className={style.adultMini}><img src={adult_img}/></div>)
+            {liveImginfo?.adult ? //19금 체크
+                (<>
+                <div className={style.adultMini}><img src={adult_img}/></div>
+                <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+                </>)
                 :
-                (<img src={liveImginfo?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />)
-            }                                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+                (liveImginfo?.liveImageUrl ? //방송중 체크
+                    <>
+                    <img src={liveImginfo?.liveImageUrl?.replace("{type}", 144)} alt="Live Image" />
+                    <div className={style.liveRed}><div className={style.pointer}></div>LIVE</div>
+                    </>
+                    :
+                    <div className={style.adultMini}>No Signal</div>
+                )
+            }                                    
         </div >
     )
 }
