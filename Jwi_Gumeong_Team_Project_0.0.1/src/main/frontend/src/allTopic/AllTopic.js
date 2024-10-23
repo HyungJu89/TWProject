@@ -110,8 +110,11 @@ function AllTopic({ onLogout, isLoggedIn }) {
 
     return (
         <div >
+            <div className={styles.topBannerBg}>
             <div className={styles.topBanner}>
-                <img src={illustration01} />
+                <div className={styles.topTitle}>전체 게시판</div>
+                <img src={illustration01} className={styles.topImge} />
+            </div>
             </div>
             <div className={styles.basic}> {/*전체 DIV*/}
                 <div className={styles.leftDiv}>{/*게시판 영역*/}

@@ -1,14 +1,30 @@
-.topBanner {
+.topBannerBg{
+
     background: #FBB54B;
     width: 100%;
-    height: 102px;
-    border-radius: 0px;
-}
-.topBanner img{
-    margin: auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 102px;
+    border-radius: 0px;
+}
+
+.topBanner {
+    width: 786px;
+    height: 102px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1194px;
+}
+.topTitle{
+    font-weight: 500;
+    font-size: 32px;
+    color: #FFFFFF;
+    width: 200px;
+}
+
+.topBanner img{
     height: 103px;
 }
 
