@@ -77,16 +77,16 @@ public class SecurityConfig {
 	}
 	
 //	Cors 설정 (React 통신용) 당장 중요하지않아서 안알아봄
-	@Bean
-	public CorsFilter corsFilter() {
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true);
-		config.addAllowedOrigin("http://localhost:3000"); // 리액트 서버 주소
-		config.addAllowedHeader("*");
-		config.addAllowedMethod("*");
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", config);
-
-		return new CorsFilter(source);
-	}
+//	@Bean
+//	public CorsFilter corsFilter() {
+//		CorsConfiguration config = new CorsConfiguration();
+//		config.setAllowCredentials(true);
+//		config.addAllowedOrigin("http://localhost:3000"); // 리액트 서버 주소
+//		config.addAllowedHeader("*");
+//		config.addAllowedMethod("*");
+//		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//		source.registerCorsConfiguration("/**", config);
+//
+//		return new CorsFilter(source);
+//	}
 }
