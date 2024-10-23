@@ -98,16 +98,16 @@ public class SignInService {
     	//반환하기위한 객체 생성
     	CheckDto userCheck = new CheckDto();
 
-    	// 유저 키값 구하기
-    	int userKey = Integer.parseInt(userMapper.getUserKey(email));
-    	//비밀번호 틀린 횟수 구하는 변수 만들기
-    	int count = userMapper.wrongCount(userMapper.getUserKey(email));
-    	
-    	
-    	User oneUserInfo = userMapper.getUserInfo(userKey);
-    	String state = oneUserInfo.getState();
     	//이메일 체크처리
     	if(emailCheck(email)) {
+    		// 유저 키값 구하기
+    		int userKey = Integer.parseInt(userMapper.getUserKey(email));
+    		//비밀번호 틀린 횟수 구하는 변수 만들기
+    		int count = userMapper.wrongCount(userMapper.getUserKey(email));
+    		
+    		
+    		User oneUserInfo = userMapper.getUserInfo(userKey);
+    		String state = oneUserInfo.getState();
     		// 밴 체크 -- 안재원
     		if(state.equals("deactivate")) {
     			if (isBanned(email)) {
