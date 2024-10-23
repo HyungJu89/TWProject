@@ -126,7 +126,7 @@ function PublicBoard({ postInfo,index }) {
                     </div>
                     <div onClick={imgOnclick} className={styles.imgClick}>{/* 이미지 */}
                         <div className={styles.imgArea}>
-                            <img src={`http://localhost:8080/images/${imgBeing[0]}`} />
+                            <img src={`/images/${imgBeing[0]}`} />
                             {imgBeing.length > 0 &&
                                 <div onMouseEnter={() => { setImgCount("+" + imgBeing.length) }} onMouseLeave={() => { setImgCount('') }} className={styles.imgArea}>
                                     {imgCount}

@@ -735,7 +735,7 @@ function AdminMain() {
                                                         {inquiry.image && inquiry.image.split(',').map((imgUrl, imgIdx) => (
                                                             // 이미지 링크 앞 뒤 공백 제거 해서 표시
                                                             <img key={imgIdx} 
-                                                                src={`http://localhost:8080/images/${imgUrl.trim()}`}
+                                                                src={`/images/${imgUrl.trim()}`}
                                                                 className={styles.inquiryContentImage}
                                                                 onClick={() => openImageModal(inquiry.image.split(','), imgIdx)}
                                                                 alt="문의 이미지"
@@ -760,7 +760,7 @@ function AdminMain() {
                                                                         {response.image.split(',').map((imgUrl, imgIdx) => (
                                                                             // 이미지 링크 앞 뒤 공백 제거 해서 표시
                                                                             <img key={imgIdx} 
-                                                                                src={`http://localhost:8080/images/${imgUrl.trim()}`}
+                                                                                src={`/images/${imgUrl.trim()}`}
                                                                                 className={styles.inquiryContentImage}
                                                                                 onClick={() => openImageModal(response.image.split(','), imgIdx)}
                                                                                 alt="답변 이미지"
@@ -1037,7 +1037,7 @@ function AdminMain() {
                         )}  
                         {/* 이미지 */}
                         <div className={styles.imageModalImage} >
-                            <img src={`http://localhost:8080/images/${imageList[selectedImageIndex].trim()}`} alt="문의 이미지 확대" />
+                            <img src={`/images/${imageList[selectedImageIndex].trim()}`} alt="문의 이미지 확대" />
                         </div>
                         {/* 이미지가 마지막이 아닐때 다음 버튼 표시 */}
                         {selectedImageIndex < imageList.length - 1 && (

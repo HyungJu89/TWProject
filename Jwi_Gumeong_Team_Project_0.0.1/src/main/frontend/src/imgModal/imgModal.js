@@ -51,7 +51,7 @@ function ImgUi(){
                     <img style={{ marginRight: '0px' }} src={chevron_left_w} />
                 </div>
                 <div className={styles.mainImg}>
-                    <img src={`http://localhost:8080/images/${postInfo.image[imageNumver]}`}/>
+                    <img src={`/images/${postInfo.image[imageNumver]}`}/>
                 </div>
                 <div className={styles.chevron} onClick={imageUp}>
                     <img style={{ marginLeft: '0px' }} src={chevron_right_w} />
