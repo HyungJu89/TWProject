@@ -28,6 +28,8 @@ function SignIn() {
     const [modalOpen, setModalOpen] = useState(false);
     // 모달 내용
     const [modalContent, setModalContent] = useState('');
+    //이메일 유효성검사
+    const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
     const dispatch = useDispatch();
     let navigate = useNavigate();
 
@@ -62,7 +64,7 @@ function SignIn() {
     };
     
     const checkUser = async () => {
-        if (email !== '' && password !== '') {
+        if (email !== '' && password !== '' && emailRegEx.test(email)) {
             try {
                 const userData = {
                     email: email,
