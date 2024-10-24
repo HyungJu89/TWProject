@@ -5,12 +5,18 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import reportPopImg from '../icon/img/report-pop-img.png'
 import closeImg from '../icon/24px/close.png'
+import AlarmModal from './AlarmModal.js';
 // 알림 모달
 function ReportModal() {
     const reportContentRef = useRef(null);
     let reportDto = useSelector((state) => { return state.reportDto })
     const dispatch = useDispatch()
     const [reportAlarm, setReportAlarm] = useState(false);
+    // 모달 상태
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('신고가 완료되었습니다.');
+    // 닫기
+    const [onClose, setOnClose] = useState(null);
 
     useEffect(() => {
         // 모달 열리면 스크롤 막음
@@ -74,12 +80,21 @@ function ReportModal() {
                 // 버튼 하나짜리 알람창 필요합니다!
                 return
             }
-            dispatch(offModal())
+            setModalOpen(true);
             // 신고가 완료되었습니다 모달 띄우기
         } catch (error) {
             console.error('업로드 실패:', error);
         }
     }
+
+        // 모달 닫기
+        const closeModal = () => {
+            setModalOpen(false);
+            dispatch(offModal())
+            if (onClose) {
+                onClose();
+            }
+        }
 
     return (
         <div className={styles.modalContainer}>
@@ -135,6 +150,9 @@ function ReportModal() {
                     </button>
                 </div>
             </div>
+            {modalOpen && 
+                <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
+            }
         </div>
     );
 }
