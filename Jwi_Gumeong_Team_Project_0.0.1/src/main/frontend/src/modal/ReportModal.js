@@ -6,19 +6,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import reportPopImg from '../icon/img/report-pop-img.png'
 import closeImg from '../icon/24px/close.png'
 import AlarmModal from './AlarmModal.js';
+import { useNavigate } from 'react-router-dom';
 // 알림 모달
 function ReportModal() {
+    let navigate = useNavigate();
     const reportContentRef = useRef(null);
     let reportDto = useSelector((state) => { return state.reportDto })
     const dispatch = useDispatch()
     const [reportAlarm, setReportAlarm] = useState(false);
     // 모달 상태
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState('신고가 완료되었습니다.');
+    const [modalContent, setModalContent] = useState('');
+    
     // 닫기
     const [onClose, setOnClose] = useState(null);
 
     useEffect(() => {
+        let sessionIdJson = sessionStorage.getItem('sessionId');
+        if (!sessionIdJson) {
+            setModalContent('로그인되어있지 않습니다.')
+            setModalOpen(true);
+            return
+        }
         // 모달 열리면 스크롤 막음
         document.body.style.overflow = 'hidden';
         return () => {
@@ -56,7 +65,11 @@ function ReportModal() {
     const reportSubmit = async () => {
         let sessionIdJson = sessionStorage.getItem('sessionId');
         if (!sessionIdJson) {
-            return alert("로그인되어있지않습니다.")
+            
+            setModalContent('로그인되어있지 않습니다.')
+            setModalOpen(true);
+            navigate('/signIn'); window.scrollTo(0, 0)
+            return
         }
         let sessionId = JSON.parse(sessionIdJson).sessionId
 
@@ -80,6 +93,7 @@ function ReportModal() {
                 // 버튼 하나짜리 알람창 필요합니다!
                 return
             }
+            setModalContent('신고가 완료되었습니다.')
             setModalOpen(true);
             // 신고가 완료되었습니다 모달 띄우기
         } catch (error) {
