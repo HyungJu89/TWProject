@@ -126,11 +126,13 @@ function MiniPublicBoard() {
                 </div>
                 {/* <img src={sharing} /> */} {/* 공유 아이콘 임시 숨기기 */}
             </div>
+            <div className={styles.commentsZindx}>
             {commentsON && <Comments postKey={postInfo.postKey} setCommentCount={setCommentCount} PublicBoardImgmodal={PublicBoardImgmodal} />}
+            </div>
             {modalOpen && 
                 <AlarmModal content={<div>{modalContent}</div>} onClose={closeModal} />
             }
-        </div>
+        </ div>
     )
 }
 export default MiniPublicBoard;

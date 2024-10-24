@@ -263,3 +263,8 @@
     font-weight: 500;
     color: #999999;
 }
+
+.commentsZindx{
+    position: relative;
+    z-index: 10000;
+}
